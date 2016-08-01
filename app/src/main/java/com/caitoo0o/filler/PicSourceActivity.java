@@ -1,21 +1,24 @@
 package com.caitoo0o.filler;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.graphics.Bitmap;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,27 +33,38 @@ public class PicSourceActivity extends AppCompatActivity {
     Bitmap source;
     Bitmap mod;
     int [] pixels;
+    Queue<int []> undoQueue;
+    Queue<int []> redoQueue;
 
+    private static final int MAX_IMAGE_DIMENSION = 1000;
     private static final int ROTATION_ANGLE = 90;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_source);
 
-        // TODO: put this in a function or something
-        final int REQUEST_EXTERNAL_STORAGE = 1;
+        getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+        getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        getPermission(Manifest.permission.CAMERA);
+
+        undoQueue = new LinkedList<int []>();
+        redoQueue = new LinkedList<int []>();
+    }
+
+    void getPermission(String permissionKind) {
+        final int REQUEST = 1;
         String[] PERMISSIONS_STORAGE = {
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                permissionKind,
         };
-        int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permission = ActivityCompat.checkSelfPermission(this, permissionKind);
         if (permission != PackageManager.PERMISSION_GRANTED) {
             // We don't have permission so prompt the user
             ActivityCompat.requestPermissions(
                     this,
                     PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
+                    REQUEST
             );
         }
     }
@@ -84,15 +98,31 @@ public class PicSourceActivity extends AppCompatActivity {
         return file;
     }
 
-    private void reloadModImage() {
-        LinearLayout ll = (LinearLayout) findViewById(R.id.theLinearLayout);
-        ll.removeAllViews();
+    private void removeCurrImage() {
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.imageAreaLayout);
+        //rl.removeAllViews();
+        ImageView currImg = (ImageView) findViewById(R.id.theImage);
+        rl.removeView(currImg);
+    }
+
+    private void reloadCurrImage() {
+        removeCurrImage();
         ImageView img = new ImageView(getApplicationContext());
+        img.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                Log.e("picsource", "Hey!");
+                return true;
+            }
+        });
+        img.setId(R.id.theImage);
         img.setImageBitmap(mod);
         img.setScaleType(ScaleType.FIT_CENTER);
         img.setPadding(0, 4, 4, 0);
         img.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        ll.addView(img);
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.imageAreaLayout);
+        rl.addView(img);
     }
 
     public void onRotate(View v) {
@@ -102,20 +132,20 @@ public class PicSourceActivity extends AppCompatActivity {
         pixels = new int[mod.getWidth() * mod.getHeight()];
         mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
 
-        reloadModImage();
+        reloadCurrImage();
     }
 
     public void onReset(View v) {
         mod = source.copy(source.getConfig(), true);
         pixels = new int[mod.getWidth() * mod.getHeight()];
         mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-        reloadModImage();
+        reloadCurrImage();
     }
 
     public void onThreshold(View v) {
         pixels = applyThreshold(pixels, mod.getWidth(), mod.getHeight());
         mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-        reloadModImage();
+        reloadCurrImage();
     }
 
     // The bitmap passed in must be mutable
@@ -137,7 +167,7 @@ public class PicSourceActivity extends AppCompatActivity {
     public void onRandomLineFill(View v) {
         pixels = applyRandomLineFill(pixels, mod.getWidth(), mod.getHeight());
         mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-        reloadModImage();
+        reloadCurrImage();
     }
 
     int[] applyRandomLineFill(int [] pixels, int width, int height) {
@@ -173,7 +203,7 @@ public class PicSourceActivity extends AppCompatActivity {
     public void onRandomFloodFill(View v) {
         applyRandomFill(pixels, mod.getWidth(), mod.getHeight());
         mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-        reloadModImage();
+        reloadCurrImage();
     }
 
     public void onSave(View v) {
@@ -189,7 +219,7 @@ public class PicSourceActivity extends AppCompatActivity {
                 mod.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
                 // PNG is a lossless format, the compression factor (100) is ignored
             } catch (Exception e) {
-                // TODO: notify user
+                Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_SHORT);
                 Log.e("picsource", "failed save.");
                 e.printStackTrace();
             } finally {
@@ -197,19 +227,54 @@ public class PicSourceActivity extends AppCompatActivity {
                     if (out != null) {
                         out.close();
                     }
-                    // TODO: change this from e to i and notify user
-                    Log.e("picsource", "file written to: " + picFile.getAbsolutePath());
+                    Toast.makeText(getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
+                    Log.i("picsource", "file written to: " + picFile.getAbsolutePath());
                 } catch (IOException e) {
-                    // TODO: notify user
+                    Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_LONG);
                     Log.e("picsource", "failed save.");
                     e.printStackTrace();
                 }
             }
         }
         else {
-            // TODO: notify user
+            // TODO: move these strings to strings file
+            Toast.makeText(getApplicationContext(), "Save failed. External storage not writeable.", Toast.LENGTH_SHORT);
             Log.e("picsource", "failed save. external storage not writeable");
         }
+    }
+
+    private void addImageFromNewSource() {
+        // TODO: Fix this
+//        if (source.getWidth() >= MAX_IMAGE_DIMENSION &&  source.getHeight() >= MAX_IMAGE_DIMENSION && source.getWidth() > source.getHeight()) {
+//            int height = MAX_IMAGE_DIMENSION / source.getWidth() * source.getHeight();
+//            source = Bitmap.createScaledBitmap(source, MAX_IMAGE_DIMENSION, height,true);
+//        } else if (source.getWidth() >= MAX_IMAGE_DIMENSION && source.getHeight() >= MAX_IMAGE_DIMENSION && source.getHeight() > source.getWidth()) {
+//            int width = MAX_IMAGE_DIMENSION/source.getHeight() * source.getWidth();
+//            source = Bitmap.createScaledBitmap(source, width, MAX_IMAGE_DIMENSION, true);
+//        }
+
+        // TODO: Fix this logic and remove hardcoded numbersageFromNewSource() {
+        if (source.getWidth() >= 1000 &&  source.getHeight() >= 1000 && source.getWidth() > source.getHeight()) {
+            source = Bitmap.createScaledBitmap(source, source.getWidth()/2, source.getHeight()/2,true);
+        }
+
+        mod = source.copy(source.getConfig(), true);
+        pixels = new int[mod.getWidth() * mod.getHeight()];
+        mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+
+        LinearLayout ll1 = (LinearLayout) findViewById(R.id.firstButtonLinearLayout);
+        ll1.getChildCount();
+        for (int i = 0; i < ll1.getChildCount(); i++) {
+            ll1.getChildAt(i).setEnabled(true);
+        }
+        LinearLayout ll2 = (LinearLayout) findViewById(R.id.buttonLinearLayout);
+        ll2.getChildCount();
+        for (int i = 0; i < ll2.getChildCount(); i++) {
+            ll2.getChildAt(i).setEnabled(true);
+        }
+        findViewById(R.id.cameraButton).setVisibility(View.GONE);
+        findViewById(R.id.openExistingButton).setVisibility(View.GONE);
+        reloadCurrImage();
     }
 
     public void onOpen(View v) {
@@ -222,19 +287,7 @@ public class PicSourceActivity extends AppCompatActivity {
                 Log.e("picsource", "picfile: " + picFile.getAbsolutePath());
 
                 source = BitmapFactory.decodeFile(picFile.getAbsolutePath());
-                source = Bitmap.createScaledBitmap(source,source.getWidth()/2,source.getHeight()/2,true);
-                mod = source.copy(source.getConfig(), true);
-                pixels = new int[mod.getWidth() * mod.getHeight()];
-                mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-
-                LinearLayout ll = (LinearLayout) findViewById(R.id.buttonLinearLayout);
-                ll.getChildCount();
-                for (int i = 0; i < ll.getChildCount(); i++) {
-                    ll.getChildAt(i).setEnabled(true);
-                }
-                findViewById(R.id.saveButton).setEnabled(true);
-
-                reloadModImage();
+                addImageFromNewSource();
             }
             catch (Exception e) {
                 // TODO: notify user
@@ -244,6 +297,49 @@ public class PicSourceActivity extends AppCompatActivity {
         else {
             // TODO: notify user
             Log.e("picsource", "failed open. external storage not readable");
+        }
+    }
+
+    public void onDiscard(View v) {
+        source = null;
+        mod = null;
+
+        LinearLayout ll1 = (LinearLayout) findViewById(R.id.firstButtonLinearLayout);
+        ll1.getChildCount();
+        for (int i = 0; i < ll1.getChildCount(); i++) {
+            ll1.getChildAt(i).setEnabled(false);
+        }
+        LinearLayout ll2 = (LinearLayout) findViewById(R.id.buttonLinearLayout);
+        ll2.getChildCount();
+        for (int i = 0; i < ll2.getChildCount(); i++) {
+            ll2.getChildAt(i).setEnabled(false);
+        }
+        findViewById(R.id.cameraButton).setVisibility(View.VISIBLE);
+        findViewById(R.id.openExistingButton).setVisibility(View.VISIBLE);
+        removeCurrImage();
+    }
+
+    public void onCamera(View v) {
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "No known app to handle camera use.", Toast.LENGTH_SHORT);
+            }
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Device has no camera.", Toast.LENGTH_SHORT);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            source = (Bitmap) extras.get("data");
+            addImageFromNewSource();
         }
     }
 
