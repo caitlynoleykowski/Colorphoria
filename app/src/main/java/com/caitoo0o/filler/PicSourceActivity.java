@@ -1,55 +1,121 @@
 package com.caitoo0o.filler;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.graphics.Bitmap;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.io.File;
 
 public class PicSourceActivity extends AppCompatActivity {
 
     Bitmap source;
     Bitmap mod;
-    ImageView modImg;
-    int clickCount = 0;
-    Queue<PixelNode> queue;
     int [] pixels;
+
+    private static final int ROTATION_ANGLE = 90;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_source);
 
-        source = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.test);
-        mod = source.copy(source.getConfig(), true);
-        queue = new LinkedList<PixelNode>();
-        pixels = new int[mod.getWidth() * mod.getHeight()];
-        mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+        // TODO: put this in a function or something
+        final int REQUEST_EXTERNAL_STORAGE = 1;
+        String[] PERMISSIONS_STORAGE = {
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+        int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
     }
 
-    public void onThreshold(View v) {
+    /* Checks if external storage is available for read and write */
+    private boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    private boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    private File getAlbumStorageDir(String albumName) {
+        // Get the directory for the user's public pictures directory.
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), albumName);
+        if (!file.mkdirs()) {
+            Log.e("picsource", "Directory not created");
+        }
+        return file;
+    }
+
+    private void reloadModImage() {
         LinearLayout ll = (LinearLayout) findViewById(R.id.theLinearLayout);
         ll.removeAllViews();
-
-        pixels = applyThreshold(pixels, mod.getWidth(), mod.getHeight());
-        mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-
         ImageView img = new ImageView(getApplicationContext());
         img.setImageBitmap(mod);
         img.setScaleType(ScaleType.FIT_CENTER);
         img.setPadding(0, 4, 4, 0);
         img.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         ll.addView(img);
+    }
+
+    public void onRotate(View v) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(ROTATION_ANGLE);
+        mod = Bitmap.createBitmap(mod, 0, 0, mod.getWidth(), mod.getHeight(), matrix, true);
+        pixels = new int[mod.getWidth() * mod.getHeight()];
+        mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+
+        reloadModImage();
+    }
+
+    public void onReset(View v) {
+        mod = source.copy(source.getConfig(), true);
+        pixels = new int[mod.getWidth() * mod.getHeight()];
+        mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+        reloadModImage();
+    }
+
+    public void onThreshold(View v) {
+        pixels = applyThreshold(pixels, mod.getWidth(), mod.getHeight());
+        mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+        reloadModImage();
     }
 
     // The bitmap passed in must be mutable
@@ -69,23 +135,12 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRandomLineFill(View v) {
-        LinearLayout ll = (LinearLayout) findViewById(R.id.theLinearLayout);
-        ll.removeAllViews();
-
         pixels = applyRandomLineFill(pixels, mod.getWidth(), mod.getHeight());
         mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-
-        ImageView img = new ImageView(getApplicationContext());
-        img.setImageBitmap(mod);
-        img.setScaleType(ScaleType.FIT_CENTER);
-        img.setPadding(0, 4, 4, 0);
-        img.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        ll.addView(img);
+        reloadModImage();
     }
 
     int[] applyRandomLineFill(int [] pixels, int width, int height) {
-        // TODO: for some reason when i getPixels() again all pixels are -1 :/ figure out why
-        //bm.getPixels(pixels, 0, bm.getWidth(), 0, 0, bm.getWidth(), bm.getHeight());
         int [] modPixels = new int[width * height];
         int prevPixelColor = 0x000000;
         int currColor = 0;
@@ -115,22 +170,83 @@ public class PicSourceActivity extends AppCompatActivity {
         return modPixels;
     }
 
-    public void onFloodFill(View v) {
-        LinearLayout ll = (LinearLayout) findViewById(R.id.theLinearLayout);
-        ll.removeAllViews();
-
+    public void onRandomFloodFill(View v) {
         applyRandomFill(pixels, mod.getWidth(), mod.getHeight());
         mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-
-        ImageView img = new ImageView(getApplicationContext());
-        img.setImageBitmap(mod);
-        img.setScaleType(ScaleType.FIT_CENTER);
-        img.setPadding(0, 4, 4, 0);
-        img.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        ll.addView(img);
+        reloadModImage();
     }
 
-    // Random shitty code to call the flood fill??
+    public void onSave(View v) {
+        if (isExternalStorageWritable()) {
+            //File albumStorageDir = getAlbumStorageDir("FillerSaves");
+            File albumStorageDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES);
+            File picFile = new File(albumStorageDir, "fillerPic.png");
+            Log.e("picsource", "picfile: " + picFile.getAbsolutePath());
+            FileOutputStream out = null;
+            try {
+                out = new FileOutputStream(picFile);
+                mod.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                // PNG is a lossless format, the compression factor (100) is ignored
+            } catch (Exception e) {
+                // TODO: notify user
+                Log.e("picsource", "failed save.");
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                    // TODO: change this from e to i and notify user
+                    Log.e("picsource", "file written to: " + picFile.getAbsolutePath());
+                } catch (IOException e) {
+                    // TODO: notify user
+                    Log.e("picsource", "failed save.");
+                    e.printStackTrace();
+                }
+            }
+        }
+        else {
+            // TODO: notify user
+            Log.e("picsource", "failed save. external storage not writeable");
+        }
+    }
+
+    public void onOpen(View v) {
+        if (isExternalStorageReadable()) {
+            try {
+                //File albumStorageDir = getAlbumStorageDir("FillerSaves");
+                File albumStorageDir = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES);
+                File picFile = new File(albumStorageDir, "fillerPic.jpg");
+                Log.e("picsource", "picfile: " + picFile.getAbsolutePath());
+
+                source = BitmapFactory.decodeFile(picFile.getAbsolutePath());
+                source = Bitmap.createScaledBitmap(source,source.getWidth()/2,source.getHeight()/2,true);
+                mod = source.copy(source.getConfig(), true);
+                pixels = new int[mod.getWidth() * mod.getHeight()];
+                mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+
+                LinearLayout ll = (LinearLayout) findViewById(R.id.buttonLinearLayout);
+                ll.getChildCount();
+                for (int i = 0; i < ll.getChildCount(); i++) {
+                    ll.getChildAt(i).setEnabled(true);
+                }
+                findViewById(R.id.saveButton).setEnabled(true);
+
+                reloadModImage();
+            }
+            catch (Exception e) {
+                // TODO: notify user
+                Log.e("picsource", "open failed.");
+            }
+        }
+        else {
+            // TODO: notify user
+            Log.e("picsource", "failed open. external storage not readable");
+        }
+    }
+
     int [] applyRandomFill(int [] pixels, int width, int height) {
         boolean[] processed = new boolean[pixels.length];
         Arrays.fill(processed, false);
@@ -147,6 +263,7 @@ public class PicSourceActivity extends AppCompatActivity {
 
     // Flood-fill (node, target-color, replacement-color):
     void floodFill(PixelNode node, int targetColor, int replacementColor) {
+        Queue<PixelNode> queue = new LinkedList<PixelNode>();
         queue.add(node);
 
         while (!queue.isEmpty()) {
