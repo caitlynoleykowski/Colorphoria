@@ -10,4 +10,5 @@ public class EffectButton extends Button {
     public EffectButton (Context context){
         super(context);
     }
+
 }

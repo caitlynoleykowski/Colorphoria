@@ -22,21 +22,27 @@ import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 import java.io.File;
+import java.util.Stack;
 
 public class PicSourceActivity extends AppCompatActivity {
 
     Bitmap source;
     Bitmap mod;
     int [] pixels;
-    Queue<int []> undoQueue;
-    Queue<int []> redoQueue;
+    Deque<Bitmap> undoQueue;
+    Deque<Bitmap> redoQueue;
 
     private static final int MAX_IMAGE_DIMENSION = 1000;
+    private static final int MAX_UNDO_STACK_SIZE = 2;
     private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
@@ -50,8 +56,8 @@ public class PicSourceActivity extends AppCompatActivity {
         getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         getPermission(Manifest.permission.CAMERA);
 
-        undoQueue = new LinkedList<int []>();
-        redoQueue = new LinkedList<int []>();
+        undoQueue = new ArrayDeque<>();
+        redoQueue = new ArrayDeque<>();
     }
 
     void getPermission(String permissionKind) {
@@ -126,7 +132,48 @@ public class PicSourceActivity extends AppCompatActivity {
         rl.addView(img);
     }
 
+    private void newEffectApplied() {
+        redoQueue.clear();
+        findViewById(R.id.redoButton).setEnabled(false);
+        undoEnqueue();
+    }
+
+    private void undoEnqueue() {
+        if (undoQueue.size() >= MAX_UNDO_STACK_SIZE) {
+            undoQueue.removeFirst();
+        }
+        undoQueue.addLast(mod.copy(mod.getConfig(), true));
+        findViewById(R.id.undoButton).setEnabled(true);
+    }
+
+    private void redoEnqueue() {
+        // TODO: Do we need to check if the size gets exceeded? think its handled by undo checking
+        redoQueue.addLast(mod.copy(mod.getConfig(), true));
+        findViewById(R.id.redoButton).setEnabled(true);
+    }
+
+    public void onRedo(View v) {
+        undoEnqueue();
+        mod = redoQueue.removeLast();
+        if (redoQueue.isEmpty()) {
+            findViewById(R.id.redoButton).setEnabled(false);
+        }
+        setupNewMod();
+        reloadCurrImage();
+    }
+
+    public void onUndo(View v) {
+        redoEnqueue();
+        mod = undoQueue.removeLast();
+        if (undoQueue.isEmpty()) {
+            findViewById(R.id.undoButton).setEnabled(false);
+        }
+        setupNewMod();
+        reloadCurrImage();
+    }
+
     public void onRotate(View v) {
+        newEffectApplied();
         Matrix matrix = new Matrix();
         matrix.postRotate(ROTATION_ANGLE);
         mod = Bitmap.createBitmap(mod, 0, 0, mod.getWidth(), mod.getHeight(), matrix, true);
@@ -138,12 +185,12 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onReset(View v) {
         mod = source.copy(source.getConfig(), true);
-        pixels = new int[mod.getWidth() * mod.getHeight()];
-        mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+        setupNewMod();
         reloadCurrImage();
     }
 
     public void onThreshold(View v) {
+        newEffectApplied();
         pixels = applyThreshold(pixels, mod.getWidth(), mod.getHeight());
         mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
         reloadCurrImage();
@@ -166,6 +213,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRandomLineFill(View v) {
+        newEffectApplied();
         pixels = applyRandomLineFill(pixels, mod.getWidth(), mod.getHeight());
         mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
         reloadCurrImage();
@@ -202,6 +250,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRandomFloodFill(View v) {
+        newEffectApplied();
         applyRandomFill(pixels, mod.getWidth(), mod.getHeight());
         mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
         reloadCurrImage();
@@ -212,7 +261,10 @@ public class PicSourceActivity extends AppCompatActivity {
             //File albumStorageDir = getAlbumStorageDir("FillerSaves");
             File albumStorageDir = Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_PICTURES);
-            File picFile = new File(albumStorageDir, "fillerPic.png");
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyyhhmmss");
+            String formattedDate = sdf.format(date);
+            File picFile = new File(albumStorageDir, "Filler" + formattedDate + ".png");
             Log.e("picsource", "picfile: " + picFile.getAbsolutePath());
             FileOutputStream out = null;
             try {
@@ -244,6 +296,23 @@ public class PicSourceActivity extends AppCompatActivity {
         }
     }
 
+    public void onShare(View v) {
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), mod, "Export from Filler", null);
+        Uri uri = Uri.parse(path);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/jpeg");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(Intent.createChooser(intent, "Share Image"));
+        }
+    }
+
+    private void setupNewMod() {
+        pixels = new int[mod.getWidth() * mod.getHeight()];
+        mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+    }
+
     private void addImageFromNewSource() {
         // TODO: Fix this
 //        if (source.getWidth() >= MAX_IMAGE_DIMENSION &&  source.getHeight() >= MAX_IMAGE_DIMENSION && source.getWidth() > source.getHeight()) {
@@ -260,8 +329,7 @@ public class PicSourceActivity extends AppCompatActivity {
         }
 
         mod = source.copy(source.getConfig(), true);
-        pixels = new int[mod.getWidth() * mod.getHeight()];
-        mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+        setupNewMod();
 
         LinearLayout ll1 = (LinearLayout) findViewById(R.id.firstButtonLinearLayout);
         ll1.getChildCount();
@@ -273,6 +341,9 @@ public class PicSourceActivity extends AppCompatActivity {
         for (int i = 0; i < ll2.getChildCount(); i++) {
             ll2.getChildAt(i).setEnabled(true);
         }
+        findViewById(R.id.undoButton).setEnabled(false);
+        findViewById(R.id.redoButton).setEnabled(false);
+
         findViewById(R.id.cameraButton).setVisibility(View.GONE);
         findViewById(R.id.openExistingButton).setVisibility(View.GONE);
         reloadCurrImage();
@@ -282,12 +353,6 @@ public class PicSourceActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("scale", true);
-        intent.putExtra("outputX", 256);
-        intent.putExtra("outputY", 256);
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
         intent.putExtra("return-data", true);
 
         if (intent.resolveActivity(getPackageManager()) != null) {
