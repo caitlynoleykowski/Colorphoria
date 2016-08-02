@@ -3,8 +3,8 @@ package com.caitoo0o.filler;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -39,6 +39,7 @@ public class PicSourceActivity extends AppCompatActivity {
     private static final int MAX_IMAGE_DIMENSION = 1000;
     private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_GET = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,7 +220,7 @@ public class PicSourceActivity extends AppCompatActivity {
                 mod.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
                 // PNG is a lossless format, the compression factor (100) is ignored
             } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
                 Log.e("picsource", "failed save.");
                 e.printStackTrace();
             } finally {
@@ -230,7 +231,7 @@ public class PicSourceActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
                     Log.i("picsource", "file written to: " + picFile.getAbsolutePath());
                 } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
                     Log.e("picsource", "failed save.");
                     e.printStackTrace();
                 }
@@ -238,7 +239,7 @@ public class PicSourceActivity extends AppCompatActivity {
         }
         else {
             // TODO: move these strings to strings file
-            Toast.makeText(getApplicationContext(), "Save failed. External storage not writeable.", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "Save failed. External storage not writeable.", Toast.LENGTH_LONG).show();
             Log.e("picsource", "failed save. external storage not writeable");
         }
     }
@@ -278,25 +279,19 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onOpen(View v) {
-        if (isExternalStorageReadable()) {
-            try {
-                //File albumStorageDir = getAlbumStorageDir("FillerSaves");
-                File albumStorageDir = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES);
-                File picFile = new File(albumStorageDir, "fillerPic.jpg");
-                Log.e("picsource", "picfile: " + picFile.getAbsolutePath());
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("scale", true);
+        intent.putExtra("outputX", 256);
+        intent.putExtra("outputY", 256);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("return-data", true);
 
-                source = BitmapFactory.decodeFile(picFile.getAbsolutePath());
-                addImageFromNewSource();
-            }
-            catch (Exception e) {
-                // TODO: notify user
-                Log.e("picsource", "open failed.");
-            }
-        }
-        else {
-            // TODO: notify user
-            Log.e("picsource", "failed open. external storage not readable");
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_IMAGE_GET);
         }
     }
 
@@ -326,20 +321,50 @@ public class PicSourceActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
             else {
-                Toast.makeText(getApplicationContext(), "No known app to handle camera use.", Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(), "No known app to handle camera use.", Toast.LENGTH_LONG).show();
             }
         }
         else {
-            Toast.makeText(getApplicationContext(), "Device has no camera.", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "Device has no camera.", Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != RESULT_OK) {
+            Log.e("picsource", "No Image Selected.");
+            Toast.makeText(getApplicationContext(), "No Image Selected", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (requestCode == REQUEST_IMAGE_GET) {
+            if (data != null && data.getData() != null) {
+                Uri uri = data.getData();
+
+                try {
+                    source = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    addImageFromNewSource();
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
+                    Log.e("picsource", "Failed getting bitmap from uri from image picker.");
+                    e.printStackTrace();
+                }
+            } else {
+                Log.e("picsource", "data or data.getData from image picker intent is null.");
+                Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
+            }
+        }
+        else if (requestCode == REQUEST_IMAGE_CAPTURE) {
             Bundle extras = data.getExtras();
-            source = (Bitmap) extras.get("data");
-            addImageFromNewSource();
+            if (extras != null) {
+                source = (Bitmap) extras.get("data");
+                addImageFromNewSource();
+            } else {
+                Log.e("picsource", "Extras return from camera intent is null.");
+                Toast.makeText(getApplicationContext(), "No image capture found.", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
