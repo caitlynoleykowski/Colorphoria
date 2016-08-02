@@ -95,16 +95,6 @@ public class PicSourceActivity extends AppCompatActivity {
         return false;
     }
 
-    private File getAlbumStorageDir(String albumName) {
-        // Get the directory for the user's public pictures directory.
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), albumName);
-        if (!file.mkdirs()) {
-            Log.e("picsource", "Directory not created");
-        }
-        return file;
-    }
-
     private void removeCurrImage() {
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.imageAreaLayout);
         //rl.removeAllViews();
@@ -256,11 +246,30 @@ public class PicSourceActivity extends AppCompatActivity {
         reloadCurrImage();
     }
 
+    private File getAlbumStorageDir(String albumName) {
+        // Get the directory for the user's public pictures directory.
+        File file = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), albumName);
+        if (!file.mkdirs()) {
+            Log.e("picsource", "Directory not created");
+        }
+        return file;
+    }
+
     public void onSave(View v) {
         if (isExternalStorageWritable()) {
             //File albumStorageDir = getAlbumStorageDir("FillerSaves");
-            File albumStorageDir = Environment.getExternalStoragePublicDirectory(
+            File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_PICTURES);
+            File albumStorageDir = new File(pictureStorageDir, "Filler");
+            try {
+                albumStorageDir.mkdir();
+            }
+            catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "Failed to create directory", Toast.LENGTH_LONG).show();
+                Log.e("picsource", "Failed to create Filler directory.");
+                e.printStackTrace();
+            }
             Date date = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyyhhmmss");
             String formattedDate = sdf.format(date);
