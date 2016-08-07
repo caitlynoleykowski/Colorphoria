@@ -1,6 +1,7 @@
 package com.caitoo0o.filler;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Matrix;
@@ -19,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.net.Uri;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,6 +42,7 @@ public class PicSourceActivity extends AppCompatActivity {
     int [] pixels;
     Deque<Bitmap> undoQueue;
     Deque<Bitmap> redoQueue;
+    private Uri mImageUri;
 
     private static final int MAX_IMAGE_DIMENSION = 1000;
     private static final int MAX_UNDO_STACK_SIZE = 2;
@@ -256,7 +259,7 @@ public class PicSourceActivity extends AppCompatActivity {
         return file;
     }
 
-    public void onSave(View v) {
+    public void saveCurrImage() {
         if (isExternalStorageWritable()) {
             //File albumStorageDir = getAlbumStorageDir("FillerSaves");
             File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
@@ -305,6 +308,10 @@ public class PicSourceActivity extends AppCompatActivity {
         }
     }
 
+    public void onSave(View v) {
+        saveCurrImage();
+    }
+
     public void onShare(View v) {
         String path = MediaStore.Images.Media.insertImage(getContentResolver(), mod, "Export from Filler", null);
         Uri uri = Uri.parse(path);
@@ -322,7 +329,7 @@ public class PicSourceActivity extends AppCompatActivity {
         mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
     }
 
-    private void addImageFromNewSource() {
+    private void addImageFromNewSource(Bitmap bm) {
         // TODO: Fix this
 //        if (source.getWidth() >= MAX_IMAGE_DIMENSION &&  source.getHeight() >= MAX_IMAGE_DIMENSION && source.getWidth() > source.getHeight()) {
 //            int height = MAX_IMAGE_DIMENSION / source.getWidth() * source.getHeight();
@@ -333,8 +340,11 @@ public class PicSourceActivity extends AppCompatActivity {
 //        }
 
         // TODO: Fix this logic and remove hardcoded numbersageFromNewSource() {
-        if (source.getWidth() >= 1000 &&  source.getHeight() >= 1000 && source.getWidth() > source.getHeight()) {
-            source = Bitmap.createScaledBitmap(source, source.getWidth()/2, source.getHeight()/2,true);
+        if (bm.getWidth() >= 1000 &&  bm.getHeight() >= 1000 && bm.getWidth() > bm.getHeight()) {
+            source = Bitmap.createScaledBitmap(bm, bm.getWidth()/2, bm.getHeight()/2,true);
+        }
+        else {
+            source = bm;
         }
 
         mod = source.copy(source.getConfig(), true);
@@ -390,17 +400,47 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onCamera(View v) {
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//            }
+//            else {
+//                Toast.makeText(getApplicationContext(), "No known app to handle camera use.", Toast.LENGTH_LONG).show();
+//            }
+
+            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+            File photo;
+            try
+            {
+                // place where to store camera taken picture
+                photo = this.createTemporaryFile("picture", ".jpg");
+                photo.delete();
             }
-            else {
-                Toast.makeText(getApplicationContext(), "No known app to handle camera use.", Toast.LENGTH_LONG).show();
+            catch(Exception e)
+            {
+                Log.v("picsource", "Can't create file to take picture!");
+                Toast.makeText(this, "Please check SD card! Image shot is impossible!", Toast.LENGTH_LONG).show();
+                return;
             }
+            mImageUri = Uri.fromFile(photo);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+            //start camera intent
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         }
         else {
             Toast.makeText(getApplicationContext(), "Device has no camera.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private File createTemporaryFile(String part, String ext) throws Exception
+    {
+        File tempDir= Environment.getExternalStorageDirectory();
+        tempDir=new File(tempDir.getAbsolutePath()+"/.temp/");
+        if(!tempDir.exists())
+        {
+            tempDir.mkdirs();
+        }
+        return File.createTempFile(part, ext, tempDir);
     }
 
     @Override
@@ -418,8 +458,7 @@ public class PicSourceActivity extends AppCompatActivity {
                 Uri uri = data.getData();
 
                 try {
-                    source = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                    addImageFromNewSource();
+                    addImageFromNewSource(MediaStore.Images.Media.getBitmap(getContentResolver(), uri));
                 } catch (IOException e) {
                     Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
                     Log.e("picsource", "Failed getting bitmap from uri from image picker.");
@@ -431,14 +470,36 @@ public class PicSourceActivity extends AppCompatActivity {
             }
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                source = (Bitmap) extras.get("data");
-                addImageFromNewSource();
-            } else {
-                Log.e("picsource", "Extras return from camera intent is null.");
-                Toast.makeText(getApplicationContext(), "No image capture found.", Toast.LENGTH_LONG).show();
+//            Bundle extras = data.getExtras();
+//            if (extras != null) {
+//                source = (Bitmap) extras.get("data");
+//                addImageFromNewSource();
+//            } else {
+//                Log.e("picsource", "Extras return from camera intent is null.");
+//                Toast.makeText(getApplicationContext(), "No image capture found.", Toast.LENGTH_LONG).show();
+//            }
+            Bitmap image = grabImage();
+            if (image != null) {
+                addImageFromNewSource(grabImage());
             }
+        }
+    }
+
+    public Bitmap grabImage()
+    {
+        getContentResolver().notifyChange(mImageUri, null);
+        ContentResolver cr = this.getContentResolver();
+        Bitmap bitmap;
+        try
+        {
+            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, mImageUri);
+            return bitmap;
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
+            Log.d("picsource", "Failed to load image", e);
+            return null;
         }
     }
 
