@@ -49,7 +49,7 @@ public class PicSourceActivity extends AppCompatActivity {
     private static final String SOURCE_STATE_KEY = "source";
     private static final String MOD_STATE_KEY = "mod";
     private static final String PIXELS_STATE_KEY = "pixels";
-    private static final int MAX_PIXELS = 2500000;
+    private static final int MAX_PIXELS = 2000000;
     private static final int MAX_UNDO_STACK_SIZE = 2;
     private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
