@@ -4,7 +4,10 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -14,13 +17,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.graphics.Bitmap;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import android.net.Uri;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,7 +36,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 import java.io.File;
-import java.util.Stack;
 
 public class PicSourceActivity extends AppCompatActivity {
 
@@ -44,7 +46,10 @@ public class PicSourceActivity extends AppCompatActivity {
     Deque<Bitmap> redoQueue;
     private Uri mImageUri;
 
-    private static final int MAX_IMAGE_DIMENSION = 1000;
+    private static final String SOURCE_STATE_KEY = "source";
+    private static final String MOD_STATE_KEY = "mod";
+    private static final String PIXELS_STATE_KEY = "pixels";
+    private static final int MAX_PIXELS = 5000000;
     private static final int MAX_UNDO_STACK_SIZE = 2;
     private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -61,6 +66,16 @@ public class PicSourceActivity extends AppCompatActivity {
 
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
+        if (savedInstanceState != null) {
+            source = savedInstanceState.getParcelable(SOURCE_STATE_KEY);
+            mod = savedInstanceState.getParcelable(MOD_STATE_KEY);
+            pixels = savedInstanceState.getIntArray(PIXELS_STATE_KEY);
+            setHasImageActivityState(true);
+            reloadCurrImage();
+        }
+        else {
+            setHasImageActivityState(false);
+        }
     }
 
     void getPermission(String permissionKind) {
@@ -127,8 +142,21 @@ public class PicSourceActivity extends AppCompatActivity {
 
     private void newEffectApplied() {
         redoQueue.clear();
-        findViewById(R.id.redoButton).setEnabled(false);
+        setImageButtonClickable(findViewById(R.id.redoButton), false);
         undoEnqueue();
+    }
+
+    // TODO: If you make an imagebutton class this could be a function
+    private void setImageButtonClickable(View view, boolean clickable) {
+        // TODO: Maybe change this to a selector in the layout.xml??
+        // http://stackoverflow.com/questions/7228985/android-imagebutton-with-disabled-ui-feel
+        ImageButton button = (ImageButton) view;
+        button.setClickable(clickable);
+        if (clickable) {
+            button.getDrawable().setColorFilter(null);
+        } else {
+            button.getDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
+        }
     }
 
     private void undoEnqueue() {
@@ -136,20 +164,20 @@ public class PicSourceActivity extends AppCompatActivity {
             undoQueue.removeFirst();
         }
         undoQueue.addLast(mod.copy(mod.getConfig(), true));
-        findViewById(R.id.undoButton).setEnabled(true);
+        setImageButtonClickable(findViewById(R.id.undoButton), true);
     }
 
     private void redoEnqueue() {
         // TODO: Do we need to check if the size gets exceeded? think its handled by undo checking
         redoQueue.addLast(mod.copy(mod.getConfig(), true));
-        findViewById(R.id.redoButton).setEnabled(true);
+        setImageButtonClickable(findViewById(R.id.redoButton), true);
     }
 
     public void onRedo(View v) {
         undoEnqueue();
         mod = redoQueue.removeLast();
         if (redoQueue.isEmpty()) {
-            findViewById(R.id.redoButton).setEnabled(false);
+            setImageButtonClickable(findViewById(R.id.redoButton), false);
         }
         setupNewMod();
         reloadCurrImage();
@@ -159,7 +187,7 @@ public class PicSourceActivity extends AppCompatActivity {
         redoEnqueue();
         mod = undoQueue.removeLast();
         if (undoQueue.isEmpty()) {
-            findViewById(R.id.undoButton).setEnabled(false);
+            setImageButtonClickable(findViewById(R.id.undoButton), false);
         }
         setupNewMod();
         reloadCurrImage();
@@ -331,40 +359,28 @@ public class PicSourceActivity extends AppCompatActivity {
 
     private void addImageFromNewSource(Bitmap bm) {
         // TODO: Fix this
-//        if (source.getWidth() >= MAX_IMAGE_DIMENSION &&  source.getHeight() >= MAX_IMAGE_DIMENSION && source.getWidth() > source.getHeight()) {
-//            int height = MAX_IMAGE_DIMENSION / source.getWidth() * source.getHeight();
-//            source = Bitmap.createScaledBitmap(source, MAX_IMAGE_DIMENSION, height,true);
-//        } else if (source.getWidth() >= MAX_IMAGE_DIMENSION && source.getHeight() >= MAX_IMAGE_DIMENSION && source.getHeight() > source.getWidth()) {
-//            int width = MAX_IMAGE_DIMENSION/source.getHeight() * source.getWidth();
-//            source = Bitmap.createScaledBitmap(source, width, MAX_IMAGE_DIMENSION, true);
-//        }
-
-        // TODO: Fix this logic and remove hardcoded numbersageFromNewSource() {
-        if (bm.getWidth() >= 1000 &&  bm.getHeight() >= 1000 && bm.getWidth() > bm.getHeight()) {
-            source = Bitmap.createScaledBitmap(bm, bm.getWidth()/2, bm.getHeight()/2,true);
-        }
-        else {
+        int numPixels = bm.getWidth() * bm.getHeight();
+        if (numPixels >= MAX_PIXELS) {
+            double scaleFactor = (double)MAX_PIXELS / (double)numPixels;
+            int width = (int) (bm.getWidth() * scaleFactor);
+            int height = (int) (bm.getHeight() * scaleFactor);
+            source = Bitmap.createScaledBitmap(bm, width, height,true);
+        } else {
             source = bm;
         }
+
+//        // TODO: Fix this logic and remove hardcoded numbersageFromNewSource() {
+//        if (bm.getWidth() >= 1000 &&  bm.getHeight() >= 1000 && bm.getWidth() > bm.getHeight()) {
+//            source = Bitmap.createScaledBitmap(bm, bm.getWidth()/2, bm.getHeight()/2,true);
+//        }
+//        else {
+//            source = bm;
+//        }
 
         mod = source.copy(source.getConfig(), true);
         setupNewMod();
 
-        LinearLayout ll1 = (LinearLayout) findViewById(R.id.firstButtonLinearLayout);
-        ll1.getChildCount();
-        for (int i = 0; i < ll1.getChildCount(); i++) {
-            ll1.getChildAt(i).setEnabled(true);
-        }
-        LinearLayout ll2 = (LinearLayout) findViewById(R.id.buttonLinearLayout);
-        ll2.getChildCount();
-        for (int i = 0; i < ll2.getChildCount(); i++) {
-            ll2.getChildAt(i).setEnabled(true);
-        }
-        findViewById(R.id.undoButton).setEnabled(false);
-        findViewById(R.id.redoButton).setEnabled(false);
-
-        findViewById(R.id.cameraButton).setVisibility(View.GONE);
-        findViewById(R.id.openExistingButton).setVisibility(View.GONE);
+        setHasImageActivityState(true);
         reloadCurrImage();
     }
 
@@ -379,22 +395,33 @@ public class PicSourceActivity extends AppCompatActivity {
         }
     }
 
-    public void onDiscard(View v) {
-        source = null;
-        mod = null;
-
+    private void setHasImageActivityState(boolean hasImage) {
         LinearLayout ll1 = (LinearLayout) findViewById(R.id.firstButtonLinearLayout);
         ll1.getChildCount();
         for (int i = 0; i < ll1.getChildCount(); i++) {
-            ll1.getChildAt(i).setEnabled(false);
+            setImageButtonClickable(ll1.getChildAt(i), hasImage);
         }
         LinearLayout ll2 = (LinearLayout) findViewById(R.id.buttonLinearLayout);
         ll2.getChildCount();
         for (int i = 0; i < ll2.getChildCount(); i++) {
-            ll2.getChildAt(i).setEnabled(false);
+            setImageButtonClickable(ll2.getChildAt(i), hasImage);
         }
-        findViewById(R.id.cameraButton).setVisibility(View.VISIBLE);
-        findViewById(R.id.openExistingButton).setVisibility(View.VISIBLE);
+        setImageButtonClickable(findViewById(R.id.undoButton), false);
+        setImageButtonClickable(findViewById(R.id.redoButton), false);
+        if (hasImage) {
+            findViewById(R.id.cameraButton).setVisibility(View.GONE);
+            findViewById(R.id.openExistingButton).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.cameraButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.openExistingButton).setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void onDiscard(View v) {
+        source = null;
+        mod = null;
+
+        setHasImageActivityState(false);
         removeCurrImage();
     }
 
@@ -618,6 +645,17 @@ public class PicSourceActivity extends AppCompatActivity {
         public String toString() {
             return "(" + x + "," + y + ")";
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SOURCE_STATE_KEY, source);
+        outState.putParcelable(MOD_STATE_KEY, mod);
+        outState.putIntArray(PIXELS_STATE_KEY, pixels);
+        // TODO: Is there any possible reason i would need to save the URI?
+        // it should only be needed on return from an intent in which case state is preserved
+        // TODO: Handle saving the undo and redo queues
     }
 
     //public class CaitlynsBitmap extends Bitmap {
