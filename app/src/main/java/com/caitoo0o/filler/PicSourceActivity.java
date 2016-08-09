@@ -218,15 +218,17 @@ public class PicSourceActivity extends AppCompatActivity {
 
     // The bitmap passed in must be mutable
     int[] applyThreshold(int [] pixels, int width, int height) {
+        boolean [] processedDummy = new boolean[width * height];
         for (int i = 0; i < pixels.length; i++) {
-            int red = (pixels[i] >> 16) & 0xFF;
-            int green = (pixels[i] >> 8) & 0xFF;
-            int blue = (pixels[i] >> 0) & 0xFF;
+            PixelNode pixel = new PixelNode(i, 0, width, height, pixels, processedDummy);
+            int red = (pixel.getColor() >> 16) & 0xFF;
+            int green = (pixel.getColor() >> 8) & 0xFF;
+            int blue = (pixel.getColor() >> 0) & 0xFF;
             int average = (red + blue + green) / 3;
             if (average >= (255/2)) {
-                pixels[i] = 0xffffff;
+                pixel.setColor(0xffffff);
             } else {
-                pixels[i] = 0x000000;
+                pixel.setColor(0x000000);
             }
         }
         return pixels;
