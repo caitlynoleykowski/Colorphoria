@@ -38,21 +38,21 @@ import java.io.File;
 
 public class PicSourceActivity extends AppCompatActivity {
 
+    private static final String SOURCE_STATE_KEY = "source";
+    private static final String MOD_STATE_KEY = "mod";
+    private static final String PIXELS_STATE_KEY = "pixels";
+    private static final int MAX_PIXELS = 2000000;
+    private static final int MAX_UNDO_QUEUE_SIZE = 8;
+    private static final int ROTATION_ANGLE = 90;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_GET = 0;
+
     Bitmap source;
     Bitmap mod;
     int [] pixels;
     Deque<Bitmap> undoQueue;
     Deque<Bitmap> redoQueue;
     private Uri mImageUri;
-
-    private static final String SOURCE_STATE_KEY = "source";
-    private static final String MOD_STATE_KEY = "mod";
-    private static final String PIXELS_STATE_KEY = "pixels";
-    private static final int MAX_PIXELS = 2000000;
-    private static final int MAX_UNDO_QUEUE_SIZE = 2;
-    private static final int ROTATION_ANGLE = 90;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int REQUEST_IMAGE_GET = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
