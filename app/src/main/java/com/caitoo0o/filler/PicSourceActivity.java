@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -50,7 +49,7 @@ public class PicSourceActivity extends AppCompatActivity {
     private static final String MOD_STATE_KEY = "mod";
     private static final String PIXELS_STATE_KEY = "pixels";
     private static final int MAX_PIXELS = 2000000;
-    private static final int MAX_UNDO_STACK_SIZE = 2;
+    private static final int MAX_UNDO_QUEUE_SIZE = 2;
     private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
@@ -160,7 +159,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     private void undoEnqueue() {
-        if (undoQueue.size() >= MAX_UNDO_STACK_SIZE) {
+        if (undoQueue.size() >= MAX_UNDO_QUEUE_SIZE) {
             undoQueue.removeFirst();
         }
         undoQueue.addLast(mod.copy(mod.getConfig(), true));
@@ -242,6 +241,7 @@ public class PicSourceActivity extends AppCompatActivity {
 
     int[] applyRandomLineFill(int [] pixels, int width, int height) {
         int [] modPixels = new int[width * height];
+        boolean [] processedDummy = new boolean[width * height];
         int prevPixelColor = 0x000000;
         int currColor = 0;
         Random r = new Random();
@@ -249,22 +249,21 @@ public class PicSourceActivity extends AppCompatActivity {
         for (int i = 0; i < pixels.length; i++) {
         //for (int i = 0; i < 20; i++) {
             //Log.i("picsource", "pixels[i]: " + pixels[i]);
-            if (pixels[i] == 0xffffff && prevPixelColor == 0x000000) {
+            PixelNode pixel = new PixelNode(i, 0, width, height, pixels, processedDummy);
+            if (pixel.getColor() == 0xffffff && prevPixelColor == 0x000000) {
                 currColor = r.nextInt(maxColor);
                 modPixels[i] = currColor;
-                prevPixelColor = pixels[i];
-            } else if (pixels[i] == 0xffffff && prevPixelColor == 0xffffff) {
+                prevPixelColor = pixel.getColor();
+            } else if (pixel.getColor() == 0xffffff && prevPixelColor == 0xffffff) {
                 modPixels[i] = currColor;
-                prevPixelColor = pixels[i];
-            } else if (pixels[i] == 0x000000) {
-                prevPixelColor = pixels[i];
-                continue;
+                prevPixelColor = pixel.getColor();
+            } else if (pixel.getColor() == 0x000000) {
+                modPixels[i] = pixel.getColor();
+                prevPixelColor = pixel.getColor();
             } else {
-                //Log.i("picsource", "pixel color = " + pixels[i]);
-                //Log.i("picsource", "The Bitmap passed to applySearchAndFill() was not black and white.");
-                continue;
-                //return bm; // the color of every pixel must be black or white
                 // this condition is only hit if the current pixel is a different color
+                modPixels[i] = pixel.getColor();
+                prevPixelColor = pixel.getColor();
             }
         }
         return modPixels;
@@ -358,7 +357,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     private void addImageFromNewSource(Bitmap bm) {
-        // TODO: Fix this
+        // TODO: Should this go in its own function?
         int numPixels = bm.getWidth() * bm.getHeight();
         if (numPixels >= MAX_PIXELS) {
             double scaleFactor = (double)MAX_PIXELS / (double)numPixels;
@@ -368,14 +367,6 @@ public class PicSourceActivity extends AppCompatActivity {
         } else {
             source = bm;
         }
-
-//        // TODO: Fix this logic and remove hardcoded numbersageFromNewSource() {
-//        if (bm.getWidth() >= 1000 &&  bm.getHeight() >= 1000 && bm.getWidth() > bm.getHeight()) {
-//            source = Bitmap.createScaledBitmap(bm, bm.getWidth()/2, bm.getHeight()/2,true);
-//        }
-//        else {
-//            source = bm;
-//        }
 
         mod = source.copy(source.getConfig(), true);
         setupNewMod();
@@ -497,14 +488,6 @@ public class PicSourceActivity extends AppCompatActivity {
             }
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-//            Bundle extras = data.getExtras();
-//            if (extras != null) {
-//                source = (Bitmap) extras.get("data");
-//                addImageFromNewSource();
-//            } else {
-//                Log.e("picsource", "Extras return from camera intent is null.");
-//                Toast.makeText(getApplicationContext(), "No image capture found.", Toast.LENGTH_LONG).show();
-//            }
             Bitmap image = grabImage();
             if (image != null) {
                 addImageFromNewSource(grabImage());
@@ -608,7 +591,7 @@ public class PicSourceActivity extends AppCompatActivity {
             this.processed = processed;
         }
         public int getColor() {
-            return pixels[idx];
+            return 0x00FFFFFF & pixels[idx];
         }
         public void setColor(int color) {
             pixels[idx] = color;
