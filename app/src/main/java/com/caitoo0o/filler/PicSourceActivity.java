@@ -46,6 +46,7 @@ public class PicSourceActivity extends AppCompatActivity {
     private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
+    private static final int SIGNIFICANT_CHANGE_AMOUNT = 0xff;
 
     Bitmap source;
     Bitmap mod;
@@ -276,6 +277,172 @@ public class PicSourceActivity extends AppCompatActivity {
         applyRandomFill(pixels, mod.getWidth(), mod.getHeight());
         mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
         reloadCurrImage();
+    }
+
+    int [] applyRandomFill(int [] pixels, int width, int height) {
+        boolean[] processed = new boolean[pixels.length];
+        Arrays.fill(processed, false);
+        Random r = new Random();
+        int maxColor = 0xffffff;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                PixelNode currNode = new PixelNode(i, j, width, height, pixels, processed);
+                floodFill(currNode, 0xffffff, r.nextInt(maxColor));
+            }
+        }
+        return pixels;
+    }
+
+    // Flood-fill (node, target-color, replacement-color):
+    void floodFill(PixelNode node, int targetColor, int replacementColor) {
+        Queue<PixelNode> queue = new LinkedList<PixelNode>();
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            //Log.e("picsource", "The queue:" + queue.toString());
+            // 5.    Set n equal to the first element of Q.
+            // 6.    Remove first element from Q.
+            PixelNode n = queue.remove();
+            // 7.     If the color of n is equal to target-color:
+            if (n.getColor() == targetColor) {
+                // 8.    Set the color of n to replacement-color and mark "n" as processed.
+                n.setColor(replacementColor);
+                n.markProcessed();
+                // 9.    Add west node to end of Q if west has not been processed yet.
+                PixelNode west = n.getWest();
+                if (west != null && !west.isProcessed()) {
+                    west.markProcessed();
+                    queue.add(west);
+                }
+                // 10.   Add east node to end of Q if east has not been processed yet.
+                PixelNode east = n.getEast();
+                if (east != null && !east.isProcessed()) {
+                    east.markProcessed();
+                    queue.add(east);
+                }
+                // 11.   Add north node to end of Q if north has not been processed yet.
+                PixelNode north = n.getNorth();
+                if (north != null && !north.isProcessed()) {
+                    north.markProcessed();
+                    queue.add(north);
+                }
+                // 12.   Add south node to end of Q if south has not been processed yet.
+                PixelNode south = n.getSouth();
+                if (south != null && !south.isProcessed()) {
+                    south.markProcessed();
+                    queue.add(south);
+                }
+            }
+        }
+        //13. Return.
+        return;
+    }
+
+    public void onRandomBleedFill(View v) {
+        newEffectApplied();
+        applyRandomBleedFill(pixels, mod.getWidth(), mod.getHeight());
+        mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+        reloadCurrImage();
+    }
+
+    int [] applyRandomBleedFill(int [] pixels, int width, int height) {
+        boolean[] processed = new boolean[pixels.length];
+        Arrays.fill(processed, false);
+        Random r = new Random();
+        int maxColor = 0xffffff;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                PixelNode currNode = new PixelNode(i, j, width, height, pixels, processed);
+                if (!currNode.isProcessed()) {
+                    int targetColor = currNode.getColor();
+                    bleedFill(currNode, targetColor, r.nextInt(maxColor));
+                }
+            }
+        }
+        return pixels;
+    }
+
+    // Flood-fill (node, target-color, replacement-color):
+    void bleedFill(PixelNode node, int targetColor, int replacementColor) {
+        Queue<PixelNode> queue = new LinkedList<PixelNode>();
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            //Log.e("picsource", "The queue:" + queue.toString());
+            // 5.    Set n equal to the first element of Q.
+            // 6.    Remove first element from Q.
+            PixelNode n = queue.remove();
+            // 7.     If the color of n is not significantly different than the target-color:
+            boolean sigChange = false;
+            int pixelCurrColor = n.getColor();
+            int changeInRed = Math.abs(getRed(pixelCurrColor) - getRed(targetColor));
+            int changeInGreen = Math.abs(getGreen(pixelCurrColor) - getGreen(targetColor));
+            int changeInBlue = Math.abs(getBlue(pixelCurrColor) - getBlue(targetColor));
+            int overallChange = changeInRed + changeInGreen + changeInBlue;
+            if (overallChange > SIGNIFICANT_CHANGE_AMOUNT) {
+                sigChange = true;
+            }
+            if (!sigChange) {
+                // 8.    Set the color of n to adjusted replacement-color and mark "n" as processed.
+                int adjustedReplacementColor;
+                int pixelDarkness = getRed(pixelCurrColor) + getGreen(pixelCurrColor) + getBlue(pixelCurrColor);
+                int darknessInRepColor = getRed(replacementColor) + getGreen(replacementColor) + getBlue(replacementColor);
+                double redRatioInRepColor, greenRatioInRepColor, blueRatioInRepColor;
+                if (darknessInRepColor > 0) {
+                    redRatioInRepColor = (double)getRed(replacementColor) / (double)darknessInRepColor;
+                    greenRatioInRepColor = (double)getGreen(replacementColor) / (double)darknessInRepColor;
+                    blueRatioInRepColor = (double)getBlue(replacementColor) / (double)darknessInRepColor;
+                } else {
+                    redRatioInRepColor = 0;
+                    greenRatioInRepColor = 0;
+                    blueRatioInRepColor = 0;
+                }
+                int redInAdjRepColor = (int) (redRatioInRepColor * pixelDarkness);
+                int greenInAdjRepColor = (int) (greenRatioInRepColor * pixelDarkness);
+                int blueInAdjRepColor = (int) (blueRatioInRepColor * pixelDarkness);
+                adjustedReplacementColor = (redInAdjRepColor << 16) + (greenInAdjRepColor << 8) + blueInAdjRepColor;
+                n.setColor(adjustedReplacementColor);
+                n.markProcessed();
+                // 9.    Add west node to end of Q if west has not been processed yet.
+                PixelNode west = n.getWest();
+                if (west != null && !west.isProcessed()) {
+                    west.markProcessed();
+                    queue.add(west);
+                }
+                // 10.   Add east node to end of Q if east has not been processed yet.
+                PixelNode east = n.getEast();
+                if (east != null && !east.isProcessed()) {
+                    east.markProcessed();
+                    queue.add(east);
+                }
+                // 11.   Add north node to end of Q if north has not been processed yet.
+                PixelNode north = n.getNorth();
+                if (north != null && !north.isProcessed()) {
+                    north.markProcessed();
+                    queue.add(north);
+                }
+                // 12.   Add south node to end of Q if south has not been processed yet.
+                PixelNode south = n.getSouth();
+                if (south != null && !south.isProcessed()) {
+                    south.markProcessed();
+                    queue.add(south);
+                }
+            }
+        }
+        //13. Return.
+        return;
+    }
+
+    private int getRed(int color) {
+        return (color & 0xff0000)>> 16;
+    }
+
+    private int getGreen(int color) {
+        return (color &  0x00ff00) >> 8;
+    }
+
+    private int getBlue(int color) {
+        return (color & 0x0000ff) >> 0;
     }
 
     private File getAlbumStorageDir(String albumName) {
@@ -513,65 +680,6 @@ public class PicSourceActivity extends AppCompatActivity {
             Log.d("picsource", "Failed to load image", e);
             return null;
         }
-    }
-
-    int [] applyRandomFill(int [] pixels, int width, int height) {
-        boolean[] processed = new boolean[pixels.length];
-        Arrays.fill(processed, false);
-        Random r = new Random();
-        int maxColor = 0xffffff;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                PixelNode currNode = new PixelNode(i, j, width, height, pixels, processed);
-                floodFill(currNode, 0xffffff, r.nextInt(maxColor));
-            }
-        }
-        return pixels;
-    }
-
-    // Flood-fill (node, target-color, replacement-color):
-    void floodFill(PixelNode node, int targetColor, int replacementColor) {
-        Queue<PixelNode> queue = new LinkedList<PixelNode>();
-        queue.add(node);
-
-        while (!queue.isEmpty()) {
-            //Log.e("picsource", "The queue:" + queue.toString());
-            // 5.    Set n equal to the first element of Q.
-            // 6.    Remove first element from Q.
-            PixelNode n = queue.remove();
-            // 7.     If the color of n is equal to target-color:
-            if (n.getColor() == targetColor) {
-                // 8.    Set the color of n to replacement-color and mark "n" as processed.
-                n.setColor(replacementColor);
-                n.markProcessed();
-                // 9.    Add west node to end of Q if west has not been processed yet.
-                PixelNode west = n.getWest();
-                if (west != null && !west.isProcessed()) {
-                    west.markProcessed();
-                    queue.add(west);
-                }
-                // 10.   Add east node to end of Q if east has not been processed yet.
-                PixelNode east = n.getEast();
-                if (east != null && !east.isProcessed()) {
-                    east.markProcessed();
-                    queue.add(east);
-                }
-                // 11.   Add north node to end of Q if north has not been processed yet.
-                PixelNode north = n.getNorth();
-                if (north != null && !north.isProcessed()) {
-                    north.markProcessed();
-                    queue.add(north);
-                }
-                // 12.   Add south node to end of Q if south has not been processed yet.
-                PixelNode south = n.getSouth();
-                if (south != null && !south.isProcessed()) {
-                    south.markProcessed();
-                    queue.add(south);
-                }
-            }
-        }
-        //13. Return.
-        return;
     }
 
     class PixelNode {

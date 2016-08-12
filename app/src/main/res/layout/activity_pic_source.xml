@@ -93,10 +93,18 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/my_menu_bar_button"
+            android:onClick="onRandomBleedFill"
+            android:src="@drawable/ic_face_24dp"
+            android:clickable="false" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/my_menu_bar_button"
             android:onClick="onThreshold"
             android:src="@drawable/ic_threshold_24dp"
-            android:clickable="false"
-            android:textStyle="bold" />
+            android:clickable="false" />
 
         <ImageButton
             android:layout_width="0dp"
@@ -105,8 +113,7 @@
             android:background="@drawable/my_menu_bar_button"
             android:onClick="onRandomLineFill"
             android:src="@drawable/ic_line_fill_24dp"
-            android:clickable="false"
-            android:textStyle="bold" />
+            android:clickable="false" />
 
         <ImageButton
             android:layout_width="0dp"
@@ -115,8 +122,7 @@
             android:background="@drawable/my_menu_bar_button"
             android:onClick="onRandomFloodFill"
             android:src="@drawable/ic_color_fill_24dp"
-            android:clickable="false"
-            android:textStyle="bold" />
+            android:clickable="false" />
 
         <ImageButton
             android:layout_width="0dp"
@@ -125,8 +131,7 @@
             android:background="@drawable/my_menu_bar_button"
             android:onClick="onRotate"
             android:src="@drawable/ic_rotate_right_24dp"
-            android:clickable="false"
-            android:textStyle="bold" />
+            android:clickable="false" />
     </LinearLayout>
 
     <RelativeLayout
