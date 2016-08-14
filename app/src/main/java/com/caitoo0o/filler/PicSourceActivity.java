@@ -41,16 +41,13 @@ public class PicSourceActivity extends AppCompatActivity {
     private static final String SOURCE_STATE_KEY = "source";
     private static final String MOD_STATE_KEY = "mod";
     private static final String PIXELS_STATE_KEY = "pixels";
-    private static final int MAX_PIXELS = 2000000;
     private static final int MAX_UNDO_QUEUE_SIZE = 8;
     private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
     private static final int SIGNIFICANT_CHANGE_AMOUNT = 0xff;
 
-    Bitmap source;
-    Bitmap mod;
-    int [] pixels;
+    BitmapWrapper bmW;
     Deque<Bitmap> undoQueue;
     Deque<Bitmap> redoQueue;
     private Uri mImageUri;
@@ -67,11 +64,17 @@ public class PicSourceActivity extends AppCompatActivity {
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
         if (savedInstanceState != null) {
-            source = savedInstanceState.getParcelable(SOURCE_STATE_KEY);
-            mod = savedInstanceState.getParcelable(MOD_STATE_KEY);
-            pixels = savedInstanceState.getIntArray(PIXELS_STATE_KEY);
-            setHasImageActivityState(true);
-            reloadCurrImage();
+            Bitmap sourceImage = (Bitmap) savedInstanceState.getParcelable(SOURCE_STATE_KEY);
+            Bitmap modImage = (Bitmap) savedInstanceState.getParcelable(MOD_STATE_KEY);
+            if (sourceImage != null && modImage != null) {
+                bmW = new BitmapWrapper(sourceImage);
+                bmW.setModifiedBitmap(modImage);
+                setHasImageActivityState(true);
+                reloadCurrImage();
+            }
+            else {
+                setHasImageActivityState(false);
+            }
         }
         else {
             setHasImageActivityState(false);
@@ -123,6 +126,7 @@ public class PicSourceActivity extends AppCompatActivity {
     private void reloadCurrImage() {
         removeCurrImage();
         ImageView img = new ImageView(getApplicationContext());
+        // TODO: Remove this unless you want a longclick
         img.setOnLongClickListener(new View.OnLongClickListener() {
 
             @Override
@@ -132,7 +136,9 @@ public class PicSourceActivity extends AppCompatActivity {
             }
         });
         img.setId(R.id.theImage);
-        img.setImageBitmap(mod);
+        if (bmW.getModifiedBitmap() != null) {
+            img.setImageBitmap(bmW.getModifiedBitmap());
+        }
         img.setScaleType(ScaleType.FIT_CENTER);
         img.setPadding(0, 4, 4, 0);
         img.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
@@ -163,33 +169,31 @@ public class PicSourceActivity extends AppCompatActivity {
         if (undoQueue.size() >= MAX_UNDO_QUEUE_SIZE) {
             undoQueue.removeFirst();
         }
-        undoQueue.addLast(mod.copy(mod.getConfig(), true));
+        undoQueue.addLast(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
         setImageButtonClickable(findViewById(R.id.undoButton), true);
     }
 
     private void redoEnqueue() {
         // TODO: Do we need to check if the size gets exceeded? think its handled by undo checking
-        redoQueue.addLast(mod.copy(mod.getConfig(), true));
+        redoQueue.addLast(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
         setImageButtonClickable(findViewById(R.id.redoButton), true);
     }
 
     public void onRedo(View v) {
         undoEnqueue();
-        mod = redoQueue.removeLast();
+        bmW.setModifiedBitmap(redoQueue.removeLast());
         if (redoQueue.isEmpty()) {
             setImageButtonClickable(findViewById(R.id.redoButton), false);
         }
-        setupNewMod();
         reloadCurrImage();
     }
 
     public void onUndo(View v) {
         redoEnqueue();
-        mod = undoQueue.removeLast();
+        bmW.setModifiedBitmap(undoQueue.removeLast());
         if (undoQueue.isEmpty()) {
             setImageButtonClickable(findViewById(R.id.undoButton), false);
         }
-        setupNewMod();
         reloadCurrImage();
     }
 
@@ -197,104 +201,91 @@ public class PicSourceActivity extends AppCompatActivity {
         newEffectApplied();
         Matrix matrix = new Matrix();
         matrix.postRotate(ROTATION_ANGLE);
-        mod = Bitmap.createBitmap(mod, 0, 0, mod.getWidth(), mod.getHeight(), matrix, true);
-        pixels = new int[mod.getWidth() * mod.getHeight()];
-        mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-
+        bmW.setModifiedBitmap(Bitmap.createBitmap(bmW.getModifiedBitmap(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
         reloadCurrImage();
     }
 
     public void onReset(View v) {
-        mod = source.copy(source.getConfig(), true);
-        setupNewMod();
+        bmW.resetFromSource();
         reloadCurrImage();
     }
 
     public void onThreshold(View v) {
         newEffectApplied();
-        pixels = applyThreshold(pixels, mod.getWidth(), mod.getHeight());
-        mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+        applyThreshold(bmW);
         reloadCurrImage();
     }
 
-    // The bitmap passed in must be mutable
-    int[] applyThreshold(int [] pixels, int width, int height) {
-        boolean [] processedDummy = new boolean[width * height];
-        for (int i = 0; i < pixels.length; i++) {
-            PixelNode pixel = new PixelNode(i, 0, width, height, pixels, processedDummy);
-            int red = (pixel.getColor() >> 16) & 0xFF;
-            int green = (pixel.getColor() >> 8) & 0xFF;
-            int blue = (pixel.getColor() >> 0) & 0xFF;
-            int average = (red + blue + green) / 3;
-            if (average >= (255/2)) {
-                pixel.setColor(0xffffff);
-            } else {
-                pixel.setColor(0x000000);
+    void applyThreshold(BitmapWrapper bmW) {
+        for (int y = 0; y < bmW.getHeight(); y++) {
+            for (int x = 0; x < bmW.getWidth(); x++) {
+                PixelNode pixel = bmW.getPixel(x, y);
+                int red = (pixel.getColor() >> 16) & 0xFF;
+                int green = (pixel.getColor() >> 8) & 0xFF;
+                int blue = (pixel.getColor() >> 0) & 0xFF;
+                int average = (red + blue + green) / 3;
+                if (average >= (255 / 2)) {
+                    pixel.setColor(0xffffff);
+                } else {
+                    pixel.setColor(0x000000);
+                }
             }
         }
-        return pixels;
+        bmW.doneProcessing();
     }
 
     public void onRandomLineFill(View v) {
         newEffectApplied();
-        pixels = applyRandomLineFill(pixels, mod.getWidth(), mod.getHeight());
-        mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+        applyRandomLineFill(bmW);
         reloadCurrImage();
     }
 
-    int[] applyRandomLineFill(int [] pixels, int width, int height) {
-        int [] modPixels = new int[width * height];
-        boolean [] processedDummy = new boolean[width * height];
+    void applyRandomLineFill(BitmapWrapper bmW) {
         int prevPixelColor = 0x000000;
         int currColor = 0;
         Random r = new Random();
         int maxColor = 0xffffff;
-        for (int i = 0; i < pixels.length; i++) {
-        //for (int i = 0; i < 20; i++) {
-            //Log.i("picsource", "pixels[i]: " + pixels[i]);
-            PixelNode pixel = new PixelNode(i, 0, width, height, pixels, processedDummy);
-            if (pixel.getColor() == 0xffffff && prevPixelColor == 0x000000) {
-                currColor = r.nextInt(maxColor);
-                modPixels[i] = currColor;
-                prevPixelColor = pixel.getColor();
-            } else if (pixel.getColor() == 0xffffff && prevPixelColor == 0xffffff) {
-                modPixels[i] = currColor;
-                prevPixelColor = pixel.getColor();
-            } else if (pixel.getColor() == 0x000000) {
-                modPixels[i] = pixel.getColor();
-                prevPixelColor = pixel.getColor();
-            } else {
-                // this condition is only hit if the current pixel is a different color
-                modPixels[i] = pixel.getColor();
-                prevPixelColor = pixel.getColor();
+        for (int y = 0; y < bmW.getHeight(); y++) {
+            for (int x = 0; x < bmW.getWidth(); x++) {
+                PixelNode pixel = bmW.getPixel(x, y);
+                if (pixel.getColor() == 0xffffff && prevPixelColor == 0x000000) {
+                    currColor = r.nextInt(maxColor);
+                    prevPixelColor = pixel.getColor();
+                    pixel.setColor(currColor);
+                } else if (pixel.getColor() == 0xffffff && prevPixelColor == 0xffffff) {
+                    prevPixelColor = pixel.getColor();
+                    pixel.setColor(currColor);
+                } else if (pixel.getColor() == 0x000000) {
+                    prevPixelColor = pixel.getColor();
+                } else {
+                    // this condition is only hit if the current pixel is a different color
+                    prevPixelColor = pixel.getColor();
+                }
             }
         }
-        return modPixels;
+        bmW.doneProcessing();
     }
 
     public void onRandomFloodFill(View v) {
         newEffectApplied();
-        applyRandomFill(pixels, mod.getWidth(), mod.getHeight());
-        mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+        applyRandomFill(bmW);
         reloadCurrImage();
     }
 
-    int [] applyRandomFill(int [] pixels, int width, int height) {
-        boolean[] processed = new boolean[pixels.length];
-        Arrays.fill(processed, false);
+    public void applyRandomFill(BitmapWrapper bmW) {
         Random r = new Random();
         int maxColor = 0xffffff;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                PixelNode currNode = new PixelNode(i, j, width, height, pixels, processed);
+        for (int i = 0; i < bmW.getWidth(); i++) {
+            for (int j = 0; j < bmW.getHeight(); j++) {
+                PixelNode currNode = bmW.getPixel(i, j);
                 floodFill(currNode, 0xffffff, r.nextInt(maxColor));
             }
         }
-        return pixels;
+        bmW.doneProcessing();
     }
 
     // Flood-fill (node, target-color, replacement-color):
-    void floodFill(PixelNode node, int targetColor, int replacementColor) {
+    private void floodFill(PixelNode node, int targetColor, int replacementColor) {
         Queue<PixelNode> queue = new LinkedList<PixelNode>();
         queue.add(node);
 
@@ -340,26 +331,23 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onRandomBleedFill(View v) {
         newEffectApplied();
-        applyRandomBleedFill(pixels, mod.getWidth(), mod.getHeight());
-        mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
+        applyRandomBleedFill(bmW);
         reloadCurrImage();
     }
 
-    int [] applyRandomBleedFill(int [] pixels, int width, int height) {
-        boolean[] processed = new boolean[pixels.length];
-        Arrays.fill(processed, false);
+    public void applyRandomBleedFill(BitmapWrapper bmW) {
         Random r = new Random();
         int maxColor = 0xffffff;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                PixelNode currNode = new PixelNode(i, j, width, height, pixels, processed);
+        for (int i = 0; i < bmW.getWidth(); i++) {
+            for (int j = 0; j < bmW.getHeight(); j++) {
+                PixelNode currNode = bmW.getPixel(i, j);
                 if (!currNode.isProcessed()) {
                     int targetColor = currNode.getColor();
                     bleedFill(currNode, targetColor, r.nextInt(maxColor));
                 }
             }
         }
-        return pixels;
+        bmW.doneProcessing();
     }
 
     // Flood-fill (node, target-color, replacement-color):
@@ -477,7 +465,7 @@ public class PicSourceActivity extends AppCompatActivity {
             FileOutputStream out = null;
             try {
                 out = new FileOutputStream(picFile);
-                mod.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                bmW.getModifiedBitmap().compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
                 // PNG is a lossless format, the compression factor (100) is ignored
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
@@ -509,7 +497,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onShare(View v) {
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), mod, "Export from Filler", null);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmW.getModifiedBitmap(), "Export from Filler", null);
         Uri uri = Uri.parse(path);
 
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -520,26 +508,8 @@ public class PicSourceActivity extends AppCompatActivity {
         }
     }
 
-    private void setupNewMod() {
-        pixels = new int[mod.getWidth() * mod.getHeight()];
-        mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-    }
-
     private void addImageFromNewSource(Bitmap bm) {
-        // TODO: Should this go in its own function?
-        int numPixels = bm.getWidth() * bm.getHeight();
-        if (numPixels >= MAX_PIXELS) {
-            double scaleFactor = (double)MAX_PIXELS / (double)numPixels;
-            int width = (int) (bm.getWidth() * scaleFactor);
-            int height = (int) (bm.getHeight() * scaleFactor);
-            source = Bitmap.createScaledBitmap(bm, width, height,true);
-        } else {
-            source = bm;
-        }
-
-        mod = source.copy(source.getConfig(), true);
-        setupNewMod();
-
+        bmW = new BitmapWrapper(bm);
         setHasImageActivityState(true);
         reloadCurrImage();
     }
@@ -578,8 +548,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onDiscard(View v) {
-        source = null;
-        mod = null;
+        bmW = null;
 
         setHasImageActivityState(false);
         removeCurrImage();
@@ -682,73 +651,23 @@ public class PicSourceActivity extends AppCompatActivity {
         }
     }
 
-    class PixelNode {
-        int x;
-        int y;
-        int idx;
-        int width;
-        int height;
-        int[] pixels;
-        boolean [] processed;
-
-        PixelNode(int x, int y, int width, int height, int[] pixels, boolean[] processed) {
-            this.x = x;
-            this.y = y;
-            this.idx = x + (y * width);
-            this.width = width;
-            this.height = height;
-            this.pixels = pixels;
-            this.processed = processed;
-        }
-        public int getColor() {
-            return 0x00FFFFFF & pixels[idx];
-        }
-        public void setColor(int color) {
-            pixels[idx] = color;
-        }
-        public boolean isProcessed() {
-            return processed[idx];
-        }
-        public void markProcessed() {
-            processed[idx] = true;
-        }
-        public PixelNode getNorth() {
-            PixelNode node = new PixelNode(x, y - 1, width, height, pixels, processed);
-            return node.isWithinBounds() ? node : null;
-        }
-        public PixelNode getSouth() {
-            PixelNode node = new PixelNode(x, y + 1, width, height, pixels, processed);
-            return node.isWithinBounds() ? node : null;
-        }
-        public PixelNode getEast() {
-            PixelNode node = new PixelNode(x + 1, y, width, height, pixels, processed);
-            return node.isWithinBounds() ? node : null;
-        }
-        public PixelNode getWest() {
-            PixelNode node = new PixelNode(x - 1, y, width, height, pixels, processed);
-            return node.isWithinBounds() ? node : null;
-        }
-        private boolean isWithinBounds() {
-            if (x < width && x >= 0 && y < height && y >= 0) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        public String toString() {
-            return "(" + x + "," + y + ")";
-        }
-    }
-
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(SOURCE_STATE_KEY, source);
-        outState.putParcelable(MOD_STATE_KEY, mod);
-        outState.putIntArray(PIXELS_STATE_KEY, pixels);
-        // TODO: Is there any possible reason i would need to save the URI?
-        // it should only be needed on return from an intent in which case state is preserved
-        // TODO: Handle saving the undo and redo queues
+        if (bmW != null) {
+            outState.putParcelable(SOURCE_STATE_KEY, bmW.getSourceBitmap());
+            outState.putParcelable(MOD_STATE_KEY, bmW.getModifiedBitmap());
+            // TODO: Is there any possible reason i would need to save the URI?
+            // it should only be needed on return from an intent in which case state is preserved
+            // TODO: Handle saving the undo and redo queues
+        }
+        else {
+            outState.putParcelable(SOURCE_STATE_KEY, null);
+            outState.putParcelable(MOD_STATE_KEY, null);
+            // TODO: Is there any possible reason i would need to save the URI?
+            // it should only be needed on return from an intent in which case state is preserved
+            // TODO: Handle saving the undo and redo queues
+        }
     }
 
     //public class CaitlynsBitmap extends Bitmap {
