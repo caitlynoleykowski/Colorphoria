@@ -161,7 +161,7 @@ public class PicSourceActivity extends AppCompatActivity {
         if (clickable) {
             button.getDrawable().setColorFilter(null);
         } else {
-            button.getDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
+            button.getDrawable().setColorFilter(0xff00ffee, PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -201,6 +201,14 @@ public class PicSourceActivity extends AppCompatActivity {
         newEffectApplied();
         Matrix matrix = new Matrix();
         matrix.postRotate(ROTATION_ANGLE);
+        bmW.setModifiedBitmap(Bitmap.createBitmap(bmW.getModifiedBitmap(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
+        reloadCurrImage();
+    }
+
+    public void onRotateLeft(View v) {
+        newEffectApplied();
+        Matrix matrix = new Matrix();
+        matrix.postRotate(-90);
         bmW.setModifiedBitmap(Bitmap.createBitmap(bmW.getModifiedBitmap(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
         reloadCurrImage();
     }
