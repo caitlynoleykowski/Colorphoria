@@ -161,7 +161,7 @@ public class PicSourceActivity extends AppCompatActivity {
         if (clickable) {
             button.getDrawable().setColorFilter(null);
         } else {
-            button.getDrawable().setColorFilter(0xff00ffee, PorterDuff.Mode.SRC_IN);
+            button.getDrawable().setColorFilter(0xff00ffff, PorterDuff.Mode.SRC_IN);
         }
     }
 
