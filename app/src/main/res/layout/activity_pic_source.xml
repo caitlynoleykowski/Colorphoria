@@ -4,143 +4,153 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.caitoo0o.filler.PicSourceActivity">
+    tools:context="com.caitoo0o.filler.PicSourceActivity"
+    android:background="#00ccbb">
 
     <LinearLayout
-        android:id="@+id/firstButtonLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:elevation="@dimen/activity_horizontal_margin"
+        android:background="#00ddcc">
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+        <LinearLayout
+            android:id="@+id/firstButtonLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onDiscard"
-            android:src="@drawable/ic_delete_24dp"
-            android:textStyle="bold"
-            android:clickable="false" />
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onDiscard"
+                android:src="@drawable/ic_delete_24dp"
+                android:textStyle="bold"
+                android:clickable="false" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onReset"
+                android:src="@drawable/ic_clear_24dp"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:clickable="false" />
+
+            <ImageButton
+                android:id="@+id/undoButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onUndo"
+                android:src="@drawable/ic_undo_24dp"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:clickable="false" />
+
+            <ImageButton
+                android:id="@+id/redoButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onRedo"
+                android:src="@drawable/ic_redo_24dp"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:clickable="false" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onSave"
+                android:src="@drawable/ic_get_app_24dp"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:clickable="false" />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onShare"
+                android:src="@drawable/ic_share_24dp"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:clickable="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/buttonLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onReset"
-            android:src="@drawable/ic_clear_24dp"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:clickable="false" />
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/undoButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onUndo"
-            android:src="@drawable/ic_undo_24dp"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:clickable="false" />
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onRotateLeft"
+                android:src="@drawable/ic_rotate_left_24dp"
+                android:clickable="false" />
 
-        <ImageButton
-            android:id="@+id/redoButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onRedo"
-            android:src="@drawable/ic_redo_24dp"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:clickable="false" />
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onRandomBleedFill"
+                android:src="@drawable/ic_face_24dp"
+                android:clickable="false" />
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onSave"
-            android:src="@drawable/ic_get_app_24dp"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:clickable="false" />
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onThreshold"
+                android:src="@drawable/ic_threshold_24dp"
+                android:clickable="false" />
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onShare"
-            android:src="@drawable/ic_share_24dp"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:clickable="false" />
-    </LinearLayout>
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onRandomLineFill"
+                android:src="@drawable/ic_line_fill_24dp"
+                android:clickable="false" />
 
-    <LinearLayout
-        android:id="@+id/buttonLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onRandomFloodFill"
+                android:src="@drawable/ic_color_fill_24dp"
+                android:clickable="false" />
 
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onRotateLeft"
-            android:src="@drawable/ic_rotate_left_24dp"
-            android:clickable="false" />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onRandomBleedFill"
-            android:src="@drawable/ic_face_24dp"
-            android:clickable="false" />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onThreshold"
-            android:src="@drawable/ic_threshold_24dp"
-            android:clickable="false" />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onRandomLineFill"
-            android:src="@drawable/ic_line_fill_24dp"
-            android:clickable="false" />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onRandomFloodFill"
-            android:src="@drawable/ic_color_fill_24dp"
-            android:clickable="false" />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onRotate"
-            android:src="@drawable/ic_rotate_right_24dp"
-            android:clickable="false" />
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onRotate"
+                android:src="@drawable/ic_rotate_right_24dp"
+                android:clickable="false" />
+        </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
@@ -148,7 +158,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8"
-        android:background="#00ccbb"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
@@ -175,7 +184,8 @@
                 android:src="@drawable/ic_camera_alt_200dp"
                 android:scaleType="fitCenter"
                 android:background="@drawable/mybutton"
-                android:onClick="onCamera" />
+                android:onClick="onCamera"
+                />
 
             <ImageButton
                 android:layout_width="wrap_content"

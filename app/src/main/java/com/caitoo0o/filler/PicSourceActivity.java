@@ -140,7 +140,7 @@ public class PicSourceActivity extends AppCompatActivity {
             img.setImageBitmap(bmW.getModifiedBitmap());
         }
         img.setScaleType(ScaleType.FIT_CENTER);
-        img.setPadding(0, 4, 4, 0);
+        img.setPadding(4, 8, 4, 4);
         img.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.imageAreaLayout);
         rl.addView(img);
