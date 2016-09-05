@@ -48,8 +48,8 @@ public class PicSourceActivity extends AppCompatActivity {
     private static final int SIGNIFICANT_CHANGE_AMOUNT = 0xff;
 
     BitmapWrapper bmW;
-    Deque<Bitmap> undoQueue;
-    Deque<Bitmap> redoQueue;
+    Deque<BitmapWrapper> undoQueue;
+    Deque<BitmapWrapper> redoQueue;
     private Uri mImageUri;
 
     @Override
@@ -169,19 +169,25 @@ public class PicSourceActivity extends AppCompatActivity {
         if (undoQueue.size() >= MAX_UNDO_QUEUE_SIZE) {
             undoQueue.removeFirst();
         }
-        undoQueue.addLast(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
+        BitmapWrapper undoCopy = new BitmapWrapper(bmW.getSourceBitmap().copy(bmW.getSourceBitmap().getConfig(), true));
+        undoCopy.setRotatedSource(bmW.getRotatedSource().copy(bmW.getRotatedSource().getConfig(), true));
+        undoCopy.setModifiedBitmap(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
+        undoQueue.addLast(undoCopy);
         setImageButtonClickable(findViewById(R.id.undoButton), true);
     }
 
     private void redoEnqueue() {
         // TODO: Do we need to check if the size gets exceeded? think its handled by undo checking
-        redoQueue.addLast(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
+        BitmapWrapper redoCopy = new BitmapWrapper(bmW.getSourceBitmap().copy(bmW.getSourceBitmap().getConfig(), true));
+        redoCopy.setRotatedSource(bmW.getRotatedSource().copy(bmW.getRotatedSource().getConfig(), true));
+        redoCopy.setModifiedBitmap(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
+        redoQueue.addLast(redoCopy);
         setImageButtonClickable(findViewById(R.id.redoButton), true);
     }
 
     public void onRedo(View v) {
         undoEnqueue();
-        bmW.setModifiedBitmap(redoQueue.removeLast());
+        bmW = redoQueue.removeLast();
         if (redoQueue.isEmpty()) {
             setImageButtonClickable(findViewById(R.id.redoButton), false);
         }
@@ -190,7 +196,7 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onUndo(View v) {
         redoEnqueue();
-        bmW.setModifiedBitmap(undoQueue.removeLast());
+        bmW = undoQueue.removeLast();
         if (undoQueue.isEmpty()) {
             setImageButtonClickable(findViewById(R.id.undoButton), false);
         }
@@ -201,6 +207,7 @@ public class PicSourceActivity extends AppCompatActivity {
         newEffectApplied();
         Matrix matrix = new Matrix();
         matrix.postRotate(ROTATION_ANGLE);
+        bmW.setRotatedSource(Bitmap.createBitmap(bmW.getRotatedSource(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
         bmW.setModifiedBitmap(Bitmap.createBitmap(bmW.getModifiedBitmap(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
         reloadCurrImage();
     }
@@ -208,7 +215,8 @@ public class PicSourceActivity extends AppCompatActivity {
     public void onRotateLeft(View v) {
         newEffectApplied();
         Matrix matrix = new Matrix();
-        matrix.postRotate(-90);
+        matrix.postRotate(-1 * ROTATION_ANGLE);
+        bmW.setRotatedSource(Bitmap.createBitmap(bmW.getRotatedSource(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
         bmW.setModifiedBitmap(Bitmap.createBitmap(bmW.getModifiedBitmap(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
         reloadCurrImage();
     }
@@ -220,6 +228,7 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onThreshold(View v) {
         newEffectApplied();
+        bmW.resetFromRotatedSource();
         applyThreshold(bmW);
         reloadCurrImage();
     }
@@ -244,6 +253,8 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onRandomLineFill(View v) {
         newEffectApplied();
+        bmW.resetFromRotatedSource();
+        applyThreshold(bmW);
         applyRandomLineFill(bmW);
         reloadCurrImage();
     }
@@ -276,6 +287,8 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onRandomFloodFill(View v) {
         newEffectApplied();
+        bmW.resetFromRotatedSource();
+        applyThreshold(bmW);
         applyRandomFill(bmW);
         reloadCurrImage();
     }
@@ -339,6 +352,7 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onRandomBleedFill(View v) {
         newEffectApplied();
+        bmW.resetFromRotatedSource();
         applyRandomBleedFill(bmW);
         reloadCurrImage();
     }

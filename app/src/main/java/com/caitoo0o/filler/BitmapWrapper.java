@@ -10,6 +10,7 @@ public class BitmapWrapper {
     private static final int MAX_PIXELS = 2000000;
 
     Bitmap source;
+    Bitmap rotatedSource;
     Bitmap mod;
     int [] pixels;
     PixelNode [][] pixelNodes;
@@ -65,10 +66,22 @@ public class BitmapWrapper {
 
     public void setSource(Bitmap bm) {
         source = bm;
+        rotatedSource = source.copy(source.getConfig(), true);
         setModifiedBitmap(source.copy(source.getConfig(), true));
+    }
+
+    public Bitmap getRotatedSource() {
+        return rotatedSource;
+    }
+
+    public void setRotatedSource(Bitmap bm) {
+        rotatedSource = bm;
     }
 
     public void resetFromSource() {
         setModifiedBitmap(source.copy(source.getConfig(), true));
+    }
+    public void resetFromRotatedSource() {
+        setModifiedBitmap(rotatedSource.copy(rotatedSource.getConfig(), true));
     }
 }
