@@ -16,12 +16,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.graphics.Bitmap;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import java.io.FileOutputStream;
@@ -38,19 +40,29 @@ import java.io.File;
 
 public class PicSourceActivity extends AppCompatActivity {
 
-    private static final String SOURCE_STATE_KEY = "source";
-    private static final String MOD_STATE_KEY = "mod";
-    private static final String PIXELS_STATE_KEY = "pixels";
+    private static final String SOURCE_STATE_KEY = "SOURCE_STATE_KEY";
+    // TODO: rotated source
+    private static final String MOD_STATE_KEY = "MOD_STATE_KEY";
+    private static final String EFFECT_SELECTED_STATE_KEY = "EFFECT_SELECTED_STATE_KEY";
+
     private static final int MAX_UNDO_QUEUE_SIZE = 8;
     private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
-    private static final int SIGNIFICANT_CHANGE_AMOUNT = 0xff;
 
-    BitmapWrapper bmW;
-    Deque<BitmapWrapper> undoQueue;
-    Deque<BitmapWrapper> redoQueue;
+    private enum Effect {
+        NONE,
+        RANDOM_BLEED_FILL,
+        THRESHOLD,
+        RANDOM_LINE_FILL,
+        RANDOM_FLOOD_FILL
+    }
+
+    private BitmapWrapper bmW;
+    private Deque<BitmapWrapper> undoQueue;
+    private Deque<BitmapWrapper> redoQueue;
     private Uri mImageUri;
+    private Effect effectSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +87,20 @@ public class PicSourceActivity extends AppCompatActivity {
             else {
                 setHasImageActivityState(false);
             }
+            Effect effectSelected = (Effect) savedInstanceState.getSerializable(EFFECT_SELECTED_STATE_KEY);
+            LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
+            if (effectSelected == Effect.NONE) {
+                ctrlLayout.setVisibility(View.GONE);
+            }
+            else {
+                ctrlLayout.setVisibility(View.VISIBLE);
+            }
         }
         else {
             setHasImageActivityState(false);
+            LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
+            ctrlLayout.setVisibility(View.GONE);
+            effectSelected = Effect.NONE;
         }
     }
 
@@ -226,14 +249,76 @@ public class PicSourceActivity extends AppCompatActivity {
         reloadCurrImage();
     }
 
-    public void onThreshold(View v) {
-        newEffectApplied();
-        bmW.resetFromRotatedSource();
-        applyThreshold(bmW);
-        reloadCurrImage();
+    public void onEffectApplyClicked(View v) {
+        SeekBar ctrlSeekbar = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
+        double progress = ctrlSeekbar.getProgress();
+        double max = ctrlSeekbar.getMax();
+        double ctrl = progress/max;
+        switch (effectSelected) {
+            case NONE:
+                // Do nothing
+                break;
+            case RANDOM_BLEED_FILL:
+                newEffectApplied();
+                bmW.resetFromRotatedSource();
+                applyRandomBleedFill(bmW, ctrl);
+                reloadCurrImage();
+                break;
+            case THRESHOLD:
+                newEffectApplied();
+                bmW.resetFromRotatedSource();
+                applyThreshold(bmW, ctrl);
+                reloadCurrImage();
+                break;
+            case RANDOM_LINE_FILL:
+                newEffectApplied();
+                bmW.resetFromRotatedSource();
+                applyThreshold(bmW, ctrl);
+                applyRandomLineFill(bmW);
+                reloadCurrImage();
+                break;
+            case RANDOM_FLOOD_FILL:
+                newEffectApplied();
+                bmW.resetFromRotatedSource();
+                applyThreshold(bmW, ctrl);
+                applyRandomFill(bmW);
+                reloadCurrImage();
+                break;
+        }
     }
 
-    void applyThreshold(BitmapWrapper bmW) {
+    public void onCtrlLayoutExit(View v) {
+        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
+        ctrlLayout.setVisibility(View.GONE);
+        effectSelected = Effect.NONE;
+    }
+
+    public void onRandomBleedFill(View v) {
+        effectSelected = Effect.RANDOM_BLEED_FILL;
+        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
+        ctrlLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void onThreshold(View v) {
+        effectSelected = Effect.THRESHOLD;
+        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
+        ctrlLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void onRandomLineFill(View v) {
+        effectSelected = Effect.RANDOM_LINE_FILL;
+        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
+        ctrlLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void onRandomFloodFill(View v) {
+        effectSelected = Effect.RANDOM_FLOOD_FILL;
+        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
+        ctrlLayout.setVisibility(View.VISIBLE);
+    }
+
+    void applyThreshold(BitmapWrapper bmW, double ctrl) {
+        Log.e("picsource", "I get here!");
         for (int y = 0; y < bmW.getHeight(); y++) {
             for (int x = 0; x < bmW.getWidth(); x++) {
                 PixelNode pixel = bmW.getPixel(x, y);
@@ -241,22 +326,14 @@ public class PicSourceActivity extends AppCompatActivity {
                 int green = (pixel.getColor() >> 8) & 0xFF;
                 int blue = (pixel.getColor() >> 0) & 0xFF;
                 int average = (red + blue + green) / 3;
-                if (average >= (255 / 2)) {
-                    pixel.setColor(0xffffff);
-                } else {
+                if (average <= (255 * ctrl)) {
                     pixel.setColor(0x000000);
+                } else {
+                    pixel.setColor(0xffffff);
                 }
             }
         }
         bmW.doneProcessing();
-    }
-
-    public void onRandomLineFill(View v) {
-        newEffectApplied();
-        bmW.resetFromRotatedSource();
-        applyThreshold(bmW);
-        applyRandomLineFill(bmW);
-        reloadCurrImage();
     }
 
     void applyRandomLineFill(BitmapWrapper bmW) {
@@ -283,14 +360,6 @@ public class PicSourceActivity extends AppCompatActivity {
             }
         }
         bmW.doneProcessing();
-    }
-
-    public void onRandomFloodFill(View v) {
-        newEffectApplied();
-        bmW.resetFromRotatedSource();
-        applyThreshold(bmW);
-        applyRandomFill(bmW);
-        reloadCurrImage();
     }
 
     public void applyRandomFill(BitmapWrapper bmW) {
@@ -350,14 +419,7 @@ public class PicSourceActivity extends AppCompatActivity {
         return;
     }
 
-    public void onRandomBleedFill(View v) {
-        newEffectApplied();
-        bmW.resetFromRotatedSource();
-        applyRandomBleedFill(bmW);
-        reloadCurrImage();
-    }
-
-    public void applyRandomBleedFill(BitmapWrapper bmW) {
+    public void applyRandomBleedFill(BitmapWrapper bmW, double ctrl) {
         Random r = new Random();
         int maxColor = 0xffffff;
         for (int i = 0; i < bmW.getWidth(); i++) {
@@ -365,7 +427,7 @@ public class PicSourceActivity extends AppCompatActivity {
                 PixelNode currNode = bmW.getPixel(i, j);
                 if (!currNode.isProcessed()) {
                     int targetColor = currNode.getColor();
-                    bleedFill(currNode, targetColor, r.nextInt(maxColor));
+                    bleedFill(currNode, targetColor, r.nextInt(maxColor), ctrl);
                 }
             }
         }
@@ -373,7 +435,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     // Flood-fill (node, target-color, replacement-color):
-    void bleedFill(PixelNode node, int targetColor, int replacementColor) {
+    void bleedFill(PixelNode node, int targetColor, int replacementColor, double ctrl) {
         Queue<PixelNode> queue = new LinkedList<PixelNode>();
         queue.add(node);
 
@@ -389,7 +451,7 @@ public class PicSourceActivity extends AppCompatActivity {
             int changeInGreen = Math.abs(getGreen(pixelCurrColor) - getGreen(targetColor));
             int changeInBlue = Math.abs(getBlue(pixelCurrColor) - getBlue(targetColor));
             int overallChange = changeInRed + changeInGreen + changeInBlue;
-            if (overallChange > SIGNIFICANT_CHANGE_AMOUNT) {
+            if (overallChange > ((0xff + 0xff + 0xff) * ctrl)) {
                 sigChange = true;
             }
             if (!sigChange) {
@@ -690,6 +752,7 @@ public class PicSourceActivity extends AppCompatActivity {
             // it should only be needed on return from an intent in which case state is preserved
             // TODO: Handle saving the undo and redo queues
         }
+        outState.putSerializable(EFFECT_SELECTED_STATE_KEY, effectSelected);
     }
 
     //public class CaitlynsBitmap extends Bitmap {

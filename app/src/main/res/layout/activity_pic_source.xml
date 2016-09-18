@@ -182,7 +182,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/linearLayout">
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -207,4 +208,39 @@
                 android:onClick="onOpen"/>
         </LinearLayout>
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#00dddd"
+        android:orientation="horizontal"
+        android:id="@+id/effect_ctrl_layout">
+
+        <SeekBar
+            android:id="@+id/effect_ctrl_seekbar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:layout_alignParentBottom="true"/>
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/effect_ctrl_apply_button"
+            android:layout_alignParentBottom="true"
+            android:onClick="onEffectApplyClicked"
+            android:background="@drawable/my_menu_bar_button"
+            android:src="@drawable/ic_done_24dp" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/effect_ctrl_exit"
+            android:layout_alignParentBottom="true"
+            android:onClick="onCtrlLayoutExit"
+            android:background="@drawable/my_menu_bar_button"
+            android:src="@drawable/ic_clear_24dp" />
+    </LinearLayout>
 </LinearLayout>
