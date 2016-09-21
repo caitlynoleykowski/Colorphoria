@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -45,7 +47,7 @@ public class PicSourceActivity extends AppCompatActivity {
     private static final String MOD_STATE_KEY = "MOD_STATE_KEY";
     private static final String EFFECT_SELECTED_STATE_KEY = "EFFECT_SELECTED_STATE_KEY";
 
-    private static final int MAX_UNDO_QUEUE_SIZE = 8;
+    private static final int MAX_UNDO_QUEUE_SIZE = 6;
     private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
@@ -640,13 +642,6 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onCamera(View v) {
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-//            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//            }
-//            else {
-//                Toast.makeText(getApplicationContext(), "No known app to handle camera use.", Toast.LENGTH_LONG).show();
-//            }
 
             Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
             File photo;
@@ -695,14 +690,12 @@ public class PicSourceActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_IMAGE_GET) {
             if (data != null && data.getData() != null) {
-                Uri uri = data.getData();
-
-                try {
-                    addImageFromNewSource(MediaStore.Images.Media.getBitmap(getContentResolver(), uri));
-                } catch (IOException e) {
+                Bitmap bm = grabImage(data.getData());
+                if (bm != null) {
+                    addImageFromNewSource(bm);
+                } else {
+                    Log.e("picsource", "bitmap from grabImage is null.");
                     Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
-                    Log.e("picsource", "Failed getting bitmap from uri from image picker.");
-                    e.printStackTrace();
                 }
             } else {
                 Log.e("picsource", "data or data.getData from image picker intent is null.");
@@ -710,22 +703,28 @@ public class PicSourceActivity extends AppCompatActivity {
             }
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            Bitmap image = grabImage();
+            getContentResolver().notifyChange(mImageUri, null);
+            Bitmap image = grabImage(mImageUri);
             if (image != null) {
-                addImageFromNewSource(grabImage());
+                addImageFromNewSource(image);
             }
         }
     }
 
-    public Bitmap grabImage()
+    public Bitmap grabImage(Uri uri)
     {
-        getContentResolver().notifyChange(mImageUri, null);
-        ContentResolver cr = this.getContentResolver();
-        Bitmap bitmap;
         try
         {
-            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, mImageUri);
-            return bitmap;
+            InputStream is = getApplicationContext().getContentResolver().openInputStream(uri);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(is, null, options);
+            double scaleFactor = BitmapWrapper.getScaleFactor(options.outWidth, options.outHeight);
+            BitmapFactory.Options finalOptions = new BitmapFactory.Options();
+            finalOptions.inSampleSize = (int) (1/scaleFactor);
+            InputStream finalInputStream = getApplicationContext().getContentResolver().openInputStream(uri);
+            Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
+            return bm;
         }
         catch (Exception e)
         {

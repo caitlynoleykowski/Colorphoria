@@ -55,8 +55,8 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.3448277">
-              <caret line="231" column="49" selection-start-line="231" selection-start-column="49" selection-end-line="231" selection-end-column="49" />
+            <state vertical-scroll-proportion="-8.206897">
+              <caret line="241" column="41" selection-start-line="241" selection-start-column="41" selection-end-line="241" selection-end-column="41" />
               <folding>
                 <element signature="e#569#604#0" expanded="true" />
                 <element signature="e#6810#6845#0" expanded="true" />
@@ -85,15 +85,23 @@
       <file leaf-file-name="PicSourceActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8072626">
-              <caret line="292" column="37" selection-start-line="292" selection-start-column="37" selection-end-line="292" selection-end-column="37" />
+            <state vertical-scroll-proportion="-1.3091787">
+              <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#applyThreshold#0;class#PicSourceActivity#0" expanded="false" />
-                <element signature="method#applyRandomLineFill#0;class#PicSourceActivity#0" expanded="false" />
-                <element signature="method#applyRandomFill#0;class#PicSourceActivity#0" expanded="false" />
-                <element signature="method#floodFill#0;class#PicSourceActivity#0" expanded="false" />
-                <element signature="e#14443#14454#0" expanded="true" />
+                <element signature="method#onRotate#0;class#PicSourceActivity#0" expanded="false" />
+                <element signature="method#onRotateLeft#0;class#PicSourceActivity#0" expanded="false" />
+                <element signature="method#onReset#0;class#PicSourceActivity#0" expanded="false" />
+                <element signature="e#14510#14521#0" expanded="true" />
+                <element signature="e#17094#17105#0" expanded="true" />
+                <element signature="e#20803#20804#0" expanded="true" />
+                <element signature="e#20849#20850#0" expanded="true" />
+                <element signature="e#20888#20889#0" expanded="true" />
+                <element signature="e#20935#20936#0" expanded="true" />
+                <element signature="e#20973#20974#0" expanded="true" />
+                <element signature="e#21019#21020#0" expanded="true" />
+                <element signature="e#23926#23927#0" expanded="true" />
+                <element signature="e#23957#23958#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -147,6 +155,16 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/res/mipmap-xhdpi/ic_launcher.png">
           <provider selected="true" editor-type-id="images">
             <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BitmapWrapper.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/BitmapWrapper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+              <folding />
+            </state>
           </provider>
         </entry>
       </file>
@@ -1743,9 +1761,9 @@
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/mybutton.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/my_menu_bar_button.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/BitmapWrapper.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_done_24dp.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_pic_source.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/BitmapWrapper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java" />
       </list>
     </option>
@@ -1754,10 +1772,9 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1" />
-    <option name="y" value="1" />
-    <option name="width" value="1364" />
-    <option name="height" value="726" />
+    <option name="x" value="322" />
+    <option name="width" value="1051" />
+    <option name="height" value="735" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -2033,8 +2050,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="1" width="1364" height="726" extended-state="0" />
-    <editor active="true" />
+    <frame x="322" y="0" width="1051" height="735" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2043,7 +2060,7 @@
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24956064" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27065027" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1851211" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4701874" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -2058,7 +2075,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24923313" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24923313" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32864675" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -2116,97 +2133,97 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>475</line>
+          <line>477</line>
           <properties />
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>459</line>
+          <line>461</line>
           <properties />
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>460</line>
+          <line>462</line>
           <properties />
           <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>461</line>
+          <line>463</line>
           <properties />
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>462</line>
+          <line>464</line>
           <properties />
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>463</line>
+          <line>465</line>
           <properties />
           <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>464</line>
+          <line>466</line>
           <properties />
           <option name="timeStamp" value="54" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>465</line>
+          <line>467</line>
           <properties />
           <option name="timeStamp" value="55" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>467</line>
+          <line>469</line>
           <properties />
           <option name="timeStamp" value="56" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>471</line>
+          <line>473</line>
           <properties />
           <option name="timeStamp" value="57" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>472</line>
+          <line>474</line>
           <properties />
           <option name="timeStamp" value="58" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>473</line>
+          <line>475</line>
           <properties />
           <option name="timeStamp" value="59" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>474</line>
+          <line>476</line>
           <properties />
           <option name="timeStamp" value="60" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>458</line>
+          <line>460</line>
           <properties />
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>339</line>
+          <line>341</line>
           <properties />
           <option name="timeStamp" value="66" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>422</line>
+          <line>424</line>
           <properties />
           <option name="timeStamp" value="67" />
         </line-breakpoint>
@@ -2216,14 +2233,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_pic_source.xml">
       <provider selected="true" editor-type-id="android-designer">
         <state />
@@ -2259,11 +2268,19 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#applyThreshold#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#applyRandomLineFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#applyRandomFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#floodFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="e#14443#14454#0" expanded="true" />
+            <element signature="method#onRotate#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="method#onRotateLeft#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="method#onReset#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="e#14510#14521#0" expanded="true" />
+            <element signature="e#17094#17105#0" expanded="true" />
+            <element signature="e#20803#20804#0" expanded="true" />
+            <element signature="e#20849#20850#0" expanded="true" />
+            <element signature="e#20888#20889#0" expanded="true" />
+            <element signature="e#20935#20936#0" expanded="true" />
+            <element signature="e#20973#20974#0" expanded="true" />
+            <element signature="e#21019#21020#0" expanded="true" />
+            <element signature="e#23926#23927#0" expanded="true" />
+            <element signature="e#23957#23958#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2317,11 +2334,19 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#applyThreshold#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#applyRandomLineFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#applyRandomFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#floodFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="e#14443#14454#0" expanded="true" />
+            <element signature="method#onRotate#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="method#onRotateLeft#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="method#onReset#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="e#14510#14521#0" expanded="true" />
+            <element signature="e#17094#17105#0" expanded="true" />
+            <element signature="e#20803#20804#0" expanded="true" />
+            <element signature="e#20849#20850#0" expanded="true" />
+            <element signature="e#20888#20889#0" expanded="true" />
+            <element signature="e#20935#20936#0" expanded="true" />
+            <element signature="e#20973#20974#0" expanded="true" />
+            <element signature="e#21019#21020#0" expanded="true" />
+            <element signature="e#23926#23927#0" expanded="true" />
+            <element signature="e#23957#23958#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2375,11 +2400,19 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#applyThreshold#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#applyRandomLineFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#applyRandomFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#floodFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="e#14443#14454#0" expanded="true" />
+            <element signature="method#onRotate#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="method#onRotateLeft#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="method#onReset#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="e#14510#14521#0" expanded="true" />
+            <element signature="e#17094#17105#0" expanded="true" />
+            <element signature="e#20803#20804#0" expanded="true" />
+            <element signature="e#20849#20850#0" expanded="true" />
+            <element signature="e#20888#20889#0" expanded="true" />
+            <element signature="e#20935#20936#0" expanded="true" />
+            <element signature="e#20973#20974#0" expanded="true" />
+            <element signature="e#21019#21020#0" expanded="true" />
+            <element signature="e#23926#23927#0" expanded="true" />
+            <element signature="e#23957#23958#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2537,14 +2570,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/BitmapWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="35" column="16" selection-start-line="35" selection-start-column="16" selection-end-line="35" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_camera_alt_200dp.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2666,8 +2691,8 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.3448277">
-          <caret line="231" column="49" selection-start-line="231" selection-start-column="49" selection-end-line="231" selection-end-column="49" />
+        <state vertical-scroll-proportion="-8.206897">
+          <caret line="241" column="41" selection-start-line="241" selection-start-column="41" selection-end-line="241" selection-end-column="41" />
           <folding>
             <element signature="e#569#604#0" expanded="true" />
             <element signature="e#6810#6845#0" expanded="true" />
@@ -2682,17 +2707,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$USER_HOME$/AppData/Local/Android/sdk/extras/android/m2repository/com/android/support/support-v4/23.4.0/support-v4-23.4.0-sources.jar!/android/support/v4/app/FragmentActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334">
+          <caret line="833" column="16" selection-start-line="833" selection-start-column="16" selection-end-line="833" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/BitmapWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8072626">
-          <caret line="292" column="37" selection-start-line="292" selection-start-column="37" selection-end-line="292" selection-end-column="37" />
+        <state vertical-scroll-proportion="-1.3091787">
+          <caret line="49" column="52" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#applyThreshold#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#applyRandomLineFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#applyRandomFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#floodFill#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="e#14443#14454#0" expanded="true" />
+            <element signature="method#onRotate#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="method#onRotateLeft#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="method#onReset#0;class#PicSourceActivity#0" expanded="false" />
+            <element signature="e#14510#14521#0" expanded="true" />
+            <element signature="e#17094#17105#0" expanded="true" />
+            <element signature="e#20803#20804#0" expanded="true" />
+            <element signature="e#20849#20850#0" expanded="true" />
+            <element signature="e#20888#20889#0" expanded="true" />
+            <element signature="e#20935#20936#0" expanded="true" />
+            <element signature="e#20973#20974#0" expanded="true" />
+            <element signature="e#21019#21020#0" expanded="true" />
+            <element signature="e#23926#23927#0" expanded="true" />
+            <element signature="e#23957#23958#0" expanded="true" />
           </folding>
         </state>
       </provider>

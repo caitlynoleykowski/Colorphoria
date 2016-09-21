@@ -17,15 +17,24 @@ public class BitmapWrapper {
     boolean [] processed;
 
     public BitmapWrapper(Bitmap bm) {
-        // TODO: Should this go in its own function?
-        int numPixels = bm.getWidth() * bm.getHeight();
-        if (numPixels >= MAX_PIXELS) {
-            double scaleFactor = (double)MAX_PIXELS / (double)numPixels;
+        double scaleFactor = getScaleFactor(bm.getWidth(), bm.getHeight());
+        if (scaleFactor == 1) {
+            setSource(bm);
+        } else {
             int width = (int) (bm.getWidth() * scaleFactor);
             int height = (int) (bm.getHeight() * scaleFactor);
             setSource(Bitmap.createScaledBitmap(bm, width, height, true));
+        }
+
+    }
+
+    public static double getScaleFactor(int bitmapWidth, int bitmapHeight) {
+        int numPixels = bitmapWidth * bitmapHeight;
+        if (numPixels >= MAX_PIXELS) {
+            double scaleFactor = (double) MAX_PIXELS / (double) numPixels;
+            return scaleFactor;
         } else {
-            setSource(bm);
+            return 1;
         }
     }
 
