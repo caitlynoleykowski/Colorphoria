@@ -47,7 +47,7 @@ public class PicSourceActivity extends AppCompatActivity {
     private static final String MOD_STATE_KEY = "MOD_STATE_KEY";
     private static final String EFFECT_SELECTED_STATE_KEY = "EFFECT_SELECTED_STATE_KEY";
 
-    private static final int MAX_UNDO_QUEUE_SIZE = 6;
+    private static final int MAX_UNDO_QUEUE_SIZE = 2;
     private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
@@ -255,7 +255,7 @@ public class PicSourceActivity extends AppCompatActivity {
         SeekBar ctrlSeekbar = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
         double progress = ctrlSeekbar.getProgress();
         double max = ctrlSeekbar.getMax();
-        double ctrl = progress/max;
+        double ctrl = 1 - progress/max;
         switch (effectSelected) {
             case NONE:
                 // Do nothing
@@ -293,34 +293,43 @@ public class PicSourceActivity extends AppCompatActivity {
         LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
         ctrlLayout.setVisibility(View.GONE);
         effectSelected = Effect.NONE;
+        SeekBar ctrlSeekbar = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
+        ctrlSeekbar.setProgress(ctrlSeekbar.getMax()/2);
     }
 
     public void onRandomBleedFill(View v) {
         effectSelected = Effect.RANDOM_BLEED_FILL;
+        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
+        ctrlImage.setImageResource(R.drawable.filler_rbleed_icon);
         LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
         ctrlLayout.setVisibility(View.VISIBLE);
     }
 
     public void onThreshold(View v) {
         effectSelected = Effect.THRESHOLD;
+        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
+        ctrlImage.setImageResource(R.drawable.filler_threshold_icon);
         LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
         ctrlLayout.setVisibility(View.VISIBLE);
     }
 
     public void onRandomLineFill(View v) {
         effectSelected = Effect.RANDOM_LINE_FILL;
+        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
+        ctrlImage.setImageResource(R.drawable.filler_rline_icon);
         LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
         ctrlLayout.setVisibility(View.VISIBLE);
     }
 
     public void onRandomFloodFill(View v) {
         effectSelected = Effect.RANDOM_FLOOD_FILL;
+        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
+        ctrlImage.setImageResource(R.drawable.filler_rfill_icon);
         LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
         ctrlLayout.setVisibility(View.VISIBLE);
     }
 
     void applyThreshold(BitmapWrapper bmW, double ctrl) {
-        Log.e("picsource", "I get here!");
         for (int y = 0; y < bmW.getHeight(); y++) {
             for (int x = 0; x < bmW.getWidth(); x++) {
                 PixelNode pixel = bmW.getPixel(x, y);
