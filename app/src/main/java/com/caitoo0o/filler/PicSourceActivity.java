@@ -211,6 +211,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRedo(View v) {
+        exitCtrlLayout();
         undoEnqueue();
         bmW = redoQueue.removeLast();
         if (redoQueue.isEmpty()) {
@@ -220,6 +221,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onUndo(View v) {
+        exitCtrlLayout();
         redoEnqueue();
         bmW = undoQueue.removeLast();
         if (undoQueue.isEmpty()) {
@@ -229,6 +231,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRotate(View v) {
+        exitCtrlLayout();
         newEffectApplied();
         Matrix matrix = new Matrix();
         matrix.postRotate(ROTATION_ANGLE);
@@ -238,6 +241,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRotateLeft(View v) {
+        exitCtrlLayout();
         newEffectApplied();
         Matrix matrix = new Matrix();
         matrix.postRotate(-1 * ROTATION_ANGLE);
@@ -247,49 +251,75 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onReset(View v) {
+        exitCtrlLayout();
         bmW.resetFromSource();
         reloadCurrImage();
     }
 
-    public void onEffectApplyClicked(View v) {
+    private double getEffectCtrl() {
         SeekBar ctrlSeekbar = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
         double progress = ctrlSeekbar.getProgress();
         double max = ctrlSeekbar.getMax();
         double ctrl = 1 - progress/max;
+        return ctrl;
+    }
+
+    public void onEffectApplyClicked(View v) {
+        double ctrl = getEffectCtrl();
         switch (effectSelected) {
             case NONE:
                 // Do nothing
                 break;
             case RANDOM_BLEED_FILL:
-                newEffectApplied();
-                bmW.resetFromRotatedSource();
-                applyRandomBleedFill(bmW, ctrl);
-                reloadCurrImage();
+                randomBleedFill(ctrl);
                 break;
             case THRESHOLD:
-                newEffectApplied();
-                bmW.resetFromRotatedSource();
-                applyThreshold(bmW, ctrl);
-                reloadCurrImage();
+                threshold(ctrl);
                 break;
             case RANDOM_LINE_FILL:
-                newEffectApplied();
-                bmW.resetFromRotatedSource();
-                applyThreshold(bmW, ctrl);
-                applyRandomLineFill(bmW);
-                reloadCurrImage();
+                randomLineFill(ctrl);
                 break;
             case RANDOM_FLOOD_FILL:
-                newEffectApplied();
-                bmW.resetFromRotatedSource();
-                applyThreshold(bmW, ctrl);
-                applyRandomFill(bmW);
-                reloadCurrImage();
+                randomFloodFill(ctrl);
                 break;
         }
     }
 
+    private void randomBleedFill(double ctrl) {
+        newEffectApplied();
+        bmW.resetFromRotatedSource();
+        applyRandomBleedFill(bmW, ctrl);
+        reloadCurrImage();
+    }
+
+    private void threshold(double ctrl) {
+        newEffectApplied();
+        bmW.resetFromRotatedSource();
+        applyThreshold(bmW, ctrl);
+        reloadCurrImage();
+    }
+
+    private void randomLineFill(double ctrl) {
+        newEffectApplied();
+        bmW.resetFromRotatedSource();
+        applyThreshold(bmW, ctrl);
+        applyRandomLineFill(bmW);
+        reloadCurrImage();
+    }
+
+    private void randomFloodFill(double ctrl) {
+        newEffectApplied();
+        bmW.resetFromRotatedSource();
+        applyThreshold(bmW, ctrl);
+        applyRandomFill(bmW);
+        reloadCurrImage();
+    }
+
     public void onCtrlLayoutExit(View v) {
+        exitCtrlLayout();
+    }
+
+    private void exitCtrlLayout() {
         LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
         ctrlLayout.setVisibility(View.GONE);
         effectSelected = Effect.NONE;
@@ -298,6 +328,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRandomBleedFill(View v) {
+        randomBleedFill(getEffectCtrl());
         effectSelected = Effect.RANDOM_BLEED_FILL;
         ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
         ctrlImage.setImageResource(R.drawable.filler_rbleed_icon);
@@ -306,6 +337,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onThreshold(View v) {
+        threshold(getEffectCtrl());
         effectSelected = Effect.THRESHOLD;
         ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
         ctrlImage.setImageResource(R.drawable.filler_threshold_icon);
@@ -314,6 +346,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRandomLineFill(View v) {
+        randomLineFill(getEffectCtrl());
         effectSelected = Effect.RANDOM_LINE_FILL;
         ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
         ctrlImage.setImageResource(R.drawable.filler_rline_icon);
@@ -322,6 +355,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRandomFloodFill(View v) {
+        randomFloodFill(getEffectCtrl());
         effectSelected = Effect.RANDOM_FLOOD_FILL;
         ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
         ctrlImage.setImageResource(R.drawable.filler_rfill_icon);
@@ -644,7 +678,7 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onDiscard(View v) {
         bmW = null;
-
+        exitCtrlLayout();
         setHasImageActivityState(false);
         removeCurrImage();
     }

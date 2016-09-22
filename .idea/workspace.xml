@@ -55,8 +55,8 @@
             <state />
           </provider>
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.068966">
-              <caret line="223" column="0" selection-start-line="223" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
+            <state vertical-scroll-proportion="-3.8275862">
+              <caret line="24" column="12" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
               <folding>
                 <element signature="e#569#604#0" expanded="true" />
                 <element signature="e#6810#6845#0" expanded="true" />
@@ -85,23 +85,22 @@
       <file leaf-file-name="PicSourceActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6726727">
-              <caret line="257" column="26" selection-start-line="257" selection-start-column="26" selection-end-line="257" selection-end-column="26" />
+            <state vertical-scroll-proportion="0.36824325">
+              <caret line="357" column="41" selection-start-line="357" selection-start-column="41" selection-end-line="357" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#onRotate#0;class#PicSourceActivity#0" expanded="false" />
-                <element signature="method#onRotateLeft#0;class#PicSourceActivity#0" expanded="false" />
-                <element signature="method#onReset#0;class#PicSourceActivity#0" expanded="false" />
-                <element signature="e#15197#15208#0" expanded="true" />
-                <element signature="e#17781#17792#0" expanded="true" />
-                <element signature="e#21490#21491#0" expanded="true" />
-                <element signature="e#21536#21537#0" expanded="true" />
-                <element signature="e#21575#21576#0" expanded="true" />
-                <element signature="e#21622#21623#0" expanded="true" />
-                <element signature="e#21660#21661#0" expanded="true" />
-                <element signature="e#21706#21707#0" expanded="true" />
-                <element signature="e#24613#24614#0" expanded="true" />
-                <element signature="e#24644#24645#0" expanded="true" />
+                <element signature="e#11373#11374#0" expanded="true" />
+                <element signature="e#11405#11406#0" expanded="true" />
+                <element signature="e#15879#15890#0" expanded="true" />
+                <element signature="e#18463#18474#0" expanded="true" />
+                <element signature="e#22172#22173#0" expanded="true" />
+                <element signature="e#22218#22219#0" expanded="true" />
+                <element signature="e#22257#22258#0" expanded="true" />
+                <element signature="e#22304#22305#0" expanded="true" />
+                <element signature="e#22342#22343#0" expanded="true" />
+                <element signature="e#22388#22389#0" expanded="true" />
+                <element signature="e#25295#25296#0" expanded="true" />
+                <element signature="e#25326#25327#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1721,9 +1720,10 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="322" />
-    <option name="width" value="1051" />
-    <option name="height" value="735" />
+    <option name="x" value="1" />
+    <option name="y" value="1" />
+    <option name="width" value="1364" />
+    <option name="height" value="726" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -1999,8 +1999,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="322" y="0" width="1051" height="735" extended-state="0" />
-    <editor active="false" />
+    <frame x="1" y="1" width="1364" height="726" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2009,7 +2009,7 @@
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24913494" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37370244" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37961337" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4701874" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -2018,13 +2018,13 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3252595" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3252595" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24823411" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18865031" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32864675" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -2082,102 +2082,102 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>486</line>
+          <line>520</line>
           <properties />
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>470</line>
+          <line>504</line>
           <properties />
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>471</line>
+          <line>505</line>
           <properties />
           <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>472</line>
+          <line>506</line>
           <properties />
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>473</line>
+          <line>507</line>
           <properties />
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>474</line>
+          <line>508</line>
           <properties />
           <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>475</line>
+          <line>509</line>
           <properties />
           <option name="timeStamp" value="54" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>476</line>
+          <line>510</line>
           <properties />
           <option name="timeStamp" value="55" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>478</line>
+          <line>512</line>
           <properties />
           <option name="timeStamp" value="56" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>482</line>
+          <line>516</line>
           <properties />
           <option name="timeStamp" value="57" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>483</line>
+          <line>517</line>
           <properties />
           <option name="timeStamp" value="58" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>484</line>
+          <line>518</line>
           <properties />
           <option name="timeStamp" value="59" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>485</line>
+          <line>519</line>
           <properties />
           <option name="timeStamp" value="60" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>469</line>
+          <line>503</line>
           <properties />
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>350</line>
+          <line>384</line>
           <properties />
           <option name="timeStamp" value="66" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>433</line>
+          <line>467</line>
           <properties />
           <option name="timeStamp" value="67" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="68" />
+      <option name="time" value="70" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -2217,19 +2217,18 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#onRotate#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#onRotateLeft#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#onReset#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="e#15197#15208#0" expanded="true" />
-            <element signature="e#17781#17792#0" expanded="true" />
-            <element signature="e#21490#21491#0" expanded="true" />
-            <element signature="e#21536#21537#0" expanded="true" />
-            <element signature="e#21575#21576#0" expanded="true" />
-            <element signature="e#21622#21623#0" expanded="true" />
-            <element signature="e#21660#21661#0" expanded="true" />
-            <element signature="e#21706#21707#0" expanded="true" />
-            <element signature="e#24613#24614#0" expanded="true" />
-            <element signature="e#24644#24645#0" expanded="true" />
+            <element signature="e#11373#11374#0" expanded="true" />
+            <element signature="e#11405#11406#0" expanded="true" />
+            <element signature="e#15879#15890#0" expanded="true" />
+            <element signature="e#18463#18474#0" expanded="true" />
+            <element signature="e#22172#22173#0" expanded="true" />
+            <element signature="e#22218#22219#0" expanded="true" />
+            <element signature="e#22257#22258#0" expanded="true" />
+            <element signature="e#22304#22305#0" expanded="true" />
+            <element signature="e#22342#22343#0" expanded="true" />
+            <element signature="e#22388#22389#0" expanded="true" />
+            <element signature="e#25295#25296#0" expanded="true" />
+            <element signature="e#25326#25327#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2283,19 +2282,18 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#onRotate#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#onRotateLeft#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#onReset#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="e#15197#15208#0" expanded="true" />
-            <element signature="e#17781#17792#0" expanded="true" />
-            <element signature="e#21490#21491#0" expanded="true" />
-            <element signature="e#21536#21537#0" expanded="true" />
-            <element signature="e#21575#21576#0" expanded="true" />
-            <element signature="e#21622#21623#0" expanded="true" />
-            <element signature="e#21660#21661#0" expanded="true" />
-            <element signature="e#21706#21707#0" expanded="true" />
-            <element signature="e#24613#24614#0" expanded="true" />
-            <element signature="e#24644#24645#0" expanded="true" />
+            <element signature="e#11373#11374#0" expanded="true" />
+            <element signature="e#11405#11406#0" expanded="true" />
+            <element signature="e#15879#15890#0" expanded="true" />
+            <element signature="e#18463#18474#0" expanded="true" />
+            <element signature="e#22172#22173#0" expanded="true" />
+            <element signature="e#22218#22219#0" expanded="true" />
+            <element signature="e#22257#22258#0" expanded="true" />
+            <element signature="e#22304#22305#0" expanded="true" />
+            <element signature="e#22342#22343#0" expanded="true" />
+            <element signature="e#22388#22389#0" expanded="true" />
+            <element signature="e#25295#25296#0" expanded="true" />
+            <element signature="e#25326#25327#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2349,19 +2347,18 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#onRotate#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#onRotateLeft#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#onReset#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="e#15197#15208#0" expanded="true" />
-            <element signature="e#17781#17792#0" expanded="true" />
-            <element signature="e#21490#21491#0" expanded="true" />
-            <element signature="e#21536#21537#0" expanded="true" />
-            <element signature="e#21575#21576#0" expanded="true" />
-            <element signature="e#21622#21623#0" expanded="true" />
-            <element signature="e#21660#21661#0" expanded="true" />
-            <element signature="e#21706#21707#0" expanded="true" />
-            <element signature="e#24613#24614#0" expanded="true" />
-            <element signature="e#24644#24645#0" expanded="true" />
+            <element signature="e#11373#11374#0" expanded="true" />
+            <element signature="e#11405#11406#0" expanded="true" />
+            <element signature="e#15879#15890#0" expanded="true" />
+            <element signature="e#18463#18474#0" expanded="true" />
+            <element signature="e#22172#22173#0" expanded="true" />
+            <element signature="e#22218#22219#0" expanded="true" />
+            <element signature="e#22257#22258#0" expanded="true" />
+            <element signature="e#22304#22305#0" expanded="true" />
+            <element signature="e#22342#22343#0" expanded="true" />
+            <element signature="e#22388#22389#0" expanded="true" />
+            <element signature="e#25295#25296#0" expanded="true" />
+            <element signature="e#25326#25327#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2656,8 +2653,8 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.068966">
-          <caret line="223" column="0" selection-start-line="223" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
+        <state vertical-scroll-proportion="-3.8275862">
+          <caret line="24" column="12" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
           <folding>
             <element signature="e#569#604#0" expanded="true" />
             <element signature="e#6810#6845#0" expanded="true" />
@@ -2674,23 +2671,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6726727">
-          <caret line="257" column="26" selection-start-line="257" selection-start-column="26" selection-end-line="257" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.36824325">
+          <caret line="357" column="41" selection-start-line="357" selection-start-column="41" selection-end-line="357" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#onRotate#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#onRotateLeft#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="method#onReset#0;class#PicSourceActivity#0" expanded="false" />
-            <element signature="e#15197#15208#0" expanded="true" />
-            <element signature="e#17781#17792#0" expanded="true" />
-            <element signature="e#21490#21491#0" expanded="true" />
-            <element signature="e#21536#21537#0" expanded="true" />
-            <element signature="e#21575#21576#0" expanded="true" />
-            <element signature="e#21622#21623#0" expanded="true" />
-            <element signature="e#21660#21661#0" expanded="true" />
-            <element signature="e#21706#21707#0" expanded="true" />
-            <element signature="e#24613#24614#0" expanded="true" />
-            <element signature="e#24644#24645#0" expanded="true" />
+            <element signature="e#11373#11374#0" expanded="true" />
+            <element signature="e#11405#11406#0" expanded="true" />
+            <element signature="e#15879#15890#0" expanded="true" />
+            <element signature="e#18463#18474#0" expanded="true" />
+            <element signature="e#22172#22173#0" expanded="true" />
+            <element signature="e#22218#22219#0" expanded="true" />
+            <element signature="e#22257#22258#0" expanded="true" />
+            <element signature="e#22304#22305#0" expanded="true" />
+            <element signature="e#22342#22343#0" expanded="true" />
+            <element signature="e#22388#22389#0" expanded="true" />
+            <element signature="e#25295#25296#0" expanded="true" />
+            <element signature="e#25326#25327#0" expanded="true" />
           </folding>
         </state>
       </provider>
