@@ -43,7 +43,7 @@ import java.io.File;
 public class PicSourceActivity extends AppCompatActivity {
 
     private static final String SOURCE_STATE_KEY = "SOURCE_STATE_KEY";
-    // TODO: rotated source
+    private static final String ROTATED_SOURCE_STATE_KEY = "ROTATED_SOURCE_STATE_KEY";
     private static final String MOD_STATE_KEY = "MOD_STATE_KEY";
     private static final String EFFECT_SELECTED_STATE_KEY = "EFFECT_SELECTED_STATE_KEY";
 
@@ -79,9 +79,12 @@ public class PicSourceActivity extends AppCompatActivity {
         redoQueue = new ArrayDeque<>();
         if (savedInstanceState != null) {
             Bitmap sourceImage = (Bitmap) savedInstanceState.getParcelable(SOURCE_STATE_KEY);
+            Bitmap rotatedSourceImage = (Bitmap) savedInstanceState.getParcelable(ROTATED_SOURCE_STATE_KEY);
             Bitmap modImage = (Bitmap) savedInstanceState.getParcelable(MOD_STATE_KEY);
-            if (sourceImage != null && modImage != null) {
+            Effect effectSelected = (Effect) savedInstanceState.getSerializable(EFFECT_SELECTED_STATE_KEY);
+            if (sourceImage != null && modImage != null && rotatedSourceImage != null) {
                 bmW = new BitmapWrapper(sourceImage);
+                bmW.setRotatedSource(rotatedSourceImage);
                 bmW.setModifiedBitmap(modImage);
                 setHasImageActivityState(true);
                 reloadCurrImage();
@@ -89,7 +92,6 @@ public class PicSourceActivity extends AppCompatActivity {
             else {
                 setHasImageActivityState(false);
             }
-            Effect effectSelected = (Effect) savedInstanceState.getSerializable(EFFECT_SELECTED_STATE_KEY);
             LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
             if (effectSelected == Effect.NONE) {
                 ctrlLayout.setVisibility(View.GONE);
@@ -211,7 +213,6 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRedo(View v) {
-        exitCtrlLayout();
         undoEnqueue();
         bmW = redoQueue.removeLast();
         if (redoQueue.isEmpty()) {
@@ -221,7 +222,6 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onUndo(View v) {
-        exitCtrlLayout();
         redoEnqueue();
         bmW = undoQueue.removeLast();
         if (undoQueue.isEmpty()) {
@@ -231,7 +231,6 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRotate(View v) {
-        exitCtrlLayout();
         newEffectApplied();
         Matrix matrix = new Matrix();
         matrix.postRotate(ROTATION_ANGLE);
@@ -241,7 +240,6 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onRotateLeft(View v) {
-        exitCtrlLayout();
         newEffectApplied();
         Matrix matrix = new Matrix();
         matrix.postRotate(-1 * ROTATION_ANGLE);
@@ -251,7 +249,6 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onReset(View v) {
-        exitCtrlLayout();
         bmW.resetFromSource();
         reloadCurrImage();
     }
@@ -323,8 +320,8 @@ public class PicSourceActivity extends AppCompatActivity {
         LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
         ctrlLayout.setVisibility(View.GONE);
         effectSelected = Effect.NONE;
-        SeekBar ctrlSeekbar = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
-        ctrlSeekbar.setProgress(ctrlSeekbar.getMax()/2);
+        //SeekBar ctrlSeekbar = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
+        //ctrlSeekbar.setProgress(ctrlSeekbar.getMax()/2);
     }
 
     public void onRandomBleedFill(View v) {
@@ -782,6 +779,7 @@ public class PicSourceActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         if (bmW != null) {
             outState.putParcelable(SOURCE_STATE_KEY, bmW.getSourceBitmap());
+            outState.putParcelable(ROTATED_SOURCE_STATE_KEY, bmW.getRotatedSource());
             outState.putParcelable(MOD_STATE_KEY, bmW.getModifiedBitmap());
             // TODO: Is there any possible reason i would need to save the URI?
             // it should only be needed on return from an intent in which case state is preserved
@@ -789,6 +787,7 @@ public class PicSourceActivity extends AppCompatActivity {
         }
         else {
             outState.putParcelable(SOURCE_STATE_KEY, null);
+            outState.putParcelable(ROTATED_SOURCE_STATE_KEY, null);
             outState.putParcelable(MOD_STATE_KEY, null);
             // TODO: Is there any possible reason i would need to save the URI?
             // it should only be needed on return from an intent in which case state is preserved

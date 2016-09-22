@@ -51,12 +51,12 @@
     <leaf>
       <file leaf-file-name="activity_pic_source.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_pic_source.xml">
-          <provider editor-type-id="android-designer">
+          <provider selected="true" editor-type-id="android-designer">
             <state />
           </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.8275862">
-              <caret line="24" column="12" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
+          <provider editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="213" column="47" selection-start-line="213" selection-start-column="47" selection-end-line="213" selection-end-column="47" />
               <folding>
                 <element signature="e#569#604#0" expanded="true" />
                 <element signature="e#6810#6845#0" expanded="true" />
@@ -72,36 +72,56 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ic_done_24dp.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_done_24dp.xml">
+      <file leaf-file-name="PicSourceActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-4.6551723">
+              <caret line="88" column="30" selection-start-line="88" selection-start-column="30" selection-end-line="88" selection-end-column="30" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#11499#11500#0" expanded="true" />
+                <element signature="e#11531#11532#0" expanded="true" />
+                <element signature="e#16009#16020#0" expanded="true" />
+                <element signature="e#18593#18604#0" expanded="true" />
+                <element signature="e#22302#22303#0" expanded="true" />
+                <element signature="e#22348#22349#0" expanded="true" />
+                <element signature="e#22387#22388#0" expanded="true" />
+                <element signature="e#22434#22435#0" expanded="true" />
+                <element signature="e#22472#22473#0" expanded="true" />
+                <element signature="e#22518#22519#0" expanded="true" />
+                <element signature="e#25425#25426#0" expanded="true" />
+                <element signature="e#25456#25457#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="6" column="36" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
+              <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PicSourceActivity.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.36824325">
-              <caret line="357" column="41" selection-start-line="357" selection-start-column="41" selection-end-line="357" selection-end-column="41" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#11373#11374#0" expanded="true" />
-                <element signature="e#11405#11406#0" expanded="true" />
-                <element signature="e#15879#15890#0" expanded="true" />
-                <element signature="e#18463#18474#0" expanded="true" />
-                <element signature="e#22172#22173#0" expanded="true" />
-                <element signature="e#22218#22219#0" expanded="true" />
-                <element signature="e#22257#22258#0" expanded="true" />
-                <element signature="e#22304#22305#0" expanded="true" />
-                <element signature="e#22342#22343#0" expanded="true" />
-                <element signature="e#22388#22389#0" expanded="true" />
-                <element signature="e#25295#25296#0" expanded="true" />
-                <element signature="e#25326#25327#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.3090909">
+              <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1324,7 +1344,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="C:\Users\Cait\Development\Filler" value="4410448932818" />
+        <entry key="C:\Users\Cait\Development\Filler" value="4414360844311" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1687,7 +1707,6 @@
       <list>
         <option value="$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/State.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/EffectButton.java" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_camera_alt_24dp.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_camera_alt_200dp.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/ic_collections_200dp.xml" />
@@ -1713,6 +1732,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/BitmapWrapper.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_pic_source.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
       </list>
     </option>
   </component>
@@ -1721,9 +1741,8 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1" />
-    <option name="y" value="1" />
     <option name="width" value="1364" />
-    <option name="height" value="726" />
+    <option name="height" value="735" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -1760,38 +1779,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="Gradle Scripts" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Filler" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Filler" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="drawable" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -1999,17 +1986,17 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="1" width="1364" height="726" extended-state="0" />
-    <editor active="true" />
+    <frame x="1" y="0" width="1364" height="735" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27144298" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27070552" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24913494" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37961337" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37716264" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4701874" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -2024,8 +2011,8 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18865031" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32864675" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18865031" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.328125" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -2082,97 +2069,97 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>520</line>
+          <line>517</line>
           <properties />
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>504</line>
+          <line>501</line>
           <properties />
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>505</line>
+          <line>502</line>
           <properties />
           <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>506</line>
+          <line>503</line>
           <properties />
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>507</line>
+          <line>504</line>
           <properties />
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>508</line>
+          <line>505</line>
           <properties />
           <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>509</line>
+          <line>506</line>
           <properties />
           <option name="timeStamp" value="54" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>510</line>
+          <line>507</line>
           <properties />
           <option name="timeStamp" value="55" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>512</line>
+          <line>509</line>
           <properties />
           <option name="timeStamp" value="56" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>516</line>
+          <line>513</line>
           <properties />
           <option name="timeStamp" value="57" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>517</line>
+          <line>514</line>
           <properties />
           <option name="timeStamp" value="58" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>518</line>
+          <line>515</line>
           <properties />
           <option name="timeStamp" value="59" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>519</line>
+          <line>516</line>
           <properties />
           <option name="timeStamp" value="60" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>503</line>
+          <line>500</line>
           <properties />
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>384</line>
+          <line>381</line>
           <properties />
           <option name="timeStamp" value="66" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java</url>
-          <line>467</line>
+          <line>464</line>
           <properties />
           <option name="timeStamp" value="67" />
         </line-breakpoint>
@@ -2217,18 +2204,18 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#11373#11374#0" expanded="true" />
-            <element signature="e#11405#11406#0" expanded="true" />
-            <element signature="e#15879#15890#0" expanded="true" />
-            <element signature="e#18463#18474#0" expanded="true" />
-            <element signature="e#22172#22173#0" expanded="true" />
-            <element signature="e#22218#22219#0" expanded="true" />
-            <element signature="e#22257#22258#0" expanded="true" />
-            <element signature="e#22304#22305#0" expanded="true" />
-            <element signature="e#22342#22343#0" expanded="true" />
-            <element signature="e#22388#22389#0" expanded="true" />
-            <element signature="e#25295#25296#0" expanded="true" />
-            <element signature="e#25326#25327#0" expanded="true" />
+            <element signature="e#11499#11500#0" expanded="true" />
+            <element signature="e#11531#11532#0" expanded="true" />
+            <element signature="e#16009#16020#0" expanded="true" />
+            <element signature="e#18593#18604#0" expanded="true" />
+            <element signature="e#22302#22303#0" expanded="true" />
+            <element signature="e#22348#22349#0" expanded="true" />
+            <element signature="e#22387#22388#0" expanded="true" />
+            <element signature="e#22434#22435#0" expanded="true" />
+            <element signature="e#22472#22473#0" expanded="true" />
+            <element signature="e#22518#22519#0" expanded="true" />
+            <element signature="e#25425#25426#0" expanded="true" />
+            <element signature="e#25456#25457#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2282,18 +2269,18 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#11373#11374#0" expanded="true" />
-            <element signature="e#11405#11406#0" expanded="true" />
-            <element signature="e#15879#15890#0" expanded="true" />
-            <element signature="e#18463#18474#0" expanded="true" />
-            <element signature="e#22172#22173#0" expanded="true" />
-            <element signature="e#22218#22219#0" expanded="true" />
-            <element signature="e#22257#22258#0" expanded="true" />
-            <element signature="e#22304#22305#0" expanded="true" />
-            <element signature="e#22342#22343#0" expanded="true" />
-            <element signature="e#22388#22389#0" expanded="true" />
-            <element signature="e#25295#25296#0" expanded="true" />
-            <element signature="e#25326#25327#0" expanded="true" />
+            <element signature="e#11499#11500#0" expanded="true" />
+            <element signature="e#11531#11532#0" expanded="true" />
+            <element signature="e#16009#16020#0" expanded="true" />
+            <element signature="e#18593#18604#0" expanded="true" />
+            <element signature="e#22302#22303#0" expanded="true" />
+            <element signature="e#22348#22349#0" expanded="true" />
+            <element signature="e#22387#22388#0" expanded="true" />
+            <element signature="e#22434#22435#0" expanded="true" />
+            <element signature="e#22472#22473#0" expanded="true" />
+            <element signature="e#22518#22519#0" expanded="true" />
+            <element signature="e#25425#25426#0" expanded="true" />
+            <element signature="e#25456#25457#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2347,18 +2334,18 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#11373#11374#0" expanded="true" />
-            <element signature="e#11405#11406#0" expanded="true" />
-            <element signature="e#15879#15890#0" expanded="true" />
-            <element signature="e#18463#18474#0" expanded="true" />
-            <element signature="e#22172#22173#0" expanded="true" />
-            <element signature="e#22218#22219#0" expanded="true" />
-            <element signature="e#22257#22258#0" expanded="true" />
-            <element signature="e#22304#22305#0" expanded="true" />
-            <element signature="e#22342#22343#0" expanded="true" />
-            <element signature="e#22388#22389#0" expanded="true" />
-            <element signature="e#25295#25296#0" expanded="true" />
-            <element signature="e#25326#25327#0" expanded="true" />
+            <element signature="e#11499#11500#0" expanded="true" />
+            <element signature="e#11531#11532#0" expanded="true" />
+            <element signature="e#16009#16020#0" expanded="true" />
+            <element signature="e#18593#18604#0" expanded="true" />
+            <element signature="e#22302#22303#0" expanded="true" />
+            <element signature="e#22348#22349#0" expanded="true" />
+            <element signature="e#22387#22388#0" expanded="true" />
+            <element signature="e#22434#22435#0" expanded="true" />
+            <element signature="e#22472#22473#0" expanded="true" />
+            <element signature="e#22518#22519#0" expanded="true" />
+            <element signature="e#25425#25426#0" expanded="true" />
+            <element signature="e#25456#25457#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2592,22 +2579,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_delete_24dp.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.18853974">
@@ -2632,14 +2603,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3860045">
-          <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/BitmapWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2649,12 +2612,12 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_pic_source.xml">
-      <provider editor-type-id="android-designer">
+      <provider selected="true" editor-type-id="android-designer">
         <state />
       </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.8275862">
-          <caret line="24" column="12" selection-start-line="24" selection-start-column="12" selection-end-line="24" selection-end-column="12" />
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="213" column="47" selection-start-line="213" selection-start-column="47" selection-end-line="213" selection-end-column="47" />
           <folding>
             <element signature="e#569#604#0" expanded="true" />
             <element signature="e#6810#6845#0" expanded="true" />
@@ -2671,23 +2634,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/caitoo0o/filler/PicSourceActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36824325">
-          <caret line="357" column="41" selection-start-line="357" selection-start-column="41" selection-end-line="357" selection-end-column="41" />
+        <state vertical-scroll-proportion="-4.6551723">
+          <caret line="88" column="30" selection-start-line="88" selection-start-column="30" selection-end-line="88" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#11373#11374#0" expanded="true" />
-            <element signature="e#11405#11406#0" expanded="true" />
-            <element signature="e#15879#15890#0" expanded="true" />
-            <element signature="e#18463#18474#0" expanded="true" />
-            <element signature="e#22172#22173#0" expanded="true" />
-            <element signature="e#22218#22219#0" expanded="true" />
-            <element signature="e#22257#22258#0" expanded="true" />
-            <element signature="e#22304#22305#0" expanded="true" />
-            <element signature="e#22342#22343#0" expanded="true" />
-            <element signature="e#22388#22389#0" expanded="true" />
-            <element signature="e#25295#25296#0" expanded="true" />
-            <element signature="e#25326#25327#0" expanded="true" />
+            <element signature="e#11499#11500#0" expanded="true" />
+            <element signature="e#11531#11532#0" expanded="true" />
+            <element signature="e#16009#16020#0" expanded="true" />
+            <element signature="e#18593#18604#0" expanded="true" />
+            <element signature="e#22302#22303#0" expanded="true" />
+            <element signature="e#22348#22349#0" expanded="true" />
+            <element signature="e#22387#22388#0" expanded="true" />
+            <element signature="e#22434#22435#0" expanded="true" />
+            <element signature="e#22472#22473#0" expanded="true" />
+            <element signature="e#22518#22519#0" expanded="true" />
+            <element signature="e#25425#25426#0" expanded="true" />
+            <element signature="e#25456#25457#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="8" selection-start-line="19" selection-start-column="8" selection-end-line="19" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3090909">
+          <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>
