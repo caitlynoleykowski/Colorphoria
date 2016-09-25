@@ -1,6 +1,13 @@
 package com.caitoo0o.filler;
 
 import android.graphics.Bitmap;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Random;
 
 /**
  * Created by Cait on 8/11/2016.
@@ -27,6 +34,8 @@ public class BitmapWrapper {
         }
 
     }
+
+    public BitmapWrapper() {}
 
     public static double getScaleFactor(int bitmapWidth, int bitmapHeight) {
         int numPixels = bitmapWidth * bitmapHeight;
@@ -92,5 +101,228 @@ public class BitmapWrapper {
     }
     public void resetFromRotatedSource() {
         setModifiedBitmap(rotatedSource.copy(rotatedSource.getConfig(), true));
+    }
+
+    // Start effects
+
+    public void randomBleedFill(double ctrl) {
+        resetFromRotatedSource();
+        applyRandomBleedFill(ctrl);
+    }
+
+    public void threshold(double ctrl) {
+        resetFromRotatedSource();
+        applyThreshold(ctrl);
+    }
+
+    public void randomLineFill(double ctrl) {
+        resetFromRotatedSource();
+        applyThreshold(ctrl);
+        applyRandomLineFill();
+    }
+
+    public void randomFloodFill(double ctrl) {
+        resetFromRotatedSource();
+        applyThreshold(ctrl);
+        applyRandomFill();
+    }
+
+    void applyThreshold(double ctrl) {
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                PixelNode pixel = getPixel(x, y);
+                int red = (pixel.getColor() >> 16) & 0xFF;
+                int green = (pixel.getColor() >> 8) & 0xFF;
+                int blue = (pixel.getColor() >> 0) & 0xFF;
+                int average = (red + blue + green) / 3;
+                if (average <= (255 * ctrl)) {
+                    pixel.setColor(0x000000);
+                } else {
+                    pixel.setColor(0xffffff);
+                }
+            }
+        }
+        doneProcessing();
+    }
+
+    void applyRandomLineFill() {
+        int prevPixelColor = 0x000000;
+        int currColor = 0;
+        Random r = new Random();
+        int maxColor = 0xffffff;
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                PixelNode pixel = getPixel(x, y);
+                if (pixel.getColor() == 0xffffff && prevPixelColor == 0x000000) {
+                    currColor = r.nextInt(maxColor);
+                    prevPixelColor = pixel.getColor();
+                    pixel.setColor(currColor);
+                } else if (pixel.getColor() == 0xffffff && prevPixelColor == 0xffffff) {
+                    prevPixelColor = pixel.getColor();
+                    pixel.setColor(currColor);
+                } else if (pixel.getColor() == 0x000000) {
+                    prevPixelColor = pixel.getColor();
+                } else {
+                    // this condition is only hit if the current pixel is a different color
+                    prevPixelColor = pixel.getColor();
+                }
+            }
+        }
+        doneProcessing();
+    }
+
+    public void applyRandomFill() {
+        Random r = new Random();
+        int maxColor = 0xffffff;
+        for (int i = 0; i < getWidth(); i++) {
+            for (int j = 0; j < getHeight(); j++) {
+                PixelNode currNode = getPixel(i, j);
+                floodFill(currNode, 0xffffff, r.nextInt(maxColor));
+            }
+        }
+        doneProcessing();
+    }
+
+    // Flood-fill (node, target-color, replacement-color):
+    private void floodFill(PixelNode node, int targetColor, int replacementColor) {
+        Queue<PixelNode> queue = new LinkedList<PixelNode>();
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            //Log.e("picsource", "The queue:" + queue.toString());
+            // 5.    Set n equal to the first element of Q.
+            // 6.    Remove first element from Q.
+            PixelNode n = queue.remove();
+            // 7.     If the color of n is equal to target-color:
+            if (n.getColor() == targetColor) {
+                // 8.    Set the color of n to replacement-color and mark "n" as processed.
+                n.setColor(replacementColor);
+                n.markProcessed();
+                // 9.    Add west node to end of Q if west has not been processed yet.
+                PixelNode west = n.getWest();
+                if (west != null && !west.isProcessed()) {
+                    west.markProcessed();
+                    queue.add(west);
+                }
+                // 10.   Add east node to end of Q if east has not been processed yet.
+                PixelNode east = n.getEast();
+                if (east != null && !east.isProcessed()) {
+                    east.markProcessed();
+                    queue.add(east);
+                }
+                // 11.   Add north node to end of Q if north has not been processed yet.
+                PixelNode north = n.getNorth();
+                if (north != null && !north.isProcessed()) {
+                    north.markProcessed();
+                    queue.add(north);
+                }
+                // 12.   Add south node to end of Q if south has not been processed yet.
+                PixelNode south = n.getSouth();
+                if (south != null && !south.isProcessed()) {
+                    south.markProcessed();
+                    queue.add(south);
+                }
+            }
+        }
+        //13. Return.
+        return;
+    }
+
+    public void applyRandomBleedFill(double ctrl) {
+        Random r = new Random();
+        int maxColor = 0xffffff;
+        for (int i = 0; i < getWidth(); i++) {
+            for (int j = 0; j < getHeight(); j++) {
+                PixelNode currNode = getPixel(i, j);
+                if (!currNode.isProcessed()) {
+                    int targetColor = currNode.getColor();
+                    bleedFill(currNode, targetColor, r.nextInt(maxColor), ctrl);
+                }
+            }
+        }
+        doneProcessing();
+    }
+
+    // Flood-fill (node, target-color, replacement-color):
+    void bleedFill(PixelNode node, int targetColor, int replacementColor, double ctrl) {
+        Queue<PixelNode> queue = new LinkedList<PixelNode>();
+        queue.add(node);
+
+        while (!queue.isEmpty()) {
+            //Log.e("picsource", "The queue:" + queue.toString());
+            // 5.    Set n equal to the first element of Q.
+            // 6.    Remove first element from Q.
+            PixelNode n = queue.remove();
+            // 7.     If the color of n is not significantly different than the target-color:
+            boolean sigChange = false;
+            int pixelCurrColor = n.getColor();
+            int changeInRed = Math.abs(getRed(pixelCurrColor) - getRed(targetColor));
+            int changeInGreen = Math.abs(getGreen(pixelCurrColor) - getGreen(targetColor));
+            int changeInBlue = Math.abs(getBlue(pixelCurrColor) - getBlue(targetColor));
+            int overallChange = changeInRed + changeInGreen + changeInBlue;
+            if (overallChange > ((0xff + 0xff + 0xff) * ctrl)) {
+                sigChange = true;
+            }
+            if (!sigChange) {
+                // 8.    Set the color of n to adjusted replacement-color and mark "n" as processed.
+                int adjustedReplacementColor;
+                int pixelDarkness = getRed(pixelCurrColor) + getGreen(pixelCurrColor) + getBlue(pixelCurrColor);
+                int darknessInRepColor = getRed(replacementColor) + getGreen(replacementColor) + getBlue(replacementColor);
+                double redRatioInRepColor, greenRatioInRepColor, blueRatioInRepColor;
+                if (darknessInRepColor > 0) {
+                    redRatioInRepColor = (double)getRed(replacementColor) / (double)darknessInRepColor;
+                    greenRatioInRepColor = (double)getGreen(replacementColor) / (double)darknessInRepColor;
+                    blueRatioInRepColor = (double)getBlue(replacementColor) / (double)darknessInRepColor;
+                } else {
+                    redRatioInRepColor = 0;
+                    greenRatioInRepColor = 0;
+                    blueRatioInRepColor = 0;
+                }
+                int redInAdjRepColor = (int) (redRatioInRepColor * pixelDarkness);
+                int greenInAdjRepColor = (int) (greenRatioInRepColor * pixelDarkness);
+                int blueInAdjRepColor = (int) (blueRatioInRepColor * pixelDarkness);
+                adjustedReplacementColor = (redInAdjRepColor << 16) + (greenInAdjRepColor << 8) + blueInAdjRepColor;
+                n.setColor(adjustedReplacementColor);
+                n.markProcessed();
+                // 9.    Add west node to end of Q if west has not been processed yet.
+                PixelNode west = n.getWest();
+                if (west != null && !west.isProcessed()) {
+                    west.markProcessed();
+                    queue.add(west);
+                }
+                // 10.   Add east node to end of Q if east has not been processed yet.
+                PixelNode east = n.getEast();
+                if (east != null && !east.isProcessed()) {
+                    east.markProcessed();
+                    queue.add(east);
+                }
+                // 11.   Add north node to end of Q if north has not been processed yet.
+                PixelNode north = n.getNorth();
+                if (north != null && !north.isProcessed()) {
+                    north.markProcessed();
+                    queue.add(north);
+                }
+                // 12.   Add south node to end of Q if south has not been processed yet.
+                PixelNode south = n.getSouth();
+                if (south != null && !south.isProcessed()) {
+                    south.markProcessed();
+                    queue.add(south);
+                }
+            }
+        }
+        //13. Return.
+        return;
+    }
+
+    private int getRed(int color) {
+        return (color & 0xff0000)>> 16;
+    }
+
+    private int getGreen(int color) {
+        return (color &  0x00ff00) >> 8;
+    }
+
+    private int getBlue(int color) {
+        return (color & 0x0000ff) >> 0;
     }
 }

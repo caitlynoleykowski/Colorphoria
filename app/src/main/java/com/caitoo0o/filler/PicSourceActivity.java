@@ -1,13 +1,8 @@
 package com.caitoo0o.filler;
 
 import android.Manifest;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -16,55 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.graphics.Bitmap;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
 import java.io.File;
 
 public class PicSourceActivity extends AppCompatActivity {
 
-    private static final String SOURCE_STATE_KEY = "SOURCE_STATE_KEY";
-    private static final String ROTATED_SOURCE_STATE_KEY = "ROTATED_SOURCE_STATE_KEY";
-    private static final String MOD_STATE_KEY = "MOD_STATE_KEY";
-    private static final String EFFECT_SELECTED_STATE_KEY = "EFFECT_SELECTED_STATE_KEY";
-
-    private static final int MAX_UNDO_QUEUE_SIZE = 2;
-    private static final int ROTATION_ANGLE = 90;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
 
-    private enum Effect {
-        NONE,
-        RANDOM_BLEED_FILL,
-        THRESHOLD,
-        RANDOM_LINE_FILL,
-        RANDOM_FLOOD_FILL
-    }
-
-    private BitmapWrapper bmW;
-    private Deque<BitmapWrapper> undoQueue;
-    private Deque<BitmapWrapper> redoQueue;
     private Uri mImageUri;
-    private Effect effectSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,36 +31,11 @@ public class PicSourceActivity extends AppCompatActivity {
         getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         getPermission(Manifest.permission.CAMERA);
 
-        undoQueue = new ArrayDeque<>();
-        redoQueue = new ArrayDeque<>();
         if (savedInstanceState != null) {
-            Bitmap sourceImage = (Bitmap) savedInstanceState.getParcelable(SOURCE_STATE_KEY);
-            Bitmap rotatedSourceImage = (Bitmap) savedInstanceState.getParcelable(ROTATED_SOURCE_STATE_KEY);
-            Bitmap modImage = (Bitmap) savedInstanceState.getParcelable(MOD_STATE_KEY);
-            Effect effectSelected = (Effect) savedInstanceState.getSerializable(EFFECT_SELECTED_STATE_KEY);
-            if (sourceImage != null && modImage != null && rotatedSourceImage != null) {
-                bmW = new BitmapWrapper(sourceImage);
-                bmW.setRotatedSource(rotatedSourceImage);
-                bmW.setModifiedBitmap(modImage);
-                setHasImageActivityState(true);
-                reloadCurrImage();
-            }
-            else {
-                setHasImageActivityState(false);
-            }
-            LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-            if (effectSelected == Effect.NONE) {
-                ctrlLayout.setVisibility(View.GONE);
-            }
-            else {
-                ctrlLayout.setVisibility(View.VISIBLE);
-            }
+            // do nothing
         }
         else {
-            setHasImageActivityState(false);
-            LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-            ctrlLayout.setVisibility(View.GONE);
-            effectSelected = Effect.NONE;
+            //do nothing
         }
     }
 
@@ -124,522 +55,6 @@ public class PicSourceActivity extends AppCompatActivity {
         }
     }
 
-    /* Checks if external storage is available for read and write */
-    private boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
-    /* Checks if external storage is available to at least read */
-    private boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
-    private void removeCurrImage() {
-        RelativeLayout rl = (RelativeLayout) findViewById(R.id.imageAreaLayout);
-        //rl.removeAllViews();
-        ImageView currImg = (ImageView) findViewById(R.id.theImage);
-        rl.removeView(currImg);
-    }
-
-    private void reloadCurrImage() {
-        removeCurrImage();
-        ImageView img = new ImageView(getApplicationContext());
-        // TODO: Remove this unless you want a longclick
-        img.setOnLongClickListener(new View.OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View v) {
-                Log.e("picsource", "Hey!");
-                return true;
-            }
-        });
-        img.setId(R.id.theImage);
-        if (bmW.getModifiedBitmap() != null) {
-            img.setImageBitmap(bmW.getModifiedBitmap());
-        }
-        img.setScaleType(ScaleType.FIT_CENTER);
-        img.setPadding(4, 8, 4, 4);
-        img.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        RelativeLayout rl = (RelativeLayout) findViewById(R.id.imageAreaLayout);
-        rl.addView(img);
-    }
-
-    private void newEffectApplied() {
-        redoQueue.clear();
-        setImageButtonClickable(findViewById(R.id.redoButton), false);
-        undoEnqueue();
-    }
-
-    // TODO: If you make an imagebutton class this could be a function
-    private void setImageButtonClickable(View view, boolean clickable) {
-        // TODO: Maybe change this to a selector in the layout.xml??
-        // http://stackoverflow.com/questions/7228985/android-imagebutton-with-disabled-ui-feel
-        ImageButton button = (ImageButton) view;
-        button.setClickable(clickable);
-        if (clickable) {
-            button.getDrawable().setColorFilter(null);
-        } else {
-            button.getDrawable().setColorFilter(0xff00ffff, PorterDuff.Mode.SRC_IN);
-        }
-    }
-
-    private void undoEnqueue() {
-        if (undoQueue.size() >= MAX_UNDO_QUEUE_SIZE) {
-            undoQueue.removeFirst();
-        }
-        BitmapWrapper undoCopy = new BitmapWrapper(bmW.getSourceBitmap().copy(bmW.getSourceBitmap().getConfig(), true));
-        undoCopy.setRotatedSource(bmW.getRotatedSource().copy(bmW.getRotatedSource().getConfig(), true));
-        undoCopy.setModifiedBitmap(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
-        undoQueue.addLast(undoCopy);
-        setImageButtonClickable(findViewById(R.id.undoButton), true);
-    }
-
-    private void redoEnqueue() {
-        // TODO: Do we need to check if the size gets exceeded? think its handled by undo checking
-        BitmapWrapper redoCopy = new BitmapWrapper(bmW.getSourceBitmap().copy(bmW.getSourceBitmap().getConfig(), true));
-        redoCopy.setRotatedSource(bmW.getRotatedSource().copy(bmW.getRotatedSource().getConfig(), true));
-        redoCopy.setModifiedBitmap(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
-        redoQueue.addLast(redoCopy);
-        setImageButtonClickable(findViewById(R.id.redoButton), true);
-    }
-
-    public void onRedo(View v) {
-        undoEnqueue();
-        bmW = redoQueue.removeLast();
-        if (redoQueue.isEmpty()) {
-            setImageButtonClickable(findViewById(R.id.redoButton), false);
-        }
-        reloadCurrImage();
-    }
-
-    public void onUndo(View v) {
-        redoEnqueue();
-        bmW = undoQueue.removeLast();
-        if (undoQueue.isEmpty()) {
-            setImageButtonClickable(findViewById(R.id.undoButton), false);
-        }
-        reloadCurrImage();
-    }
-
-    public void onRotate(View v) {
-        newEffectApplied();
-        Matrix matrix = new Matrix();
-        matrix.postRotate(ROTATION_ANGLE);
-        bmW.setRotatedSource(Bitmap.createBitmap(bmW.getRotatedSource(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
-        bmW.setModifiedBitmap(Bitmap.createBitmap(bmW.getModifiedBitmap(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
-        reloadCurrImage();
-    }
-
-    public void onRotateLeft(View v) {
-        newEffectApplied();
-        Matrix matrix = new Matrix();
-        matrix.postRotate(-1 * ROTATION_ANGLE);
-        bmW.setRotatedSource(Bitmap.createBitmap(bmW.getRotatedSource(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
-        bmW.setModifiedBitmap(Bitmap.createBitmap(bmW.getModifiedBitmap(), 0, 0, bmW.getWidth(), bmW.getHeight(), matrix, true));
-        reloadCurrImage();
-    }
-
-    public void onReset(View v) {
-        bmW.resetFromSource();
-        reloadCurrImage();
-    }
-
-    private double getEffectCtrl() {
-        SeekBar ctrlSeekbar = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
-        double progress = ctrlSeekbar.getProgress();
-        double max = ctrlSeekbar.getMax();
-        double ctrl = 1 - progress/max;
-        return ctrl;
-    }
-
-    public void onEffectApplyClicked(View v) {
-        double ctrl = getEffectCtrl();
-        switch (effectSelected) {
-            case NONE:
-                // Do nothing
-                break;
-            case RANDOM_BLEED_FILL:
-                randomBleedFill(ctrl);
-                break;
-            case THRESHOLD:
-                threshold(ctrl);
-                break;
-            case RANDOM_LINE_FILL:
-                randomLineFill(ctrl);
-                break;
-            case RANDOM_FLOOD_FILL:
-                randomFloodFill(ctrl);
-                break;
-        }
-    }
-
-    private void randomBleedFill(double ctrl) {
-        newEffectApplied();
-        bmW.resetFromRotatedSource();
-        applyRandomBleedFill(bmW, ctrl);
-        reloadCurrImage();
-    }
-
-    private void threshold(double ctrl) {
-        newEffectApplied();
-        bmW.resetFromRotatedSource();
-        applyThreshold(bmW, ctrl);
-        reloadCurrImage();
-    }
-
-    private void randomLineFill(double ctrl) {
-        newEffectApplied();
-        bmW.resetFromRotatedSource();
-        applyThreshold(bmW, ctrl);
-        applyRandomLineFill(bmW);
-        reloadCurrImage();
-    }
-
-    private void randomFloodFill(double ctrl) {
-        newEffectApplied();
-        bmW.resetFromRotatedSource();
-        applyThreshold(bmW, ctrl);
-        applyRandomFill(bmW);
-        reloadCurrImage();
-    }
-
-    public void onCtrlLayoutExit(View v) {
-        exitCtrlLayout();
-    }
-
-    private void exitCtrlLayout() {
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.GONE);
-        effectSelected = Effect.NONE;
-        //SeekBar ctrlSeekbar = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
-        //ctrlSeekbar.setProgress(ctrlSeekbar.getMax()/2);
-    }
-
-    public void onRandomBleedFill(View v) {
-        randomBleedFill(getEffectCtrl());
-        effectSelected = Effect.RANDOM_BLEED_FILL;
-        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
-        ctrlImage.setImageResource(R.drawable.filler_rbleed_icon);
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.VISIBLE);
-    }
-
-    public void onThreshold(View v) {
-        threshold(getEffectCtrl());
-        effectSelected = Effect.THRESHOLD;
-        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
-        ctrlImage.setImageResource(R.drawable.filler_threshold_icon);
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.VISIBLE);
-    }
-
-    public void onRandomLineFill(View v) {
-        randomLineFill(getEffectCtrl());
-        effectSelected = Effect.RANDOM_LINE_FILL;
-        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
-        ctrlImage.setImageResource(R.drawable.filler_rline_icon);
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.VISIBLE);
-    }
-
-    public void onRandomFloodFill(View v) {
-        randomFloodFill(getEffectCtrl());
-        effectSelected = Effect.RANDOM_FLOOD_FILL;
-        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
-        ctrlImage.setImageResource(R.drawable.filler_rfill_icon);
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.VISIBLE);
-    }
-
-    void applyThreshold(BitmapWrapper bmW, double ctrl) {
-        for (int y = 0; y < bmW.getHeight(); y++) {
-            for (int x = 0; x < bmW.getWidth(); x++) {
-                PixelNode pixel = bmW.getPixel(x, y);
-                int red = (pixel.getColor() >> 16) & 0xFF;
-                int green = (pixel.getColor() >> 8) & 0xFF;
-                int blue = (pixel.getColor() >> 0) & 0xFF;
-                int average = (red + blue + green) / 3;
-                if (average <= (255 * ctrl)) {
-                    pixel.setColor(0x000000);
-                } else {
-                    pixel.setColor(0xffffff);
-                }
-            }
-        }
-        bmW.doneProcessing();
-    }
-
-    void applyRandomLineFill(BitmapWrapper bmW) {
-        int prevPixelColor = 0x000000;
-        int currColor = 0;
-        Random r = new Random();
-        int maxColor = 0xffffff;
-        for (int y = 0; y < bmW.getHeight(); y++) {
-            for (int x = 0; x < bmW.getWidth(); x++) {
-                PixelNode pixel = bmW.getPixel(x, y);
-                if (pixel.getColor() == 0xffffff && prevPixelColor == 0x000000) {
-                    currColor = r.nextInt(maxColor);
-                    prevPixelColor = pixel.getColor();
-                    pixel.setColor(currColor);
-                } else if (pixel.getColor() == 0xffffff && prevPixelColor == 0xffffff) {
-                    prevPixelColor = pixel.getColor();
-                    pixel.setColor(currColor);
-                } else if (pixel.getColor() == 0x000000) {
-                    prevPixelColor = pixel.getColor();
-                } else {
-                    // this condition is only hit if the current pixel is a different color
-                    prevPixelColor = pixel.getColor();
-                }
-            }
-        }
-        bmW.doneProcessing();
-    }
-
-    public void applyRandomFill(BitmapWrapper bmW) {
-        Random r = new Random();
-        int maxColor = 0xffffff;
-        for (int i = 0; i < bmW.getWidth(); i++) {
-            for (int j = 0; j < bmW.getHeight(); j++) {
-                PixelNode currNode = bmW.getPixel(i, j);
-                floodFill(currNode, 0xffffff, r.nextInt(maxColor));
-            }
-        }
-        bmW.doneProcessing();
-    }
-
-    // Flood-fill (node, target-color, replacement-color):
-    private void floodFill(PixelNode node, int targetColor, int replacementColor) {
-        Queue<PixelNode> queue = new LinkedList<PixelNode>();
-        queue.add(node);
-
-        while (!queue.isEmpty()) {
-            //Log.e("picsource", "The queue:" + queue.toString());
-            // 5.    Set n equal to the first element of Q.
-            // 6.    Remove first element from Q.
-            PixelNode n = queue.remove();
-            // 7.     If the color of n is equal to target-color:
-            if (n.getColor() == targetColor) {
-                // 8.    Set the color of n to replacement-color and mark "n" as processed.
-                n.setColor(replacementColor);
-                n.markProcessed();
-                // 9.    Add west node to end of Q if west has not been processed yet.
-                PixelNode west = n.getWest();
-                if (west != null && !west.isProcessed()) {
-                    west.markProcessed();
-                    queue.add(west);
-                }
-                // 10.   Add east node to end of Q if east has not been processed yet.
-                PixelNode east = n.getEast();
-                if (east != null && !east.isProcessed()) {
-                    east.markProcessed();
-                    queue.add(east);
-                }
-                // 11.   Add north node to end of Q if north has not been processed yet.
-                PixelNode north = n.getNorth();
-                if (north != null && !north.isProcessed()) {
-                    north.markProcessed();
-                    queue.add(north);
-                }
-                // 12.   Add south node to end of Q if south has not been processed yet.
-                PixelNode south = n.getSouth();
-                if (south != null && !south.isProcessed()) {
-                    south.markProcessed();
-                    queue.add(south);
-                }
-            }
-        }
-        //13. Return.
-        return;
-    }
-
-    public void applyRandomBleedFill(BitmapWrapper bmW, double ctrl) {
-        Random r = new Random();
-        int maxColor = 0xffffff;
-        for (int i = 0; i < bmW.getWidth(); i++) {
-            for (int j = 0; j < bmW.getHeight(); j++) {
-                PixelNode currNode = bmW.getPixel(i, j);
-                if (!currNode.isProcessed()) {
-                    int targetColor = currNode.getColor();
-                    bleedFill(currNode, targetColor, r.nextInt(maxColor), ctrl);
-                }
-            }
-        }
-        bmW.doneProcessing();
-    }
-
-    // Flood-fill (node, target-color, replacement-color):
-    void bleedFill(PixelNode node, int targetColor, int replacementColor, double ctrl) {
-        Queue<PixelNode> queue = new LinkedList<PixelNode>();
-        queue.add(node);
-
-        while (!queue.isEmpty()) {
-            //Log.e("picsource", "The queue:" + queue.toString());
-            // 5.    Set n equal to the first element of Q.
-            // 6.    Remove first element from Q.
-            PixelNode n = queue.remove();
-            // 7.     If the color of n is not significantly different than the target-color:
-            boolean sigChange = false;
-            int pixelCurrColor = n.getColor();
-            int changeInRed = Math.abs(getRed(pixelCurrColor) - getRed(targetColor));
-            int changeInGreen = Math.abs(getGreen(pixelCurrColor) - getGreen(targetColor));
-            int changeInBlue = Math.abs(getBlue(pixelCurrColor) - getBlue(targetColor));
-            int overallChange = changeInRed + changeInGreen + changeInBlue;
-            if (overallChange > ((0xff + 0xff + 0xff) * ctrl)) {
-                sigChange = true;
-            }
-            if (!sigChange) {
-                // 8.    Set the color of n to adjusted replacement-color and mark "n" as processed.
-                int adjustedReplacementColor;
-                int pixelDarkness = getRed(pixelCurrColor) + getGreen(pixelCurrColor) + getBlue(pixelCurrColor);
-                int darknessInRepColor = getRed(replacementColor) + getGreen(replacementColor) + getBlue(replacementColor);
-                double redRatioInRepColor, greenRatioInRepColor, blueRatioInRepColor;
-                if (darknessInRepColor > 0) {
-                    redRatioInRepColor = (double)getRed(replacementColor) / (double)darknessInRepColor;
-                    greenRatioInRepColor = (double)getGreen(replacementColor) / (double)darknessInRepColor;
-                    blueRatioInRepColor = (double)getBlue(replacementColor) / (double)darknessInRepColor;
-                } else {
-                    redRatioInRepColor = 0;
-                    greenRatioInRepColor = 0;
-                    blueRatioInRepColor = 0;
-                }
-                int redInAdjRepColor = (int) (redRatioInRepColor * pixelDarkness);
-                int greenInAdjRepColor = (int) (greenRatioInRepColor * pixelDarkness);
-                int blueInAdjRepColor = (int) (blueRatioInRepColor * pixelDarkness);
-                adjustedReplacementColor = (redInAdjRepColor << 16) + (greenInAdjRepColor << 8) + blueInAdjRepColor;
-                n.setColor(adjustedReplacementColor);
-                n.markProcessed();
-                // 9.    Add west node to end of Q if west has not been processed yet.
-                PixelNode west = n.getWest();
-                if (west != null && !west.isProcessed()) {
-                    west.markProcessed();
-                    queue.add(west);
-                }
-                // 10.   Add east node to end of Q if east has not been processed yet.
-                PixelNode east = n.getEast();
-                if (east != null && !east.isProcessed()) {
-                    east.markProcessed();
-                    queue.add(east);
-                }
-                // 11.   Add north node to end of Q if north has not been processed yet.
-                PixelNode north = n.getNorth();
-                if (north != null && !north.isProcessed()) {
-                    north.markProcessed();
-                    queue.add(north);
-                }
-                // 12.   Add south node to end of Q if south has not been processed yet.
-                PixelNode south = n.getSouth();
-                if (south != null && !south.isProcessed()) {
-                    south.markProcessed();
-                    queue.add(south);
-                }
-            }
-        }
-        //13. Return.
-        return;
-    }
-
-    private int getRed(int color) {
-        return (color & 0xff0000)>> 16;
-    }
-
-    private int getGreen(int color) {
-        return (color &  0x00ff00) >> 8;
-    }
-
-    private int getBlue(int color) {
-        return (color & 0x0000ff) >> 0;
-    }
-
-    private File getAlbumStorageDir(String albumName) {
-        // Get the directory for the user's public pictures directory.
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), albumName);
-        if (!file.mkdirs()) {
-            Log.e("picsource", "Directory not created");
-        }
-        return file;
-    }
-
-    public void saveCurrImage() {
-        if (isExternalStorageWritable()) {
-            //File albumStorageDir = getAlbumStorageDir("FillerSaves");
-            File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
-            File albumStorageDir = new File(pictureStorageDir, "Filler");
-            try {
-                albumStorageDir.mkdir();
-            }
-            catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Failed to create directory", Toast.LENGTH_LONG).show();
-                Log.e("picsource", "Failed to create Filler directory.");
-                e.printStackTrace();
-            }
-            Date date = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyyhhmmss");
-            String formattedDate = sdf.format(date);
-            File picFile = new File(albumStorageDir, "Filler" + formattedDate + ".png");
-            Log.e("picsource", "picfile: " + picFile.getAbsolutePath());
-            FileOutputStream out = null;
-            try {
-                out = new FileOutputStream(picFile);
-                bmW.getModifiedBitmap().compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-                // PNG is a lossless format, the compression factor (100) is ignored
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
-                Log.e("picsource", "failed save.");
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (out != null) {
-                        out.close();
-                    }
-                    Toast.makeText(getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
-                    Log.i("picsource", "file written to: " + picFile.getAbsolutePath());
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
-                    Log.e("picsource", "failed save.");
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            // TODO: move these strings to strings file
-            Toast.makeText(getApplicationContext(), "Save failed. External storage not writeable.", Toast.LENGTH_LONG).show();
-            Log.e("picsource", "failed save. external storage not writeable");
-        }
-    }
-
-    public void onSave(View v) {
-        saveCurrImage();
-    }
-
-    public void onShare(View v) {
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmW.getModifiedBitmap(), "Export from Filler", null);
-        Uri uri = Uri.parse(path);
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("image/jpeg");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(Intent.createChooser(intent, "Share Image"));
-        }
-    }
-
-    private void addImageFromNewSource(Bitmap bm) {
-        bmW = new BitmapWrapper(bm);
-        setHasImageActivityState(true);
-        reloadCurrImage();
-    }
-
     public void onOpen(View v) {
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -648,36 +63,8 @@ public class PicSourceActivity extends AppCompatActivity {
 
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_IMAGE_GET);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
-    }
-
-    private void setHasImageActivityState(boolean hasImage) {
-        LinearLayout ll1 = (LinearLayout) findViewById(R.id.firstButtonLinearLayout);
-        ll1.getChildCount();
-        for (int i = 0; i < ll1.getChildCount(); i++) {
-            setImageButtonClickable(ll1.getChildAt(i), hasImage);
-        }
-        LinearLayout ll2 = (LinearLayout) findViewById(R.id.buttonLinearLayout);
-        ll2.getChildCount();
-        for (int i = 0; i < ll2.getChildCount(); i++) {
-            setImageButtonClickable(ll2.getChildAt(i), hasImage);
-        }
-        setImageButtonClickable(findViewById(R.id.undoButton), false);
-        setImageButtonClickable(findViewById(R.id.redoButton), false);
-        if (hasImage) {
-            findViewById(R.id.cameraButton).setVisibility(View.GONE);
-            findViewById(R.id.openExistingButton).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.cameraButton).setVisibility(View.VISIBLE);
-            findViewById(R.id.openExistingButton).setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void onDiscard(View v) {
-        bmW = null;
-        exitCtrlLayout();
-        setHasImageActivityState(false);
-        removeCurrImage();
     }
 
     public void onCamera(View v) {
@@ -701,6 +88,7 @@ public class PicSourceActivity extends AppCompatActivity {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
             //start camera intent
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
         else {
             Toast.makeText(getApplicationContext(), "Device has no camera.", Toast.LENGTH_LONG).show();
@@ -730,13 +118,14 @@ public class PicSourceActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_IMAGE_GET) {
             if (data != null && data.getData() != null) {
-                Bitmap bm = grabImage(data.getData());
-                if (bm != null) {
-                    addImageFromNewSource(bm);
-                } else {
-                    Log.e("picsource", "bitmap from grabImage is null.");
-                    Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
-                }
+                startPicEditActivity(data.getData());
+//                Bitmap bm = grabImage(data.getData());
+//                if (bm != null) {
+//                    startPicEditActivity(bm);
+//                } else {
+//                    Log.e("picsource", "bitmap from grabImage is null.");
+//                    Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
+//                }
             } else {
                 Log.e("picsource", "data or data.getData from image picker intent is null.");
                 Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
@@ -744,59 +133,24 @@ public class PicSourceActivity extends AppCompatActivity {
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE) {
             getContentResolver().notifyChange(mImageUri, null);
-            Bitmap image = grabImage(mImageUri);
-            if (image != null) {
-                addImageFromNewSource(image);
-            }
+            startPicEditActivity(mImageUri);
+//            Bitmap image = grabImage(mImageUri);
+//            if (image != null) {
+//                startPicEditActivity(image);
+//            }
         }
     }
 
-    public Bitmap grabImage(Uri uri)
-    {
-        try
-        {
-            InputStream is = getApplicationContext().getContentResolver().openInputStream(uri);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(is, null, options);
-            double scaleFactor = BitmapWrapper.getScaleFactor(options.outWidth, options.outHeight);
-            BitmapFactory.Options finalOptions = new BitmapFactory.Options();
-            finalOptions.inSampleSize = (int) (1/scaleFactor);
-            InputStream finalInputStream = getApplicationContext().getContentResolver().openInputStream(uri);
-            Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
-            return bm;
-        }
-        catch (Exception e)
-        {
-            Toast.makeText(this, "Failed to load image", Toast.LENGTH_SHORT).show();
-            Log.d("picsource", "Failed to load image", e);
-            return null;
-        }
+    private void startPicEditActivity(Uri uri) {
+        Intent intent = new Intent(this, PicEditActivity.class);
+        intent.putExtra(PicEditActivity.SOURCE_URI, uri);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (bmW != null) {
-            outState.putParcelable(SOURCE_STATE_KEY, bmW.getSourceBitmap());
-            outState.putParcelable(ROTATED_SOURCE_STATE_KEY, bmW.getRotatedSource());
-            outState.putParcelable(MOD_STATE_KEY, bmW.getModifiedBitmap());
-            // TODO: Is there any possible reason i would need to save the URI?
-            // it should only be needed on return from an intent in which case state is preserved
-            // TODO: Handle saving the undo and redo queues
-        }
-        else {
-            outState.putParcelable(SOURCE_STATE_KEY, null);
-            outState.putParcelable(ROTATED_SOURCE_STATE_KEY, null);
-            outState.putParcelable(MOD_STATE_KEY, null);
-            // TODO: Is there any possible reason i would need to save the URI?
-            // it should only be needed on return from an intent in which case state is preserved
-            // TODO: Handle saving the undo and redo queues
-        }
-        outState.putSerializable(EFFECT_SELECTED_STATE_KEY, effectSelected);
+        // do nothing
     }
-
-    //public class CaitlynsBitmap extends Bitmap {
-    //
-    //}
 }
