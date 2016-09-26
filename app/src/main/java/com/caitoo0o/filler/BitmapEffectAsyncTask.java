@@ -45,6 +45,15 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
                 case NONE:
                     // do nothing
                     break;
+                case RESET:
+                    bmwWeakReference.get().reset();
+                    break;
+                case ROTATE_RIGHT:
+                    bmwWeakReference.get().rotateRight();
+                    break;
+                case ROTATE_LEFT:
+                    bmwWeakReference.get().rotateLeft();
+                    break;
                 case RANDOM_BLEED_FILL:
                     bmwWeakReference.get().randomBleedFill(ctrl);
                     break;

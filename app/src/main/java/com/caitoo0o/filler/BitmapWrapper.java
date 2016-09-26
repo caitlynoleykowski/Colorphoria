@@ -1,6 +1,7 @@
 package com.caitoo0o.filler;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +16,7 @@ import java.util.Random;
 public class BitmapWrapper {
 
     private static final int MAX_PIXELS = 2000000;
+    private static final int ROTATION_ANGLE = 90;
 
     Bitmap source;
     Bitmap rotatedSource;
@@ -96,14 +98,23 @@ public class BitmapWrapper {
         rotatedSource = bm;
     }
 
-    public void resetFromSource() {
-        setModifiedBitmap(source.copy(source.getConfig(), true));
-    }
     public void resetFromRotatedSource() {
         setModifiedBitmap(rotatedSource.copy(rotatedSource.getConfig(), true));
     }
 
     // Start effects
+
+    public void reset() {
+        setModifiedBitmap(source.copy(source.getConfig(), true));
+    }
+
+    public void rotateRight() {
+        applyRotate(ROTATION_ANGLE);
+    }
+
+    public void rotateLeft() {
+        applyRotate(-1 * ROTATION_ANGLE);
+    }
 
     public void randomBleedFill(double ctrl) {
         resetFromRotatedSource();
@@ -125,6 +136,13 @@ public class BitmapWrapper {
         resetFromRotatedSource();
         applyThreshold(ctrl);
         applyRandomFill();
+    }
+
+    private void applyRotate(int rotationAngle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(rotationAngle);
+        setRotatedSource(Bitmap.createBitmap(getRotatedSource(), 0, 0, getWidth(), getHeight(), matrix, true));
+        setModifiedBitmap(Bitmap.createBitmap(getModifiedBitmap(), 0, 0, getWidth(), getHeight(), matrix, true));
     }
 
     void applyThreshold(double ctrl) {

@@ -155,7 +155,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/my_menu_bar_button"
-                android:onClick="onRotate"
+                android:onClick="onRotateRight"
                 android:src="@drawable/ic_rotate_right_24dp"
                 android:clickable="false" />
         </LinearLayout>
