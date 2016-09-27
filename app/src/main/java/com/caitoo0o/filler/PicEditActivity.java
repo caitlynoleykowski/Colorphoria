@@ -33,7 +33,7 @@ public class PicEditActivity extends AppCompatActivity {
     public static final String SOURCE_URI = "SOURCE_URI";
 
     private static final String SOURCE_STATE_KEY = "SOURCE_STATE_KEY";
-    private static final String ROTATED_SOURCE_STATE_KEY = "ROTATED_SOURCE_STATE_KEY";
+    private static final String ROTATION_ANGLE_STATE_KEY = "ROTATION_ANGLE_STATE_KEY";
     private static final String MOD_STATE_KEY = "MOD_STATE_KEY";
     private static final String EFFECT_SELECTED_STATE_KEY = "EFFECT_SELECTED_STATE_KEY";
 
@@ -73,12 +73,12 @@ public class PicEditActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             Bitmap sourceImage = (Bitmap) savedInstanceState.getParcelable(SOURCE_STATE_KEY);
-            Bitmap rotatedSourceImage = (Bitmap) savedInstanceState.getParcelable(ROTATED_SOURCE_STATE_KEY);
+            int rotationAngle = savedInstanceState.getInt(ROTATION_ANGLE_STATE_KEY);
             Bitmap modImage = (Bitmap) savedInstanceState.getParcelable(MOD_STATE_KEY);
             Effect effectSelected = (Effect) savedInstanceState.getSerializable(EFFECT_SELECTED_STATE_KEY);
-            if (sourceImage != null && modImage != null && rotatedSourceImage != null) {
+            if (sourceImage != null && modImage != null) {
                 bmW = new BitmapWrapper(sourceImage);
-                bmW.setRotatedSource(rotatedSourceImage);
+                bmW.setRotationAngle(rotationAngle);
                 bmW.setModifiedBitmap(modImage);
                 setUIforImageDoneProcessing(true);
                 ((ImageView) findViewById(R.id.theImage)).setImageBitmap(bmW.getModifiedBitmap());
@@ -111,7 +111,7 @@ public class PicEditActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         if (bmW != null) {
             outState.putParcelable(SOURCE_STATE_KEY, bmW.getSourceBitmap());
-            outState.putParcelable(ROTATED_SOURCE_STATE_KEY, bmW.getRotatedSource());
+            outState.putInt(ROTATION_ANGLE_STATE_KEY, bmW.getRotationAngle());
             outState.putParcelable(MOD_STATE_KEY, bmW.getModifiedBitmap());
             // TODO: Is there any possible reason i would need to save the URI?
             // it should only be needed on return from an intent in which case state is preserved
@@ -119,7 +119,7 @@ public class PicEditActivity extends AppCompatActivity {
         }
         else {
             outState.putParcelable(SOURCE_STATE_KEY, null);
-            outState.putParcelable(ROTATED_SOURCE_STATE_KEY, null);
+            outState.putInt(ROTATION_ANGLE_STATE_KEY, bmW.getRotationAngle());
             outState.putParcelable(MOD_STATE_KEY, null);
             // TODO: Is there any possible reason i would need to save the URI?
             // it should only be needed on return from an intent in which case state is preserved
@@ -294,28 +294,30 @@ public class PicEditActivity extends AppCompatActivity {
         LinearLayout ll1 = (LinearLayout) findViewById(R.id.firstButtonLinearLayout);
         ll1.getChildCount();
         for (int i = 0; i < ll1.getChildCount(); i++) {
-            ((ImageButton) ll1.getChildAt(i)).setClickable(processingImageDone);
+            setImageButtonClickable(ll1.getChildAt(i), processingImageDone);
         }
         LinearLayout ll2 = (LinearLayout) findViewById(R.id.buttonLinearLayout);
         ll2.getChildCount();
         for (int i = 0; i < ll2.getChildCount(); i++) {
             ((ImageButton) ll2.getChildAt(i)).setClickable(processingImageDone);
         }
-        ((ImageButton) findViewById(R.id.effect_ctrl_apply_button)).setClickable(processingImageDone);
+        setImageButtonClickable(findViewById(R.id.rotate_left), processingImageDone);
+        setImageButtonClickable(findViewById(R.id.rotate_right), processingImageDone);
+        setImageButtonClickable(findViewById(R.id.effect_ctrl_apply_button), processingImageDone);
         if (processingImageDone) {
             if (undoQueue.size() > 0) {
-                ((ImageButton) findViewById(R.id.undoButton)).setClickable(true);
+                setImageButtonClickable(findViewById(R.id.undoButton), true);
             } else {
-                ((ImageButton) findViewById(R.id.undoButton)).setClickable(false);
+                setImageButtonClickable(findViewById(R.id.undoButton), false);
             }
             if (redoQueue.size() > 0) {
-                ((ImageButton) findViewById(R.id.redoButton)).setClickable(true);
+                setImageButtonClickable(findViewById(R.id.redoButton), true);
             } else {
-                ((ImageButton) findViewById(R.id.redoButton)).setClickable(false);
+                setImageButtonClickable(findViewById(R.id.redoButton), false);
             }
         } else {
-            ((ImageButton) findViewById(R.id.undoButton)).setClickable(false);
-            ((ImageButton) findViewById(R.id.redoButton)).setClickable(false);
+            setImageButtonClickable(findViewById(R.id.undoButton), false);
+            setImageButtonClickable(findViewById(R.id.redoButton), false);
         }
     }
 
@@ -328,7 +330,6 @@ public class PicEditActivity extends AppCompatActivity {
             undoQueue.removeFirst();
         }
         BitmapWrapper undoCopy = new BitmapWrapper(bmW.getSourceBitmap().copy(bmW.getSourceBitmap().getConfig(), true));
-        undoCopy.setRotatedSource(bmW.getRotatedSource().copy(bmW.getRotatedSource().getConfig(), true));
         undoCopy.setModifiedBitmap(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
         undoQueue.addLast(undoCopy);
         ((ImageButton) findViewById(R.id.undoButton)).setClickable(true);
@@ -337,7 +338,6 @@ public class PicEditActivity extends AppCompatActivity {
     private void redoEnqueue() {
         // TODO: Do we need to check if the size gets exceeded? think its handled by undo checking
         BitmapWrapper redoCopy = new BitmapWrapper(bmW.getSourceBitmap().copy(bmW.getSourceBitmap().getConfig(), true));
-        redoCopy.setRotatedSource(bmW.getRotatedSource().copy(bmW.getRotatedSource().getConfig(), true));
         redoCopy.setModifiedBitmap(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
         redoQueue.addLast(redoCopy);
         ((ImageButton) findViewById(R.id.redoButton)).setClickable(true);

@@ -2,9 +2,6 @@ package com.caitoo0o.filler;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -19,13 +16,14 @@ public class BitmapWrapper {
     private static final int ROTATION_ANGLE = 90;
 
     Bitmap source;
-    Bitmap rotatedSource;
     Bitmap mod;
+    int currRotationAngle;
     int [] pixels;
     PixelNode [][] pixelNodes;
     boolean [] processed;
 
     public BitmapWrapper(Bitmap bm) {
+        currRotationAngle = 0;
         double scaleFactor = getScaleFactor(bm.getWidth(), bm.getHeight());
         if (scaleFactor == 1) {
             setSource(bm);
@@ -34,7 +32,6 @@ public class BitmapWrapper {
             int height = (int) (bm.getHeight() * scaleFactor);
             setSource(Bitmap.createScaledBitmap(bm, width, height, true));
         }
-
     }
 
     public BitmapWrapper() {}
@@ -79,6 +76,14 @@ public class BitmapWrapper {
         return mod.getHeight();
     }
 
+    public int getRotationAngle() {
+        return currRotationAngle;
+    }
+
+    public void setRotationAngle(int rotationAngle) {
+        currRotationAngle = rotationAngle;
+    }
+
     public void doneProcessing() {
         mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
         processed = new boolean[mod.getWidth() * mod.getHeight()];
@@ -86,20 +91,18 @@ public class BitmapWrapper {
 
     public void setSource(Bitmap bm) {
         source = bm;
-        rotatedSource = source.copy(source.getConfig(), true);
         setModifiedBitmap(source.copy(source.getConfig(), true));
     }
 
-    public Bitmap getRotatedSource() {
-        return rotatedSource;
-    }
-
-    public void setRotatedSource(Bitmap bm) {
-        rotatedSource = bm;
-    }
-
     public void resetFromRotatedSource() {
-        setModifiedBitmap(rotatedSource.copy(rotatedSource.getConfig(), true));
+        Bitmap temp = source.copy(source.getConfig(), true);
+        if (currRotationAngle != 0) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(currRotationAngle);
+            setModifiedBitmap(Bitmap.createBitmap(temp, 0, 0, source.getWidth(), source.getHeight(), matrix, true));
+        } else {
+            setModifiedBitmap(temp);
+        }
     }
 
     // Start effects
@@ -139,9 +142,13 @@ public class BitmapWrapper {
     }
 
     private void applyRotate(int rotationAngle) {
+        // calculate the net rotation angle
+        currRotationAngle += rotationAngle;
+        currRotationAngle %= 360;
+        // apply the rotation
+        // TODO: combine this with the applyRotate function by passing a bitmap to applyRotate?
         Matrix matrix = new Matrix();
         matrix.postRotate(rotationAngle);
-        setRotatedSource(Bitmap.createBitmap(getRotatedSource(), 0, 0, getWidth(), getHeight(), matrix, true));
         setModifiedBitmap(Bitmap.createBitmap(getModifiedBitmap(), 0, 0, getWidth(), getHeight(), matrix, true));
     }
 
