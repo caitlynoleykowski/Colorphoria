@@ -332,7 +332,7 @@ public class PicEditActivity extends AppCompatActivity {
         BitmapWrapper undoCopy = new BitmapWrapper(bmW.getSourceBitmap().copy(bmW.getSourceBitmap().getConfig(), true));
         undoCopy.setModifiedBitmap(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
         undoQueue.addLast(undoCopy);
-        ((ImageButton) findViewById(R.id.undoButton)).setClickable(true);
+        setImageButtonClickable(findViewById(R.id.undoButton), true);
     }
 
     private void redoEnqueue() {
@@ -340,7 +340,7 @@ public class PicEditActivity extends AppCompatActivity {
         BitmapWrapper redoCopy = new BitmapWrapper(bmW.getSourceBitmap().copy(bmW.getSourceBitmap().getConfig(), true));
         redoCopy.setModifiedBitmap(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
         redoQueue.addLast(redoCopy);
-        ((ImageButton) findViewById(R.id.redoButton)).setClickable(true);
+        setImageButtonClickable(findViewById(R.id.redoButton), true);
     }
 
     private void updateUndoRedoQueues() {
