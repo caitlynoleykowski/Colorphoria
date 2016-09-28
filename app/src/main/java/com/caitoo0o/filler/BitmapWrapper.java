@@ -68,6 +68,10 @@ public class BitmapWrapper {
         return pixelNodes[x][y];
     }
 
+    public int getPixelColor(int x, int y) {
+        return mod.getPixel(x, y) & 0x00FFFFFF;
+    }
+
     public int getWidth() {
         return mod.getWidth();
     }
@@ -155,19 +159,19 @@ public class BitmapWrapper {
     void applyThreshold(double ctrl) {
         for (int y = 0; y < getHeight(); y++) {
             for (int x = 0; x < getWidth(); x++) {
-                PixelNode pixel = getPixel(x, y);
-                int red = (pixel.getColor() >> 16) & 0xFF;
-                int green = (pixel.getColor() >> 8) & 0xFF;
-                int blue = (pixel.getColor() >> 0) & 0xFF;
+                int color = getPixelColor(x, y);
+                int red = (color >> 16) & 0xFF;
+                int green = (color >> 8) & 0xFF;
+                int blue = (color >> 0) & 0xFF;
                 int average = (red + blue + green) / 3;
                 if (average <= (255 * ctrl)) {
-                    pixel.setColor(0x000000);
+                    mod.setPixel(x, y, 0x000000);
                 } else {
-                    pixel.setColor(0xffffff);
+                    mod.setPixel(x, y, 0xffffff);
                 }
             }
         }
-        doneProcessing();
+        //doneProcessing();
     }
 
     void applyRandomLineFill() {
