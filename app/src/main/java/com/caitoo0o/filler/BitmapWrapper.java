@@ -95,19 +95,19 @@ public class BitmapWrapper {
     }
 
     public void resetFromRotatedSource() {
-        Bitmap temp = source.copy(source.getConfig(), true);
         if (currRotationAngle != 0) {
             Matrix matrix = new Matrix();
             matrix.postRotate(currRotationAngle);
-            setModifiedBitmap(Bitmap.createBitmap(temp, 0, 0, source.getWidth(), source.getHeight(), matrix, true));
+            setModifiedBitmap(Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true));
         } else {
-            setModifiedBitmap(temp);
+            setModifiedBitmap(source.copy(source.getConfig(), true));
         }
     }
 
     // Start effects
 
     public void reset() {
+        currRotationAngle = 0;
         setModifiedBitmap(source.copy(source.getConfig(), true));
     }
 
