@@ -181,23 +181,23 @@ public class BitmapWrapper {
         int maxColor = 0xffffff;
         for (int y = 0; y < getHeight(); y++) {
             for (int x = 0; x < getWidth(); x++) {
-                PixelNode pixel = getPixel(x, y);
-                if (pixel.getColor() == 0xffffff && prevPixelColor == 0x000000) {
+                int color = getPixelColor(x, y);
+                if (color == 0xffffff && prevPixelColor == 0x000000) {
                     currColor = r.nextInt(maxColor);
-                    prevPixelColor = pixel.getColor();
-                    pixel.setColor(currColor);
-                } else if (pixel.getColor() == 0xffffff && prevPixelColor == 0xffffff) {
-                    prevPixelColor = pixel.getColor();
-                    pixel.setColor(currColor);
-                } else if (pixel.getColor() == 0x000000) {
-                    prevPixelColor = pixel.getColor();
+                    prevPixelColor = color;
+                    mod.setPixel(x, y, currColor);
+                } else if (color == 0xffffff && prevPixelColor == 0xffffff) {
+                    prevPixelColor = color;
+                    mod.setPixel(x, y, currColor);
+                } else if (color == 0x000000) {
+                    prevPixelColor = color;
                 } else {
                     // this condition is only hit if the current pixel is a different color
-                    prevPixelColor = pixel.getColor();
+                    prevPixelColor = color;
                 }
             }
         }
-        doneProcessing();
+        //doneProcessing();
     }
 
     public void applyRandomFill() {
