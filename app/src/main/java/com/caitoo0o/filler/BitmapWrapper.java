@@ -2,6 +2,7 @@ package com.caitoo0o.filler;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -18,9 +19,7 @@ public class BitmapWrapper {
     Bitmap source;
     Bitmap mod;
     int currRotationAngle;
-    int [] pixels;
-    PixelNode [][] pixelNodes;
-    boolean [] processed;
+    boolean [][] processed;
 
     public BitmapWrapper(Bitmap bm) {
         currRotationAngle = 0;
@@ -51,25 +50,50 @@ public class BitmapWrapper {
         return source;
     }
     public void setModifiedBitmap(Bitmap bm) {
-        // TODO: check if mod is mutable?
+        // TODO: throw exception if mod is not mutable
+        if (!bm.isMutable()) {
+            Log.e("bitmapwrapper", "error!! bitmap not mutable");
+        }
         mod = bm;
-        pixels = new int[mod.getWidth() * mod.getHeight()];
-        mod.getPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-        pixelNodes = new PixelNode[mod.getWidth()][mod.getHeight()];
-        processed = new boolean[mod.getWidth() * mod.getHeight()];
+        processed = new boolean[mod.getWidth()][mod.getHeight()];
     }
 
     public Bitmap getModifiedBitmap() { return mod; }
 
-    public PixelNode getPixel(int x, int y) {
-        if (pixelNodes[x][y] == null) {
-            pixelNodes[x][y] = new PixelNode(x, y, mod.getWidth(), mod.getHeight(), pixels, processed);
-        }
-        return pixelNodes[x][y];
-    }
-
-    public int getPixelColor(int x, int y) {
+    private int getPixelColor(int x, int y) {
         return mod.getPixel(x, y) & 0x00FFFFFF;
+    }
+    private void setPixelColor(int x, int y, int color) {
+        mod.setPixel(x, y, color);
+    }
+    public boolean isPixelNodeProcessed(PixelNode n) {
+        return processed[n.x()][n.y()];
+    }
+    public void markPixelNodeProcessed(PixelNode n) {
+        processed[n.x()][n.y()] = true;
+    }
+    public PixelNode getNorth(PixelNode n) {
+        PixelNode node = new PixelNode(n.x(), n.y() - 1);
+        return isWithinBounds(node) ? node : null;
+    }
+    public PixelNode getSouth(PixelNode n) {
+        PixelNode node = new PixelNode(n.x(), n.y() + 1);
+        return isWithinBounds(node) ? node : null;
+    }
+    public PixelNode getEast(PixelNode n) {
+        PixelNode node = new PixelNode(n.x() + 1, n.y());
+        return isWithinBounds(node) ? node : null;
+    }
+    public PixelNode getWest(PixelNode n) {
+        PixelNode node = new PixelNode(n.x() - 1, n.y());
+        return isWithinBounds(node) ? node : null;
+    }
+    private boolean isWithinBounds(PixelNode n) {
+        if (n.x() < getWidth() && n.x() >= 0 && n.y() < getHeight() && n.y() >= 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public int getWidth() {
@@ -89,8 +113,7 @@ public class BitmapWrapper {
     }
 
     public void doneProcessing() {
-        mod.setPixels(pixels, 0, mod.getWidth(), 0, 0, mod.getWidth(), mod.getHeight());
-        processed = new boolean[mod.getWidth() * mod.getHeight()];
+        processed = new boolean[mod.getWidth()][mod.getHeight()];
     }
 
     public void setSource(Bitmap bm) {
@@ -205,7 +228,7 @@ public class BitmapWrapper {
         int maxColor = 0xffffff;
         for (int i = 0; i < getWidth(); i++) {
             for (int j = 0; j < getHeight(); j++) {
-                PixelNode currNode = getPixel(i, j);
+                PixelNode currNode = new PixelNode(i, j);
                 floodFill(currNode, 0xffffff, r.nextInt(maxColor));
             }
         }
@@ -223,32 +246,32 @@ public class BitmapWrapper {
             // 6.    Remove first element from Q.
             PixelNode n = queue.remove();
             // 7.     If the color of n is equal to target-color:
-            if (n.getColor() == targetColor) {
+            if (getPixelColor(n.x(), n.y()) == targetColor) {
                 // 8.    Set the color of n to replacement-color and mark "n" as processed.
-                n.setColor(replacementColor);
-                n.markProcessed();
+                setPixelColor(n.x(), n.y(), replacementColor);
+                markPixelNodeProcessed(n);
                 // 9.    Add west node to end of Q if west has not been processed yet.
-                PixelNode west = n.getWest();
-                if (west != null && !west.isProcessed()) {
-                    west.markProcessed();
+                PixelNode west = getWest(n);
+                if (west != null && !isPixelNodeProcessed(west)) {
+                    markPixelNodeProcessed(west);
                     queue.add(west);
                 }
                 // 10.   Add east node to end of Q if east has not been processed yet.
-                PixelNode east = n.getEast();
-                if (east != null && !east.isProcessed()) {
-                    east.markProcessed();
+                PixelNode east = getEast(n);
+                if (east != null && !isPixelNodeProcessed(east)) {
+                    markPixelNodeProcessed(east);
                     queue.add(east);
                 }
                 // 11.   Add north node to end of Q if north has not been processed yet.
-                PixelNode north = n.getNorth();
-                if (north != null && !north.isProcessed()) {
-                    north.markProcessed();
+                PixelNode north = getNorth(n);
+                if (north != null && !isPixelNodeProcessed(n)) {
+                    markPixelNodeProcessed(north);
                     queue.add(north);
                 }
                 // 12.   Add south node to end of Q if south has not been processed yet.
-                PixelNode south = n.getSouth();
-                if (south != null && !south.isProcessed()) {
-                    south.markProcessed();
+                PixelNode south = getSouth(n);
+                if (south != null && !isPixelNodeProcessed(south)) {
+                    markPixelNodeProcessed(south);
                     queue.add(south);
                 }
             }
@@ -262,9 +285,9 @@ public class BitmapWrapper {
         int maxColor = 0xffffff;
         for (int i = 0; i < getWidth(); i++) {
             for (int j = 0; j < getHeight(); j++) {
-                PixelNode currNode = getPixel(i, j);
-                if (!currNode.isProcessed()) {
-                    int targetColor = currNode.getColor();
+                PixelNode currNode = new PixelNode(i, j);
+                if (!isPixelNodeProcessed(currNode)) {
+                    int targetColor = getPixelColor(currNode.x(), currNode.y() );
                     bleedFill(currNode, targetColor, r.nextInt(maxColor), ctrl);
                 }
             }
@@ -284,7 +307,7 @@ public class BitmapWrapper {
             PixelNode n = queue.remove();
             // 7.     If the color of n is not significantly different than the target-color:
             boolean sigChange = false;
-            int pixelCurrColor = n.getColor();
+            int pixelCurrColor = getPixelColor(n.x(), n.y());
             int changeInRed = Math.abs(getRed(pixelCurrColor) - getRed(targetColor));
             int changeInGreen = Math.abs(getGreen(pixelCurrColor) - getGreen(targetColor));
             int changeInBlue = Math.abs(getBlue(pixelCurrColor) - getBlue(targetColor));
@@ -311,30 +334,30 @@ public class BitmapWrapper {
                 int greenInAdjRepColor = (int) (greenRatioInRepColor * pixelDarkness);
                 int blueInAdjRepColor = (int) (blueRatioInRepColor * pixelDarkness);
                 adjustedReplacementColor = (redInAdjRepColor << 16) + (greenInAdjRepColor << 8) + blueInAdjRepColor;
-                n.setColor(adjustedReplacementColor);
-                n.markProcessed();
+                setPixelColor(n.x(), n.y(), adjustedReplacementColor);
+                markPixelNodeProcessed(n);
                 // 9.    Add west node to end of Q if west has not been processed yet.
-                PixelNode west = n.getWest();
-                if (west != null && !west.isProcessed()) {
-                    west.markProcessed();
+                PixelNode west = getWest(n);
+                if (west != null && !isPixelNodeProcessed(west)) {
+                    markPixelNodeProcessed(west);
                     queue.add(west);
                 }
                 // 10.   Add east node to end of Q if east has not been processed yet.
-                PixelNode east = n.getEast();
-                if (east != null && !east.isProcessed()) {
-                    east.markProcessed();
+                PixelNode east = getEast(n);
+                if (east != null && !isPixelNodeProcessed(east)) {
+                    markPixelNodeProcessed(east);
                     queue.add(east);
                 }
                 // 11.   Add north node to end of Q if north has not been processed yet.
-                PixelNode north = n.getNorth();
-                if (north != null && !north.isProcessed()) {
-                    north.markProcessed();
+                PixelNode north = getNorth(n);
+                if (north != null && !isPixelNodeProcessed(n)) {
+                    markPixelNodeProcessed(north);
                     queue.add(north);
                 }
                 // 12.   Add south node to end of Q if south has not been processed yet.
-                PixelNode south = n.getSouth();
-                if (south != null && !south.isProcessed()) {
-                    south.markProcessed();
+                PixelNode south = getSouth(n);
+                if (south != null && !isPixelNodeProcessed(south)) {
+                    markPixelNodeProcessed(south);
                     queue.add(south);
                 }
             }
