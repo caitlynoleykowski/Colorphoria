@@ -264,7 +264,7 @@ public class BitmapWrapper {
                 }
                 // 11.   Add north node to end of Q if north has not been processed yet.
                 PixelNode north = getNorth(n);
-                if (north != null && !isPixelNodeProcessed(n)) {
+                if (north != null && !isPixelNodeProcessed(north)) {
                     markPixelNodeProcessed(north);
                     queue.add(north);
                 }
@@ -350,7 +350,7 @@ public class BitmapWrapper {
                 }
                 // 11.   Add north node to end of Q if north has not been processed yet.
                 PixelNode north = getNorth(n);
-                if (north != null && !isPixelNodeProcessed(n)) {
+                if (north != null && !isPixelNodeProcessed(north)) {
                     markPixelNodeProcessed(north);
                     queue.add(north);
                 }
