@@ -82,6 +82,32 @@ public class PicEditActivity extends AppCompatActivity {
                 bmW.setModifiedBitmap(modImage);
                 setUIforImageDoneProcessing(true);
                 ((ImageView) findViewById(R.id.theImage)).setImageBitmap(bmW.getModifiedBitmap());
+                switch (effectSelected) {
+                    case NONE:
+                        // do nothing
+                        break;
+                    case RESET:
+                        // do nothing
+                        break;
+                    case ROTATE_LEFT:
+                        // do nothing
+                        break;
+                    case ROTATE_RIGHT:
+                        // do nothing
+                        break;
+                    case RANDOM_BLEED_FILL:
+                        showCtrlLayout(R.drawable.filler_rbleed_icon);
+                        break;
+                    case THRESHOLD:
+                        showCtrlLayout(R.drawable.filler_threshold_icon);
+                        break;
+                    case RANDOM_LINE_FILL:
+                        showCtrlLayout(R.drawable.filler_rline_icon);
+                        break;
+                    case RANDOM_FLOOD_FILL:
+                        showCtrlLayout(R.drawable.filler_rfill_icon);
+                        break;
+                }
             } else {
                 setUIforImageDoneProcessing(false);
             }
@@ -167,6 +193,7 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     public void onReset(View v) {
+        showCtrlLayout(R.drawable.filler_rbleed_icon);
         effectSelected = Effect.RESET;
         applyEffect();
     }
@@ -206,11 +233,13 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     public void onRotateRight(View v) {
+        exitCtrlLayout();
         effectSelected = Effect.ROTATE_RIGHT;
         applyEffect();
     }
 
     public void onRotateLeft(View v) {
+        exitCtrlLayout();
         effectSelected = Effect.ROTATE_LEFT;
         applyEffect();
     }
@@ -218,37 +247,25 @@ public class PicEditActivity extends AppCompatActivity {
     public void onRandomBleedFill(View v) {
         effectSelected = Effect.RANDOM_BLEED_FILL;
         applyEffect();
-        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
-        ctrlImage.setImageResource(R.drawable.filler_rbleed_icon);
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.VISIBLE);
+        showCtrlLayout(R.drawable.filler_rbleed_icon);
     }
 
     public void onThreshold(View v) {
         effectSelected = Effect.THRESHOLD;
         applyEffect();
-        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
-        ctrlImage.setImageResource(R.drawable.filler_threshold_icon);
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.VISIBLE);
+        showCtrlLayout(R.drawable.filler_threshold_icon);
     }
 
     public void onRandomLineFill(View v) {
         effectSelected = Effect.RANDOM_LINE_FILL;
         applyEffect();
-        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
-        ctrlImage.setImageResource(R.drawable.filler_rline_icon);
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.VISIBLE);
+        showCtrlLayout(R.drawable.filler_rline_icon);
     }
 
     public void onRandomFloodFill(View v) {
         effectSelected = Effect.RANDOM_FLOOD_FILL;
         applyEffect();
-        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
-        ctrlImage.setImageResource(R.drawable.filler_rfill_icon);
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.VISIBLE);
+        showCtrlLayout(R.drawable.filler_rfill_icon);
     }
 
     public void onEffectApplyClicked(View v) {
@@ -280,6 +297,13 @@ public class PicEditActivity extends AppCompatActivity {
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         setUIforImageDoneProcessing(true);
+    }
+
+    private void showCtrlLayout(int resDrawableId) {
+        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
+        ctrlImage.setImageResource(resDrawableId);
+        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
+        ctrlLayout.setVisibility(View.VISIBLE);
     }
 
     private void exitCtrlLayout() {
