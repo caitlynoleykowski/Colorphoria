@@ -184,7 +184,6 @@ public class BitmapWrapper {
                 }
             }
         }
-        //doneProcessing();
     }
 
     void applyRandomLineFill(Bitmap bm) {
@@ -210,7 +209,6 @@ public class BitmapWrapper {
                 }
             }
         }
-        //doneProcessing();
     }
 
     public void applyRandomFill(Bitmap bm) {
@@ -220,7 +218,10 @@ public class BitmapWrapper {
         for (int i = 0; i < bm.getWidth(); i++) {
             for (int j = 0; j < bm.getHeight(); j++) {
                 PixelNode currNode = new PixelNode(i, j);
-                floodFill(bm, currNode, 0xffffff, r.nextInt(maxColor), processed);
+                if (!isPixelNodeProcessed(currNode, processed) &&
+                        getPixelColor(bm, currNode.x(), currNode.y()) == 0xffffff) {
+                    floodFill(bm, currNode, 0xffffff, r.nextInt(maxColor), processed);
+                }
             }
         }
     }
