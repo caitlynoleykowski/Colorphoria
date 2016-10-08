@@ -27,6 +27,27 @@ public class PicSourceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_source);
 
+        View outerLinearLayout = findViewById(R.id.outer_linear_layout);
+        outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicSourceActivity.this) {
+            public void onSwipeTop() {
+                Toast.makeText(PicSourceActivity.this, "top", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeRight() {
+                Toast.makeText(PicSourceActivity.this, "right", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeLeft() {
+                Toast.makeText(PicSourceActivity.this, "left", Toast.LENGTH_SHORT).show();
+                startPicEditActivity();
+            }
+
+            public void onSwipeBottom() {
+                Toast.makeText(PicSourceActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
         getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
         getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         getPermission(Manifest.permission.CAMERA);
@@ -151,6 +172,12 @@ public class PicSourceActivity extends AppCompatActivity {
     private void startPicEditActivity(Uri uri) {
         Intent intent = new Intent(this, PicEditActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    private void startPicEditActivity() {
+        Intent intent = new Intent(this, PicEditActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
