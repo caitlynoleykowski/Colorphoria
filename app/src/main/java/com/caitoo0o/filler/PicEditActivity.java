@@ -60,7 +60,29 @@ public class PicEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_pic_edit);
+
+        View outerLinearLayout = findViewById(R.id.outer_linear_layout);
+        outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicEditActivity.this) {
+            public void onSwipeTop() {
+                Toast.makeText(PicEditActivity.this, "top", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeRight() {
+                Toast.makeText(PicEditActivity.this, "right", Toast.LENGTH_SHORT).show();
+                goToPicSourceActivity();
+            }
+
+            public void onSwipeLeft() {
+                Toast.makeText(PicEditActivity.this, "left", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeBottom() {
+                Toast.makeText(PicEditActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+            }
+
+        });
 
         getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
         getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -188,8 +210,7 @@ public class PicEditActivity extends AppCompatActivity {
     // Begin UI handlers
 
     public void onDiscard(View v) {
-        startActivity(new Intent(this, PicSourceActivity.class));
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        goToPicSourceActivity();
     }
 
     public void onReset(View v) {
@@ -343,6 +364,11 @@ public class PicEditActivity extends AppCompatActivity {
             setImageButtonClickable(findViewById(R.id.undoButton), false);
             setImageButtonClickable(findViewById(R.id.redoButton), false);
         }
+    }
+
+    private void goToPicSourceActivity() {
+        startActivity(new Intent(this, PicSourceActivity.class));
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     // End UI Helpers
