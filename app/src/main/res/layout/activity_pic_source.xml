@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.caitoo0o.filler.PicSourceActivity"
-    android:background="#00cccc">
+    android:background="@color/colorPrimaryDark">
 
     <RelativeLayout
         android:id="@+id/imageAreaLayout"

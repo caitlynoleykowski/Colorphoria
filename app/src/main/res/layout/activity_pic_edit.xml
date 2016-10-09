@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.caitoo0o.filler.PicSourceActivity"
-    android:background="#00cccc">
+    android:background="@color/colorPrimaryDark">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         android:layout_weight="2"
         android:orientation="vertical"
         android:elevation="@dimen/activity_horizontal_margin"
-        android:background="#00dddd">
+        android:background="@color/colorPrimary">
 
         <LinearLayout
             android:id="@+id/firstButtonLinearLayout"
