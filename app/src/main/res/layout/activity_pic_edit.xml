@@ -29,7 +29,6 @@
                 android:background="@drawable/my_menu_bar_button"
                 android:onClick="onDiscard"
                 android:src="@drawable/ic_delete_24dp"
-                android:textStyle="bold"
                 android:clickable="false" />
 
             <ImageButton
@@ -39,8 +38,6 @@
                 android:background="@drawable/my_menu_bar_button"
                 android:onClick="onReset"
                 android:src="@drawable/ic_clear_24dp"
-                android:textSize="10sp"
-                android:textStyle="bold"
                 android:clickable="false" />
 
             <ImageButton
@@ -51,8 +48,6 @@
                 android:background="@drawable/my_menu_bar_button"
                 android:onClick="onUndo"
                 android:src="@drawable/ic_undo_24dp"
-                android:textSize="10sp"
-                android:textStyle="bold"
                 android:clickable="false" />
 
             <ImageButton
@@ -63,8 +58,6 @@
                 android:background="@drawable/my_menu_bar_button"
                 android:onClick="onRedo"
                 android:src="@drawable/ic_redo_24dp"
-                android:textSize="10sp"
-                android:textStyle="bold"
                 android:clickable="false" />
 
             <ImageButton
@@ -74,8 +67,6 @@
                 android:background="@drawable/my_menu_bar_button"
                 android:onClick="onSave"
                 android:src="@drawable/ic_get_app_24dp"
-                android:textSize="10sp"
-                android:textStyle="bold"
                 android:clickable="false" />
 
             <ImageButton
@@ -85,8 +76,6 @@
                 android:background="@drawable/my_menu_bar_button"
                 android:onClick="onShare"
                 android:src="@drawable/ic_share_24dp"
-                android:textSize="10sp"
-                android:textStyle="bold"
                 android:clickable="false" />
         </LinearLayout>
 
