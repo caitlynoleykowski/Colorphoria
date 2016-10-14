@@ -95,6 +95,12 @@ public class PicSourceActivity extends AppCompatActivity {
         }
     }
 
+    public void onBrowse(View v) {
+        Intent intent = new Intent(this, Browse.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
     private File createTemporaryFile(String part, String ext) throws Exception
     {
         File tempDir= Environment.getExternalStorageDirectory();
