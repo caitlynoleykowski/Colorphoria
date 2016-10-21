@@ -61,6 +61,7 @@ public class PicSourceActivity extends AppCompatActivity {
         intent.setType("image/*");
         intent.putExtra("return-data", true);
 
+        // Verify there is an app to accept this type intent before starting it
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_IMAGE_GET);
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
