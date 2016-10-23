@@ -23,6 +23,9 @@ public class BitmapWrapper {
     public BitmapWrapper(Bitmap bm) {
         currRotationAngle = 0;
         double scaleFactor = getScaleFactor(bm.getWidth(), bm.getHeight());
+        // could use scaleFactor to multiply by the image dimensions regardless
+        // but it's an optimization to not create a new bitmap if you don't have to,
+        // so just set the source bm to the existing bitmap if the scaleFactor is 1
         if (scaleFactor == 1) {
             setSource(bm);
         } else {
@@ -37,7 +40,7 @@ public class BitmapWrapper {
     public static double getScaleFactor(int bitmapWidth, int bitmapHeight) {
         int numPixels = bitmapWidth * bitmapHeight;
         if (numPixels >= MAX_PIXELS) {
-            double scaleFactor = (double) MAX_PIXELS / (double) numPixels;
+            double scaleFactor = Math.sqrt((double) MAX_PIXELS / (double) numPixels);
             return scaleFactor;
         } else {
             return 1;

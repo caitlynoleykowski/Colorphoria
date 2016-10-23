@@ -51,7 +51,7 @@ public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
                 BitmapFactory.decodeStream(is, null, options);
                 double scaleFactor = BitmapWrapper.getScaleFactor(options.outWidth, options.outHeight);
                 BitmapFactory.Options finalOptions = new BitmapFactory.Options();
-                finalOptions.inSampleSize = (int) (1 / scaleFactor);
+                finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
                 InputStream finalInputStream = contextWeakReference.get().getContentResolver().openInputStream(uri);
                 Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
                 return bm;
