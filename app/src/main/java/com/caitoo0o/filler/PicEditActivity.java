@@ -55,6 +55,8 @@ public class PicEditActivity extends AppCompatActivity {
     private Deque<BitmapWrapper> redoQueue;
     private Effect effectSelected;
 
+    private Uri sourceUri;
+
     // Begin activity lifecycle handlers
 
     @Override
@@ -71,11 +73,12 @@ public class PicEditActivity extends AppCompatActivity {
 
             public void onSwipeRight() {
                 Toast.makeText(PicEditActivity.this, "right", Toast.LENGTH_SHORT).show();
-                goToPicSourceActivity();
+                goToPicSourceActivity(sourceUri);
             }
 
             public void onSwipeLeft() {
                 Toast.makeText(PicEditActivity.this, "left", Toast.LENGTH_SHORT).show();
+                goToBrowseActivity(sourceUri);
             }
 
             public void onSwipeBottom() {
@@ -94,6 +97,7 @@ public class PicEditActivity extends AppCompatActivity {
         effectSelected = Effect.NONE;
 
         if (savedInstanceState != null) {
+            sourceUri = savedInstanceState.getParcelable(SOURCE_URI);
             Bitmap sourceImage = (Bitmap) savedInstanceState.getParcelable(SOURCE_STATE_KEY);
             int rotationAngle = savedInstanceState.getInt(ROTATION_ANGLE_STATE_KEY);
             Bitmap modImage = (Bitmap) savedInstanceState.getParcelable(MOD_STATE_KEY);
@@ -140,7 +144,8 @@ public class PicEditActivity extends AppCompatActivity {
                 ctrlLayout.setVisibility(View.VISIBLE);
             }
         } else if (getIntent().hasExtra(SOURCE_URI)) {
-            Uri uri = (Uri)getIntent().getParcelableExtra(SOURCE_URI);
+            sourceUri = (Uri)getIntent().getParcelableExtra(SOURCE_URI);
+            Uri uri = sourceUri;
             ImageView iv = (ImageView) findViewById(R.id.theImage);
             bmW = new BitmapWrapper();
             BitmapLoaderAsyncTask bmwAsync = new BitmapLoaderAsyncTask(getApplicationContext(), iv, uri, bmW);
@@ -174,6 +179,7 @@ public class PicEditActivity extends AppCompatActivity {
             // TODO: Handle saving the undo and redo queues
         }
         outState.putSerializable(EFFECT_SELECTED_STATE_KEY, effectSelected);
+        outState.putParcelable(SOURCE_URI, sourceUri);
     }
 
     // End activity lifecycle handlers
@@ -210,7 +216,7 @@ public class PicEditActivity extends AppCompatActivity {
     // Begin UI handlers
 
     public void onDiscard(View v) {
-        goToPicSourceActivity();
+        goToPicSourceActivity(sourceUri);
     }
 
     public void onReset(View v) {
@@ -366,8 +372,17 @@ public class PicEditActivity extends AppCompatActivity {
         }
     }
 
-    private void goToPicSourceActivity() {
-        startActivity(new Intent(this, PicSourceActivity.class));
+    private void goToPicSourceActivity(Uri uri) {
+        Intent intent = new Intent(this, PicSourceActivity.class);
+        intent.putExtra(PicSourceActivity.IMAGE_URI_STATE_KEY, uri);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    private void goToBrowseActivity(Uri uri) {
+        Intent intent = new Intent(this, Browse.class);
+        intent.putExtra(Browse.IMAGE_URI_STATE_KEY, uri);
+        startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 

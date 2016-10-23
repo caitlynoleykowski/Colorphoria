@@ -19,27 +19,53 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class Browse extends AppCompatActivity {
-//cursor and columnIndex defined Globally so we can use it in below class.
-    private Cursor cursor;
-    private int columnIndex;
     private File[] allFiles;
 
     private static final int MAX_THUMBNAIL_PIXELS = 50000;
-    private static final int THUMBSIZE = 512;
+
+    public static final String IMAGE_URI_STATE_KEY = "IMAGE_URI_STATE_KEY";
+
+    private Uri mImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
 
-        //Searching Images ID's from Gallery. _ID is the Default id code for all. You can retrive image,contacts,music id in the same way.
-        //String[] list = {MediaStore.Images.Media._ID};
+        if (savedInstanceState != null) {
+            mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
+        }
+        else if (getIntent() != null && getIntent().hasExtra(IMAGE_URI_STATE_KEY)) {
+            mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
+        }
+
+        View outerRelativeLayout = findViewById(R.id.outer_relative_layout);
+        outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(Browse.this) {
+            public void onSwipeTop() {
+                Toast.makeText(Browse.this, "top", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeRight() {
+                Toast.makeText(Browse.this, "right", Toast.LENGTH_SHORT).show();
+                startPicEditActivity(mImageUri);
+            }
+
+            public void onSwipeLeft() {
+                Toast.makeText(Browse.this, "left", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeBottom() {
+                Toast.makeText(Browse.this, "bottom", Toast.LENGTH_SHORT).show();
+            }
+
+        });
 
         //Retriving Images from Database(SD CARD) by Cursor.
         File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
@@ -71,6 +97,13 @@ public class Browse extends AppCompatActivity {
     // Used to get the index into the allFiles list in order to retrieve the files in order of most recent first
     private int getIdxFromPos(int pos) {
         return allFiles.length - pos - 1;
+    }
+
+    private void startPicEditActivity(Uri uri) {
+        Intent intent = new Intent(this, PicEditActivity.class);
+        intent.putExtra(PicEditActivity.SOURCE_URI, uri);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     // Adapter for Grid View
@@ -147,5 +180,11 @@ public class Browse extends AppCompatActivity {
         } else {
             return 1;
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(IMAGE_URI_STATE_KEY, mImageUri);
     }
 }

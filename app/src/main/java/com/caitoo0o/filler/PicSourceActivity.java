@@ -19,6 +19,7 @@ public class PicSourceActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
+    public static final String IMAGE_URI_STATE_KEY = "IMAGE_URI_STATE_KEY";
 
     private Uri mImageUri;
 
@@ -26,6 +27,17 @@ public class PicSourceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_source);
+
+        getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+        getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        getPermission(Manifest.permission.CAMERA);
+
+        if (savedInstanceState != null) {
+            mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
+        }
+        else if (getIntent() != null && getIntent().hasExtra(IMAGE_URI_STATE_KEY)) {
+            mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
+        }
 
         View outerLinearLayout = findViewById(R.id.outer_linear_layout);
         outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicSourceActivity.this) {
@@ -39,7 +51,9 @@ public class PicSourceActivity extends AppCompatActivity {
 
             public void onSwipeLeft() {
                 Toast.makeText(PicSourceActivity.this, "left", Toast.LENGTH_SHORT).show();
-                startPicEditActivity();
+                if (mImageUri != null) {
+                    startPicEditActivity(mImageUri);
+                }
             }
 
             public void onSwipeBottom() {
@@ -47,17 +61,6 @@ public class PicSourceActivity extends AppCompatActivity {
             }
 
         });
-
-        getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-        getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        getPermission(Manifest.permission.CAMERA);
-
-        if (savedInstanceState != null) {
-            // do nothing
-        }
-        else {
-            //do nothing
-        }
     }
 
     void getPermission(String permissionKind) {
@@ -146,6 +149,7 @@ public class PicSourceActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_IMAGE_GET) {
             if (data != null && data.getData() != null) {
+                mImageUri = data.getData(); // save this as the uri so that on swipe left we can use it again
                 startPicEditActivity(data.getData());
 //                Bitmap bm = grabImage(data.getData());
 //                if (bm != null) {
@@ -176,15 +180,9 @@ public class PicSourceActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    private void startPicEditActivity() {
-        Intent intent = new Intent(this, PicEditActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-    }
-
     @Override
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
-        // do nothing
+        outState.putParcelable(IMAGE_URI_STATE_KEY, mImageUri);
     }
 }
