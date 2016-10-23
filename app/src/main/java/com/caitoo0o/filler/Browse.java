@@ -2,9 +2,11 @@ package com.caitoo0o.filler;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -29,6 +31,7 @@ public class Browse extends AppCompatActivity {
     private File[] allFiles;
 
     private static final int MAX_THUMBNAIL_PIXELS = 50000;
+    private static final int THUMBSIZE = 512;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class Browse extends AppCompatActivity {
         File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         File albumStorageDir = new File(pictureStorageDir, "Filler");
-        allFiles = albumStorageDir.listFiles();
+        allFiles = albumStorageDir.listFiles(); // todo add a file filter to make sure all files are images
         //Uri uri = Uri.fromFile(albumStorageDir);
         //cursor = getContentResolver().query(uri, list, null, null, MediaStore.Images.Thumbnails._ID);
         //columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
@@ -53,16 +56,22 @@ public class Browse extends AppCompatActivity {
 
             public void onItemClick(AdapterView<?> adapterView, View v, int pos,
                                     long arg3) {
+                // dont need but what is it??
                 Object i = adapterView.getItemAtPosition(pos);
-                if (v instanceof ImageView) {
-                    Log.i("browse", "toot toot!");
-                }
-                Log.i("browse", "poop poop!!");
+                // Load the image that was clicked into the editor
+                Intent intent = new Intent(Browse.this, PicEditActivity.class);
+                intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(allFiles[getIdxFromPos(pos)]));
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
         sdcardimage.setAdapter(adapter);
     }
 
+    // Used to get the index into the allFiles list in order to retrieve the files in order of most recent first
+    private int getIdxFromPos(int pos) {
+        return allFiles.length - pos - 1;
+    }
 
     // Adapter for Grid View
     private class ImageAdapter extends BaseAdapter {
@@ -99,7 +108,7 @@ public class Browse extends AppCompatActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            Uri uri = Uri.fromFile(allFiles[position]);
+            Uri uri = Uri.fromFile(allFiles[getIdxFromPos(position)]);
             InputStream is;
             try {
                 is = context.getContentResolver().openInputStream(uri);
@@ -111,6 +120,9 @@ public class Browse extends AppCompatActivity {
                 finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
                 InputStream finalInputStream = context.getContentResolver().openInputStream(uri);
                 Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
+
+                //Bitmap bm = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeStream(finalInputStream, null, finalOptions),
+                //        THUMBSIZE, THUMBSIZE, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
 
                 holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
                 holder.picturesView.setImageBitmap(bm);
