@@ -45,6 +45,7 @@
                 android:scaleType="fitCenter"
                 android:background="@drawable/mybutton"
                 android:onClick="onOpen"/>
+
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

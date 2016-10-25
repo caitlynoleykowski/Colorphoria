@@ -1,5 +1,6 @@
 package com.caitoo0o.filler;
 
+import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +40,12 @@ public class Browse extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
 
+        // Setup recent apps bar with app color
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
+                getString(R.string.app_name), bm, getColor(R.color.colorPrimaryDark));
+        setTaskDescription(taskDesc);
+
         if (savedInstanceState != null) {
             mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
         }
@@ -54,11 +61,15 @@ public class Browse extends AppCompatActivity {
 
             public void onSwipeRight() {
                 Toast.makeText(Browse.this, "right", Toast.LENGTH_SHORT).show();
-                startPicEditActivity(mImageUri);
+                //startPicEditActivity(mImageUri);
+                startPicSourceActivity(mImageUri);
             }
 
             public void onSwipeLeft() {
                 Toast.makeText(Browse.this, "left", Toast.LENGTH_SHORT).show();
+                if (mImageUri != null) {
+                    startPicEditActivity(mImageUri);
+                }
             }
 
             public void onSwipeBottom() {
@@ -88,7 +99,7 @@ public class Browse extends AppCompatActivity {
                 Intent intent = new Intent(Browse.this, PicEditActivity.class);
                 intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(allFiles[getIdxFromPos(pos)]));
                 startActivity(intent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
         sdcardimage.setAdapter(adapter);
@@ -103,7 +114,14 @@ public class Browse extends AppCompatActivity {
         Intent intent = new Intent(this, PicEditActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    private void startPicSourceActivity(Uri uri) {
+        Intent intent = new Intent(this, PicSourceActivity.class);
+        intent.putExtra(PicEditActivity.SOURCE_URI, uri);
+        startActivity(intent);
+        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     // Adapter for Grid View

@@ -1,8 +1,10 @@
 package com.caitoo0o.filler;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Environment;
@@ -62,30 +64,13 @@ public class PicEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_pic_edit);
 
-        View outerLinearLayout = findViewById(R.id.outer_linear_layout);
-        outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicEditActivity.this) {
-            public void onSwipeTop() {
-                Toast.makeText(PicEditActivity.this, "top", Toast.LENGTH_SHORT).show();
-            }
-
-            public void onSwipeRight() {
-                Toast.makeText(PicEditActivity.this, "right", Toast.LENGTH_SHORT).show();
-                goToPicSourceActivity(sourceUri);
-            }
-
-            public void onSwipeLeft() {
-                Toast.makeText(PicEditActivity.this, "left", Toast.LENGTH_SHORT).show();
-                goToBrowseActivity(sourceUri);
-            }
-
-            public void onSwipeBottom() {
-                Toast.makeText(PicEditActivity.this, "bottom", Toast.LENGTH_SHORT).show();
-            }
-
-        });
+        // Setup recent apps bar with app color
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
+                getString(R.string.app_name), bm, getColor(R.color.colorPrimaryDark));
+        setTaskDescription(taskDesc);
 
         getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
         getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -157,6 +142,29 @@ public class PicEditActivity extends AppCompatActivity {
             LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
             ctrlLayout.setVisibility(View.GONE);
         }
+
+        View outerLinearLayout = findViewById(R.id.outer_linear_layout);
+        outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicEditActivity.this) {
+            public void onSwipeTop() {
+                Toast.makeText(PicEditActivity.this, "top", Toast.LENGTH_SHORT).show();
+            }
+
+            public void onSwipeRight() {
+                Toast.makeText(PicEditActivity.this, "right", Toast.LENGTH_SHORT).show();
+                //goToPicSourceActivity(sourceUri);
+                goToBrowseActivity(sourceUri);
+            }
+
+            public void onSwipeLeft() {
+                Toast.makeText(PicEditActivity.this, "left", Toast.LENGTH_SHORT).show();
+                //goToBrowseActivity(sourceUri);
+            }
+
+            public void onSwipeBottom() {
+                Toast.makeText(PicEditActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 
     @Override
@@ -315,7 +323,7 @@ public class PicEditActivity extends AppCompatActivity {
         if (clickable) {
             button.getDrawable().setColorFilter(null);
         } else {
-            button.getDrawable().setColorFilter(0xff00ffff, PorterDuff.Mode.SRC_IN);
+            button.getDrawable().setColorFilter(getColor(R.color.colorHighlight), PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -376,14 +384,14 @@ public class PicEditActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PicSourceActivity.class);
         intent.putExtra(PicSourceActivity.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void goToBrowseActivity(Uri uri) {
         Intent intent = new Intent(this, Browse.class);
         intent.putExtra(Browse.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     // End UI Helpers
