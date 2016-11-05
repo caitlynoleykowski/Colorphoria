@@ -85,12 +85,11 @@ public class Browse extends AppCompatActivity {
 
         });
 
-        //Retriving Images from Database(SD CARD) by Cursor.
+        // Find Filler pictures
         File picturesStorageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         final File albumStorageDir = new File(picturesStorageDir, "Filler");
         allFiles = new ArrayList<File>(); // todo add a file filter to make sure all files are images
-        allPictures = new ArrayList<File>();
         FilenameFilter allFilesFF = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
@@ -104,6 +103,11 @@ public class Browse extends AppCompatActivity {
                 return false;
             }
         };
+        listFiles(albumStorageDir, allFiles, allFilesFF);
+
+        // Find all pictures other than those in Filler directory
+        final File sdcardDir = Environment.getExternalStorageDirectory();
+        allPictures = new ArrayList<File>();
         FilenameFilter allPicturesFF = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
@@ -123,11 +127,7 @@ public class Browse extends AppCompatActivity {
                 return false;
             }
         };
-        listFiles(albumStorageDir, allFiles, allFilesFF);
-        listFiles(picturesStorageDir, allPictures, allPicturesFF);
-        //Uri uri = Uri.fromFile(albumStorageDir);
-        //cursor = getContentResolver().query(uri, list, null, null, MediaStore.Images.Thumbnails._ID);
-        //columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+        listFiles(sdcardDir, allPictures, allPicturesFF);
 
         GridView fillerImagesGV = (GridView) findViewById(R.id.filler_images_gridview);
         ImageAdapter adapter = new ImageAdapter(getApplicationContext(), allFiles);
