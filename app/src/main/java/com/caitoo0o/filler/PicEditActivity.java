@@ -151,8 +151,8 @@ public class PicEditActivity extends AppCompatActivity {
 
             public void onSwipeRight() {
                 Toast.makeText(PicEditActivity.this, "right", Toast.LENGTH_SHORT).show();
-                //goToPicSourceActivity(sourceUri);
-                goToBrowseActivity(sourceUri);
+                goToPicSourceActivity(sourceUri);
+                //goToBrowseActivity(sourceUri);
             }
 
             public void onSwipeLeft() {

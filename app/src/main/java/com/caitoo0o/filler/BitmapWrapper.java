@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class BitmapWrapper {
 
-    private static final int MAX_PIXELS = 2000000;
+    private static final int MAX_PIXELS = 1600000;
     private static final int ROTATION_ANGLE = 90;
 
     Bitmap source;

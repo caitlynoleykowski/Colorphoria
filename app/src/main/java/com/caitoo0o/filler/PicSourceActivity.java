@@ -53,6 +53,7 @@ public class PicSourceActivity extends AppCompatActivity {
         outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicSourceActivity.this) {
             public void onSwipeTop() {
                 Toast.makeText(PicSourceActivity.this, "top", Toast.LENGTH_SHORT).show();
+                startBrowseActivity(mImageUri);
             }
 
             public void onSwipeRight() {
@@ -64,11 +65,12 @@ public class PicSourceActivity extends AppCompatActivity {
 //                if (mImageUri != null) {
 //                    startPicEditActivity(mImageUri);
 //                }
-                startBrowseActivity(mImageUri);
+                //startBrowseActivity(mImageUri);
             }
 
             public void onSwipeBottom() {
                 Toast.makeText(PicSourceActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+                startCameraActivity();
             }
 
         });
@@ -104,31 +106,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onCamera(View v) {
-        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-
-            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-            File photo;
-            try
-            {
-                // place where to store camera taken picture
-                photo = this.createTemporaryFile("picture", ".jpg");
-                photo.delete();
-            }
-            catch(Exception e)
-            {
-                Log.v("picsource", "Can't create file to take picture!");
-                Toast.makeText(this, "Please check SD card! Image shot is impossible!", Toast.LENGTH_LONG).show();
-                return;
-            }
-            mImageUri = Uri.fromFile(photo);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-            //start camera intent
-            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-            //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        }
-        else {
-            Toast.makeText(getApplicationContext(), "Device has no camera.", Toast.LENGTH_LONG).show();
-        }
+        startCameraActivity();
     }
 
     public void onBrowse(View v) {
@@ -196,6 +174,34 @@ public class PicSourceActivity extends AppCompatActivity {
         intent.putExtra(Browse.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
         //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    private void startCameraActivity() {
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+
+            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+            File photo;
+            try
+            {
+                // place where to store camera taken picture
+                photo = this.createTemporaryFile("picture", ".jpg");
+                photo.delete();
+            }
+            catch(Exception e)
+            {
+                Log.v("picsource", "Can't create file to take picture!");
+                Toast.makeText(this, "Please check SD card! Image shot is impossible!", Toast.LENGTH_LONG).show();
+                return;
+            }
+            mImageUri = Uri.fromFile(photo);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+            //start camera intent
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+            //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Device has no camera.", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
