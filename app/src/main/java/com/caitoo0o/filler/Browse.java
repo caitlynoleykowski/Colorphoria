@@ -28,6 +28,8 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Browse extends AppCompatActivity {
     private ArrayList<File> allFiles;
@@ -104,6 +106,15 @@ public class Browse extends AppCompatActivity {
             }
         };
         listFiles(albumStorageDir, allFiles, allFilesFF);
+        // Sort images by date ascending
+        Collections.sort(allFiles, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                Long o1lastModified = o1.lastModified();
+                Long o2lastModified = o2.lastModified();
+                return o1lastModified.compareTo(o2lastModified);
+            }
+        });
 
         // Find all pictures other than those in Filler directory
         final File sdcardDir = Environment.getExternalStorageDirectory();
@@ -128,6 +139,15 @@ public class Browse extends AppCompatActivity {
             }
         };
         listFiles(sdcardDir, allPictures, allPicturesFF);
+        // Sort images by date ascending
+        Collections.sort(allPictures, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                Long o1lastModified = o1.lastModified();
+                Long o2lastModified = o2.lastModified();
+                return o1lastModified.compareTo(o2lastModified);
+            }
+        });
 
         GridView fillerImagesGV = (GridView) findViewById(R.id.filler_images_gridview);
         ImageAdapter adapter = new ImageAdapter(getApplicationContext(), allFiles);

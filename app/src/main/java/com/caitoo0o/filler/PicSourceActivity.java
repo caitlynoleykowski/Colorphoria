@@ -93,16 +93,20 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onOpen(View v) {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        intent.putExtra("return-data", true);
+        // TOOD: remove this code when sure no longer need the google image browser
+//        Intent intent = new Intent(Intent.ACTION_PICK,
+//                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+//        intent.setType("image/*");
+//        intent.putExtra("return-data", true);
+//
+//        // Verify there is an app to accept this type intent before starting it
+//        if (intent.resolveActivity(getPackageManager()) != null) {
+//            startActivityForResult(intent, REQUEST_IMAGE_GET);
+//            //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+//        }
 
-        // Verify there is an app to accept this type intent before starting it
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_IMAGE_GET);
-            //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        }
+        startBrowseActivity(mImageUri);
+
     }
 
     public void onCamera(View v) {
