@@ -52,16 +52,16 @@ public class PicSourceActivity extends AppCompatActivity {
         View outerLinearLayout = findViewById(R.id.outer_linear_layout);
         outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicSourceActivity.this) {
             public void onSwipeTop() {
-                Toast.makeText(PicSourceActivity.this, "top", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PicSourceActivity.this, "top", Toast.LENGTH_SHORT).show();
                 startBrowseActivity(mImageUri);
             }
 
             public void onSwipeRight() {
-                Toast.makeText(PicSourceActivity.this, "right", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PicSourceActivity.this, "right", Toast.LENGTH_SHORT).show();
             }
 
             public void onSwipeLeft() {
-                Toast.makeText(PicSourceActivity.this, "left", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PicSourceActivity.this, "left", Toast.LENGTH_SHORT).show();
 //                if (mImageUri != null) {
 //                    startPicEditActivity(mImageUri);
 //                }
@@ -69,7 +69,7 @@ public class PicSourceActivity extends AppCompatActivity {
             }
 
             public void onSwipeBottom() {
-                Toast.makeText(PicSourceActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PicSourceActivity.this, "bottom", Toast.LENGTH_SHORT).show();
                 startCameraActivity();
             }
 

@@ -146,22 +146,22 @@ public class PicEditActivity extends AppCompatActivity {
         View outerLinearLayout = findViewById(R.id.outer_linear_layout);
         outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicEditActivity.this) {
             public void onSwipeTop() {
-                Toast.makeText(PicEditActivity.this, "top", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PicEditActivity.this, "top", Toast.LENGTH_SHORT).show();
             }
 
             public void onSwipeRight() {
-                Toast.makeText(PicEditActivity.this, "right", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PicEditActivity.this, "right", Toast.LENGTH_SHORT).show();
                 goToPicSourceActivity(sourceUri);
                 //goToBrowseActivity(sourceUri);
             }
 
             public void onSwipeLeft() {
-                Toast.makeText(PicEditActivity.this, "left", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PicEditActivity.this, "left", Toast.LENGTH_SHORT).show();
                 //goToBrowseActivity(sourceUri);
             }
 
             public void onSwipeBottom() {
-                Toast.makeText(PicEditActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PicEditActivity.this, "bottom", Toast.LENGTH_SHORT).show();
             }
 
         });

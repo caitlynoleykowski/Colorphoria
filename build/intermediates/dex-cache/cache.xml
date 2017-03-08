@@ -1,3 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        is-multidex="true"
+        jar="/Users/organizer/Development/repos/Filler/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
+        <dex dex="/Users/organizer/Development/repos/Filler/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.4.0_eed62848a5f039a8486e94a2bf7f744f81966764/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/organizer/Development/repos/Filler/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="c3720f39a6be3c1d5e298695a70a52d75ba9d34b">
+        <dex dex="/Users/organizer/Development/repos/Filler/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_87b88c07c915f6426986ac7dc18fae81aa5df01f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/organizer/Development/repos/Filler/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/libs/internal_impl-23.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
+        <dex dex="/Users/organizer/Development/repos/Filler/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.4.0_04ae5efa7fe2849dfcd1f3cc10ee3c2446ebebbd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/organizer/Development/repos/Filler/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
+        <dex dex="/Users/organizer/Development/repos/Filler/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.4.0_b79a5215d07f15ebd086cf33e0ca3d2a42f6ce8b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/organizer/Development/repos/Filler/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="10ec403238c2d57f8aad62293248d2a14262fe23">
+        <dex dex="/Users/organizer/Development/repos/Filler/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_4bfeab47ef76cd5304d7e4eb990ea18e52f3cb16/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/organizer/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.4.0/support-annotations-23.4.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
+        <dex dex="/Users/organizer/Development/repos/Filler/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.4.0_bcebf0b24ff520b25c29e5bde0c41c2356c53e0a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/organizer/Development/repos/Filler/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
+        <dex dex="/Users/organizer/Development/repos/Filler/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.4.0_7e2ce0f5bf5852f9644c03a0f169683cb63790ad/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/organizer/Development/repos/Filler/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.2"
+        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
+        <dex dex="/Users/organizer/Development/repos/Filler/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.4.0_11ff18fb8574a24ef8f80c1c8a8722c29083cecc/classes.dex" />
+    </item>
+
+</items>
