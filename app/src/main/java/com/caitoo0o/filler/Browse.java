@@ -62,24 +62,24 @@ public class Browse extends AppCompatActivity {
         View outerRelativeLayout = findViewById(R.id.outer_relative_layout);
         outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(Browse.this) {
             public void onSwipeTop() {
-                Toast.makeText(Browse.this, "top", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Browse.this, "top", Toast.LENGTH_SHORT).show();
             }
 
             public void onSwipeRight() {
-                Toast.makeText(Browse.this, "right", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Browse.this, "right", Toast.LENGTH_SHORT).show();
                 //startPicEditActivity(mImageUri);
                 //startPicSourceActivity(mImageUri);
             }
 
             public void onSwipeLeft() {
-                Toast.makeText(Browse.this, "left", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Browse.this, "left", Toast.LENGTH_SHORT).show();
 //                if (mImageUri != null) {
 //                    startPicEditActivity(mImageUri);
 //                }
             }
 
             public void onSwipeBottom() {
-                Toast.makeText(Browse.this, "bottom", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Browse.this, "bottom", Toast.LENGTH_SHORT).show();
                 startPicSourceActivity(mImageUri);
             }
 
