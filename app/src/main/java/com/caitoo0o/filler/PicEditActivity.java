@@ -210,15 +210,6 @@ public class PicEditActivity extends AppCompatActivity {
         }
     }
 
-    /* Checks if external storage is available for read and write */
-    private boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
     // End device helpers
 
     // Begin UI handlers
@@ -441,7 +432,7 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     private void saveCurrImage() {
-        if (isExternalStorageWritable()) {
+        if (Utils.isExternalStorageWritable()) {
             //File albumStorageDir = getAlbumStorageDir("FillerSaves");
             File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_PICTURES);
