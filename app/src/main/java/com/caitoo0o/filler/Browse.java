@@ -87,6 +87,8 @@ public class Browse extends AppCompatActivity {
 
         });
 
+        createFillerImageStorage();
+
         // Find Filler pictures
         File picturesStorageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
@@ -199,6 +201,29 @@ public class Browse extends AppCompatActivity {
         spec.setContent(R.id.tab2);
         spec.setIndicator("Everywhere");
         host.addTab(spec);
+    }
+
+    private void createFillerImageStorage() {
+        if (Utils.isExternalStorageWritable()) {
+            // TODO: Don't really need to do this every time - check if its there first?
+            //File albumStorageDir = getAlbumStorageDir("FillerSaves");
+            File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES);
+            File albumStorageDir = new File(pictureStorageDir, "Filler");
+            try {
+                albumStorageDir.mkdir();
+            }
+            catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "Failed to create Filler directory", Toast.LENGTH_LONG).show();
+                Log.e("picsource", "Failed to create Filler directory.");
+                e.printStackTrace();
+            }
+        }
+        else {
+            // TODO: move these strings to strings file
+            Toast.makeText(getApplicationContext(), "Create Filler storage failed. External storage not writeable.", Toast.LENGTH_LONG).show();
+            Log.e("picsource", "Create Filler storage failed. External storage not writeable.");
+        }
     }
 
     private void listFiles(File directory, ArrayList<File> files, FilenameFilter filenameFilter) {

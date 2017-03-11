@@ -8,8 +8,8 @@ android {
         applicationId "com.caitoo0o.filler"
         minSdkVersion 23
         targetSdkVersion 23
-        versionCode 9
-        versionName "1.6"
+        versionCode 1
+        versionName "1.7"
     }
     buildTypes {
         release {
