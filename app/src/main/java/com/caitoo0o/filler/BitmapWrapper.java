@@ -127,6 +127,14 @@ public class BitmapWrapper {
         setModifiedBitmap(source.copy(source.getConfig(), true));
     }
 
+    public void editWidth(int width) {
+        applyEditWidth(width);
+    }
+
+    public void editHeight(int height) {
+        applyEditHeight(height);
+    }
+
     public void rotateRight() {
         applyRotate(ROTATION_ANGLE);
     }
@@ -147,6 +155,12 @@ public class BitmapWrapper {
         mod = temp;
     }
 
+    public void invert(double ctrl) {
+        Bitmap temp = getRotatedSource();
+        applyInvert(temp, ctrl);
+        mod = temp;
+    }
+
     public void randomLineFill(double ctrl) {
         Bitmap temp = getRotatedSource();
         applyThreshold(temp, ctrl);
@@ -161,6 +175,20 @@ public class BitmapWrapper {
         mod = temp;
     }
 
+    private void applyEditWidth(int width) {
+        Matrix matrix = new Matrix();
+        int deltaWidth = mod.getWidth() - width;
+        int halfDeltaWidth = deltaWidth/2;
+        setModifiedBitmap(Bitmap.createBitmap(mod, halfDeltaWidth, 0, mod.getWidth() - halfDeltaWidth, mod.getHeight(), matrix, true));
+    }
+
+    private void applyEditHeight(int height) {
+        Matrix matrix = new Matrix();
+        int deltaHeight = mod.getHeight() - height;
+        int halfDeltaHeight = deltaHeight/2;
+        setModifiedBitmap(Bitmap.createBitmap(mod, 0, halfDeltaHeight, 0, mod.getHeight() - halfDeltaHeight));
+    }
+
     private void applyRotate(int rotationAngle) {
         // calculate the net rotation angle
         currRotationAngle += rotationAngle;
@@ -169,7 +197,7 @@ public class BitmapWrapper {
         // TODO: combine this with the applyRotate function by passing a bitmap to applyRotate?
         Matrix matrix = new Matrix();
         matrix.postRotate(rotationAngle);
-        setModifiedBitmap(Bitmap.createBitmap(mod, 0, 0, mod.getWidth(), mod.getHeight(), matrix, true));
+        setModifiedBitmap(Bitmap.createBitmap(mod, 0, 0, mod.getWidth(), mod.getHeight()));
     }
 
     void applyThreshold(Bitmap bm, double ctrl) {
@@ -184,6 +212,23 @@ public class BitmapWrapper {
                     setPixelColor(bm, x, y, 0x000000);
                 } else {
                     setPixelColor(bm, x, y, 0xffffff);
+                }
+            }
+        }
+    }
+
+    void applyInvert(Bitmap bm, double ctrl) {
+        for (int y = 0; y < bm.getHeight(); y++) {
+            for (int x = 0; x < bm.getWidth(); x++) {
+                int color = getPixelColor(bm, x, y);
+                int red = (color >> 16) & 0xFF;
+                int green = (color >> 8) & 0xFF;
+                int blue = (color >> 0) & 0xFF;
+                int average = (red + blue + green) / 3;
+                if (average <= (255 * ctrl)) {
+                    setPixelColor(bm, x, y, 0xffffff);
+                } else {
+                    setPixelColor(bm, x, y, 0x000000);
                 }
             }
         }

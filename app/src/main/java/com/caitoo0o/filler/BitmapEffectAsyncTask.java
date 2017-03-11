@@ -24,9 +24,12 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     private final WeakReference<BitmapWrapper> bmwWeakReference;
     private final WeakReference<PicEditActivity.Effect> effectWeakReference;
     private final double ctrl;
-    private int data = 0;
+    private final int width;
+    private final int height;
 
-    public BitmapEffectAsyncTask(PicEditActivity activity, Context context, ImageView imageView, ProgressBar pb, PicEditActivity.Effect effect, BitmapWrapper bmw, double ctrl) {
+    public BitmapEffectAsyncTask(PicEditActivity activity, Context context, ImageView imageView,
+            ProgressBar pb, PicEditActivity.Effect effect, BitmapWrapper bmw, double ctrl,
+            int width, int height) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
         activityWeakReference = new WeakReference<PicEditActivity>(activity);
         contextWeakReference = new WeakReference<Context>(context);
@@ -35,6 +38,13 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
         bmwWeakReference = new WeakReference<BitmapWrapper>(bmw);
         effectWeakReference = new WeakReference<PicEditActivity.Effect>(effect);
         this.ctrl = ctrl;
+        this.width = width;
+        this.height = height;
+    }
+
+    public BitmapEffectAsyncTask(PicEditActivity activity, Context context, ImageView imageView,
+            ProgressBar pb, PicEditActivity.Effect effect, BitmapWrapper bmw, double ctrl) {
+        this(activity, context, imageView, pb, effect, bmw, ctrl, 0, 0);
     }
 
     // Apply effect to image in background
@@ -60,11 +70,20 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
                 case THRESHOLD:
                     bmwWeakReference.get().threshold(ctrl);
                     break;
+                case INVERT:
+                    bmwWeakReference.get().invert(ctrl);
+                    break;
                 case RANDOM_LINE_FILL:
                     bmwWeakReference.get().randomLineFill(ctrl);
                     break;
                 case RANDOM_FLOOD_FILL:
                     bmwWeakReference.get().randomFloodFill(ctrl);
+                    break;
+                case EDIT_WIDTH:
+                    bmwWeakReference.get().editWidth(width);
+                    break;
+                case EDIT_HEIGHT:
+                    bmwWeakReference.get().editHeight(height);
                     break;
             }
         }

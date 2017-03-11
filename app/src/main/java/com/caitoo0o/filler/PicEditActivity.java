@@ -13,13 +13,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.graphics.Bitmap;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.FileOutputStream;
@@ -48,8 +51,11 @@ public class PicEditActivity extends AppCompatActivity {
         ROTATE_RIGHT,
         RANDOM_BLEED_FILL,
         THRESHOLD,
+        INVERT,
         RANDOM_LINE_FILL,
-        RANDOM_FLOOD_FILL
+        RANDOM_FLOOD_FILL,
+        EDIT_WIDTH,
+        EDIT_HEIGHT
     }
 
     private BitmapWrapper bmW;
@@ -112,11 +118,20 @@ public class PicEditActivity extends AppCompatActivity {
                     case THRESHOLD:
                         showCtrlLayout(R.drawable.filler_threshold_icon);
                         break;
+                    case INVERT:
+                        showCtrlLayout(R.drawable.filler_threshold_icon);
+                        break;
                     case RANDOM_LINE_FILL:
                         showCtrlLayout(R.drawable.filler_rline_icon);
                         break;
                     case RANDOM_FLOOD_FILL:
                         showCtrlLayout(R.drawable.filler_rfill_icon);
+                        break;
+                    case EDIT_WIDTH:
+                        // do nothing
+                        break;
+                    case EDIT_HEIGHT:
+                        // do nothing
                         break;
                 }
             } else {
@@ -164,6 +179,15 @@ public class PicEditActivity extends AppCompatActivity {
                 //Toast.makeText(PicEditActivity.this, "bottom", Toast.LENGTH_SHORT).show();
             }
 
+        });
+
+        EditText editWidth = (EditText) findViewById(R.id.edit_width);
+        editWidth.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                onEditWidth();
+                return false;
+            }
         });
     }
 
@@ -224,6 +248,16 @@ public class PicEditActivity extends AppCompatActivity {
         applyEffect();
     }
 
+    public void onEditWidth() {
+        effectSelected = Effect.EDIT_WIDTH;
+        applyEffect();
+    }
+
+    public void onEditHeight(View v) {
+        effectSelected = Effect.EDIT_HEIGHT;
+        applyEffect();
+    }
+
     public void onRedo(View v) {
         undoEnqueue();
         bmW = redoQueue.removeLast();
@@ -278,6 +312,12 @@ public class PicEditActivity extends AppCompatActivity {
 
     public void onThreshold(View v) {
         effectSelected = Effect.THRESHOLD;
+        applyEffect();
+        showCtrlLayout(R.drawable.filler_threshold_icon);
+    }
+
+    public void onInvert(View v) {
+        effectSelected = Effect.INVERT;
         applyEffect();
         showCtrlLayout(R.drawable.filler_threshold_icon);
     }
@@ -418,9 +458,20 @@ public class PicEditActivity extends AppCompatActivity {
         updateUndoRedoQueues();
         setUIforImageDoneProcessing(false);
         double ctrl = getEffectCtrl();
+        int editWidth = getEditWidth();
+        int editHeight = getEditHeight();
         ImageView iv = (ImageView) findViewById(R.id.theImage);
         ProgressBar pb = (ProgressBar) findViewById(R.id.progressBar);
-        new BitmapEffectAsyncTask(this,getApplicationContext(),iv,pb,effectSelected,bmW,ctrl).execute();
+        new BitmapEffectAsyncTask(this,getApplicationContext(), iv, pb, effectSelected, bmW, ctrl,
+                editWidth, editHeight).execute();
+    }
+
+    private int getEditWidth() {
+        return Integer.getInteger(((EditText) findViewById(R.id.edit_width)).getText().toString()).intValue();
+    }
+
+    private int getEditHeight() {
+        return Integer.getInteger(((EditText) findViewById(R.id.edit_height)).getText().toString()).intValue();
     }
 
     private double getEffectCtrl() {

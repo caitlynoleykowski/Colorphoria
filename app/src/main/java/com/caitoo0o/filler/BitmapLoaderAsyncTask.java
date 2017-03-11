@@ -49,9 +49,11 @@ public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeStream(is, null, options);
+                Log.e("bitmaploader", "bitmap size before scaling: " + options.outWidth +" x " + options.outHeight);
                 double scaleFactor = BitmapWrapper.getScaleFactor(options.outWidth, options.outHeight);
+                Log.e("bitmaploader", "scaleFactor: " + scaleFactor);
                 BitmapFactory.Options finalOptions = new BitmapFactory.Options();
-                finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
+                finalOptions.inSampleSize = (int) Math.floor(1 / scaleFactor);
                 InputStream finalInputStream = contextWeakReference.get().getContentResolver().openInputStream(uri);
                 Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
                 return bm;
@@ -71,6 +73,7 @@ public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     protected void onPostExecute(Bitmap bitmap) {
         if (bmwWeakReference != null && bmwWeakReference.get() != null) {
             BitmapWrapper bmw = bmwWeakReference.get();
+            Log.i("bitmaploader", "bitmap size: " + bitmap.getWidth() + " x " + bitmap.getHeight());
             bmw.setSource(bitmap);
         }
         if (imageViewReference != null && bitmap != null) {

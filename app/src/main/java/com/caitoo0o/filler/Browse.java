@@ -233,6 +233,7 @@ public class Browse extends AppCompatActivity {
     }
 
     // Adapter for Grid View
+    // TODO: Could this be cleaned up by extending from ArrayAdapter?
     private class ImageAdapter extends BaseAdapter {
 
         private Context context;
