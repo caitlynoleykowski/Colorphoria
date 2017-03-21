@@ -1,16 +1,11 @@
 package com.caitoo0o.filler;
 
-import android.app.ActivityManager;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,11 +43,7 @@ public class Browse extends AppCompatActivity {
 
         setupTabTitles();
 
-        // Setup recent apps bar with app color
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
-                getString(R.string.app_name), bm, getColor(R.color.colorPrimaryDark));
-        setTaskDescription(taskDesc);
+        Utils.setupFillerRecentAppsBar(this);
 
         if (savedInstanceState != null) {
             mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
@@ -180,7 +171,7 @@ public class Browse extends AppCompatActivity {
                 Intent intent = new Intent(Browse.this, PicEditActivity.class);
                 intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(allPictures.get(getIdxFromPos(allPictures, pos))));
                 startActivity(intent);
-                //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
         allImagesGV.setAdapter(adapter2);
@@ -247,14 +238,14 @@ public class Browse extends AppCompatActivity {
         Intent intent = new Intent(this, PicEditActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
-        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void startPicSourceActivity(Uri uri) {
         Intent intent = new Intent(this, PicSourceActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
-        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     // Adapter for Grid View

@@ -1,12 +1,8 @@
 package com.caitoo0o.filler;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -32,11 +28,7 @@ public class PicSourceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_source);
 
-        // Setup recent apps bar with app color
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
-                getString(R.string.app_name), bm, getColor(R.color.colorPrimaryDark));
-        setTaskDescription(taskDesc);
+        Utils.setupFillerRecentAppsBar(this);
 
         getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
         getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -49,7 +41,7 @@ public class PicSourceActivity extends AppCompatActivity {
             mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
         }
 
-        View outerLinearLayout = findViewById(R.id.outer_linear_layout);
+        final View outerLinearLayout = findViewById(R.id.outer_linear_layout);
         outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicSourceActivity.this) {
             public void onSwipeTop() {
                 //Toast.makeText(PicSourceActivity.this, "top", Toast.LENGTH_SHORT).show();
@@ -58,13 +50,14 @@ public class PicSourceActivity extends AppCompatActivity {
 
             public void onSwipeRight() {
                 //Toast.makeText(PicSourceActivity.this, "right", Toast.LENGTH_SHORT).show();
+                startDrawActivity();
             }
 
             public void onSwipeLeft() {
                 //Toast.makeText(PicSourceActivity.this, "left", Toast.LENGTH_SHORT).show();
-//                if (mImageUri != null) {
-//                    startPicEditActivity(mImageUri);
-//                }
+                if (mImageUri != null) {
+                    startPicEditActivity(mImageUri);
+                }
                 //startBrowseActivity(mImageUri);
             }
 
@@ -114,9 +107,11 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onBrowse(View v) {
-        Intent intent = new Intent(this, Browse.class);
-        startActivity(intent);
-        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        startBrowseActivity(mImageUri);
+    }
+
+    public void onDraw(View v) {
+        startDrawActivity();
     }
 
     private File createTemporaryFile(String part, String ext) throws Exception
@@ -170,14 +165,20 @@ public class PicSourceActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PicEditActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
-        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void startBrowseActivity(Uri uri) {
         Intent intent = new Intent(this, Browse.class);
         intent.putExtra(Browse.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
-        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+    }
+
+    private void startDrawActivity() {
+        Intent intent = new Intent(this, DrawActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void startCameraActivity() {

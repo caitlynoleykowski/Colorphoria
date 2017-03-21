@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="match_parent"
+    android:background="@color/colorDark"
+    android:padding="@dimen/button_margin"
+    android:orientation="vertical" >
+    <TextView
+        android:id="@+id/extra_small_brush"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/button_margin"
+        android:textSize="20sp"
+        android:textColor="@color/colorAccent"
+        android:text="Are you sure?" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/no_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/button_margin"
+            android:background="@drawable/my_menu_bar_button"
+            android:textColor="@color/colorAccent"
+            android:text="No" />
+
+        <Button
+            android:id="@+id/yes_btn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:background="@drawable/my_menu_bar_button"
+            android:textColor="@color/colorAccent"
+            android:text="Yes" />
+    </LinearLayout>
+</LinearLayout>

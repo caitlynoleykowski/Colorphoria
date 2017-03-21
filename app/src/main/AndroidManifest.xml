@@ -26,7 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".PicEditActivity" />
-        <activity android:name=".Browse"></activity>
+        <activity android:name=".Browse" />
+        <activity android:name=".DrawActivity"></activity>
     </application>
 
 </manifest>

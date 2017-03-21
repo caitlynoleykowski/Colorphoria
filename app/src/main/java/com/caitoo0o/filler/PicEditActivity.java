@@ -1,18 +1,14 @@
 package com.caitoo0o.filler;
 
 import android.Manifest;
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.graphics.Bitmap;
 import android.widget.ImageButton;
@@ -20,15 +16,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
-import java.util.Date;
 import java.util.Deque;
-import java.io.File;
 
 public class PicEditActivity extends AppCompatActivity {
 
@@ -66,11 +56,7 @@ public class PicEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pic_edit);
 
-        // Setup recent apps bar with app color
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
-                getString(R.string.app_name), bm, getColor(R.color.colorPrimaryDark));
-        setTaskDescription(taskDesc);
+        Utils.setupFillerRecentAppsBar(this);
 
         getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
         getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -432,52 +418,7 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     private void saveCurrImage() {
-        if (Utils.isExternalStorageWritable()) {
-            //File albumStorageDir = getAlbumStorageDir("FillerSaves");
-            File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
-            File albumStorageDir = new File(pictureStorageDir, "Filler");
-            try {
-                albumStorageDir.mkdir();
-            }
-            catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Failed to create directory", Toast.LENGTH_LONG).show();
-                Log.e("picsource", "Failed to create Filler directory.");
-                e.printStackTrace();
-            }
-            Date date = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyyhhmmss");
-            String formattedDate = sdf.format(date);
-            File picFile = new File(albumStorageDir, "Filler" + formattedDate + ".png");
-            Log.e("picsource", "picfile: " + picFile.getAbsolutePath());
-            FileOutputStream out = null;
-            try {
-                out = new FileOutputStream(picFile);
-                bmW.getModifiedBitmap().compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
-                // PNG is a lossless format, the compression factor (100) is ignored
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
-                Log.e("picsource", "failed save.");
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (out != null) {
-                        out.close();
-                    }
-                    Toast.makeText(getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
-                    Log.i("picsource", "file written to: " + picFile.getAbsolutePath());
-                } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
-                    Log.e("picsource", "failed save.");
-                    e.printStackTrace();
-                }
-            }
-        }
-        else {
-            // TODO: move these strings to strings file
-            Toast.makeText(getApplicationContext(), "Save failed. External storage not writeable.", Toast.LENGTH_LONG).show();
-            Log.e("picsource", "failed save. external storage not writeable");
-        }
+        Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this);
     }
 
     // End business logic
