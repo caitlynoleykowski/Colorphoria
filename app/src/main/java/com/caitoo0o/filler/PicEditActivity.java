@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -72,54 +73,41 @@ public class PicEditActivity extends AppCompatActivity {
             Bitmap sourceImage = (Bitmap) savedInstanceState.getParcelable(SOURCE_STATE_KEY);
             int rotationAngle = savedInstanceState.getInt(ROTATION_ANGLE_STATE_KEY);
             Bitmap modImage = (Bitmap) savedInstanceState.getParcelable(MOD_STATE_KEY);
-            Effect effectSelected = (Effect) savedInstanceState.getSerializable(EFFECT_SELECTED_STATE_KEY);
             if (sourceImage != null && modImage != null) {
                 bmW = new BitmapWrapper(sourceImage);
                 bmW.setRotationAngle(rotationAngle);
                 bmW.setModifiedBitmap(modImage);
                 setUIforImageDoneProcessing(true);
                 ((ImageView) findViewById(R.id.theImage)).setImageBitmap(bmW.getModifiedBitmap());
-                switch (effectSelected) {
-                    case NONE:
-                        // do nothing
-                        break;
-                    case RESET:
-                        // do nothing
-                        break;
-                    case ROTATE_LEFT:
-                        // do nothing
-                        break;
-                    case ROTATE_RIGHT:
-                        // do nothing
-                        break;
-                    case RANDOM_BLEED_FILL:
-                        showCtrlLayout(R.drawable.filler_rbleed_icon);
-                        break;
-                    case THRESHOLD:
-                        showCtrlLayout(R.drawable.filler_threshold_icon);
-                        break;
-                    case RANDOM_LINE_FILL:
-                        showCtrlLayout(R.drawable.filler_rline_icon);
-                        break;
-                    case RANDOM_FLOOD_FILL:
-                        showCtrlLayout(R.drawable.filler_rfill_icon);
-                        break;
-                }
+
+                // Populate the effect preview buttons
+                new BitmapEffectPreviewAsyncTask(this,
+                        (ImageButton) findViewById(R.id.random_bleed_button),
+                        PicEditActivity.Effect.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), .5).execute();
+                new BitmapEffectPreviewAsyncTask(this,
+                        (ImageButton) findViewById(R.id.threshold_button),
+                        PicEditActivity.Effect.THRESHOLD, bmW.getSourceBitmap(), .5).execute();
+                new BitmapEffectPreviewAsyncTask(this,
+                        (ImageButton) findViewById(R.id.random_line_button),
+                        PicEditActivity.Effect.RANDOM_LINE_FILL, bmW.getSourceBitmap(), .5).execute();
+                new BitmapEffectPreviewAsyncTask(this,
+                        (ImageButton) findViewById(R.id.random_flood_button),
+                        PicEditActivity.Effect.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), .5).execute();
             } else {
-                setUIforImageDoneProcessing(false);
-            }
-            LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-            if (effectSelected == Effect.NONE) {
-                ctrlLayout.setVisibility(View.GONE);
-            } else {
-                ctrlLayout.setVisibility(View.VISIBLE);
+                // TODO: Error/bug, shouldn't get here
+                setUIforImageDoneProcessing(false); // Shouldn't get here
             }
         } else if (getIntent().hasExtra(SOURCE_URI)) {
             sourceUri = (Uri)getIntent().getParcelableExtra(SOURCE_URI);
             Uri uri = sourceUri;
             ImageView iv = (ImageView) findViewById(R.id.theImage);
             bmW = new BitmapWrapper();
-            BitmapLoaderAsyncTask bmwAsync = new BitmapLoaderAsyncTask(getApplicationContext(), iv, uri, bmW);
+            BitmapLoaderAsyncTask bmwAsync = new BitmapLoaderAsyncTask(this, getApplicationContext(), iv, uri, bmW,
+                    (ImageButton) findViewById(R.id.random_bleed_button),
+                    (ImageButton) findViewById(R.id.threshold_button),
+                    (ImageButton) findViewById(R.id.random_line_button),
+                    (ImageButton) findViewById(R.id.random_flood_button)
+                    );
             bmwAsync.execute();
             setUIforImageDoneProcessing(true);
         } else {
@@ -166,7 +154,7 @@ public class PicEditActivity extends AppCompatActivity {
         }
         else {
             outState.putParcelable(SOURCE_STATE_KEY, null);
-            outState.putInt(ROTATION_ANGLE_STATE_KEY, bmW.getRotationAngle());
+            outState.putInt(ROTATION_ANGLE_STATE_KEY, 0);
             outState.putParcelable(MOD_STATE_KEY, null);
             // TODO: Is there any possible reason i would need to save the URI?
             // it should only be needed on return from an intent in which case state is preserved
@@ -205,7 +193,6 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     public void onReset(View v) {
-        showCtrlLayout(R.drawable.filler_rbleed_icon);
         effectSelected = Effect.RESET;
         applyEffect();
     }
@@ -245,13 +232,11 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     public void onRotateRight(View v) {
-        exitCtrlLayout();
         effectSelected = Effect.ROTATE_RIGHT;
         applyEffect();
     }
 
     public void onRotateLeft(View v) {
-        exitCtrlLayout();
         effectSelected = Effect.ROTATE_LEFT;
         applyEffect();
     }
@@ -259,33 +244,25 @@ public class PicEditActivity extends AppCompatActivity {
     public void onRandomBleedFill(View v) {
         effectSelected = Effect.RANDOM_BLEED_FILL;
         applyEffect();
-        showCtrlLayout(R.drawable.filler_rbleed_icon);
     }
 
     public void onThreshold(View v) {
         effectSelected = Effect.THRESHOLD;
         applyEffect();
-        showCtrlLayout(R.drawable.filler_threshold_icon);
     }
 
     public void onRandomLineFill(View v) {
         effectSelected = Effect.RANDOM_LINE_FILL;
         applyEffect();
-        showCtrlLayout(R.drawable.filler_rline_icon);
     }
 
     public void onRandomFloodFill(View v) {
         effectSelected = Effect.RANDOM_FLOOD_FILL;
         applyEffect();
-        showCtrlLayout(R.drawable.filler_rfill_icon);
     }
 
-    public void onEffectApplyClicked(View v) {
-        applyEffect();
-    }
-
-    public void onCtrlLayoutExit(View v) {
-        exitCtrlLayout();
+    public void onCtrlSeek(View v) {
+        Toast.makeText(getApplicationContext(), "Seeked!", Toast.LENGTH_SHORT).show();
     }
 
     // End UI Handlers
@@ -311,21 +288,6 @@ public class PicEditActivity extends AppCompatActivity {
         setUIforImageDoneProcessing(true);
     }
 
-    private void showCtrlLayout(int resDrawableId) {
-        ImageView ctrlImage = (ImageView) findViewById(R.id.effect_ctrl_image);
-        ctrlImage.setImageResource(resDrawableId);
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.VISIBLE);
-    }
-
-    private void exitCtrlLayout() {
-        LinearLayout ctrlLayout = (LinearLayout) findViewById(R.id.effect_ctrl_layout);
-        ctrlLayout.setVisibility(View.GONE);
-        effectSelected = Effect.NONE;
-        //SeekBar ctrlSeekbar = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
-        //ctrlSeekbar.setProgress(ctrlSeekbar.getMax()/2);
-    }
-
     private void setUIforImageDoneProcessing(boolean processingImageDone) {
         LinearLayout ll1 = (LinearLayout) findViewById(R.id.firstButtonLinearLayout);
         ll1.getChildCount();
@@ -339,7 +301,6 @@ public class PicEditActivity extends AppCompatActivity {
         }
         setImageButtonClickable(findViewById(R.id.rotate_left), processingImageDone);
         setImageButtonClickable(findViewById(R.id.rotate_right), processingImageDone);
-        setImageButtonClickable(findViewById(R.id.effect_ctrl_apply_button), processingImageDone);
         if (processingImageDone) {
             if (undoQueue.size() > 0) {
                 setImageButtonClickable(findViewById(R.id.undoButton), true);
@@ -406,7 +367,7 @@ public class PicEditActivity extends AppCompatActivity {
         double ctrl = getEffectCtrl();
         ImageView iv = (ImageView) findViewById(R.id.theImage);
         ProgressBar pb = (ProgressBar) findViewById(R.id.progressBar);
-        new BitmapEffectAsyncTask(this,getApplicationContext(),iv,pb,effectSelected,bmW,ctrl).execute();
+        new BitmapEffectAsyncTask(this,iv,effectSelected,bmW,ctrl).execute();
     }
 
     private double getEffectCtrl() {

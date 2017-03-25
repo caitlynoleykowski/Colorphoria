@@ -6,8 +6,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -16,18 +16,29 @@ import java.lang.ref.WeakReference;
  * Created by Cait on 9/22/2016.
  */
 public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
+    private final WeakReference<PicEditActivity> activityWeakReference;
     private final WeakReference<Context> contextWeakReference;
     private final WeakReference<ImageView> imageViewReference;
     private final WeakReference<Uri> uriWeakReference;
     private final WeakReference<BitmapWrapper> bmwWeakReference;
-    private int data = 0;
+    private final WeakReference<ImageButton> bleedImgBtnWeakReference;
+    private final WeakReference<ImageButton> thresholdImgBtnWeakReference;
+    private final WeakReference<ImageButton> lineImgBtnWeakReference;
+    private final WeakReference<ImageButton> floodImgBtnWeakReference;
 
-    public BitmapLoaderAsyncTask(Context context, ImageView imageView, Uri uri, BitmapWrapper bmw) {
+    public BitmapLoaderAsyncTask(PicEditActivity activity, Context context, ImageView imageView, Uri uri, BitmapWrapper bmw,
+                                 ImageButton bleedImageBtn, ImageButton thresholdImageBtn,
+                                 ImageButton lineImageBtn, ImageButton floodImageButton) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
+        activityWeakReference = new WeakReference<PicEditActivity>(activity);
         contextWeakReference = new WeakReference<Context>(context);
         imageViewReference = new WeakReference<ImageView>(imageView);
         uriWeakReference = new WeakReference<Uri>(uri);
         bmwWeakReference = new WeakReference<BitmapWrapper>(bmw);
+        bleedImgBtnWeakReference = new WeakReference<ImageButton>(bleedImageBtn);
+        thresholdImgBtnWeakReference = new WeakReference<ImageButton>(thresholdImageBtn);
+        lineImgBtnWeakReference = new WeakReference<ImageButton>(lineImageBtn);
+        floodImgBtnWeakReference = new WeakReference<ImageButton>(floodImageButton);
     }
 
     // Decode image in background.
@@ -77,6 +88,29 @@ public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
             final ImageView imageView = imageViewReference.get();
             if (imageView != null) {
                 imageView.setImageBitmap(bitmap);
+            }
+        }
+
+        if (activityWeakReference != null && activityWeakReference.get() != null && bitmap != null) {
+            if (bleedImgBtnWeakReference != null && bleedImgBtnWeakReference.get() != null) {
+                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
+                        bleedImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_BLEED_FILL,
+                        bitmap, .5).execute();
+            }
+            if (thresholdImgBtnWeakReference != null && thresholdImgBtnWeakReference.get() != null) {
+                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
+                        thresholdImgBtnWeakReference.get(), PicEditActivity.Effect.THRESHOLD,
+                        bitmap, .5).execute();
+            }
+            if (lineImgBtnWeakReference != null && lineImgBtnWeakReference.get() != null) {
+                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
+                        lineImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_LINE_FILL,
+                        bitmap, .5).execute();
+            }
+            if (floodImgBtnWeakReference != null && floodImgBtnWeakReference.get() != null) {
+                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
+                        floodImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_FLOOD_FILL,
+                        bitmap, .5).execute();
             }
         }
     }

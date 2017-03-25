@@ -18,6 +18,12 @@ public class BitmapWrapper {
 
     Bitmap source;
     Bitmap mod;
+
+    Bitmap bleedButtonImg;
+    Bitmap thresholdButtonImg;
+    Bitmap lineButtonImg;
+    Bitmap floodButtonImg;
+
     int currRotationAngle;
 
     public BitmapWrapper(Bitmap bm) {
@@ -60,6 +66,38 @@ public class BitmapWrapper {
     }
 
     public Bitmap getModifiedBitmap() { return mod; }
+
+    public Bitmap getBleedButtonImg() {
+        return bleedButtonImg;
+    }
+
+    public void setBleedButtonImg(Bitmap bleedButtonImg) {
+        this.bleedButtonImg = bleedButtonImg;
+    }
+
+    public Bitmap getThresholdButtonImg() {
+        return thresholdButtonImg;
+    }
+
+    public void setThresholdButtonImg(Bitmap thresholdButtonImg) {
+        this.thresholdButtonImg = thresholdButtonImg;
+    }
+
+    public Bitmap getLineButtonImg() {
+        return lineButtonImg;
+    }
+
+    public void setLineButtonImg(Bitmap lineButtonImg) {
+        this.lineButtonImg = lineButtonImg;
+    }
+
+    public Bitmap getFloodButtonImg() {
+        return floodButtonImg;
+    }
+
+    public void setFloodButtonImg(Bitmap floodButtonImg) {
+        this.floodButtonImg = floodButtonImg;
+    }
 
     private int getPixelColor(Bitmap bm, int x, int y) {
         return bm.getPixel(x, y) & 0x00FFFFFF;

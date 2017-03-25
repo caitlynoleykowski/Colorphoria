@@ -117,7 +117,6 @@ public class Browse extends AppCompatActivity {
             public boolean accept(File dir, String filename) {
                 // Don't accept the Filler storage directory here because that will be view elsewhere
                 if (dir.equals(albumStorageDir)) {
-                    Log.e("browse", "about to return false for " + filename + " because of its dir");
                     return false;
                 }
                 // If filename is a directory or a picture accept it
@@ -127,7 +126,6 @@ public class Browse extends AppCompatActivity {
                         filename.toLowerCase(). endsWith(".jpeg")) {
                     return true;
                 }
-                Log.e("browse", "about to return false for " + filename);
                 return false;
             }
         };

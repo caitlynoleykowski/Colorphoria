@@ -1,40 +1,33 @@
 package com.caitoo0o.filler;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
 
 /**
  * Created by Cait on 9/22/2016.
  */
 public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
-    private final WeakReference<PicEditActivity> activityWeakReference;
-    private final WeakReference<Context> contextWeakReference;
-    private final WeakReference<ImageView> imageViewReference;
-    private final WeakReference<ProgressBar> progressBarWeakReference;
-    private final WeakReference<BitmapWrapper> bmwWeakReference;
-    private final WeakReference<PicEditActivity.Effect> effectWeakReference;
+    private WeakReference<PicEditActivity> activityWeakReference;
+    private WeakReference<ImageView> imageViewWeakReference;
+    private WeakReference<BitmapWrapper> bmwWeakReference;
+    private WeakReference<PicEditActivity.Effect> effectWeakReference;
     private final double ctrl;
-    private int data = 0;
 
-    public BitmapEffectAsyncTask(PicEditActivity activity, Context context, ImageView imageView, ProgressBar pb, PicEditActivity.Effect effect, BitmapWrapper bmw, double ctrl) {
+    public BitmapEffectAsyncTask(PicEditActivity activity, ImageView imageView,
+                                 PicEditActivity.Effect effect, BitmapWrapper bmw, double ctrl) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
         activityWeakReference = new WeakReference<PicEditActivity>(activity);
-        contextWeakReference = new WeakReference<Context>(context);
-        imageViewReference = new WeakReference<ImageView>(imageView);
-        progressBarWeakReference = new WeakReference<ProgressBar>(pb);
+        imageViewWeakReference = new WeakReference<ImageView>(imageView);
         bmwWeakReference = new WeakReference<BitmapWrapper>(bmw);
         effectWeakReference = new WeakReference<PicEditActivity.Effect>(effect);
         this.ctrl = ctrl;
+    }
+
+    protected void setBmwWeakReference(BitmapWrapper bmW) {
+        bmwWeakReference = new WeakReference<BitmapWrapper>(bmW);
     }
 
     // Apply effect to image in background
@@ -74,8 +67,8 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     // Once complete, see if ImageView is still around and set bitmap.
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        if (imageViewReference != null) {
-            final ImageView imageView = imageViewReference.get();
+        if (imageViewWeakReference != null && bitmap != null) {
+            final ImageView imageView = imageViewWeakReference.get();
             if (imageView != null) {
                 imageView.setImageBitmap(bitmap);
             }
