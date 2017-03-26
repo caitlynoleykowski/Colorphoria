@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Random;
 
 public class PicEditActivity extends AppCompatActivity {
 
@@ -50,6 +51,8 @@ public class PicEditActivity extends AppCompatActivity {
 
     private Uri sourceUri;
 
+    private int randomSeed;
+
     // Begin activity lifecycle handlers
 
     @Override
@@ -68,6 +71,11 @@ public class PicEditActivity extends AppCompatActivity {
 
         effectSelected = Effect.NONE;
 
+        // So that the effects aren't the same every time the activity is restarted,
+        // the random seed itself needs to be random
+        Random randSeedGen = new Random();
+        randomSeed = randSeedGen.nextInt();
+
         if (savedInstanceState != null) {
             sourceUri = savedInstanceState.getParcelable(SOURCE_URI);
             Bitmap sourceImage = (Bitmap) savedInstanceState.getParcelable(SOURCE_STATE_KEY);
@@ -80,7 +88,7 @@ public class PicEditActivity extends AppCompatActivity {
                 setUIforImageDoneProcessing(true);
                 ((ImageView) findViewById(R.id.theImage)).setImageBitmap(bmW.getModifiedBitmap());
 
-                refreshEffectThumbnails();
+                refreshEffectThumbnails(randomSeed);
             } else {
                 // TODO: Error/bug, shouldn't get here
                 setUIforImageDoneProcessing(false); // Shouldn't get here
@@ -94,8 +102,8 @@ public class PicEditActivity extends AppCompatActivity {
                     (ImageButton) findViewById(R.id.random_bleed_button),
                     (ImageButton) findViewById(R.id.threshold_button),
                     (ImageButton) findViewById(R.id.random_line_button),
-                    (ImageButton) findViewById(R.id.random_flood_button)
-                    );
+                    (ImageButton) findViewById(R.id.random_flood_button),
+                    getEffectCtrl(), randomSeed);
             bmwAsync.execute();
             setUIforImageDoneProcessing(true);
         } else {
@@ -134,7 +142,7 @@ public class PicEditActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // TODO Auto-generated method stub
-                refreshEffectThumbnails();
+                refreshEffectThumbnails(randomSeed);
             }
 
             @Override
@@ -269,28 +277,28 @@ public class PicEditActivity extends AppCompatActivity {
         applyEffect();
     }
 
-    public void onCtrlSeek(View v) {
-        Toast.makeText(getApplicationContext(), "Seeked!", Toast.LENGTH_SHORT).show();
-    }
-
     // End UI Handlers
 
     // Begin UI Helpers
 
-    private void refreshEffectThumbnails() {
+    private void refreshEffectThumbnails(int randomSeed) {
         // Populate the effect preview buttons
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_bleed_button),
-                PicEditActivity.Effect.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), getEffectCtrl()).execute();
+                PicEditActivity.Effect.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.threshold_button),
-                PicEditActivity.Effect.THRESHOLD, bmW.getSourceBitmap(), getEffectCtrl()).execute();
+                PicEditActivity.Effect.THRESHOLD, bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_line_button),
-                PicEditActivity.Effect.RANDOM_LINE_FILL, bmW.getSourceBitmap(), getEffectCtrl()).execute();
+                PicEditActivity.Effect.RANDOM_LINE_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_flood_button),
-                PicEditActivity.Effect.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), getEffectCtrl()).execute();
+                PicEditActivity.Effect.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed).execute();
     }
 
     private void setImageButtonClickable(View view, boolean clickable) {
@@ -391,7 +399,10 @@ public class PicEditActivity extends AppCompatActivity {
         double ctrl = getEffectCtrl();
         ImageView iv = (ImageView) findViewById(R.id.theImage);
         ProgressBar pb = (ProgressBar) findViewById(R.id.progressBar);
-        new BitmapEffectAsyncTask(this,iv,effectSelected,bmW,ctrl).execute();
+        new BitmapEffectAsyncTask(this,iv,effectSelected,bmW,ctrl,randomSeed).execute();
+        Random randSeedGen = new Random();
+        randomSeed = randSeedGen.nextInt();
+        refreshEffectThumbnails(randomSeed);
     }
 
     private double getEffectCtrl() {

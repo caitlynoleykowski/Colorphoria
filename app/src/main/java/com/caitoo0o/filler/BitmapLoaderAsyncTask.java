@@ -25,10 +25,13 @@ public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     private final WeakReference<ImageButton> thresholdImgBtnWeakReference;
     private final WeakReference<ImageButton> lineImgBtnWeakReference;
     private final WeakReference<ImageButton> floodImgBtnWeakReference;
+    private final double ctrl;
+    private final int randomSeed;
 
     public BitmapLoaderAsyncTask(PicEditActivity activity, Context context, ImageView imageView, Uri uri, BitmapWrapper bmw,
                                  ImageButton bleedImageBtn, ImageButton thresholdImageBtn,
-                                 ImageButton lineImageBtn, ImageButton floodImageButton) {
+                                 ImageButton lineImageBtn, ImageButton floodImageButton, double ctrl,
+                                 int randomSeed) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
         activityWeakReference = new WeakReference<PicEditActivity>(activity);
         contextWeakReference = new WeakReference<Context>(context);
@@ -39,6 +42,8 @@ public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
         thresholdImgBtnWeakReference = new WeakReference<ImageButton>(thresholdImageBtn);
         lineImgBtnWeakReference = new WeakReference<ImageButton>(lineImageBtn);
         floodImgBtnWeakReference = new WeakReference<ImageButton>(floodImageButton);
+        this.ctrl = ctrl;
+        this.randomSeed = randomSeed;
     }
 
     // Decode image in background.
@@ -95,22 +100,22 @@ public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
             if (bleedImgBtnWeakReference != null && bleedImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         bleedImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_BLEED_FILL,
-                        bitmap, .5).execute();
+                        bitmap, ctrl, randomSeed).execute();
             }
             if (thresholdImgBtnWeakReference != null && thresholdImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         thresholdImgBtnWeakReference.get(), PicEditActivity.Effect.THRESHOLD,
-                        bitmap, .5).execute();
+                        bitmap, ctrl, randomSeed).execute();
             }
             if (lineImgBtnWeakReference != null && lineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         lineImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_LINE_FILL,
-                        bitmap, .5).execute();
+                        bitmap, ctrl, randomSeed).execute();
             }
             if (floodImgBtnWeakReference != null && floodImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         floodImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_FLOOD_FILL,
-                        bitmap, .5).execute();
+                        bitmap, ctrl, randomSeed).execute();
             }
         }
     }

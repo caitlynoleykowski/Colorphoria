@@ -11,19 +11,22 @@ import java.lang.ref.WeakReference;
  */
 public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     private WeakReference<PicEditActivity> activityWeakReference;
-    private WeakReference<ImageView> imageViewWeakReference;
+    protected WeakReference<ImageView> imageViewWeakReference;
     private WeakReference<BitmapWrapper> bmwWeakReference;
     private WeakReference<PicEditActivity.Effect> effectWeakReference;
     private final double ctrl;
+    private final int randomSeed;
 
     public BitmapEffectAsyncTask(PicEditActivity activity, ImageView imageView,
-                                 PicEditActivity.Effect effect, BitmapWrapper bmw, double ctrl) {
+                                 PicEditActivity.Effect effect, BitmapWrapper bmw, double ctrl,
+                                 int randomSeed) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
         activityWeakReference = new WeakReference<PicEditActivity>(activity);
         imageViewWeakReference = new WeakReference<ImageView>(imageView);
         bmwWeakReference = new WeakReference<BitmapWrapper>(bmw);
         effectWeakReference = new WeakReference<PicEditActivity.Effect>(effect);
         this.ctrl = ctrl;
+        this.randomSeed = randomSeed;
     }
 
     protected void setBmwWeakReference(BitmapWrapper bmW) {
@@ -48,16 +51,16 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
                     bmwWeakReference.get().rotateLeft();
                     break;
                 case RANDOM_BLEED_FILL:
-                    bmwWeakReference.get().randomBleedFill(ctrl);
+                    bmwWeakReference.get().randomBleedFill(ctrl, randomSeed);
                     break;
                 case THRESHOLD:
                     bmwWeakReference.get().threshold(ctrl);
                     break;
                 case RANDOM_LINE_FILL:
-                    bmwWeakReference.get().randomLineFill(ctrl);
+                    bmwWeakReference.get().randomLineFill(ctrl, randomSeed);
                     break;
                 case RANDOM_FLOOD_FILL:
-                    bmwWeakReference.get().randomFloodFill(ctrl);
+                    bmwWeakReference.get().randomFloodFill(ctrl, randomSeed);
                     break;
             }
         }

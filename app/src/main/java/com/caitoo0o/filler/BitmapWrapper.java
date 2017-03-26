@@ -19,11 +19,6 @@ public class BitmapWrapper {
     Bitmap source;
     Bitmap mod;
 
-    Bitmap bleedButtonImg;
-    Bitmap thresholdButtonImg;
-    Bitmap lineButtonImg;
-    Bitmap floodButtonImg;
-
     int currRotationAngle;
 
     public BitmapWrapper(Bitmap bm) {
@@ -66,38 +61,6 @@ public class BitmapWrapper {
     }
 
     public Bitmap getModifiedBitmap() { return mod; }
-
-    public Bitmap getBleedButtonImg() {
-        return bleedButtonImg;
-    }
-
-    public void setBleedButtonImg(Bitmap bleedButtonImg) {
-        this.bleedButtonImg = bleedButtonImg;
-    }
-
-    public Bitmap getThresholdButtonImg() {
-        return thresholdButtonImg;
-    }
-
-    public void setThresholdButtonImg(Bitmap thresholdButtonImg) {
-        this.thresholdButtonImg = thresholdButtonImg;
-    }
-
-    public Bitmap getLineButtonImg() {
-        return lineButtonImg;
-    }
-
-    public void setLineButtonImg(Bitmap lineButtonImg) {
-        this.lineButtonImg = lineButtonImg;
-    }
-
-    public Bitmap getFloodButtonImg() {
-        return floodButtonImg;
-    }
-
-    public void setFloodButtonImg(Bitmap floodButtonImg) {
-        this.floodButtonImg = floodButtonImg;
-    }
 
     private int getPixelColor(Bitmap bm, int x, int y) {
         return bm.getPixel(x, y) & 0x00FFFFFF;
@@ -173,9 +136,9 @@ public class BitmapWrapper {
         applyRotate(-1 * ROTATION_ANGLE);
     }
 
-    public void randomBleedFill(double ctrl) {
+    public void randomBleedFill(double ctrl, int randomSeed) {
         Bitmap temp = getRotatedSource();
-        applyRandomBleedFill(temp, ctrl);
+        applyRandomBleedFill(temp, ctrl, randomSeed);
         mod = temp;
     }
 
@@ -185,17 +148,17 @@ public class BitmapWrapper {
         mod = temp;
     }
 
-    public void randomLineFill(double ctrl) {
+    public void randomLineFill(double ctrl, int randomSeed) {
         Bitmap temp = getRotatedSource();
         applyThreshold(temp, ctrl);
-        applyRandomLineFill(temp);
+        applyRandomLineFill(temp, randomSeed);
         mod = temp;
     }
 
-    public void randomFloodFill(double ctrl) {
+    public void randomFloodFill(double ctrl, int randomSeed) {
         Bitmap temp = getRotatedSource();
         applyThreshold(temp, ctrl);
-        applyRandomFill(temp);
+        applyRandomFill(temp, randomSeed);
         mod = temp;
     }
 
@@ -227,10 +190,10 @@ public class BitmapWrapper {
         }
     }
 
-    void applyRandomLineFill(Bitmap bm) {
+    void applyRandomLineFill(Bitmap bm, int randomSeed) {
         int prevPixelColor = 0x000000;
         int currColor = 0;
-        Random r = new Random();
+        Random r = new Random(randomSeed);
         int maxColor = 0xffffff;
         for (int y = 0; y < bm.getHeight(); y++) {
             for (int x = 0; x < bm.getWidth(); x++) {
@@ -252,9 +215,9 @@ public class BitmapWrapper {
         }
     }
 
-    public void applyRandomFill(Bitmap bm) {
+    public void applyRandomFill(Bitmap bm, int randomSeed) {
         boolean [][] processed = new boolean[mod.getWidth()][mod.getHeight()];
-        Random r = new Random();
+        Random r = new Random(randomSeed);
         int maxColor = 0xffffff;
         for (int i = 0; i < bm.getWidth(); i++) {
             for (int j = 0; j < bm.getHeight(); j++) {
@@ -312,9 +275,9 @@ public class BitmapWrapper {
         return;
     }
 
-    public void applyRandomBleedFill(Bitmap bm, double ctrl) {
+    public void applyRandomBleedFill(Bitmap bm, double ctrl, int randomSeed) {
         boolean [][] processed = new boolean[mod.getWidth()][mod.getHeight()];
-        Random r = new Random();
+        Random r = new Random(randomSeed);
         int maxColor = 0xffffff;
         for (int i = 0; i < bm.getWidth(); i++) {
             for (int j = 0; j < bm.getHeight(); j++) {

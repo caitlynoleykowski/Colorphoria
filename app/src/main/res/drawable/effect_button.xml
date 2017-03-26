@@ -2,7 +2,7 @@
     <item>
         <shape android:shape="rectangle" >
             <stroke
-                android:width="4dp"
+                android:width="@dimen/image_button_border"
                 android:color="@color/colorAccent" />
 
             <solid android:color="#00000000" />
