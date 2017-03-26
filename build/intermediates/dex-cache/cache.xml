@@ -2,48 +2,12 @@
 <items version="2" >
 
     <item
-        is-multidex="false"
-        jar="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.4.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.2"
-        sha1="de4db3785756bfb0915a9f59a9b3f2fea7407be4">
-        <dex dex="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\pre-dexed\release\com.android.support-animated-vector-drawable-23.4.0_89015ba68045959aad4382d9795568e2a8e6ac79.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\caitoo0o\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.4.0\support-annotations-23.4.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.2"
-        sha1="ffbe55fdb2bb456b1485831706a9eac3300bb6b8">
-        <dex dex="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\pre-dexed\release\support-annotations-23.4.0_9731139627ca8ddb7e3d283b898918fb21f4931e.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.4.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.2"
-        sha1="548f06de403a9409f00554b3ee12a9fdea0e236c">
-        <dex dex="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\pre-dexed\release\com.android.support-appcompat-v7-23.4.0_b0b2802db7cc53e60777e7ec719a4d391debbed9.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\jars\libs\internal_impl-23.4.0.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.2"
-        sha1="ea3c07504d2c8f4b13aa17c45c1b68ed9c1c3674">
-        <dex dex="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\pre-dexed\release\internal_impl-23.4.0_8d759480de198f9ba060831379540cef1108bfe2.jar" />
-    </item>
-    <item
         is-multidex="true"
         jar="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="23.0.2"
-        sha1="245a720590180453d1259a18598dae8b28854278">
+        sha1="498e944663934976d65756234b774bfc918fd629">
         <dex dex="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_79a06bd728b7024cebe07c1eda944dec6c1dc03a\classes.dex" />
     </item>
     <item
@@ -83,24 +47,6 @@
         <dex dex="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-23.4.0_9731139627ca8ddb7e3d283b898918fb21f4931e\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.4.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.2"
-        sha1="67bd36ee9340ec7c254108936ad16b24bed160cc">
-        <dex dex="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\pre-dexed\release\com.android.support-support-v4-23.4.0_2c9a2dd93fb27956738e0c79de130137bace71d2.jar" />
-    </item>
-    <item
-        is-multidex="false"
-        jar="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\23.4.0\jars\classes.jar"
-        jumboMode="false"
-        optimize="true"
-        revision="23.0.2"
-        sha1="c2c594cace5d83a3227b2b6e658ecbfd586d3ed9">
-        <dex dex="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\pre-dexed\release\com.android.support-support-vector-drawable-23.4.0_5df51cee30bb862aa17cae59a40e1ddc33760757.jar" />
-    </item>
-    <item
         is-multidex="true"
         jar="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\23.4.0\jars\classes.jar"
         jumboMode="true"
@@ -115,7 +61,7 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.2"
-        sha1="1a7f5027d47bf2861e8682b15e35e00d8cc8e7b6">
+        sha1="1bf5d48cf8e777dbc9e6231420c732552b5eab46">
         <dex dex="C:\Users\caitoo0o\Development\Filler\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_3e8e61ee52c5ea2634c9f0c443925acd868fe892\classes.dex" />
     </item>
     <item

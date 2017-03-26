@@ -80,19 +80,7 @@ public class PicEditActivity extends AppCompatActivity {
                 setUIforImageDoneProcessing(true);
                 ((ImageView) findViewById(R.id.theImage)).setImageBitmap(bmW.getModifiedBitmap());
 
-                // Populate the effect preview buttons
-                new BitmapEffectPreviewAsyncTask(this,
-                        (ImageButton) findViewById(R.id.random_bleed_button),
-                        PicEditActivity.Effect.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), .5).execute();
-                new BitmapEffectPreviewAsyncTask(this,
-                        (ImageButton) findViewById(R.id.threshold_button),
-                        PicEditActivity.Effect.THRESHOLD, bmW.getSourceBitmap(), .5).execute();
-                new BitmapEffectPreviewAsyncTask(this,
-                        (ImageButton) findViewById(R.id.random_line_button),
-                        PicEditActivity.Effect.RANDOM_LINE_FILL, bmW.getSourceBitmap(), .5).execute();
-                new BitmapEffectPreviewAsyncTask(this,
-                        (ImageButton) findViewById(R.id.random_flood_button),
-                        PicEditActivity.Effect.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), .5).execute();
+                refreshEffectThumbnails();
             } else {
                 // TODO: Error/bug, shouldn't get here
                 setUIforImageDoneProcessing(false); // Shouldn't get here
@@ -138,6 +126,26 @@ public class PicEditActivity extends AppCompatActivity {
                 //Toast.makeText(PicEditActivity.this, "bottom", Toast.LENGTH_SHORT).show();
             }
 
+        });
+
+        SeekBar pb = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
+        pb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+                refreshEffectThumbnails();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
+                // TODO Auto-generated method stub
+            }
         });
     }
 
@@ -268,6 +276,22 @@ public class PicEditActivity extends AppCompatActivity {
     // End UI Handlers
 
     // Begin UI Helpers
+
+    private void refreshEffectThumbnails() {
+        // Populate the effect preview buttons
+        new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.random_bleed_button),
+                PicEditActivity.Effect.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), getEffectCtrl()).execute();
+        new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.threshold_button),
+                PicEditActivity.Effect.THRESHOLD, bmW.getSourceBitmap(), getEffectCtrl()).execute();
+        new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.random_line_button),
+                PicEditActivity.Effect.RANDOM_LINE_FILL, bmW.getSourceBitmap(), getEffectCtrl()).execute();
+        new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.random_flood_button),
+                PicEditActivity.Effect.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), getEffectCtrl()).execute();
+    }
 
     private void setImageButtonClickable(View view, boolean clickable) {
         // TODO: Maybe change this to a selector in the layout.xml??
