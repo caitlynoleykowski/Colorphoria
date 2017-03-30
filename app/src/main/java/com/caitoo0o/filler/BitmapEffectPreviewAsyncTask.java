@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 /**
  * Created by Cait on 9/22/2016.
@@ -22,18 +23,16 @@ public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
 
     public BitmapEffectPreviewAsyncTask(PicEditActivity activity, ImageView imageView,
                                         PicEditActivity.Effect effect, Bitmap sourceBitmap,
-                                        double ctrl, int randomSeed) {
-        super(activity, imageView, effect, null, ctrl, randomSeed);
+                                        double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
+        super(activity, imageView, effect, null, ctrl, randomSeed, colorPalette);
         sourceBitmapWeakReference = new WeakReference<Bitmap>(sourceBitmap);
     }
 
     // Create the thumbnail bitmap and use that to apply the effect to instead of the large bitmap
     @Override
     protected Bitmap doInBackground(Integer... params) {
+        // Don't bother doing this stuff if the imageView isn't there anymore
         if (imageViewWeakReference != null && imageViewWeakReference.get() != null) {
-            ImageView imageView = imageViewWeakReference.get();
-            int width = imageView.getMeasuredWidth();
-
             if (sourceBitmapWeakReference != null && sourceBitmapWeakReference.get() != null) {
                 Bitmap sourceBitmap = sourceBitmapWeakReference.get();
                 // Create scaled down thumbnail (not the final one which will be square) so that

@@ -29,6 +29,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Random;
 
@@ -62,6 +63,8 @@ public class PicEditActivity extends AppCompatActivity {
     private Uri sourceUri;
 
     private int randomSeed;
+
+    final private ArrayList<Integer> colorPalette = new ArrayList<Integer>();
 
     // Begin activity lifecycle handlers
 
@@ -270,6 +273,18 @@ public class PicEditActivity extends AppCompatActivity {
     public void onChoosePalette(View v) {
         final Dialog colorPaletteDialog = new Dialog(this);
         colorPaletteDialog.setContentView(R.layout.effect_color_options);
+
+        // Add the existing color palette colors
+        for (Integer color : colorPalette) {
+            LinearLayout colorPaletteLL = (LinearLayout) colorPaletteDialog.findViewById(R.id.selected_colors_layout);
+            ImageView colorView = new ImageView(getApplicationContext());
+            colorView.setBackgroundColor(color);
+            colorView.setLayoutParams(new android.view.ViewGroup.LayoutParams(60,60));
+            colorView.setMaxHeight(20);
+            colorView.setMaxWidth(20);
+            colorPaletteLL.addView(colorView);
+        }
+
         final ImageView colorsView = (ImageView) colorPaletteDialog.findViewById(R.id.color_spectrum_image_view);
         colorsView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -330,10 +345,19 @@ public class PicEditActivity extends AppCompatActivity {
                 LinearLayout colorPaletteLL = (LinearLayout) colorPaletteDialog.findViewById(R.id.selected_colors_layout);
                 ImageView colorView = new ImageView(getApplicationContext());
                 colorView.setBackgroundColor(color);
-                colorView.setLayoutParams(new android.view.ViewGroup.LayoutParams(80,60));
+                colorView.setLayoutParams(new android.view.ViewGroup.LayoutParams(60,60));
                 colorView.setMaxHeight(20);
                 colorView.setMaxWidth(20);
                 colorPaletteLL.addView(colorView);
+                colorPalette.add(color);
+            }
+        });
+        ImageButton doneAddingColorButton = (ImageButton) colorPaletteDialog.findViewById(R.id.done_selecting_palette_button);
+        doneAddingColorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorPaletteDialog.dismiss();
+                refreshEffectThumbnails(randomSeed);
             }
         });
         colorPaletteDialog.show();
@@ -368,19 +392,19 @@ public class PicEditActivity extends AppCompatActivity {
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_bleed_button),
                 PicEditActivity.Effect.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
-                randomSeed).execute();
+                randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.threshold_button),
                 PicEditActivity.Effect.THRESHOLD, bmW.getSourceBitmap(), getEffectCtrl(),
-                randomSeed).execute();
+                randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_line_button),
                 PicEditActivity.Effect.RANDOM_LINE_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
-                randomSeed).execute();
+                randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_flood_button),
                 PicEditActivity.Effect.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
-                randomSeed).execute();
+                randomSeed, colorPalette).execute();
     }
 
     private void setImageButtonClickable(View view, boolean clickable) {
@@ -481,7 +505,7 @@ public class PicEditActivity extends AppCompatActivity {
         double ctrl = getEffectCtrl();
         ImageView iv = (ImageView) findViewById(R.id.theImage);
         ProgressBar pb = (ProgressBar) findViewById(R.id.progressBar);
-        new BitmapEffectAsyncTask(this,iv,effectSelected,bmW,ctrl,randomSeed).execute();
+        new BitmapEffectAsyncTask(this,iv,effectSelected,bmW,ctrl,randomSeed,colorPalette).execute();
         Random randSeedGen = new Random();
         randomSeed = randSeedGen.nextInt();
         refreshEffectThumbnails(randomSeed);

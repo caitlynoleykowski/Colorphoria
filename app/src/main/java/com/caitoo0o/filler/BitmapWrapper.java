@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -15,6 +16,7 @@ public class BitmapWrapper {
 
     private static final int MAX_PIXELS = 1000000;
     private static final int ROTATION_ANGLE = 90;
+    private static final int MAX_COLOR = 0xffffff;
 
     Bitmap source;
     Bitmap mod;
@@ -121,6 +123,18 @@ public class BitmapWrapper {
         }
     }
 
+    // effect helpers
+
+    private int getNextColor(Random r, ArrayList<Integer> colorPalette) {
+        int nextColor;
+        if (colorPalette != null && colorPalette.size() > 0) {
+            nextColor = colorPalette.get(r.nextInt(colorPalette.size()));
+        } else {
+            nextColor = r.nextInt(MAX_COLOR);
+        }
+        return nextColor;
+    }
+
     // Start effects
 
     public void reset() {
@@ -136,9 +150,9 @@ public class BitmapWrapper {
         applyRotate(-1 * ROTATION_ANGLE);
     }
 
-    public void randomBleedFill(double ctrl, int randomSeed) {
+    public void randomBleedFill(double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
         Bitmap temp = getRotatedSource();
-        applyRandomBleedFill(temp, ctrl, randomSeed);
+        applyRandomBleedFill(temp, ctrl, randomSeed, colorPalette);
         mod = temp;
     }
 
@@ -148,17 +162,17 @@ public class BitmapWrapper {
         mod = temp;
     }
 
-    public void randomLineFill(double ctrl, int randomSeed) {
+    public void randomLineFill(double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
         Bitmap temp = getRotatedSource();
         applyThreshold(temp, ctrl);
-        applyRandomLineFill(temp, randomSeed);
+        applyRandomLineFill(temp, randomSeed, colorPalette);
         mod = temp;
     }
 
-    public void randomFloodFill(double ctrl, int randomSeed) {
+    public void randomFloodFill(double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
         Bitmap temp = getRotatedSource();
         applyThreshold(temp, ctrl);
-        applyRandomFill(temp, randomSeed);
+        applyRandomFill(temp, randomSeed, colorPalette);
         mod = temp;
     }
 
@@ -190,16 +204,15 @@ public class BitmapWrapper {
         }
     }
 
-    void applyRandomLineFill(Bitmap bm, int randomSeed) {
+    void applyRandomLineFill(Bitmap bm, int randomSeed, ArrayList<Integer> colorPalette) {
         int prevPixelColor = 0x000000;
         int currColor = 0;
         Random r = new Random(randomSeed);
-        int maxColor = 0xffffff;
         for (int y = 0; y < bm.getHeight(); y++) {
             for (int x = 0; x < bm.getWidth(); x++) {
                 int color = getPixelColor(bm, x, y);
                 if (color == 0xffffff && prevPixelColor == 0x000000) {
-                    currColor = r.nextInt(maxColor);
+                    currColor = getNextColor(r, colorPalette);
                     prevPixelColor = color;
                     setPixelColor(bm, x, y, currColor);
                 } else if (color == 0xffffff && prevPixelColor == 0xffffff) {
@@ -215,16 +228,16 @@ public class BitmapWrapper {
         }
     }
 
-    public void applyRandomFill(Bitmap bm, int randomSeed) {
+    public void applyRandomFill(Bitmap bm, int randomSeed, ArrayList<Integer> colorPalette) {
         boolean [][] processed = new boolean[mod.getWidth()][mod.getHeight()];
         Random r = new Random(randomSeed);
-        int maxColor = 0xffffff;
         for (int i = 0; i < bm.getWidth(); i++) {
             for (int j = 0; j < bm.getHeight(); j++) {
                 PixelNode currNode = new PixelNode(i, j);
                 if (!isPixelNodeProcessed(currNode, processed) &&
                         getPixelColor(bm, currNode.x(), currNode.y()) == 0xffffff) {
-                    floodFill(bm, currNode, 0xffffff, r.nextInt(maxColor), processed);
+                    int nextColor = getNextColor(r, colorPalette);
+                    floodFill(bm, currNode, 0xffffff, nextColor, processed);
                 }
             }
         }
@@ -275,16 +288,16 @@ public class BitmapWrapper {
         return;
     }
 
-    public void applyRandomBleedFill(Bitmap bm, double ctrl, int randomSeed) {
+    public void applyRandomBleedFill(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
         boolean [][] processed = new boolean[mod.getWidth()][mod.getHeight()];
         Random r = new Random(randomSeed);
-        int maxColor = 0xffffff;
         for (int i = 0; i < bm.getWidth(); i++) {
             for (int j = 0; j < bm.getHeight(); j++) {
                 PixelNode currNode = new PixelNode(i, j);
                 if (!isPixelNodeProcessed(currNode, processed)) {
                     int targetColor = getPixelColor(bm, currNode.x(), currNode.y());
-                    bleedFill(bm, currNode, targetColor, r.nextInt(maxColor), ctrl, processed);
+                    int nextColor = getNextColor(r, colorPalette);
+                    bleedFill(bm, currNode, targetColor, nextColor, ctrl, processed);
                 }
             }
         }

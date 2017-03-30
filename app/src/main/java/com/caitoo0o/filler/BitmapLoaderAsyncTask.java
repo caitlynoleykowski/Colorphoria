@@ -96,26 +96,27 @@ public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
             }
         }
 
+        // Don't need a colorPalette here because there will never be one yet
         if (activityWeakReference != null && activityWeakReference.get() != null && bitmap != null) {
             if (bleedImgBtnWeakReference != null && bleedImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         bleedImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_BLEED_FILL,
-                        bitmap, ctrl, randomSeed).execute();
+                        bitmap, ctrl, randomSeed, null).execute();
             }
             if (thresholdImgBtnWeakReference != null && thresholdImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         thresholdImgBtnWeakReference.get(), PicEditActivity.Effect.THRESHOLD,
-                        bitmap, ctrl, randomSeed).execute();
+                        bitmap, ctrl, randomSeed, null).execute();
             }
             if (lineImgBtnWeakReference != null && lineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         lineImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_LINE_FILL,
-                        bitmap, ctrl, randomSeed).execute();
+                        bitmap, ctrl, randomSeed, null).execute();
             }
             if (floodImgBtnWeakReference != null && floodImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         floodImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_FLOOD_FILL,
-                        bitmap, ctrl, randomSeed).execute();
+                        bitmap, ctrl, randomSeed, null).execute();
             }
         }
     }

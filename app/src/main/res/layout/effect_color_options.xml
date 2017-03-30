@@ -27,7 +27,7 @@
             android:id="@+id/color_selected_image_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:background="#FFFFFFFF"/>
@@ -36,7 +36,7 @@
             android:id="@+id/color_selected_edit_text"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="4"
+            android:layout_weight="2"
             android:padding="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:text="#FFFFFF"
@@ -50,9 +50,9 @@
             android:layout_weight="1"
             android:layout_height="fill_parent"
             android:padding="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:background="@drawable/my_menu_bar_button"
-            android:src="@drawable/ic_done_24dp"
-            android:onClick="onAddColorButton" />
+            android:src="@drawable/ic_add_24dp" />
 
         </LinearLayout>
 
@@ -61,7 +61,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorDark"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:padding="@dimen/small_margin"
         android:orientation="horizontal" >
         </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/done_selecting_palette_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_vertical_margin"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/my_menu_bar_button"
+        android:src="@drawable/ic_done_24dp"
+        android:onClick="onDoneAddingColor" />
 </LinearLayout>
