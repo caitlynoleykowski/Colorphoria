@@ -195,13 +195,15 @@
             android:layout_weight="1">
 
             <ImageButton
-                android:id="@+id/rotate_left"
+                android:id="@+id/choose_palette"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/my_menu_bar_button"
-                android:onClick="onRotateLeft"
-                android:src="@drawable/ic_rotate_left_24dp"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:scaleType="fitCenter"
+                android:onClick="onChoosePalette"
+                android:src="@drawable/color_spectrum"
                 android:clickable="false" />
 
             <SeekBar
