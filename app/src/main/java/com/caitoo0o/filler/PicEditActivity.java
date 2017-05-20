@@ -2,7 +2,7 @@ package com.caitoo0o.filler;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Matrix;
@@ -14,22 +14,22 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.graphics.Bitmap;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.Random;
 
@@ -271,93 +271,15 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     public void onChoosePalette(View v) {
-        final Dialog colorPaletteDialog = new Dialog(this);
-        colorPaletteDialog.setContentView(R.layout.effect_color_options);
-
-        // Add the existing color palette colors
-        for (Integer color : colorPalette) {
-            LinearLayout colorPaletteLL = (LinearLayout) colorPaletteDialog.findViewById(R.id.selected_colors_layout);
-            ImageView colorView = new ImageView(getApplicationContext());
-            colorView.setBackgroundColor(color);
-            colorView.setLayoutParams(new android.view.ViewGroup.LayoutParams(60,60));
-            colorView.setMaxHeight(20);
-            colorView.setMaxWidth(20);
-            colorPaletteLL.addView(colorView);
-        }
-
-        final ImageView colorsView = (ImageView) colorPaletteDialog.findViewById(R.id.color_spectrum_image_view);
-        colorsView.setOnTouchListener(new View.OnTouchListener() {
+        final PaletteChooserDialog colorPaletteDialog = new PaletteChooserDialog(this, colorPalette);
+        // TODO: Make an onPaletteChange callback that is called in the ondismiss in case of a change
+        // inside of the PaletteChooserDialog class
+        colorPaletteDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                float eventX = motionEvent.getX();
-                float eventY = motionEvent.getY();
-                float[] eventXY = new float[] {eventX, eventY};
-
-                Matrix invertMatrix = new Matrix();
-                ((ImageView)view).getImageMatrix().invert(invertMatrix);
-
-                invertMatrix.mapPoints(eventXY);
-                int x = Integer.valueOf((int)eventXY[0]);
-                int y = Integer.valueOf((int)eventXY[1]);
-
-                Drawable imgDrawable = ((ImageView)view).getDrawable();
-                Bitmap bitmap = ((BitmapDrawable)imgDrawable).getBitmap();
-
-                //Limit x, y range within bitmap
-                if(x < 0){
-                    x = 0;
-                }else if(x > bitmap.getWidth()-1){
-                    x = bitmap.getWidth()-1;
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (colorPaletteDialog.isColorPaletteChanged()) {
+                    refreshEffectThumbnails(randomSeed);
                 }
-
-                if(y < 0){
-                    y = 0;
-                }else if(y > bitmap.getHeight()-1){
-                    y = bitmap.getHeight()-1;
-                }
-
-                int touchedARGB = bitmap.getPixel(x, y);
-                int touchedRGB = touchedARGB & 0xFFFFFF;
-
-                ImageView colorSelectedView = (ImageView) colorPaletteDialog.findViewById(R.id.color_selected_image_view);
-                colorSelectedView.setBackgroundColor(touchedARGB);
-                EditText colorSelectedEditText = (EditText) colorPaletteDialog.findViewById(R.id.color_selected_edit_text);
-                colorSelectedEditText.setText(String.format("#%06X", touchedRGB));
-                return true;
-            }
-        });
-
-        ImageButton addColorButton = (ImageButton) colorPaletteDialog.findViewById(R.id.add_color_button);
-        addColorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText colorSelectedEditText = (EditText) colorPaletteDialog.findViewById(R.id.color_selected_edit_text);
-                String colorString = colorSelectedEditText.getText().toString();
-                colorString = colorString.replace("#", "");
-                ImageView colorSelectedView = (ImageView) colorPaletteDialog.findViewById(R.id.color_selected_image_view);
-                if (colorString.length() != 6) {
-                    colorSelectedView.setBackgroundColor(0xFFFFFF);
-                    colorSelectedEditText.setText(String.format("#%06X", 0xFFFFFF));
-                }
-                int colorRGB = Integer.parseInt(colorString, 16);
-                int color = 0xFF000000 | colorRGB;
-                colorSelectedView.setBackgroundColor(color);
-                LinearLayout colorPaletteLL = (LinearLayout) colorPaletteDialog.findViewById(R.id.selected_colors_layout);
-                ImageView colorView = new ImageView(getApplicationContext());
-                colorView.setBackgroundColor(color);
-                colorView.setLayoutParams(new android.view.ViewGroup.LayoutParams(60,60));
-                colorView.setMaxHeight(20);
-                colorView.setMaxWidth(20);
-                colorPaletteLL.addView(colorView);
-                colorPalette.add(color);
-            }
-        });
-        ImageButton doneAddingColorButton = (ImageButton) colorPaletteDialog.findViewById(R.id.done_selecting_palette_button);
-        doneAddingColorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                colorPaletteDialog.dismiss();
-                refreshEffectThumbnails(randomSeed);
             }
         });
         colorPaletteDialog.show();

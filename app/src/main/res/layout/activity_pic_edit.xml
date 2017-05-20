@@ -206,7 +206,7 @@
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:scaleType="fitXY"
                 android:onClick="onChoosePalette"
-                android:src="@drawable/color_spectrum"
+                android:src="@drawable/ic_chooser_24dp"
                 android:clickable="false" />
 
             <SeekBar
