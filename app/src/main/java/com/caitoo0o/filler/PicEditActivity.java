@@ -26,11 +26,28 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class PicEditActivity extends AppCompatActivity {
@@ -446,4 +463,42 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     // End business logic
+
+    // Begin network calls
+
+    private void getData() {
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://black-obelisk-161316.appspot.com/_ah/api/echo/v1/echo";
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Log.i(PicEditActivity.this.getClass().getName(), "Response is: " +
+                                response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i(PicEditActivity.this.getClass().getName(), "Error when calling endpoint: " + error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams()
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("message", "data");
+                params.put("n", "9");
+
+                return params;
+            }
+        };;
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+    }
+
+    // End network calls
 }
