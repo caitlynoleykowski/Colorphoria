@@ -1,16 +1,11 @@
-package com.caitoo0o.filler;
+package com.caitoo0o.filler.effects;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import java.io.InputStream;
+import com.caitoo0o.filler.activities.PicEditActivity;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 

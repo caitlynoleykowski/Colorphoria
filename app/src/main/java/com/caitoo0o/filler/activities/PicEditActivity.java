@@ -1,50 +1,41 @@
-package com.caitoo0o.filler;
+package com.caitoo0o.filler.activities;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Matrix;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.graphics.Bitmap;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.caitoo0o.filler.effects.BitmapEffectAsyncTask;
+import com.caitoo0o.filler.effects.BitmapEffectPreviewAsyncTask;
+import com.caitoo0o.filler.effects.BitmapLoaderAsyncTask;
+import com.caitoo0o.filler.effects.BitmapWrapper;
+import com.caitoo0o.filler.uihelpers.OnSwipeTouchListener;
+import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.uihelpers.PaletteChooserDialog;
+import com.caitoo0o.filler.utils.Utils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
@@ -129,7 +120,7 @@ public class PicEditActivity extends AppCompatActivity {
             ImageView iv = (ImageView) findViewById(R.id.theImage);
             bmW = new BitmapWrapper();
             BitmapLoaderAsyncTask bmwAsync = new BitmapLoaderAsyncTask(this, getApplicationContext(), iv, uri, bmW,
-                    (ImageButton) findViewById(R.id.random_bleed_button),
+                    (ImageButton) findViewById(R.id.icon_square_button),
                     (ImageButton) findViewById(R.id.threshold_button),
                     (ImageButton) findViewById(R.id.random_line_button),
                     (ImageButton) findViewById(R.id.random_flood_button),
@@ -329,7 +320,7 @@ public class PicEditActivity extends AppCompatActivity {
     private void refreshEffectThumbnails(int randomSeed) {
         // Populate the effect preview buttons
         new BitmapEffectPreviewAsyncTask(this,
-                (ImageButton) findViewById(R.id.random_bleed_button),
+                (ImageButton) findViewById(R.id.icon_square_button),
                 PicEditActivity.Effect.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
@@ -360,7 +351,7 @@ public class PicEditActivity extends AppCompatActivity {
 
     // public to be used by BitmapEffectAsyncTask
     public void doneProgress() {
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         progressBar.setVisibility(View.GONE);
         setUIforImageDoneProcessing(true);
     }
@@ -371,7 +362,7 @@ public class PicEditActivity extends AppCompatActivity {
         for (int i = 0; i < ll1.getChildCount(); i++) {
             setImageButtonClickable(ll1.getChildAt(i), processingImageDone);
         }
-        LinearLayout ll2 = (LinearLayout) findViewById(R.id.buttonLinearLayout);
+        LinearLayout ll2 = (LinearLayout) findViewById(R.id.icon_linear_layout);
         ll2.getChildCount();
         for (int i = 0; i < ll2.getChildCount(); i++) {
             ((ImageButton) ll2.getChildAt(i)).setClickable(processingImageDone);
@@ -403,8 +394,8 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     private void goToBrowseActivity(Uri uri) {
-        Intent intent = new Intent(this, Browse.class);
-        intent.putExtra(Browse.IMAGE_URI_STATE_KEY, uri);
+        Intent intent = new Intent(this, BrowseActivity.class);
+        intent.putExtra(BrowseActivity.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
         //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
@@ -438,12 +429,12 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     private void applyEffect() {
-        ((ProgressBar) findViewById(R.id.progressBar)).setVisibility(View.VISIBLE);
+        ((ProgressBar) findViewById(R.id.progress_bar)).setVisibility(View.VISIBLE);
         updateUndoRedoQueues();
         setUIforImageDoneProcessing(false);
         double ctrl = getEffectCtrl();
         ImageView iv = (ImageView) findViewById(R.id.theImage);
-        ProgressBar pb = (ProgressBar) findViewById(R.id.progressBar);
+        ProgressBar pb = (ProgressBar) findViewById(R.id.progress_bar);
         new BitmapEffectAsyncTask(this,iv,effectSelected,bmW,ctrl,randomSeed,colorPalette).execute();
         Random randSeedGen = new Random();
         randomSeed = randSeedGen.nextInt();

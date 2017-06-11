@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.caitoo0o.filler.PicSourceActivity"
+    tools:context="com.caitoo0o.filler.activities.PicSourceActivity"
     android:background="@color/colorPrimaryDark">
 
     <LinearLayout
@@ -108,7 +108,7 @@
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
+            android:id="@+id/progress_bar"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:indeterminate="true"
@@ -126,7 +126,7 @@
         android:visibility="visible">
 
         <LinearLayout
-            android:id="@+id/buttonLinearLayout"
+            android:id="@+id/icon_linear_layout"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="2"
@@ -135,8 +135,8 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:orientation="horizontal">
 
-            <com.caitoo0o.filler.SquareImageButton
-                android:id="@+id/random_bleed_button"
+            <com.caitoo0o.filler.uihelpers.SquareImageButton
+                android:id="@+id/icon_square_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
@@ -148,7 +148,7 @@
                 android:scaleType="centerCrop"
                 android:clickable="false" />
 
-            <com.caitoo0o.filler.SquareImageButton
+            <com.caitoo0o.filler.uihelpers.SquareImageButton
                 android:id="@+id/threshold_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -161,7 +161,7 @@
                 android:scaleType="centerCrop"
                 android:clickable="false" />
 
-            <com.caitoo0o.filler.SquareImageButton
+            <com.caitoo0o.filler.uihelpers.SquareImageButton
                 android:id="@+id/random_line_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -174,7 +174,7 @@
                 android:scaleType="centerCrop"
                 android:clickable="false" />
 
-            <com.caitoo0o.filler.SquareImageButton
+            <com.caitoo0o.filler.uihelpers.SquareImageButton
                 android:id="@+id/random_flood_button"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

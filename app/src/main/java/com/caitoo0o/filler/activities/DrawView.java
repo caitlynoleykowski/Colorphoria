@@ -1,4 +1,4 @@
-package com.caitoo0o.filler;
+package com.caitoo0o.filler.activities;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +12,8 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.caitoo0o.filler.R;
 
 /**
  * Created by caitoo0o on 3/15/2017.

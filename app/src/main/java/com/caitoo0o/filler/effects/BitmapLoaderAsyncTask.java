@@ -1,4 +1,4 @@
-package com.caitoo0o.filler;
+package com.caitoo0o.filler.effects;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import com.caitoo0o.filler.activities.PicEditActivity;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;

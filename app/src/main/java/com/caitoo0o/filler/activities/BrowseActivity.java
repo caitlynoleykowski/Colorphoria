@@ -1,4 +1,4 @@
-package com.caitoo0o.filler;
+package com.caitoo0o.filler.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +18,10 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.caitoo0o.filler.uihelpers.OnSwipeTouchListener;
+import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.utils.Utils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
@@ -26,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class Browse extends AppCompatActivity {
+public class BrowseActivity extends AppCompatActivity {
     private ArrayList<File> allFiles;
     private ArrayList<File> allPictures;
 
@@ -53,26 +57,26 @@ public class Browse extends AppCompatActivity {
         }
 
         View outerRelativeLayout = findViewById(R.id.outer_relative_layout);
-        outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(Browse.this) {
+        outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(BrowseActivity.this) {
             public void onSwipeTop() {
-                //Toast.makeText(Browse.this, "top", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BrowseActivity.this, "top", Toast.LENGTH_SHORT).show();
             }
 
             public void onSwipeRight() {
-                //Toast.makeText(Browse.this, "right", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BrowseActivity.this, "right", Toast.LENGTH_SHORT).show();
                 //startPicEditActivity(mImageUri);
                 //startPicSourceActivity(mImageUri);
             }
 
             public void onSwipeLeft() {
-                //Toast.makeText(Browse.this, "left", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BrowseActivity.this, "left", Toast.LENGTH_SHORT).show();
 //                if (mImageUri != null) {
 //                    startPicEditActivity(mImageUri);
 //                }
             }
 
             public void onSwipeBottom() {
-                //Toast.makeText(Browse.this, "bottom", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BrowseActivity.this, "bottom", Toast.LENGTH_SHORT).show();
                 startPicSourceActivity(mImageUri);
             }
 
@@ -149,7 +153,7 @@ public class Browse extends AppCompatActivity {
                 // dont need but what is it??
                 Object i = adapterView.getItemAtPosition(pos);
                 // Load the image that was clicked into the editor
-                Intent intent = new Intent(Browse.this, PicEditActivity.class);
+                Intent intent = new Intent(BrowseActivity.this, PicEditActivity.class);
                 intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(allFiles.get(getIdxFromPos(allFiles, pos))));
                 startActivity(intent);
                 //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -166,7 +170,7 @@ public class Browse extends AppCompatActivity {
                 // dont need but what is it??
                 Object i = adapterView.getItemAtPosition(pos);
                 // Load the image that was clicked into the editor
-                Intent intent = new Intent(Browse.this, PicEditActivity.class);
+                Intent intent = new Intent(BrowseActivity.this, PicEditActivity.class);
                 intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(allPictures.get(getIdxFromPos(allPictures, pos))));
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

@@ -1,4 +1,4 @@
-package com.caitoo0o.filler;
+package com.caitoo0o.filler.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -10,6 +10,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.caitoo0o.filler.uihelpers.OnSwipeTouchListener;
+import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.utils.Utils;
 
 import java.io.File;
 
@@ -60,15 +64,15 @@ public class DrawActivity extends AppCompatActivity {
         View outerRelativeLayout = findViewById(R.id.outer_linear_layout);
         outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(DrawActivity.this) {
             public void onSwipeTop() {
-                //Toast.makeText(Browse.this, "top", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BrowseActivity.this, "top", Toast.LENGTH_SHORT).show();
             }
 
             public void onSwipeRight() {
-                //Toast.makeText(Browse.this, "right", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BrowseActivity.this, "right", Toast.LENGTH_SHORT).show();
             }
 
             public void onSwipeLeft() {
-                //Toast.makeText(Browse.this, "left", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BrowseActivity.this, "left", Toast.LENGTH_SHORT).show();
 //                if (mImageUri != null) {
 //                    startPicEditActivity(mImageUri);
 //                }
@@ -76,7 +80,7 @@ public class DrawActivity extends AppCompatActivity {
             }
 
             public void onSwipeBottom() {
-                //Toast.makeText(Browse.this, "bottom", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(BrowseActivity.this, "bottom", Toast.LENGTH_SHORT).show();
             }
 
         });

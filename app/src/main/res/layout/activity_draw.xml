@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
-    tools:context="com.caitoo0o.filler.DrawActivity">
+    tools:context="com.caitoo0o.filler.activities.DrawActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,7 +66,7 @@
             android:onClick="onDoneButton" />
     </LinearLayout>
 
-    <com.caitoo0o.filler.DrawView
+    <com.caitoo0o.filler.activities.DrawView
         android:id="@+id/drawing"
         android:layout_width="fill_parent"
         android:layout_height="0dp"

@@ -1,28 +1,23 @@
-package com.caitoo0o.filler;
+package com.caitoo0o.filler.uihelpers;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.uihelpers.SquareImageButton;
+
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -39,7 +34,7 @@ public class PaletteChooserDialog extends Dialog {
     boolean colorPaletteChanged;
     int startingColorPaletteSize;
 
-    PaletteChooserDialog(Context context, final ArrayList<Integer> colorPalette) {
+    public PaletteChooserDialog(Context context, final ArrayList<Integer> colorPalette) {
         super(context);
         setContentView(R.layout.effect_color_options);
 

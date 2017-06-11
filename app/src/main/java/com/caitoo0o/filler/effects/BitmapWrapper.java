@@ -1,4 +1,4 @@
-package com.caitoo0o.filler;
+package com.caitoo0o.filler.effects;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;

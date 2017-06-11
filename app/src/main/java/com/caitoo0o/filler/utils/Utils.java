@@ -1,4 +1,4 @@
-package com.caitoo0o.filler;
+package com.caitoo0o.filler.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.caitoo0o.filler.R;
 
 import java.io.File;
 import java.io.FileOutputStream;

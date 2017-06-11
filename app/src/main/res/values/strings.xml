@@ -1,7 +1,82 @@
 <resources>
     <string name="app_name">Filler</string>
 
+    <!-- General use begin -->
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+    <!-- General use end -->
+
+    <!-- Used for brush and eraser sizes on DrawingActivity begin -->
     <string name="sml">Small</string>
     <string name="med">Medium</string>
     <string name="lrg">Large</string>
+    <!-- Used for brush and eraser sizes on DrawingActivity end -->
+
+    <!-- Used for LoginActivity begin -->
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="forgot_password_button_link">Forgot Password</string>
+
+    <string name="empty_email_input">Empty email address</string>
+    <string name="empty_password_input">Empty password</string>
+    <string name="password_too_short">Password too short, enter minimum 6 characters!</string>
+    <string name="login_try_again">Try Again</string>
+    <string name="login_failed">The email or password you entered is incorrect. Please try again or sign up.</string>
+
+    <string name="login_with_google_button">Sign in with Google</string>
+
+    <string name="google_play_services_error">Google Play Services error</string>
+    <string name="google_login_failed">Google login failed. Please try again.</string>
+    <string name="google_login_authentication_failed">Google login authentication failed. Please try again.</string>
+
+    <string name="signup_button_link">Don\'t have an account? Sign up!</string>
+    <!-- Used for LoginActivity end -->
+
+    <!-- Used for ResetPasswordActivity begin -->
+    <string name="reset_password_button">Reset Password</string>
+    <string name="back_button_link">go back</string>
+
+    <string name="reset_password_message">Enter the email you used to sign up for the account and we\'ll send you a reset link.</string>
+    <string name="reset_password_success">We have sent you instructions to reset your password. Please check your email.</string>
+    <string name="reset_password_failed">Failed to send reset email.</string>
+    <!-- Used for ResetPasswordActivity end -->
+
+    <!-- Used for SignupActivity begin -->
+    <string name="signup_button">Sign Up</string>
+
+    <string name="signup_success">Account created! Please log in.</string>
+    <string name="signup_failed">Unable to create account. Please try again.</string>
+    <!-- Used for SignupActivity end -->
+
+    <!-- Used for AccountActivity begin -->
+    <string name="new_email_hint">New Email</string>
+    <string name="new_password_hint">New Password</string>
+
+    <string name="change_email">Change Email</string>
+    <string name="change_password">Change Password</string>
+
+    <string name="reset_password">Reset Password</string>
+
+    <string name="delete_account">Delete Account</string> // TODO: add a confirmation dialog
+
+    <string name="sign_out">Sign Out</string>
+
+    <string name="change_email_success">Email successfully updated. Please sign in with your new email.</string>
+    <string name="change_email_failed">Failed to update email.</string>
+    <string name="change_email_failed_existing_user">Failed to update email. The email address entered is already in use.</string>
+    <string name="change_email_failed_recent_login">Failed to update email. A recent login is required for this action due to its sensitive nature.</string>
+
+    <string name="change_password_success">Password successfully updated. Please log in.</string>
+    <string name="change_password_failed">Password update failed.</string>
+
+    <string name="delete_account_confirmation">Are you sure you want to delete your account? This action can\'t be undone.</string>
+    <string name="delete_account_success">You have deleted your account. Goodbye for now!</string>
+    <string name="delete_account_failed">Failed to delete account.</string>
+
+    <!-- Used for AccountActivity end -->
+
+    // TODO: Add strings from other classes and convert some toasts to AlertDialogs
+
 </resources>

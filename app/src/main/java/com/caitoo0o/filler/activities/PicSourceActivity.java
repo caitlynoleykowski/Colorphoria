@@ -1,4 +1,4 @@
-package com.caitoo0o.filler;
+package com.caitoo0o.filler.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -12,6 +12,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.caitoo0o.filler.uihelpers.OnSwipeTouchListener;
+import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.utils.Utils;
 
 import java.io.File;
 
@@ -83,6 +87,10 @@ public class PicSourceActivity extends AppCompatActivity {
                     REQUEST
             );
         }
+    }
+
+    public void onMore(View v) {
+        startActivity(new Intent(this, AccountActivity.class));
     }
 
     public void onOpen(View v) {
@@ -169,8 +177,8 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     private void startBrowseActivity(Uri uri) {
-        Intent intent = new Intent(this, Browse.class);
-        intent.putExtra(Browse.IMAGE_URI_STATE_KEY, uri);
+        Intent intent = new Intent(this, BrowseActivity.class);
+        intent.putExtra(BrowseActivity.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
