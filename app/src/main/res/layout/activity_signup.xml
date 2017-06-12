@@ -31,7 +31,7 @@
                 android:id="@+id/icon_square_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/ic_launcher_xxxhdpi"
+                android:background="@drawable/ic_launcher_400dp"
                 android:onClick="onRandomBleedFill"
                 android:scaleType="centerCrop"
                 android:clickable="false" />
