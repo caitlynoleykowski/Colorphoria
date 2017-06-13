@@ -9,7 +9,7 @@ import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.caitoo0o.filler.activities.PicEditActivity;
+import com.caitoo0o.filler.activities.loggedinactivities.PicEditActivity;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;

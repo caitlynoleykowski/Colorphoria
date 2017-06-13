@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/outer_linear_layout"
+    android:id="@+id/outer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
-    tools:context="com.caitoo0o.filler.activities.DrawActivity">
+    tools:context="com.caitoo0o.filler.activities.loggedinactivities.DrawActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,7 +66,7 @@
             android:onClick="onDoneButton" />
     </LinearLayout>
 
-    <com.caitoo0o.filler.activities.DrawView
+    <com.caitoo0o.filler.uihelpers.DrawView
         android:id="@+id/drawing"
         android:layout_width="fill_parent"
         android:layout_height="0dp"

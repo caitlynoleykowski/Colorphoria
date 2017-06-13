@@ -1,9 +1,8 @@
-package com.caitoo0o.filler.activities;
+package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,13 +10,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.caitoo0o.filler.uihelpers.DrawView;
 import com.caitoo0o.filler.uihelpers.OnSwipeTouchListener;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.utils.Utils;
 
 import java.io.File;
 
-public class DrawActivity extends AppCompatActivity {
+public class DrawActivity extends LoggedInActivity {
 
     private DrawView drawView;
 
@@ -61,7 +61,7 @@ public class DrawActivity extends AppCompatActivity {
         drawView.setPaintbrushSize(extraSmallBrush);
 
         // setup swipe gestures
-        View outerRelativeLayout = findViewById(R.id.outer_linear_layout);
+        View outerRelativeLayout = findViewById(R.id.outer_layout);
         outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(DrawActivity.this) {
             public void onSwipeTop() {
                 //Toast.makeText(BrowseActivity.this, "top", Toast.LENGTH_SHORT).show();

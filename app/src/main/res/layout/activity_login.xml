@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.caitoo0o.filler.activities.LoginActivity"
+    tools:context="com.caitoo0o.filler.activities.loggedoutactivites.LoginActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
@@ -12,7 +12,7 @@
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context="com.caitoo0o.filler.activities.LoginActivity"
+        tools:context="com.caitoo0o.filler.activities.loggedoutactivites.LoginActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"

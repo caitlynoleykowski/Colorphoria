@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.activities;
+package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,7 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class PicEditActivity extends AppCompatActivity {
+public class PicEditActivity extends LoggedInActivity {
 
     public static final String SOURCE_URI = "SOURCE_URI";
 
@@ -134,7 +133,7 @@ public class PicEditActivity extends AppCompatActivity {
             ctrlLayout.setVisibility(View.GONE);
         }
 
-        View outerLinearLayout = findViewById(R.id.outer_linear_layout);
+        View outerLinearLayout = findViewById(R.id.outer_layout);
         outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicEditActivity.this) {
             public void onSwipeTop() {
                 //Toast.makeText(PicEditActivity.this, "top", Toast.LENGTH_SHORT).show();

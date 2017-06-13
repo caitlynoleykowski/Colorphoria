@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.activities;
+package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class BrowseActivity extends AppCompatActivity {
+public class BrowseActivity extends LoggedInActivity {
     private ArrayList<File> allFiles;
     private ArrayList<File> allPictures;
 
@@ -56,7 +55,7 @@ public class BrowseActivity extends AppCompatActivity {
             mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
         }
 
-        View outerRelativeLayout = findViewById(R.id.outer_relative_layout);
+        View outerRelativeLayout = findViewById(R.id.outer_layout);
         outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(BrowseActivity.this) {
             public void onSwipeTop() {
                 //Toast.makeText(BrowseActivity.this, "top", Toast.LENGTH_SHORT).show();

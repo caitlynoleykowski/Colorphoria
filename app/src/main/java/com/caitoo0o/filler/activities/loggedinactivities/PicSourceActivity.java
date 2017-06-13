@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.activities;
+package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +18,7 @@ import com.caitoo0o.filler.utils.Utils;
 
 import java.io.File;
 
-public class PicSourceActivity extends AppCompatActivity {
+public class PicSourceActivity extends LoggedInActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
@@ -45,7 +44,7 @@ public class PicSourceActivity extends AppCompatActivity {
             mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
         }
 
-        final View outerLinearLayout = findViewById(R.id.outer_linear_layout);
+        final View outerLinearLayout = findViewById(R.id.outer_layout);
         outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicSourceActivity.this) {
             public void onSwipeTop() {
                 //Toast.makeText(PicSourceActivity.this, "top", Toast.LENGTH_SHORT).show();
@@ -186,7 +185,8 @@ public class PicSourceActivity extends AppCompatActivity {
     private void startDrawActivity() {
         Intent intent = new Intent(this, DrawActivity.class);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        this.overridePendingTransition(R.anim.slide_left_to_right, R.anim.slide_right_to_left);
+        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void startCameraActivity() {

@@ -19,20 +19,20 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activities.LoginActivity">
+        <activity android:name=".activities.loggedoutactivites.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.PicSourceActivity" />
-        <activity android:name=".activities.PicEditActivity" />
-        <activity android:name=".activities.BrowseActivity" />
-        <activity android:name=".activities.DrawActivity" />
-        <activity android:name=".activities.AccountActivity"/>
-        <activity android:name=".activities.SignupActivity"/>
-        <activity android:name=".activities.ResetPasswordActivity"/>
+        <activity android:name=".activities.loggedinactivities.PicSourceActivity" />
+        <activity android:name=".activities.loggedinactivities.PicEditActivity" />
+        <activity android:name=".activities.loggedinactivities.BrowseActivity" />
+        <activity android:name=".activities.loggedinactivities.DrawActivity" />
+        <activity android:name=".activities.loggedinactivities.AccountActivity"/>
+        <activity android:name=".activities.loggedoutactivites.SignupActivity"/>
+        <activity android:name=".activities.loggedoutactivites.ResetPasswordActivity"/>
     </application>
 
 </manifest>

@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.widget.ImageView;
 
-import com.caitoo0o.filler.activities.PicEditActivity;
+import com.caitoo0o.filler.activities.loggedinactivities.PicEditActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.activities;
+package com.caitoo0o.filler.activities.loggedoutactivites;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
