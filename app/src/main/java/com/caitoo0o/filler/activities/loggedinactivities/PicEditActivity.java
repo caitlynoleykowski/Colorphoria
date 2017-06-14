@@ -141,7 +141,6 @@ public class PicEditActivity extends LoggedInActivity {
 
             public void onSwipeRight() {
                 //Toast.makeText(PicEditActivity.this, "right", Toast.LENGTH_SHORT).show();
-                goToPicSourceActivity(sourceUri);
                 //goToBrowseActivity(sourceUri);
             }
 
@@ -152,6 +151,7 @@ public class PicEditActivity extends LoggedInActivity {
 
             public void onSwipeBottom() {
                 //Toast.makeText(PicEditActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+                goToPicSourceActivity(sourceUri);
             }
 
         });
@@ -389,7 +389,7 @@ public class PicEditActivity extends LoggedInActivity {
         Intent intent = new Intent(this, PicSourceActivity.class);
         intent.putExtra(PicSourceActivity.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
-        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_top_to_center, R.anim.slide_center_to_bottom);
     }
 
     private void goToBrowseActivity(Uri uri) {

@@ -65,6 +65,7 @@ public class BrowseActivity extends LoggedInActivity {
                 //Toast.makeText(BrowseActivity.this, "right", Toast.LENGTH_SHORT).show();
                 //startPicEditActivity(mImageUri);
                 //startPicSourceActivity(mImageUri);
+                startPicSourceActivity(mImageUri);
             }
 
             public void onSwipeLeft() {
@@ -76,7 +77,6 @@ public class BrowseActivity extends LoggedInActivity {
 
             public void onSwipeBottom() {
                 //Toast.makeText(BrowseActivity.this, "bottom", Toast.LENGTH_SHORT).show();
-                startPicSourceActivity(mImageUri);
             }
 
         });
@@ -152,10 +152,7 @@ public class BrowseActivity extends LoggedInActivity {
                 // dont need but what is it??
                 Object i = adapterView.getItemAtPosition(pos);
                 // Load the image that was clicked into the editor
-                Intent intent = new Intent(BrowseActivity.this, PicEditActivity.class);
-                intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(allFiles.get(getIdxFromPos(allFiles, pos))));
-                startActivity(intent);
-                //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                startPicEditActivity(Uri.fromFile(allFiles.get(getIdxFromPos(allFiles, pos))));
             }
         });
         fillerImagesGV.setAdapter(adapter);
@@ -236,17 +233,18 @@ public class BrowseActivity extends LoggedInActivity {
     }
 
     private void startPicEditActivity(Uri uri) {
-        Intent intent = new Intent(this, PicEditActivity.class);
+        Intent intent = new Intent(this, PicSourceActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
+        intent.putExtra(PicSourceActivity.START_PIC_EDIT, true);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }
 
     private void startPicSourceActivity(Uri uri) {
         Intent intent = new Intent(this, PicSourceActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }
 
     // Adapter for Grid View

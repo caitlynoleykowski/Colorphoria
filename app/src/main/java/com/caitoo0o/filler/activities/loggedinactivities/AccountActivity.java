@@ -320,4 +320,8 @@ public class AccountActivity extends LoggedInActivity {
                     });
         }
     }
+
+    public void onClose(View v) {
+        finish();
+    }
 }

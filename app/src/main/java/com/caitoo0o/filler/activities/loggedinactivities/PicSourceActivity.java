@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
@@ -23,8 +24,13 @@ public class PicSourceActivity extends LoggedInActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
     public static final String IMAGE_URI_STATE_KEY = "IMAGE_URI_STATE_KEY";
+    public static final String START_PIC_EDIT = "START_PIC_EDIT";
 
     private Uri mImageUri;
+
+    private boolean startPicEdit = false;
+
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,28 +46,37 @@ public class PicSourceActivity extends LoggedInActivity {
         if (savedInstanceState != null) {
             mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
         }
-        else if (getIntent() != null && getIntent().hasExtra(IMAGE_URI_STATE_KEY)) {
-            mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
+        else if (getIntent() != null) {
+            if (getIntent().hasExtra(IMAGE_URI_STATE_KEY)) {
+                mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
+            }
+            if (getIntent().hasExtra(START_PIC_EDIT) &&
+                    getIntent().getBooleanExtra(START_PIC_EDIT, false) == true &&
+                    getIntent().hasExtra(PicEditActivity.SOURCE_URI) &&
+                    getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI) != null ) {
+                startPicEdit = true;
+                mImageUri = getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI);
+            }
         }
 
         final View outerLinearLayout = findViewById(R.id.outer_layout);
         outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicSourceActivity.this) {
             public void onSwipeTop() {
                 //Toast.makeText(PicSourceActivity.this, "top", Toast.LENGTH_SHORT).show();
-                startBrowseActivity(mImageUri);
+                if (mImageUri != null) {
+                    startPicEditActivity(mImageUri);
+                }
             }
 
             public void onSwipeRight() {
-                //Toast.makeText(PicSourceActivity.this, "right", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PicSourceActivity.this, "right", Toast.LENGTH_SHORT).show();
                 startDrawActivity();
             }
 
             public void onSwipeLeft() {
                 //Toast.makeText(PicSourceActivity.this, "left", Toast.LENGTH_SHORT).show();
-                if (mImageUri != null) {
-                    startPicEditActivity(mImageUri);
-                }
                 //startBrowseActivity(mImageUri);
+                startBrowseActivity(mImageUri);
             }
 
             public void onSwipeBottom() {
@@ -71,6 +86,21 @@ public class PicSourceActivity extends LoggedInActivity {
 
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (startPicEdit) {
+            startPicEdit = false;
+            handler.postDelayed(startPicEditDelayed, getResources().getInteger(R.integer.anim_duration));
+        }
+    }
+
+    private Runnable startPicEditDelayed = new Runnable() {
+        public void run() {
+            startPicEditActivity(mImageUri);
+        }
+    };
 
     void getPermission(String permissionKind) {
         final int REQUEST = 1;
@@ -160,11 +190,7 @@ public class PicSourceActivity extends LoggedInActivity {
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE) {
             getContentResolver().notifyChange(mImageUri, null);
-            startPicEditActivity(mImageUri);
-//            Bitmap image = grabImage(mImageUri);
-//            if (image != null) {
-//                startPicEditActivity(image);
-//            }
+            handler.postDelayed(startPicEditDelayed,getResources().getInteger(R.integer.anim_duration));
         }
     }
 
@@ -172,21 +198,20 @@ public class PicSourceActivity extends LoggedInActivity {
         Intent intent = new Intent(this, PicEditActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_bottom_to_center, R.anim.slide_center_to_top);
     }
 
     private void startBrowseActivity(Uri uri) {
         Intent intent = new Intent(this, BrowseActivity.class);
         intent.putExtra(BrowseActivity.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
     }
 
     private void startDrawActivity() {
         Intent intent = new Intent(this, DrawActivity.class);
         startActivity(intent);
-        this.overridePendingTransition(R.anim.slide_left_to_right, R.anim.slide_right_to_left);
-        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        this.overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }
 
     private void startCameraActivity() {
@@ -210,7 +235,7 @@ public class PicSourceActivity extends LoggedInActivity {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
             //start camera intent
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-            //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            overridePendingTransition(R.anim.slide_top_to_center, R.anim.slide_center_to_bottom);
         }
         else {
             Toast.makeText(getApplicationContext(), "Device has no camera.", Toast.LENGTH_LONG).show();

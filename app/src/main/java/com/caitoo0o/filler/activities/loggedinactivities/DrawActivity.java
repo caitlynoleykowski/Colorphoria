@@ -72,7 +72,7 @@ public class DrawActivity extends LoggedInActivity {
             }
 
             public void onSwipeLeft() {
-                //Toast.makeText(BrowseActivity.this, "left", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DrawActivity.this, "left", Toast.LENGTH_SHORT).show();
 //                if (mImageUri != null) {
 //                    startPicEditActivity(mImageUri);
 //                }
@@ -235,17 +235,18 @@ public class DrawActivity extends LoggedInActivity {
             intent.putExtra(PicSourceActivity.IMAGE_URI_STATE_KEY, Uri.fromFile(imageFile));
         }
         startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
     }
 
     private void startPicEditActivity() {
-        Intent intent = new Intent(this, PicEditActivity.class);
         if (drawView.isEdited()) {
             File imageFile = saveDrawing();
-            // Load intent with uri
-            intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(imageFile));
+
+            Intent intent = new Intent(this, PicSourceActivity.class);
+            intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(imageFile)); // Load with uri
+            intent.putExtra(PicSourceActivity.START_PIC_EDIT, true);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
         }
-        startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 }
