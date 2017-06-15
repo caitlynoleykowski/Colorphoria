@@ -1,7 +1,9 @@
 package com.caitoo0o.filler.activities.loggedinactivities;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +20,10 @@ import com.caitoo0o.filler.utils.Utils;
 import java.io.File;
 
 public class DrawActivity extends LoggedInActivity {
+
+    private static final int REQUEST_PERMISSIONS_CALLBACK_SAVE_DRAWING_WRITE_EXTERNAL_STORAGE = 0;
+    private static final int REQUEST_PERMISSIONS_CALLBACK_START_PIC_EDIT_WRITE_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_PERMISSIONS_CALLBACK_START_PIC_SOURCE_WRITE_EXTERNAL_STORAGE = 2;
 
     private DrawView drawView;
 
@@ -72,11 +78,11 @@ public class DrawActivity extends LoggedInActivity {
             }
 
             public void onSwipeLeft() {
-                Toast.makeText(DrawActivity.this, "left", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DrawActivity.this, "left", Toast.LENGTH_SHORT).show();
 //                if (mImageUri != null) {
 //                    startPicEditActivity(mImageUri);
 //                }
-                startPicSourceActivity();
+                startPicSourceStoragePermission();
             }
 
             public void onSwipeBottom() {
@@ -207,15 +213,29 @@ public class DrawActivity extends LoggedInActivity {
 
     // onClick for save image button
     public void onSaveButton(View view){
-            saveDrawing();
+            saveDrawingStoragePermission();
     }
 
     // onClick for done button
     public void onDoneButton(View view){
         if (drawView.isEdited()) {
-            startPicEditActivity();
+            startPicEditStoragePermission();
         } else {
             Toast.makeText(DrawActivity.this, "Draw an image to edit :)", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void saveDrawingStoragePermission() {
+        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                getString(R.string.permission_write_external_storage_explanation),
+                REQUEST_PERMISSIONS_CALLBACK_SAVE_DRAWING_WRITE_EXTERNAL_STORAGE,
+                new Utils.OnExplanationDeclinedHandler() {
+                    @Override
+                    public void onExplanationDeclined() {
+                        Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    }
+                })) {
+            saveDrawing();
         }
     }
 
@@ -225,6 +245,21 @@ public class DrawActivity extends LoggedInActivity {
         File imageFile = Utils.saveFillerBitmap(drawView.getDrawingCache(), this);
         drawView.destroyDrawingCache();
         return imageFile;
+    }
+
+    private void startPicSourceStoragePermission() {
+        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                getString(R.string.permission_write_external_storage_explanation),
+                REQUEST_PERMISSIONS_CALLBACK_START_PIC_SOURCE_WRITE_EXTERNAL_STORAGE,
+                new Utils.OnExplanationDeclinedHandler() {
+                    @Override
+                    public void onExplanationDeclined() {
+                        Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                        startPicSourceActivityWithoutSaving();
+                    }
+                })) {
+            startPicSourceActivity();
+        }
     }
 
     private void startPicSourceActivity() {
@@ -238,6 +273,26 @@ public class DrawActivity extends LoggedInActivity {
         overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
     }
 
+    private void startPicSourceActivityWithoutSaving() {
+        Intent intent = new Intent(this, PicSourceActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
+    }
+
+    private void startPicEditStoragePermission() {
+        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                getString(R.string.permission_write_external_storage_explanation),
+                REQUEST_PERMISSIONS_CALLBACK_START_PIC_EDIT_WRITE_EXTERNAL_STORAGE,
+                new Utils.OnExplanationDeclinedHandler() {
+                    @Override
+                    public void onExplanationDeclined() {
+                        Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    }
+                })) {
+            startPicEditActivity();
+        }
+    }
+
     private void startPicEditActivity() {
         if (drawView.isEdited()) {
             File imageFile = saveDrawing();
@@ -247,6 +302,47 @@ public class DrawActivity extends LoggedInActivity {
             intent.putExtra(PicSourceActivity.START_PIC_EDIT, true);
             startActivity(intent);
             overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_CALLBACK_SAVE_DRAWING_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    saveDrawing();
+                } else {
+                    Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                }
+                return;
+            }
+            case REQUEST_PERMISSIONS_CALLBACK_START_PIC_EDIT_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    startPicEditActivity();
+                } else {
+                    Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                }
+                return;
+            }
+            case REQUEST_PERMISSIONS_CALLBACK_START_PIC_SOURCE_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    startPicSourceActivity();
+                } else {
+                    Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    startPicSourceActivityWithoutSaving();
+                }
+                return;
+            }
         }
     }
 }

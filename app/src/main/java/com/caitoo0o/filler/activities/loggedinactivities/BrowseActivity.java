@@ -1,7 +1,9 @@
 package com.caitoo0o.filler.activities.loggedinactivities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -30,12 +32,14 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class BrowseActivity extends LoggedInActivity {
-    private ArrayList<File> allFiles;
-    private ArrayList<File> allPictures;
+    private ArrayList<File> allFillerImages;
+    private ArrayList<File> allOtherImages;
 
     private static final int MAX_THUMBNAIL_PIXELS = 50000;
 
     public static final String IMAGE_URI_STATE_KEY = "IMAGE_URI_STATE_KEY";
+
+    public static final int REQUEST_PERMISSIONS_CALLBACK_WRITE_EXTERNAL_STORAGE = 2;
 
     private Uri mImageUri;
 
@@ -81,14 +85,32 @@ public class BrowseActivity extends LoggedInActivity {
 
         });
 
+        getFilesStoragePermission();
+    }
+
+    private void getFilesStoragePermission() {
+        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                getString(R.string.permission_write_external_storage_explanation),
+                REQUEST_PERMISSIONS_CALLBACK_WRITE_EXTERNAL_STORAGE,
+                new Utils.OnExplanationDeclinedHandler() {
+                    @Override
+                    public void onExplanationDeclined() {
+                        startPicSourceActivity(mImageUri);
+                    }
+                })) {
+            getFiles();
+        }
+    }
+    
+    private void getFiles() {
         createFillerImageStorage();
 
         // Find Filler pictures
         File picturesStorageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
         final File albumStorageDir = new File(picturesStorageDir, "Filler");
-        allFiles = new ArrayList<File>(); // todo add a file filter to make sure all files are images
-        FilenameFilter allFilesFF = new FilenameFilter() {
+        allFillerImages = new ArrayList<File>();
+        FilenameFilter allFillerImagesFF = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
                 // If filename is a directory or a picture accept it
@@ -101,9 +123,9 @@ public class BrowseActivity extends LoggedInActivity {
                 return false;
             }
         };
-        listFiles(albumStorageDir, allFiles, allFilesFF);
+        listFiles(albumStorageDir, allFillerImages, allFillerImagesFF);
         // Sort images by date ascending
-        Collections.sort(allFiles, new Comparator<File>() {
+        Collections.sort(allFillerImages, new Comparator<File>() {
             @Override
             public int compare(File o1, File o2) {
                 Long o1lastModified = o1.lastModified();
@@ -114,11 +136,11 @@ public class BrowseActivity extends LoggedInActivity {
 
         // Find all pictures other than those in Filler directory
         final File sdcardDir = Environment.getExternalStorageDirectory();
-        allPictures = new ArrayList<File>();
-        FilenameFilter allPicturesFF = new FilenameFilter() {
+        allOtherImages = new ArrayList<File>();
+        FilenameFilter allOtherImagesFF = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                // Don't accept the Filler storage directory here because that will be view elsewhere
+                // Don't accept the Filler storage directory here because that will be viewed elsewhere
                 if (dir.equals(albumStorageDir)) {
                     return false;
                 }
@@ -132,9 +154,9 @@ public class BrowseActivity extends LoggedInActivity {
                 return false;
             }
         };
-        listFiles(sdcardDir, allPictures, allPicturesFF);
+        listFiles(sdcardDir, allOtherImages, allOtherImagesFF);
         // Sort images by date ascending
-        Collections.sort(allPictures, new Comparator<File>() {
+        Collections.sort(allOtherImages, new Comparator<File>() {
             @Override
             public int compare(File o1, File o2) {
                 Long o1lastModified = o1.lastModified();
@@ -144,7 +166,7 @@ public class BrowseActivity extends LoggedInActivity {
         });
 
         GridView fillerImagesGV = (GridView) findViewById(R.id.filler_images_gridview);
-        ImageAdapter adapter = new ImageAdapter(getApplicationContext(), allFiles);
+        ImageAdapter adapter = new ImageAdapter(getApplicationContext(), allFillerImages);
         fillerImagesGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> adapterView, View v, int pos,
@@ -152,13 +174,13 @@ public class BrowseActivity extends LoggedInActivity {
                 // dont need but what is it??
                 Object i = adapterView.getItemAtPosition(pos);
                 // Load the image that was clicked into the editor
-                startPicEditActivity(Uri.fromFile(allFiles.get(getIdxFromPos(allFiles, pos))));
+                startPicEditActivity(Uri.fromFile(allFillerImages.get(getIdxFromPos(allFillerImages, pos))));
             }
         });
         fillerImagesGV.setAdapter(adapter);
 
         GridView allImagesGV = (GridView) findViewById(R.id.all_images_gridview);
-        ImageAdapter adapter2 = new ImageAdapter(getApplicationContext(), allPictures);
+        ImageAdapter adapter2 = new ImageAdapter(getApplicationContext(), allOtherImages);
         allImagesGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> adapterView, View v, int pos,
@@ -167,7 +189,7 @@ public class BrowseActivity extends LoggedInActivity {
                 Object i = adapterView.getItemAtPosition(pos);
                 // Load the image that was clicked into the editor
                 Intent intent = new Intent(BrowseActivity.this, PicEditActivity.class);
-                intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(allPictures.get(getIdxFromPos(allPictures, pos))));
+                intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(allOtherImages.get(getIdxFromPos(allOtherImages, pos))));
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
@@ -227,7 +249,7 @@ public class BrowseActivity extends LoggedInActivity {
         }
     }
 
-    // Used to get the index into the allFiles list in order to retrieve the files in order of most recent first
+    // Used to get the index into the allFillerImages list in order to retrieve the files in order of most recent first
     private int getIdxFromPos(ArrayList<File> files, int pos) {
         return files.size() - pos - 1;
     }
@@ -322,6 +344,26 @@ public class BrowseActivity extends LoggedInActivity {
             return scaleFactor;
         } else {
             return 1;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_CALLBACK_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    getFiles();
+                } else {
+                    // No permission granted so go back to main page (this page will have no content)
+                    startPicSourceActivity(mImageUri);
+                }
+                return;
+            }
+
         }
     }
 

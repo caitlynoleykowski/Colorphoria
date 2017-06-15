@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -48,6 +49,9 @@ public class PicEditActivity extends LoggedInActivity {
     private static final String ROTATION_ANGLE_STATE_KEY = "ROTATION_ANGLE_STATE_KEY";
     private static final String MOD_STATE_KEY = "MOD_STATE_KEY";
     private static final String EFFECT_SELECTED_STATE_KEY = "EFFECT_SELECTED_STATE_KEY";
+
+    public static final int REQUEST_PERMISSIONS_CALLBACK_SAVE_WRITE_EXTERNAL_STORAGE = 0;
+    public static final int REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE = 1;
 
     private static final int MAX_UNDO_QUEUE_SIZE = 2;
 
@@ -81,10 +85,6 @@ public class PicEditActivity extends LoggedInActivity {
         setContentView(R.layout.activity_pic_edit);
 
         Utils.setupFillerRecentAppsBar(this);
-
-        getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-        getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        getPermission(Manifest.permission.CAMERA);
 
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
@@ -252,19 +252,11 @@ public class PicEditActivity extends LoggedInActivity {
     }
 
     public void onSave(View v) {
-        saveCurrImage();
+        saveCurrImageStoragePermission();
     }
 
     public void onShare(View v) {
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmW.getModifiedBitmap(), "Export from Filler", null);
-        Uri uri = Uri.parse(path);
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("image/jpeg");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(Intent.createChooser(intent, "Share Image"));
-        }
+        shareCurrImageStoragePermission();
     }
 
     public void onRotateRight(View v) {
@@ -392,13 +384,6 @@ public class PicEditActivity extends LoggedInActivity {
         overridePendingTransition(R.anim.slide_top_to_center, R.anim.slide_center_to_bottom);
     }
 
-    private void goToBrowseActivity(Uri uri) {
-        Intent intent = new Intent(this, BrowseActivity.class);
-        intent.putExtra(BrowseActivity.IMAGE_URI_STATE_KEY, uri);
-        startActivity(intent);
-        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-    }
-
     // End UI Helpers
 
     // Begin business logic
@@ -448,8 +433,77 @@ public class PicEditActivity extends LoggedInActivity {
         return ctrl;
     }
 
+    private void saveCurrImageStoragePermission() {
+        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                getString(R.string.permission_write_external_storage_explanation),
+                REQUEST_PERMISSIONS_CALLBACK_SAVE_WRITE_EXTERNAL_STORAGE,
+                new Utils.OnExplanationDeclinedHandler() {
+                    @Override
+                    public void onExplanationDeclined() {
+                        Toast.makeText(PicEditActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    }
+                })) {
+            saveCurrImage();
+        }
+    }
+
     private void saveCurrImage() {
         Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this);
+    }
+
+    private void shareCurrImageStoragePermission() {
+        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                getString(R.string.permission_write_external_storage_explanation),
+                REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE,
+                new Utils.OnExplanationDeclinedHandler() {
+                    @Override
+                    public void onExplanationDeclined() {
+                        Toast.makeText(PicEditActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    }
+                })) {
+            shareCurrImage();
+        }
+    }
+
+    private void shareCurrImage() {
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmW.getModifiedBitmap(), "Export from Filler", null);
+        Uri uri = Uri.parse(path);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/jpeg");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(Intent.createChooser(intent, "Share Image"));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_CALLBACK_SAVE_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    saveCurrImage();
+                } else {
+                    Toast.makeText(PicEditActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                }
+                return;
+            }
+            case REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    shareCurrImage();
+                } else {
+                    Toast.makeText(PicEditActivity.this, R.string.unable_to_share_image, Toast.LENGTH_LONG);
+                }
+                return;
+            }
+        }
     }
 
     // End business logic

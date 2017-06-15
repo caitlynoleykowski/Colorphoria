@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +25,9 @@ public class PicSourceActivity extends LoggedInActivity {
     public static final String IMAGE_URI_STATE_KEY = "IMAGE_URI_STATE_KEY";
     public static final String START_PIC_EDIT = "START_PIC_EDIT";
 
+    public static final int REQUEST_PERMISSIONS_CALLBACK_CAMERA = 0;
+    public static final int REQUEST_PERMISSIONS_CALLBACK_CAMERA_WRITE_EXTERNAL_STORAGE = 2;
+
     private Uri mImageUri;
 
     private boolean startPicEdit = false;
@@ -38,10 +40,6 @@ public class PicSourceActivity extends LoggedInActivity {
         setContentView(R.layout.activity_pic_source);
 
         Utils.setupFillerRecentAppsBar(this);
-
-        getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-        getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        getPermission(Manifest.permission.CAMERA);
 
         if (savedInstanceState != null) {
             mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
@@ -81,7 +79,7 @@ public class PicSourceActivity extends LoggedInActivity {
 
             public void onSwipeBottom() {
                 //Toast.makeText(PicSourceActivity.this, "bottom", Toast.LENGTH_SHORT).show();
-                startCameraActivity();
+                startCameraActivityCameraPermission();
             }
 
         });
@@ -102,45 +100,12 @@ public class PicSourceActivity extends LoggedInActivity {
         }
     };
 
-    void getPermission(String permissionKind) {
-        final int REQUEST = 1;
-        String[] PERMISSIONS_STORAGE = {
-                permissionKind,
-        };
-        int permission = ActivityCompat.checkSelfPermission(this, permissionKind);
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    this,
-                    PERMISSIONS_STORAGE,
-                    REQUEST
-            );
-        }
-    }
-
     public void onMore(View v) {
         startActivity(new Intent(this, AccountActivity.class));
     }
 
-    public void onOpen(View v) {
-        // TOOD: remove this code when sure no longer need the google image browser
-//        Intent intent = new Intent(Intent.ACTION_PICK,
-//                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-//        intent.setType("image/*");
-//        intent.putExtra("return-data", true);
-//
-//        // Verify there is an app to accept this type intent before starting it
-//        if (intent.resolveActivity(getPackageManager()) != null) {
-//            startActivityForResult(intent, REQUEST_IMAGE_GET);
-//            //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-//        }
-
-        startBrowseActivity(mImageUri);
-
-    }
-
     public void onCamera(View v) {
-        startCameraActivity();
+        startCameraActivityCameraPermission();
     }
 
     public void onBrowse(View v) {
@@ -214,31 +179,86 @@ public class PicSourceActivity extends LoggedInActivity {
         this.overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }
 
-    private void startCameraActivity() {
+    private void startCameraActivityCameraPermission() {
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-
-            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-            File photo;
-            try
-            {
-                // place where to store camera taken picture
-                photo = this.createTemporaryFile("picture", ".jpg");
-                photo.delete();
+            if (Utils.getPermission(this, Manifest.permission.CAMERA,
+                    getString(R.string.permission_camera_explanation),
+                    REQUEST_PERMISSIONS_CALLBACK_CAMERA,
+                    new Utils.OnExplanationDeclinedHandler() {
+                        @Override
+                        public void onExplanationDeclined() {
+                            // do nothing in this case since we're still on the main screen
+                        }
+                    })) {
+                startCamerActivityWriteStoragePermission();
             }
-            catch(Exception e)
-            {
-                Log.v("picsource", "Can't create file to take picture!");
-                Toast.makeText(this, "Please check SD card! Image shot is impossible!", Toast.LENGTH_LONG).show();
-                return;
-            }
-            mImageUri = Uri.fromFile(photo);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-            //start camera intent
-            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-            overridePendingTransition(R.anim.slide_top_to_center, R.anim.slide_center_to_bottom);
         }
         else {
             Toast.makeText(getApplicationContext(), "Device has no camera.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void startCamerActivityWriteStoragePermission() {
+        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                getString(R.string.permission_write_external_storage_explanation),
+                REQUEST_PERMISSIONS_CALLBACK_CAMERA_WRITE_EXTERNAL_STORAGE,
+                new Utils.OnExplanationDeclinedHandler() {
+                    @Override
+                    public void onExplanationDeclined() {
+                        // do nothing in this case since we're still on the main screen
+                    }
+                })) {
+            startCameraActivity();
+        }
+    }
+
+    private void startCameraActivity() {
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File photo;
+        try
+        {
+            // place where to store camera taken picture
+            photo = this.createTemporaryFile("picture", ".jpg");
+            photo.delete();
+        }
+        catch(Exception e)
+        {
+            Log.v("picsource", "Can't create file to take picture!", e);
+            Toast.makeText(this, "Please check SD card! Image shot is impossible!", Toast.LENGTH_LONG).show();
+            return;
+        }
+        mImageUri = Uri.fromFile(photo);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+        //start camera intent
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        overridePendingTransition(R.anim.slide_top_to_center, R.anim.slide_center_to_bottom);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_CALLBACK_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    startCamerActivityWriteStoragePermission();
+                }
+                // Do nothing if permission was not granted
+                return;
+            }
+            case REQUEST_PERMISSIONS_CALLBACK_CAMERA_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    startCameraActivity();
+                }
+                // Do nothing if permission was not granted
+                return;
+            }
+
         }
     }
 
