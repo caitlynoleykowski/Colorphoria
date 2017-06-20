@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.caitoo0o.filler"
         minSdkVersion 23
         targetSdkVersion 23
-        versionCode 15
-        versionName "2.0"
+        versionCode 16
+        versionName "2.1"
     }
     buildTypes {
         release {

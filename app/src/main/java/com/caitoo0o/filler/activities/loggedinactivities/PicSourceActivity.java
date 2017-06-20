@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -18,7 +19,7 @@ import com.caitoo0o.filler.utils.Utils;
 
 import java.io.File;
 
-public class PicSourceActivity extends LoggedInActivity {
+public class PicSourceActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
@@ -60,25 +61,24 @@ public class PicSourceActivity extends LoggedInActivity {
         final View outerLinearLayout = findViewById(R.id.outer_layout);
         outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicSourceActivity.this) {
             public void onSwipeTop() {
-                //Toast.makeText(PicSourceActivity.this, "top", Toast.LENGTH_SHORT).show();
+                // Swipe bottom to top
                 if (mImageUri != null) {
                     startPicEditActivity(mImageUri);
                 }
             }
 
             public void onSwipeRight() {
-                Toast.makeText(PicSourceActivity.this, "right", Toast.LENGTH_SHORT).show();
+                // Swipe left to right
                 startDrawActivity();
             }
 
             public void onSwipeLeft() {
-                //Toast.makeText(PicSourceActivity.this, "left", Toast.LENGTH_SHORT).show();
-                //startBrowseActivity(mImageUri);
+                // Swipe right to left
                 startBrowseActivity(mImageUri);
             }
 
             public void onSwipeBottom() {
-                //Toast.makeText(PicSourceActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+                // Swipe top to bottom
                 startCameraActivityCameraPermission();
             }
 
@@ -133,7 +133,6 @@ public class PicSourceActivity extends LoggedInActivity {
 
         if (resultCode != RESULT_OK) {
             Log.e("picsource", "No Image Selected.");
-            Toast.makeText(getApplicationContext(), "No Image Selected", Toast.LENGTH_LONG).show();
             return;
         }
 

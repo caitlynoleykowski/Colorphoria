@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.graphics.Bitmap;
@@ -41,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class PicEditActivity extends LoggedInActivity {
+public class PicEditActivity extends AppCompatActivity {
 
     public static final String SOURCE_URI = "SOURCE_URI";
 
@@ -136,21 +137,19 @@ public class PicEditActivity extends LoggedInActivity {
         View outerLinearLayout = findViewById(R.id.outer_layout);
         outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicEditActivity.this) {
             public void onSwipeTop() {
-                //Toast.makeText(PicEditActivity.this, "top", Toast.LENGTH_SHORT).show();
+                // Swipe bottom to top
             }
 
             public void onSwipeRight() {
-                //Toast.makeText(PicEditActivity.this, "right", Toast.LENGTH_SHORT).show();
-                //goToBrowseActivity(sourceUri);
+                // Swipe left to right
             }
 
             public void onSwipeLeft() {
-                //Toast.makeText(PicEditActivity.this, "left", Toast.LENGTH_SHORT).show();
-                //goToBrowseActivity(sourceUri);
+                // Swipe right to left
             }
 
             public void onSwipeBottom() {
-                //Toast.makeText(PicEditActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+                // Swipe top to bottom
                 goToPicSourceActivity(sourceUri);
             }
 
@@ -448,7 +447,15 @@ public class PicEditActivity extends LoggedInActivity {
     }
 
     private void saveCurrImage() {
-        Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this);
+        Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this, new Utils.SaveFillerBitmapHandler() {
+            public void onSuccess() {
+                Toast.makeText(PicEditActivity.this.getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
+            }
+            public void onFailure() {
+                // do nothing
+                Toast.makeText(PicEditActivity.this.getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void shareCurrImageStoragePermission() {

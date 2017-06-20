@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -19,7 +20,7 @@ import com.caitoo0o.filler.utils.Utils;
 
 import java.io.File;
 
-public class DrawActivity extends LoggedInActivity {
+public class DrawActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS_CALLBACK_SAVE_DRAWING_WRITE_EXTERNAL_STORAGE = 0;
     private static final int REQUEST_PERMISSIONS_CALLBACK_START_PIC_EDIT_WRITE_EXTERNAL_STORAGE = 1;
@@ -70,23 +71,20 @@ public class DrawActivity extends LoggedInActivity {
         View outerRelativeLayout = findViewById(R.id.outer_layout);
         outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(DrawActivity.this) {
             public void onSwipeTop() {
-                //Toast.makeText(BrowseActivity.this, "top", Toast.LENGTH_SHORT).show();
+                // Swipe bottom to top
             }
 
             public void onSwipeRight() {
-                //Toast.makeText(BrowseActivity.this, "right", Toast.LENGTH_SHORT).show();
+                // Swipe left to right
             }
 
             public void onSwipeLeft() {
-                //Toast.makeText(DrawActivity.this, "left", Toast.LENGTH_SHORT).show();
-//                if (mImageUri != null) {
-//                    startPicEditActivity(mImageUri);
-//                }
+                // Swipe right to left
                 startPicSourceStoragePermission();
             }
 
             public void onSwipeBottom() {
-                //Toast.makeText(BrowseActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+                // Swipe top to bottom
             }
 
         });
@@ -242,7 +240,14 @@ public class DrawActivity extends LoggedInActivity {
     private File saveDrawing() {
         //save drawing
         drawView.setDrawingCacheEnabled(true);
-        File imageFile = Utils.saveFillerBitmap(drawView.getDrawingCache(), this);
+        File imageFile = Utils.saveFillerBitmap(drawView.getDrawingCache(), this, new Utils.SaveFillerBitmapHandler() {
+            public void onSuccess() {
+                Toast.makeText(DrawActivity.this.getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
+            }
+            public void onFailure() {
+                Toast.makeText(DrawActivity.this.getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
+            }
+        });
         drawView.destroyDrawingCache();
         return imageFile;
     }

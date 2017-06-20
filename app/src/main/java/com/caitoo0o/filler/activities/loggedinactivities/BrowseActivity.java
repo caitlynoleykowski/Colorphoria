@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class BrowseActivity extends LoggedInActivity {
+public class BrowseActivity extends AppCompatActivity {
     private ArrayList<File> allFillerImages;
     private ArrayList<File> allOtherImages;
 
@@ -62,25 +63,20 @@ public class BrowseActivity extends LoggedInActivity {
         View outerRelativeLayout = findViewById(R.id.outer_layout);
         outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(BrowseActivity.this) {
             public void onSwipeTop() {
-                //Toast.makeText(BrowseActivity.this, "top", Toast.LENGTH_SHORT).show();
+                // Swipe from bottom to top
             }
 
             public void onSwipeRight() {
-                //Toast.makeText(BrowseActivity.this, "right", Toast.LENGTH_SHORT).show();
-                //startPicEditActivity(mImageUri);
-                //startPicSourceActivity(mImageUri);
+                // Swipe from left to right
                 startPicSourceActivity(mImageUri);
             }
 
             public void onSwipeLeft() {
-                //Toast.makeText(BrowseActivity.this, "left", Toast.LENGTH_SHORT).show();
-//                if (mImageUri != null) {
-//                    startPicEditActivity(mImageUri);
-//                }
+                // Swipe from right to left
             }
 
             public void onSwipeBottom() {
-                //Toast.makeText(BrowseActivity.this, "bottom", Toast.LENGTH_SHORT).show();
+                // Swipe from top to bottom
             }
 
         });

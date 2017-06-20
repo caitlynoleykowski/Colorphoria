@@ -14,7 +14,8 @@
             android:padding="@dimen/activity_vertical_margin"
             android:background="@drawable/my_menu_bar_button"
             android:onClick="onMore"
-            android:src="@drawable/ic_more_vert_24dp" />
+            android:src="@drawable/ic_more_vert_24dp"
+            android:visibility="gone"/>
 
 
         <LinearLayout

@@ -120,7 +120,13 @@ public class Utils {
 		return false;
 	}
 
-	public static File saveFillerBitmap(Bitmap bm, Activity activity) {
+	public interface SaveFillerBitmapHandler {
+		public void onSuccess();
+
+		public void onFailure();
+	}
+
+	public static File saveFillerBitmap(Bitmap bm, Activity activity, SaveFillerBitmapHandler handler) {
 		if (Utils.isExternalStorageWritable()) {
 			//File albumStorageDir = getAlbumStorageDir("FillerSaves");
 			File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
@@ -144,13 +150,13 @@ public class Utils {
 				out = new FileOutputStream(picFile);
 				bm.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
 				// PNG is a lossless format, the compression factor (100) is ignored
-				Toast.makeText(activity.getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
 				Log.i("picsource", "file written to: " + picFile.getAbsolutePath());
+				handler.onSuccess();
 			} catch (Exception e) {
-				Toast.makeText(activity.getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
 				Log.e("picsource", "failed save.");
 				e.printStackTrace();
 				picFile = null;
+				handler.onFailure();
 			} finally {
 				try {
 					if (out != null) {
@@ -164,7 +170,6 @@ public class Utils {
 			return picFile;
 		}
 		else {
-			// TODO: move these strings to strings file
 			Toast.makeText(activity.getApplicationContext(), "Save failed. External storage not writeable.", Toast.LENGTH_LONG).show();
 			Log.e("picsource", "failed save. external storage not writeable");
 			return null;
