@@ -33,6 +33,9 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class BrowseActivity extends AppCompatActivity {
+
+    private static final String TAG = BrowseActivity.class.getName();
+
     private ArrayList<File> allFillerImages;
     private ArrayList<File> allOtherImages;
 
@@ -181,11 +184,10 @@ public class BrowseActivity extends AppCompatActivity {
 
             public void onItemClick(AdapterView<?> adapterView, View v, int pos,
                                     long arg3) {
-                // dont need but what is it??
-                Object i = adapterView.getItemAtPosition(pos);
                 // Load the image that was clicked into the editor
                 Intent intent = new Intent(BrowseActivity.this, PicEditActivity.class);
-                intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(allOtherImages.get(getIdxFromPos(allOtherImages, pos))));
+                File imageFile = allOtherImages.get(getIdxFromPos(allOtherImages, pos));
+                intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(imageFile));
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
@@ -222,14 +224,14 @@ public class BrowseActivity extends AppCompatActivity {
             }
             catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "Failed to create Filler directory", Toast.LENGTH_LONG).show();
-                Log.e("picsource", "Failed to create Filler directory.");
+                Log.e(TAG, "Failed to create Filler directory.");
                 e.printStackTrace();
             }
         }
         else {
             // TODO: move these strings to strings file
             Toast.makeText(getApplicationContext(), "Create Filler storage failed. External storage not writeable.", Toast.LENGTH_LONG).show();
-            Log.e("picsource", "Create Filler storage failed. External storage not writeable.");
+            Log.e(TAG, "Create Filler storage failed. External storage not writeable.");
         }
     }
 
@@ -302,27 +304,38 @@ public class BrowseActivity extends AppCompatActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            Uri uri = Uri.fromFile(files.get(getIdxFromPos(files, position)));
-            InputStream is;
-            try {
-                is = context.getContentResolver().openInputStream(uri);
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
-                BitmapFactory.decodeStream(is, null, options);
-                double scaleFactor = getScaleFactor(options.outWidth, options.outHeight);
-                BitmapFactory.Options finalOptions = new BitmapFactory.Options();
-                finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
-                InputStream finalInputStream = context.getContentResolver().openInputStream(uri);
-                Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
+            // Must loop here in case the file at the current index is corrupted/not found/can't be read
+            Bitmap bm = null;
+            while (bm == null) {
+                int filesIndex = getIdxFromPos(files, position);
+                Uri uri = Uri.fromFile(files.get(filesIndex));
+                InputStream is;
+                try {
+                    is = context.getContentResolver().openInputStream(uri);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeStream(is, null, options);
+                    double scaleFactor = getScaleFactor(options.outWidth, options.outHeight);
+                    BitmapFactory.Options finalOptions = new BitmapFactory.Options();
+                    finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
+                    InputStream finalInputStream = context.getContentResolver().openInputStream(uri);
+                    bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
 
-                //Bitmap bm = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeStream(finalInputStream, null, finalOptions),
-                //        THUMBSIZE, THUMBSIZE, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+                    // If bitmap is null, the image couldn't load (i.e. bad/corrupted file), so
+                    // remove it from the list of files and move to the next one
+                    if (bm == null) {
+                        files.remove(filesIndex);
+                        continue;
+                    }
 
-                holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
-                holder.picturesView.setImageBitmap(bm);
-                holder.picturesView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            } catch (FileNotFoundException e) {
-                Log.e("browse", "File not found to display thumbnail of image.");
+                    holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
+                    holder.picturesView.setImageBitmap(bm);
+                    holder.picturesView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                } catch (FileNotFoundException e) {
+                    Log.e(TAG, "File not found to display thumbnail of image.");
+                    files.remove(filesIndex);
+                    continue;
+                }
             }
 
             return convertView;
