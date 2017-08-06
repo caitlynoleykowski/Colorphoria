@@ -54,20 +54,28 @@ public class DrawView extends View {
         canvasPaint = new Paint(Paint.DITHER_FLAG);
     }
 
+    public void setCanvasBitmap(Bitmap bm) {
+        canvasBitmap = bm.copy(bm.getConfig(), true);
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         // Called when view given size
 
         super.onSizeChanged(w, h, oldw, oldh);
 
-        canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        if (canvasBitmap != null) {
+            canvasBitmap = Bitmap.createScaledBitmap(canvasBitmap, w, h, false);
+        } else {
+            canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        }
         drawCanvas = new Canvas(canvasBitmap);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         //draw view
-        canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
+        canvas.drawBitmap(canvasBitmap, 0, 0, null);
         canvas.drawPath(drawPath, drawPaint);
     }
 

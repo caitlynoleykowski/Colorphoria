@@ -17,7 +17,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by Cait on 9/22/2016.
  */
-public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
+public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     private final WeakReference<PicEditActivity> activityWeakReference;
     private final WeakReference<Context> contextWeakReference;
     private final WeakReference<ImageView> imageViewReference;
@@ -30,10 +30,10 @@ public class BitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     private final double ctrl;
     private final int randomSeed;
 
-    public BitmapLoaderAsyncTask(PicEditActivity activity, Context context, ImageView imageView, Uri uri, BitmapWrapper bmw,
-                                 ImageButton bleedImageBtn, ImageButton thresholdImageBtn,
-                                 ImageButton lineImageBtn, ImageButton floodImageButton, double ctrl,
-                                 int randomSeed) {
+    public PicEditBitmapLoaderAsyncTask(PicEditActivity activity, Context context, ImageView imageView, Uri uri, BitmapWrapper bmw,
+                                        ImageButton bleedImageBtn, ImageButton thresholdImageBtn,
+                                        ImageButton lineImageBtn, ImageButton floodImageButton, double ctrl,
+                                        int randomSeed) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
         activityWeakReference = new WeakReference<PicEditActivity>(activity);
         contextWeakReference = new WeakReference<Context>(context);

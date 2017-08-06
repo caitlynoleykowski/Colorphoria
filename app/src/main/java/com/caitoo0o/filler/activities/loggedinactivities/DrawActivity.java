@@ -4,27 +4,40 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.caitoo0o.filler.effects.BitmapWrapper;
 import com.caitoo0o.filler.uihelpers.DrawView;
 import com.caitoo0o.filler.uihelpers.OnSwipeTouchListener;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.utils.Utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class DrawActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS_CALLBACK_SAVE_DRAWING_WRITE_EXTERNAL_STORAGE = 0;
     private static final int REQUEST_PERMISSIONS_CALLBACK_START_PIC_EDIT_WRITE_EXTERNAL_STORAGE = 1;
     private static final int REQUEST_PERMISSIONS_CALLBACK_START_PIC_SOURCE_WRITE_EXTERNAL_STORAGE = 2;
+
+    private static final String IMAGE_STATE_KEY = "IMAGE_STATE_KEY";
+    public static final String SOURCE_BITMAP = "SOURCE_BITMAP";
+    public static final String SOURCE_URI = "SOURCE_URI";
+
+    private static final String TAG = DrawActivity.class.getName();
 
     private DrawView drawView;
 
@@ -34,11 +47,6 @@ public class DrawActivity extends AppCompatActivity {
     private float largeBrush;
 
     private ImageButton currColorButton;
-    private ImageButton drawButton;
-    private ImageButton eraseButton;
-    private ImageButton newButton;
-    private ImageButton saveButton;
-    private ImageButton doneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +56,62 @@ public class DrawActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_draw);
         drawView = (DrawView)findViewById(R.id.drawing);
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getParcelable(IMAGE_STATE_KEY) != null) {
+                Bitmap bm = savedInstanceState.getParcelable(IMAGE_STATE_KEY);
+                drawView.setCanvasBitmap(bm);
+            }
+        } else if (getIntent().hasExtra(SOURCE_URI)) {
+        //} else if (getIntent().hasExtra(SOURCE_BITMAP)) {
+//            if (getIntent().getParcelableExtra(SOURCE_BITMAP) != null) {
+//                Bitmap bm = (Bitmap) getIntent().getParcelableExtra(SOURCE_BITMAP);
+//                drawView.setCanvasBitmap(bm);
+//            }
+
+
+            if (getIntent().getParcelableExtra(SOURCE_URI) != null) {
+                Uri uri = (Uri) getIntent().getParcelableExtra(SOURCE_URI);
+
+                try {
+                    InputStream is = getContentResolver().openInputStream(uri);
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeStream(is, null, options);
+                    // TODO: Maybe can move the getScaleFactor function somewhere else or create a generic one?
+                    double scaleFactor = BitmapWrapper.getScaleFactor(options.outWidth, options.outHeight);
+                    BitmapFactory.Options finalOptions = new BitmapFactory.Options();
+                    finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
+                    InputStream finalInputStream = getContentResolver().openInputStream(uri);
+                    Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
+                    drawView.setCanvasBitmap(bm);
+                } catch (FileNotFoundException e) {
+                    Log.e(TAG, "File with uri provided in Intent can not be found.");
+                    // TODO: Handle this error
+                }
+
+
+            }
+
+
+//
+//            Uri uri = sourceUri;
+//            ImageView iv = (ImageView) findViewById(R.id.theImage);
+//            bmW = new BitmapWrapper();
+//            PicEditBitmapLoaderAsyncTask bmwAsync = new PicEditBitmapLoaderAsyncTask(this, getApplicationContext(), iv, uri, bmW,
+//                    (ImageButton) findViewById(R.id.icon_square_button),
+//                    (ImageButton) findViewById(R.id.threshold_button),
+//                    (ImageButton) findViewById(R.id.random_line_button),
+//                    (ImageButton) findViewById(R.id.random_flood_button),
+//                    getEffectCtrl(), randomSeed);
+//            bmwAsync.execute();
+//            setUIforImageDoneProcessing(true);
+        }
+
         // Setup button refs and onClick listeners
         LinearLayout paintLayout = (LinearLayout)findViewById(R.id.paint_colors);
         currColorButton = (ImageButton)paintLayout.getChildAt(0);
         currColorButton.setImageDrawable(getResources().getDrawable(R.drawable.paint_selected_bg));
-
-        drawButton = (ImageButton)findViewById(R.id.draw_btn);
-        eraseButton = (ImageButton)findViewById(R.id.erase_btn);
-        newButton = (ImageButton)findViewById(R.id.new_btn);
-        saveButton = (ImageButton)findViewById(R.id.save_btn);
-        doneButton = (ImageButton)findViewById(R.id.done_btn);
 
         // instantiate brushes
         extraSmallBrush = getResources().getInteger(R.integer.extra_small_size);
@@ -349,5 +403,17 @@ public class DrawActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        drawView.setDrawingCacheEnabled(true);
+        Bitmap bm = drawView.getDrawingCache();
+        if (bm != null) {
+            Bitmap bm2 = bm.copy(bm.getConfig(), true);
+            outState.putParcelable(IMAGE_STATE_KEY, bm2);
+        }
+        drawView.setDrawingCacheEnabled(false);
     }
 }

@@ -88,6 +88,12 @@
     <string name="unable_to_share_image">Image could not be shared.</string>
     <!-- Used for PicEditActivity end -->
 
+    <!-- Used for BrowseActivity begin -->
+    <string name="choose_image_destination">What would you like to do with your image?</string>
+    <string name="draw">Draw</string>
+    <string name="fill">Fill</string>
+    <!-- Used for BrowseActivity end -->
+
     // TODO: Add strings from other classes and convert some toasts to AlertDialogs
 
 </resources>

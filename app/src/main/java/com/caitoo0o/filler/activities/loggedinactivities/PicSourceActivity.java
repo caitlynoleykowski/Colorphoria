@@ -25,6 +25,7 @@ public class PicSourceActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_GET = 0;
     public static final String IMAGE_URI_STATE_KEY = "IMAGE_URI_STATE_KEY";
     public static final String START_PIC_EDIT = "START_PIC_EDIT";
+    public static final String START_DRAW = "START_DRAW";
 
     public static final int REQUEST_PERMISSIONS_CALLBACK_CAMERA = 0;
     public static final int REQUEST_PERMISSIONS_CALLBACK_CAMERA_WRITE_EXTERNAL_STORAGE = 2;
@@ -32,6 +33,7 @@ public class PicSourceActivity extends AppCompatActivity {
     private Uri mImageUri;
 
     private boolean startPicEdit = false;
+    private boolean startDraw = false;
 
     private Handler handler = new Handler();
 
@@ -55,6 +57,12 @@ public class PicSourceActivity extends AppCompatActivity {
                     getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI) != null ) {
                 startPicEdit = true;
                 mImageUri = getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI);
+            } else if (getIntent().hasExtra(START_DRAW) &&
+                    getIntent().getBooleanExtra(START_DRAW, false) == true &&
+                    getIntent().hasExtra(DrawActivity.SOURCE_URI) &&
+                    getIntent().getParcelableExtra(DrawActivity.SOURCE_URI) != null ) {
+                startDraw = true;
+                mImageUri = getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI);
             }
         }
 
@@ -69,7 +77,7 @@ public class PicSourceActivity extends AppCompatActivity {
 
             public void onSwipeRight() {
                 // Swipe left to right
-                startDrawActivity();
+                startDrawActivity(mImageUri);
             }
 
             public void onSwipeLeft() {
@@ -91,12 +99,21 @@ public class PicSourceActivity extends AppCompatActivity {
         if (startPicEdit) {
             startPicEdit = false;
             handler.postDelayed(startPicEditDelayed, getResources().getInteger(R.integer.anim_duration));
+        } else if (startDraw) {
+            startDraw = false;
+            handler.postDelayed(startDrawDelayed, getResources().getInteger(R.integer.anim_duration));
         }
     }
 
     private Runnable startPicEditDelayed = new Runnable() {
         public void run() {
             startPicEditActivity(mImageUri);
+        }
+    };
+
+    private Runnable startDrawDelayed = new Runnable() {
+        public void run() {
+            startDrawActivity(mImageUri);
         }
     };
 
@@ -113,7 +130,7 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     public void onDraw(View v) {
-        startDrawActivity();
+        startDrawActivity(mImageUri);
     }
 
     private File createTemporaryFile(String part, String ext) throws Exception
@@ -172,8 +189,9 @@ public class PicSourceActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
     }
 
-    private void startDrawActivity() {
+    private void startDrawActivity(Uri uri) {
         Intent intent = new Intent(this, DrawActivity.class);
+        intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
         this.overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }

@@ -28,7 +28,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.caitoo0o.filler.effects.BitmapEffectAsyncTask;
 import com.caitoo0o.filler.effects.BitmapEffectPreviewAsyncTask;
-import com.caitoo0o.filler.effects.BitmapLoaderAsyncTask;
+import com.caitoo0o.filler.effects.PicEditBitmapLoaderAsyncTask;
 import com.caitoo0o.filler.effects.BitmapWrapper;
 import com.caitoo0o.filler.uihelpers.OnSwipeTouchListener;
 import com.caitoo0o.filler.R;
@@ -119,7 +119,7 @@ public class PicEditActivity extends AppCompatActivity {
             Uri uri = sourceUri;
             ImageView iv = (ImageView) findViewById(R.id.theImage);
             bmW = new BitmapWrapper();
-            BitmapLoaderAsyncTask bmwAsync = new BitmapLoaderAsyncTask(this, getApplicationContext(), iv, uri, bmW,
+            PicEditBitmapLoaderAsyncTask bmwAsync = new PicEditBitmapLoaderAsyncTask(this, getApplicationContext(), iv, uri, bmW,
                     (ImageButton) findViewById(R.id.icon_square_button),
                     (ImageButton) findViewById(R.id.threshold_button),
                     (ImageButton) findViewById(R.id.random_line_button),
@@ -200,26 +200,6 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     // End activity lifecycle handlers
-
-    // Begin device helpers
-
-    private void getPermission(String permissionKind) {
-        final int REQUEST = 1;
-        String[] PERMISSIONS_STORAGE = {
-                permissionKind,
-        };
-        int permission = ActivityCompat.checkSelfPermission(this, permissionKind);
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    this,
-                    PERMISSIONS_STORAGE,
-                    REQUEST
-            );
-        }
-    }
-
-    // End device helpers
 
     // Begin UI handlers
 

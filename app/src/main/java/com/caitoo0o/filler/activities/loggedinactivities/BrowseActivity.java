@@ -1,7 +1,9 @@
 package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -173,7 +175,7 @@ public class BrowseActivity extends AppCompatActivity {
                 // dont need but what is it??
                 Object i = adapterView.getItemAtPosition(pos);
                 // Load the image that was clicked into the editor
-                startPicEditActivity(Uri.fromFile(allFillerImages.get(getIdxFromPos(allFillerImages, pos))));
+                chooseImageDestination(Uri.fromFile(allFillerImages.get(getIdxFromPos(allFillerImages, pos))));
             }
         });
         fillerImagesGV.setAdapter(adapter);
@@ -185,14 +187,31 @@ public class BrowseActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View v, int pos,
                                     long arg3) {
                 // Load the image that was clicked into the editor
-                Intent intent = new Intent(BrowseActivity.this, PicEditActivity.class);
-                File imageFile = allOtherImages.get(getIdxFromPos(allOtherImages, pos));
-                intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(imageFile));
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                chooseImageDestination(Uri.fromFile(allOtherImages.get(getIdxFromPos(allOtherImages, pos))));
             }
         });
         allImagesGV.setAdapter(adapter2);
+    }
+
+    private void chooseImageDestination(final Uri uri) {
+        // TODO: Put this alert in a fragment so orientation change can be handled
+        // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
+        new AlertDialog.Builder(BrowseActivity.this)
+                .setMessage(getString(R.string.choose_image_destination))
+                .setPositiveButton(getString(R.string.fill),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startPicEditActivity(uri);
+                            }
+                        })
+                .setNegativeButton(getString(R.string.draw),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                startDrawActivity(uri);
+                            }
+                }).show();
     }
 
     private void setupTabTitles() {
@@ -256,6 +275,14 @@ public class BrowseActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PicSourceActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         intent.putExtra(PicSourceActivity.START_PIC_EDIT, true);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
+    }
+
+    private void startDrawActivity(Uri uri) {
+        Intent intent = new Intent(this, PicSourceActivity.class);
+        intent.putExtra(DrawActivity.SOURCE_URI, uri);
+        intent.putExtra(PicSourceActivity.START_DRAW, true);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }
