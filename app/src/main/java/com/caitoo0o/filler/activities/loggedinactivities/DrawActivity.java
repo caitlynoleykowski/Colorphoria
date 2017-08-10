@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -243,24 +245,20 @@ public class DrawActivity extends AppCompatActivity {
 
     // onClick for new image button
     public void onNewButton(View view){
-        final Dialog confirmDialog = new Dialog(this);
-        confirmDialog.setContentView(R.layout.confirm);
-        Button noButton = (Button) confirmDialog.findViewById(R.id.no_btn);
-        noButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmDialog.dismiss();
-            }
-        });
-        Button yesButton = (Button) confirmDialog.findViewById(R.id.yes_btn);
-        yesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawView.startNew();
-                confirmDialog.dismiss();
-            }
-        });
-        confirmDialog.show();
+        Utils.showConfirmDialog(this,
+                getString(R.string.are_you_sure),
+                getString(R.string.yes),
+                getString(R.string.no),
+                new Utils.ConfirmDialogHandler() {
+                    public void onNegativeButton(Dialog confirmDialog) {
+                        confirmDialog.dismiss();
+                    }
+                    public void onPositiveButton(Dialog confirmDialog) {
+                        drawView.startNew();
+                        confirmDialog.dismiss();
+                    }
+                },
+                true);
     }
 
     // onClick for save image button

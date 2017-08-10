@@ -6,6 +6,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cancel">Cancel</string>
+    <string name="are_you_sure">Are you sure?</string>
     <!-- General use end -->
 
     <!-- Used for brush and eraser sizes on DrawingActivity begin -->
@@ -79,8 +80,8 @@
     <!-- Used for AccountActivity end -->
 
     <!-- Used for PicSourceActivity begin -->
-    <string name="permission_camera_explanation">The camera is used so that you can take pictures in app. You must grant Filler permission to use the camera in order use this feature. Would you like to continue? </string>
-    <string name="permission_write_external_storage_explanation">External storage is used so that pictures you take and create in app can be saved. You must grant Filler permission to use storage in order to use these features. Would you like to continue?</string>
+    <string name="permission_camera_explanation">Filler requires camera permission to take pictures. Would you like to continue?</string>
+    <string name="permission_write_external_storage_explanation">Filler requires storage permission to open and save pictures. Would you like to continue?</string>
     <!-- Used for PicSourceActivity end -->
 
     <!-- Used for PicEditActivity begin -->
@@ -89,7 +90,7 @@
     <!-- Used for PicEditActivity end -->
 
     <!-- Used for BrowseActivity begin -->
-    <string name="choose_image_destination">What would you like to do with your image?</string>
+    <string name="choose_image_destination">What would you like to do?</string>
     <string name="draw">Draw</string>
     <string name="fill">Fill</string>
     <!-- Used for BrowseActivity end -->

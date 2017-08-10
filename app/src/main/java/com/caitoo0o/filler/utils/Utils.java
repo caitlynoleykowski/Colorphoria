@@ -3,15 +3,23 @@ package com.caitoo0o.filler.utils;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.caitoo0o.filler.R;
@@ -37,24 +45,8 @@ public class Utils {
 		activity.setTaskDescription(taskDesc);
 	}
 
-	public static void getPermission(Activity activity, String permissionKind) {
-		final int REQUEST = 1;
-		String[] PERMISSIONS_STORAGE = {
-				permissionKind,
-		};
-		int permission = ActivityCompat.checkSelfPermission(activity, permissionKind);
-		if (permission != PackageManager.PERMISSION_GRANTED) {
-			// We don't have permission so prompt the user
-			ActivityCompat.requestPermissions(
-					activity,
-					PERMISSIONS_STORAGE,
-					REQUEST
-			);
-		}
-	}
-
 	public interface OnExplanationDeclinedHandler {
-		public void onExplanationDeclined();
+		void onExplanationDeclined();
 	}
 
 	public static boolean getPermission(final Activity activity, final String permissionKind,
@@ -67,31 +59,27 @@ public class Utils {
 			if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
 					permissionKind)) {
 
-				// Show an explanation to the user *asynchronously* -- don't block
-				// this thread waiting for the user's response! After the user
-				// sees the explanation, try again to request the permission.
-
-				// TODO: Put this alert in a fragment so orientation change can be handled
-				// TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-				new AlertDialog.Builder(activity)
-						.setMessage(permissionExplanation)
-						.setPositiveButton(activity.getString(R.string.yes),
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										// Request the permission
-										ActivityCompat.requestPermissions(activity,
-												new String[]{permissionKind},
-												callbackInt);
-									}
-								})
-						.setNegativeButton(activity.getString(R.string.no), new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialogInterface, int i) {
-								onExplanationDeclinedHandler.onExplanationDeclined();
-							}
-						}).show();
-
+                // Show an explanation to the user
+                //If the user would like to proceed from the explanation,
+                // try again to request the permission.
+                Utils.showConfirmDialog(activity,
+                        permissionExplanation,
+                        activity.getString(R.string.yes),
+                        activity.getString(R.string.no),
+                        new Utils.ConfirmDialogHandler() {
+                            public void onNegativeButton(Dialog confirmDialog) {
+                                onExplanationDeclinedHandler.onExplanationDeclined();
+                                confirmDialog.dismiss();
+                            }
+                            public void onPositiveButton(Dialog confirmDialog) {
+                                // Request the permission
+                                ActivityCompat.requestPermissions(activity,
+                                        new String[]{permissionKind},
+                                        callbackInt);
+                                confirmDialog.dismiss();
+                            }
+                        },
+                        false);
 			} else {
 
 				// No explanation needed, we can request the permission.
@@ -175,4 +163,55 @@ public class Utils {
 			return null;
 		}
 	}
+
+	// Interface for confirm dialog button handlers
+	public interface ConfirmDialogHandler {
+        void onPositiveButton(Dialog confirmDialog);
+        void onNegativeButton(Dialog confirmDialog);
+    }
+
+    // Shows a confirm dialog
+    // TODO: Put this alert in a fragment so orientation change can be handled
+    // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
+	public static void showConfirmDialog(Context context, String confirmText, String positiveText, String negativeText, final ConfirmDialogHandler handler, boolean widthShort) {
+        final Dialog confirmDialog = new Dialog(context);
+        confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        confirmDialog.setContentView(R.layout.confirm);
+
+        // Setup size
+        LinearLayout confirmLayout = (LinearLayout) confirmDialog.findViewById(R.id.confirm_dialog_layout);
+        ViewGroup.LayoutParams params = confirmLayout.getLayoutParams();
+        if (widthShort) {
+            params.width = context.getResources().getDimensionPixelSize(R.dimen.dialog_width_short);
+        } else {
+            params.width = context.getResources().getDimensionPixelSize(R.dimen.dialog_width_long);
+        }
+        confirmLayout.setLayoutParams(params);
+
+        // Setup confirm text
+        TextView confirmTextView = (TextView) confirmDialog.findViewById(R.id.confirm_text);
+        confirmTextView.setText(confirmText);
+
+        // Setup negative button
+        Button negativeButton = (Button) confirmDialog.findViewById(R.id.no_btn);
+        negativeButton.setText(negativeText);
+        negativeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handler.onNegativeButton(confirmDialog);
+            }
+        });
+
+        // Setup positive button
+        Button positiveButton = (Button) confirmDialog.findViewById(R.id.yes_btn);
+        positiveButton.setText(positiveText);
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handler.onPositiveButton(confirmDialog);
+            }
+        });
+
+        confirmDialog.show();
+    }
 }

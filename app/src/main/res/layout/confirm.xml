@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="240dp"
+    android:id="@+id/confirm_dialog_layout"
+    android:layout_width="@dimen/dialog_width_short"
     android:layout_height="match_parent"
-    android:background="@color/colorDark"
-    android:padding="@dimen/small_margin"
+    android:background="@drawable/dialog_background"
+    android:padding="@dimen/activity_horizontal_margin"
     android:orientation="vertical" >
     <TextView
-        android:id="@+id/extra_small_brush"
+        android:id="@+id/confirm_text"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/small_margin"
         android:textSize="20sp"
+        android:breakStrategy="simple"
         android:textColor="@color/colorAccent"
-        android:text="Are you sure?" />
+        android:text="@string/are_you_sure" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -4,6 +4,9 @@
     <dimen name="activity_vertical_margin">20dp</dimen>
     <dimen name="small_margin">4dp</dimen>
     <dimen name="image_button_border">2dp</dimen>
+    <dimen name="dialog_radius">30dp</dimen>
+    <dimen name="dialog_width_short">240dp</dimen>
+    <dimen name="dialog_width_long">300dp</dimen>
 
     <!-- paint brush sizes -->
     <dimen name="extra_small_brush">5dp</dimen>

@@ -2,6 +2,7 @@ package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -194,24 +195,21 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private void chooseImageDestination(final Uri uri) {
-        // TODO: Put this alert in a fragment so orientation change can be handled
-        // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-        new AlertDialog.Builder(BrowseActivity.this)
-                .setMessage(getString(R.string.choose_image_destination))
-                .setPositiveButton(getString(R.string.fill),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startPicEditActivity(uri);
-                            }
-                        })
-                .setNegativeButton(getString(R.string.draw),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                startDrawActivity(uri);
-                            }
-                }).show();
+        Utils.showConfirmDialog(this,
+                getString(R.string.choose_image_destination),
+                getString(R.string.fill),
+                getString(R.string.draw),
+                new Utils.ConfirmDialogHandler() {
+                    public void onNegativeButton(Dialog confirmDialog) {
+                        startDrawActivity(uri);
+                        confirmDialog.dismiss();
+                    }
+                    public void onPositiveButton(Dialog confirmDialog) {
+                        startPicEditActivity(uri);
+                        confirmDialog.dismiss();
+                    }
+                },
+                false);
     }
 
     private void setupTabTitles() {
