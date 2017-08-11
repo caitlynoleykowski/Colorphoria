@@ -19,28 +19,34 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <!--<activity android:name=".activities.loggedoutactivites.LoginActivity">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
-        <activity android:name=".activities.loggedinactivities.PicSourceActivity">
+        <activity android:name=".activities.loggedoutactivites.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".activities.loggedinactivities.PicSourceActivity" />-->
-        <activity android:name=".activities.loggedoutactivites.LoginActivity" />
+        <!--<activity android:name=".activities.loggedinactivities.PicSourceActivity">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
+        <activity android:name=".activities.loggedinactivities.PicSourceActivity" />
+        <!--<activity android:name=".activities.loggedoutactivites.LoginActivity" />-->
         <activity android:name=".activities.loggedinactivities.PicEditActivity" />
         <activity android:name=".activities.loggedinactivities.BrowseActivity" />
         <activity android:name=".activities.loggedinactivities.DrawActivity" />
+        <activity android:name=".activities.loggedinactivities.ImageFeedActivity" />
+        <activity android:name=".activities.loggedinactivities.UploadActivity" />
         <activity android:name=".activities.loggedinactivities.AccountActivity"/>
         <activity android:name=".activities.loggedoutactivites.SignupActivity"/>
         <activity android:name=".activities.loggedoutactivites.ResetPasswordActivity"/>
+
+        <service
+            android:name=".activities.loggedinactivities.MyUploadService"
+            android:exported="false" />
     </application>
 
 </manifest>

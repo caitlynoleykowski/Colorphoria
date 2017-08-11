@@ -133,6 +133,14 @@ public class PicSourceActivity extends AppCompatActivity {
         startDrawActivity(mImageUri);
     }
 
+    public void onImageFeed(View v) {
+        startImageFeedActivity(mImageUri);
+    }
+
+    public void onUpload(View v) {
+        startUploadActivity(mImageUri);
+    }
+
     private File createTemporaryFile(String part, String ext) throws Exception
     {
         File tempDir= Environment.getExternalStorageDirectory();
@@ -194,6 +202,18 @@ public class PicSourceActivity extends AppCompatActivity {
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
         this.overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
+    }
+
+    private void startImageFeedActivity(Uri uri) {
+        Intent intent = new Intent(this, ImageFeedActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_bottom_to_center, R.anim.slide_center_to_top);
+    }
+
+    private void startUploadActivity(Uri uri) {
+        Intent intent = new Intent(this, UploadActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_bottom_to_center, R.anim.slide_center_to_top);
     }
 
     private void startCameraActivityCameraPermission() {

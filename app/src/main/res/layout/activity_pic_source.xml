@@ -14,9 +14,7 @@
             android:padding="@dimen/activity_vertical_margin"
             android:background="@drawable/my_menu_bar_button"
             android:onClick="onMore"
-            android:src="@drawable/ic_more_vert_24dp"
-            android:visibility="gone"/>
-
+            android:src="@drawable/ic_more_vert_24dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -69,6 +67,28 @@
                     android:scaleType="fitCenter"
                     android:background="@drawable/mybutton"
                     android:onClick="onBrowse"/>
+                <ImageButton
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/imageFeedButton"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:src="@drawable/ic_collections_200dp"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/mybutton"
+                    android:onClick="onImageFeed"/>
+                <ImageButton
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/uploadButton"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:src="@drawable/ic_collections_200dp"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/mybutton"
+                    android:onClick="onUpload"/>
 
             </LinearLayout>
         </LinearLayout>

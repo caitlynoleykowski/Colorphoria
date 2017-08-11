@@ -27,6 +27,8 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     // Firebase login
     compile 'com.google.firebase:firebase-auth:10.2.6'
+    // Firebase api to google cloud storage
+    compile 'com.google.firebase:firebase-storage:10.2.6'
     // Needed for google login - still going through firebase though
     compile 'com.google.android.gms:play-services-auth:10.2.6'
     // Needed for special UI components in login layouts
