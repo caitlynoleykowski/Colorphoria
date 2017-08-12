@@ -9,6 +9,21 @@
     <string name="are_you_sure">Are you sure?</string>
     <!-- General use end -->
 
+    <!-- Used for terms activity begin -->
+    <string name="enter_name">What is your full name?</string>
+    <string name="name_placeholder">Name</string>
+    <string name="terms_agreement_1">By pressing ACCEPT below, you agree to the <a href="https://www.websitepolicies.com/policies/view/S3KMJ1">Terms and conditions</a> and <a href="https://www.iubenda.com/privacy-policy/8156204">Privacy Policy</a></string>
+    <string name="terms_agreement_2">and</string>
+    <string name="terms_agreement_3">.</string>
+    <string name="terms_continue">Accept</string>
+    <!-- Used for terms activity end -->
+
+    <!-- Used for birthday activity begin -->
+    <string name="enter_birthday">When is your birthday?</string>
+    <string name="birthday_placeholder">01/01/1990</string>
+    <string name="birthday_continue">Continue</string>
+    <!-- Used for birthday activity end -->
+
     <!-- Used for brush and eraser sizes on DrawingActivity begin -->
     <string name="sml">Small</string>
     <string name="med">Medium</string>
@@ -61,7 +76,8 @@
 
     <string name="reset_password">Reset Password</string>
 
-    <string name="delete_account">Delete Account</string> // TODO: add a confirmation dialog
+    <string name="delete_account">Delete Account</string>
+    // TODO: add a confirmation dialog
 
     <string name="sign_out">Sign Out</string>
 

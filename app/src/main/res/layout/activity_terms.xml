@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical"
+    tools:context="com.caitoo0o.filler.activities.loggedoutactivites.BirthdayActivity">
+
+
+    <TextView
+        android:id="@+id/name_prompt_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:textSize="20sp"
+        android:breakStrategy="simple"
+        android:textColor="@color/colorAccent"
+        android:text="@string/enter_name" />
+
+    <EditText
+        android:id="@+id/name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="@string/name_placeholder"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:background="@color/colorInput"
+        android:inputType="textCapWords"
+        android:textColor="@color/colorAccent"
+        android:textColorHint="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/terms_agreement_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:textSize="20sp"
+        android:breakStrategy="simple"
+        android:textColor="@color/colorAccent"
+        android:text="@string/terms_agreement_1" />
+
+    <TextView
+        android:id="@+id/terms_continue_button"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        android:text="@string/terms_continue"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        android:fontFamily="sans-serif-medium"
+        android:textAllCaps="true"
+        android:onClick="onAccept"/>
+</LinearLayout>

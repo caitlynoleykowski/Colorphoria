@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical"
+    tools:context="com.caitoo0o.filler.activities.loggedoutactivites.BirthdayActivity">
+
+
+    <TextView
+        android:id="@+id/birthday_prompt_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:textSize="20sp"
+        android:breakStrategy="simple"
+        android:textColor="@color/colorAccent"
+        android:text="@string/enter_birthday" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.caitoo0o.filler.reusableuserinterface.ConfigurableNumberPicker
+            android:id="@+id/number_picker_month"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            default_value="1"
+            minimum="1"
+            maximum="12"/>
+        <com.caitoo0o.filler.reusableuserinterface.ConfigurableNumberPicker
+            android:id="@+id/number_picker_day"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            default_value="1"
+            minimum="1"
+            maximum="31"/>
+        <com.caitoo0o.filler.reusableuserinterface.ConfigurableNumberPicker
+            android:id="@+id/number_picker_year"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            default_value="2000"
+            minimum="1890"
+            maximum="2017"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/birthday_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:textSize="20sp"
+        android:breakStrategy="simple"
+        android:textColor="@color/colorAccent"
+        android:text="@string/birthday_placeholder" />
+
+    <TextView
+        android:id="@+id/birthday_continue_button"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorPrimary"
+        android:text="@string/birthday_continue"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:gravity="center"
+        android:textColor="@color/colorAccent"
+        android:fontFamily="sans-serif-medium"
+        android:textAllCaps="true"
+        android:onClick="onContinue"/>
+</LinearLayout>

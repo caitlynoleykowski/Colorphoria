@@ -26,26 +26,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".activities.loggedinactivities.PicSourceActivity">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+        <!-- <activity android:name=".activities.loggedinactivities.PicSourceActivity"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
+
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <activity android:name=".activities.loggedinactivities.PicSourceActivity" />
-        <!--<activity android:name=".activities.loggedoutactivites.LoginActivity" />-->
+        <!-- <activity android:name=".activities.loggedoutactivites.LoginActivity" /> -->
         <activity android:name=".activities.loggedinactivities.PicEditActivity" />
         <activity android:name=".activities.loggedinactivities.BrowseActivity" />
         <activity android:name=".activities.loggedinactivities.DrawActivity" />
         <activity android:name=".activities.loggedinactivities.UploadActivity" />
-        <activity android:name=".activities.loggedinactivities.AccountActivity"/>
-        <activity android:name=".activities.loggedoutactivites.SignupActivity"/>
-        <activity android:name=".activities.loggedoutactivites.ResetPasswordActivity"/>
+        <activity android:name=".activities.loggedinactivities.AccountActivity" />
+        <activity android:name=".activities.loggedoutactivites.BirthdayActivity" />
+        <activity android:name=".activities.loggedoutactivites.SignupActivity" />
+        <activity android:name=".activities.loggedoutactivites.ResetPasswordActivity" />
 
         <service
             android:name=".backgroundtasks.MyUploadService"
             android:exported="false" />
+
+        <activity android:name=".activities.loggedoutactivites.TermsActivity"></activity>
     </application>
 
 </manifest>

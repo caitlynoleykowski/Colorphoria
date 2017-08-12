@@ -21,18 +21,18 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.0.0'
     // Network call library
-    compile 'com.android.volley:volley:1.0.0'
     // Firebase login
-    compile 'com.google.firebase:firebase-auth:10.2.6'
     // Firebase api to google cloud storage
-    compile 'com.google.firebase:firebase-storage:10.2.6'
     // Needed for google login - still going through firebase though
-    compile 'com.google.android.gms:play-services-auth:10.2.6'
     // Needed for special UI components in login layouts
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.google.firebase:firebase-auth:10.2.6'
+    compile 'com.google.firebase:firebase-storage:10.2.6'
+    compile 'com.google.android.gms:play-services-auth:10.2.6'
     compile 'com.android.support:design:25.0.0'
+    testCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
