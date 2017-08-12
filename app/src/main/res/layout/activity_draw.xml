@@ -66,7 +66,7 @@
             android:onClick="onDoneButton" />
     </LinearLayout>
 
-    <com.caitoo0o.filler.uihelpers.DrawView
+    <com.caitoo0o.filler.reusableuserinterface.DrawView
         android:id="@+id/drawing"
         android:layout_width="fill_parent"
         android:layout_height="0dp"

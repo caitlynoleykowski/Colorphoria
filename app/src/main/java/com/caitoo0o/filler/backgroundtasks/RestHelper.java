@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.activities.loggedinactivities;
+package com.caitoo0o.filler.backgroundtasks;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.caitoo0o.filler.data.Privacy;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import java.util.Map;
  * Created by caitoo0o on 7/2/2017.
  */
 
-public class RestService {
+public class RestHelper {
 
     public static void recordUpload(Context appContext, FirebaseUser user, String downloadUrl, Privacy privacy, String comment, HttpCallbacks callbacks) {
 
@@ -66,14 +67,14 @@ public class RestService {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        Log.i(RestService.class.getName(), "Response is: " +
+                        Log.i(RestHelper.class.getName(), "Response is: " +
                                 response);
                         callbacks.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.i(RestService.class.getName(), "Error when calling endpoint " + endpoint + ": " + error.getMessage());
+                Log.i(RestHelper.class.getName(), "Error when calling endpoint " + endpoint + ": " + error.getMessage());
                 callbacks.onFailure(error.getMessage());
             }
         }) {

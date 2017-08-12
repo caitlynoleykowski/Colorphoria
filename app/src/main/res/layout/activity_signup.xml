@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <com.caitoo0o.filler.uihelpers.SquareImageButton
+            <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
                 android:id="@+id/icon_square_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

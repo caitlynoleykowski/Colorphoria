@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.uihelpers;
+package com.caitoo0o.filler.reusableuserinterface;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.caitoo0o.filler.R;
-import com.caitoo0o.filler.uihelpers.SquareImageButton;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;

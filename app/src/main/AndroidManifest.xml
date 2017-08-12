@@ -38,14 +38,13 @@
         <activity android:name=".activities.loggedinactivities.PicEditActivity" />
         <activity android:name=".activities.loggedinactivities.BrowseActivity" />
         <activity android:name=".activities.loggedinactivities.DrawActivity" />
-        <activity android:name=".activities.loggedinactivities.ImageFeedActivity" />
         <activity android:name=".activities.loggedinactivities.UploadActivity" />
         <activity android:name=".activities.loggedinactivities.AccountActivity"/>
         <activity android:name=".activities.loggedoutactivites.SignupActivity"/>
         <activity android:name=".activities.loggedoutactivites.ResetPasswordActivity"/>
 
         <service
-            android:name=".activities.loggedinactivities.MyUploadService"
+            android:name=".backgroundtasks.MyUploadService"
             android:exported="false" />
     </application>
 

@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.activities.loggedinactivities;
+package com.caitoo0o.filler.backgroundtasks;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

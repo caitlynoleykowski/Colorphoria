@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.activities.loggedinactivities;
+package com.caitoo0o.filler.backgroundtasks;
 
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,6 +10,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.data.Privacy;
+import com.caitoo0o.filler.activities.loggedinactivities.UploadActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -102,7 +104,7 @@ public class MyUploadService extends MyBaseTaskService {
 
                         // TODO : Should this success callback come from the higher level?
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        RestService.HttpCallbacks callbacks = new RestService.HttpCallbacks() {
+                        RestHelper.HttpCallbacks callbacks = new RestHelper.HttpCallbacks() {
                             public void onSuccess(String response) {
                                 // TODO: Probs don't need 2 do anything
                             }
@@ -110,7 +112,7 @@ public class MyUploadService extends MyBaseTaskService {
                                 // TODO: If record upload fails u need to retry or notify the user
                             }
                         };
-                        RestService.recordUpload(getApplicationContext(), user, downloadUri.toString(), Privacy.ONLY_ME, "testing3", callbacks);
+                        RestHelper.recordUpload(getApplicationContext(), user, downloadUri.toString(), Privacy.ONLY_ME, "testing3", callbacks);
 
                         // [START_EXCLUDE]
                         broadcastUploadFinished(downloadUri, fileUri);

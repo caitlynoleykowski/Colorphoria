@@ -1,6 +1,8 @@
 package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,15 +13,31 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.caitoo0o.filler.uihelpers.OnSwipeTouchListener;
+import com.caitoo0o.filler.backgroundtasks.GetImageAsyncTask;
+import com.caitoo0o.filler.backgroundtasks.RestHelper;
+import com.caitoo0o.filler.reusableuserinterface.OnSwipeTouchListener;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class PicSourceActivity extends AppCompatActivity {
+
+    private static final String TAG = PicSourceActivity.class.getName();
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
@@ -36,6 +54,8 @@ public class PicSourceActivity extends AppCompatActivity {
     private boolean startDraw = false;
 
     private Handler handler = new Handler();
+
+    private ImageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +111,16 @@ public class PicSourceActivity extends AppCompatActivity {
             }
 
         });
+
+
+        // Handle image feed
+        // Create the adapter to convert the array to views
+        adapter = new ImageAdapter(getApplicationContext());
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) findViewById(R.id.image_list_view);
+        listView.setAdapter(adapter);
+        // Call to get the images
+        getMyImages();
     }
 
     @Override
@@ -103,6 +133,44 @@ public class PicSourceActivity extends AppCompatActivity {
             startDraw = false;
             handler.postDelayed(startDrawDelayed, getResources().getInteger(R.integer.anim_duration));
         }
+    }
+
+    private void getMyImages() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        RestHelper.HttpCallbacks callbacks = new RestHelper.HttpCallbacks() {
+            public void onSuccess(String response) {
+                Log.i(this.getClass().getName(), response);
+
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    JSONArray urlArrayJson = responseJson.getJSONArray("urls");
+                    for (int i = 0; i < urlArrayJson.length(); i++) {
+                        String url = (String) urlArrayJson.get(i);
+                        adapter.addItem(url);
+                    }
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    // TODO: Handle this
+                    Log.i(this.getClass().getName(), "Error parsing json.", e);
+                }
+            }
+
+            public void onFailure(String error) {
+                // If get images fails notify the user
+                // TODO: Use Utils.showConfirmDialog
+                new android.app.AlertDialog.Builder(PicSourceActivity.this)
+                        .setMessage(getString(R.string.download_failure))
+                        .setPositiveButton(getString(android.R.string.ok),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // Do nothing, just close
+                                    }
+                                }).show();
+            }
+        };
+        RestHelper.myImages(getApplicationContext(), user, callbacks);
+
     }
 
     private Runnable startPicEditDelayed = new Runnable() {
@@ -133,10 +201,6 @@ public class PicSourceActivity extends AppCompatActivity {
         startDrawActivity(mImageUri);
     }
 
-    public void onImageFeed(View v) {
-        startImageFeedActivity(mImageUri);
-    }
-
     public void onUpload(View v) {
         startUploadActivity(mImageUri);
     }
@@ -157,7 +221,7 @@ public class PicSourceActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_OK) {
-            Log.e("picsource", "No Image Selected.");
+            Log.e(TAG, "No Image Selected.");
             return;
         }
 
@@ -169,11 +233,11 @@ public class PicSourceActivity extends AppCompatActivity {
 //                if (bm != null) {
 //                    startPicEditActivity(bm);
 //                } else {
-//                    Log.e("picsource", "bitmap from grabImage is null.");
+//                    Log.e(TAG, "bitmap from grabImage is null.");
 //                    Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
 //                }
             } else {
-                Log.e("picsource", "data or data.getData from image picker intent is null.");
+                Log.e(TAG, "data or data.getData from image picker intent is null.");
                 Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
             }
         }
@@ -202,12 +266,6 @@ public class PicSourceActivity extends AppCompatActivity {
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
         this.overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
-    }
-
-    private void startImageFeedActivity(Uri uri) {
-        Intent intent = new Intent(this, ImageFeedActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_bottom_to_center, R.anim.slide_center_to_top);
     }
 
     private void startUploadActivity(Uri uri) {
@@ -260,7 +318,7 @@ public class PicSourceActivity extends AppCompatActivity {
         }
         catch(Exception e)
         {
-            Log.v("picsource", "Can't create file to take picture!", e);
+            Log.v(TAG, "Can't create file to take picture!", e);
             Toast.makeText(this, "Please check SD card! Image shot is impossible!", Toast.LENGTH_LONG).show();
             return;
         }
@@ -303,5 +361,66 @@ public class PicSourceActivity extends AppCompatActivity {
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(IMAGE_URI_STATE_KEY, mImageUri);
+    }
+
+    // Image Adapter
+    // Adapter for Grid View
+    private class ImageAdapter extends BaseAdapter {
+
+        private Context context;
+        private ArrayList<String> imageUrlList;
+
+        public ImageAdapter(Context context) {
+            this.context = context;
+            this.imageUrlList = new ArrayList<String>();
+        }
+
+        public void addItem(String url) {
+            imageUrlList.add(url);
+        }
+
+        public int getCount() {
+            return imageUrlList.size();
+        }
+
+        public Object getItem(int position) {
+            return position;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ImageAdapter.ViewHolder holder = new ImageAdapter.ViewHolder();
+
+            if (convertView == null) {
+                holder.picturesView = new ImageView(context);
+                //Converting the Row Layout to be used in Grid View
+                convertView = getLayoutInflater().inflate(R.layout.image_row, parent, false);
+
+                convertView.setTag(holder);
+
+            } else {
+                holder = (ImageAdapter.ViewHolder) convertView.getTag();
+            }
+
+            ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.image_row_progress_bar);
+            progressBar.setVisibility(View.VISIBLE);
+
+            holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
+            if (position < imageUrlList.size()) {
+                holder.picturesView.setImageDrawable(getResources().getDrawable(R.drawable.image_placeholder));
+                // TODO: Is is possible this will wind up with pictures out of order if one async task finishes later than one that started later?
+                new GetImageAsyncTask(PicSourceActivity.this, holder.picturesView, progressBar, imageUrlList.get(position)).execute();
+            }
+
+            return convertView;
+        }
+
+        // View Holder pattern used for Smooth Scrolling. As View Holder pattern recycle the findViewById() object.
+        class ViewHolder {
+            private ImageView picturesView;
+        }
     }
 }
