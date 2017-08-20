@@ -4,14 +4,21 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.utils.Utils;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class BirthdayActivity extends AppCompatActivity {
+
+    private static final String TAG = BirthdayActivity.class.getName();
 
     NumberPicker numberPickerMonth;
     NumberPicker numberPickerDay;
@@ -47,13 +54,21 @@ public class BirthdayActivity extends AppCompatActivity {
                 updateBirthdayTextView();
             }
         });
+
+
+
+        updateBirthdayTextView();
+    }
+
+    private void setupDisplayedDateToCurrentDate() {
+
     }
 
     private void updateBirthdayTextView() {
         String birthday;
-        String month = Integer.toString(numberPickerMonth.getValue());
-        String day = Integer.toString(numberPickerDay.getValue());
-        String year = Integer.toString(numberPickerYear.getValue());
+        String month = String.format("%02d", numberPickerMonth.getValue());
+        String day = String.format("%02d", numberPickerDay.getValue());
+        String year = String.format("%02d", numberPickerYear.getValue());
         birthday = month + "/" + day + "/" + year;
 
         birthdayTextView.setText(birthday);
@@ -71,20 +86,15 @@ public class BirthdayActivity extends AppCompatActivity {
         if (getBirthday().isGreaterThanOrEqualThirteenYearsAgo()) {
             startActivity(new Intent(BirthdayActivity.this, TermsActivity.class));
         } else {
-            Utils.showConfirmDialog(
+            Utils.showAlertDialog(
                     this,
-                    "Sorry, you're not eligible to use Filler :/",
-                    "Ok",
-                    "Ok",
-                    new Utils.ConfirmDialogHandler() {
+                    getString(R.string.birthday_error_not_eligible),
+                    getString(android.R.string.ok),
+                    new Utils.AlertDialogHandler() {
                         @Override
                         public void onPositiveButton(Dialog confirmDialog) {
                             confirmDialog.dismiss();
-                        }
-
-                        @Override
-                        public void onNegativeButton(Dialog confirmDialog) {
-                            confirmDialog.dismiss();
+                            startActivity(new Intent(BirthdayActivity.this, LoginActivity.class));
                         }
                     },
                     false);
@@ -102,9 +112,30 @@ public class BirthdayActivity extends AppCompatActivity {
             this.year = year;
         }
 
-        // TODO: implement this
+        /* Returns true if this Birthday would make someone 13 years old or older
+         *
+         */
         public boolean isGreaterThanOrEqualThirteenYearsAgo() {
-            return true;
+            Calendar c = Calendar.getInstance();
+
+            int currentYear = c.get(Calendar.YEAR);
+            int currentMonth = c.get(Calendar.MONTH);
+            int currentDay = c.get(Calendar.DAY_OF_MONTH);
+
+            int thirteenYearsAgoYear = currentYear - 13;
+            c.set(thirteenYearsAgoYear, currentMonth, currentDay, 0, 0);
+            Date thirteenYearsAgo = c.getTime();
+
+            c.set(year, month -1, day);
+            Date birthday = c.getTime();
+
+            if (birthday.compareTo(thirteenYearsAgo) < 0) { // Already 13 or older
+                return true;
+            } else if (birthday.compareTo(thirteenYearsAgo) == 0) { // Turned 13 today
+                return true;
+            } else { // Not 13 yet
+                return false;
+            }
         }
     }
 }

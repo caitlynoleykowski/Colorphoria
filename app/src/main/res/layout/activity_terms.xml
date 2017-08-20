@@ -14,7 +14,7 @@
         android:id="@+id/name_prompt_text_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:gravity="center"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:textSize="20sp"
@@ -28,7 +28,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:hint="@string/name_placeholder"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:padding="@dimen/activity_horizontal_margin"
         android:background="@color/colorInput"
         android:inputType="textCapWords"
@@ -37,15 +38,16 @@
 
     <TextView
         android:id="@+id/terms_agreement_text_view"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:gravity="center|top"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
+        android:layout_weight="3"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:breakStrategy="simple"
         android:textColor="@color/colorAccent"
-        android:text="@string/terms_agreement_1" />
+        android:text="@string/terms_info" />
 
     <TextView
         android:id="@+id/terms_continue_button"
@@ -54,7 +56,6 @@
         android:layout_weight="1"
         android:background="@color/colorPrimary"
         android:text="@string/terms_continue"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:gravity="center"
         android:textColor="@color/colorAccent"
         android:fontFamily="sans-serif-medium"

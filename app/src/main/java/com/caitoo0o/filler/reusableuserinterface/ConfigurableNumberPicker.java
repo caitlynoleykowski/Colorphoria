@@ -24,8 +24,8 @@ public class ConfigurableNumberPicker extends NumberPicker {
     }
     private void processAttributeSet(AttributeSet attrs) {
         // Get parameters from xml and set them in this NumberPicker object
-        this.setValue(attrs.getAttributeIntValue(null, "default_value", 0));
         this.setMinValue(attrs.getAttributeIntValue(null, "minimum", 0));
         this.setMaxValue(attrs.getAttributeIntValue(null, "maximum", 0));
+        this.setValue(attrs.getAttributeIntValue(null, "default_value", 0));
     }
 }

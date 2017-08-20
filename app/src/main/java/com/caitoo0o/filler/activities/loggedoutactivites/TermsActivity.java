@@ -28,19 +28,13 @@ public class TermsActivity extends AppCompatActivity {
         if (!nameEditText.getText().toString().isEmpty()) {
             startActivity(new Intent(TermsActivity.this, SignupActivity.class));
         } else {
-            Utils.showConfirmDialog(
+            Utils.showAlertDialog(
                     this,
-                    "You'll have to enter your full name to accept the terms and conditions and privacy policy",
-                    "Ok",
-                    "Ok",
-                    new Utils.ConfirmDialogHandler() {
+                    getString(R.string.terms_error_enter_name),
+                    getString(android.R.string.ok),
+                    new Utils.AlertDialogHandler() {
                         @Override
                         public void onPositiveButton(Dialog confirmDialog) {
-                            confirmDialog.dismiss();
-                        }
-
-                        @Override
-                        public void onNegativeButton(Dialog confirmDialog) {
                             confirmDialog.dismiss();
                         }
                     },

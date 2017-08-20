@@ -14,7 +14,7 @@
         android:id="@+id/birthday_prompt_text_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="7"
         android:gravity="center"
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:textSize="20sp"
@@ -53,24 +53,31 @@
 
     <TextView
         android:id="@+id/birthday_text_view"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:breakStrategy="simple"
+        android:textColor="@color/colorHighlight"
+        android:text="@string/birthday_placeholder" />
+
+    <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:textSize="20sp"
-        android:breakStrategy="simple"
-        android:textColor="@color/colorAccent"
-        android:text="@string/birthday_placeholder" />
+        android:layout_weight="3" />
 
     <TextView
         android:id="@+id/birthday_continue_button"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:background="@color/colorPrimary"
         android:text="@string/birthday_continue"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:gravity="center"
         android:textColor="@color/colorAccent"
         android:fontFamily="sans-serif-medium"

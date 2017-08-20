@@ -214,4 +214,49 @@ public class Utils {
 
         confirmDialog.show();
     }
+
+
+	// Interface for confirm dialog button handlers
+	public interface AlertDialogHandler {
+		void onPositiveButton(Dialog confirmDialog);
+	}
+
+	// Shows an alert dialog
+	// TODO: Put this alert in a fragment so orientation change can be handled
+	// TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
+	public static void showAlertDialog(Context context, String confirmText, String positiveText, final AlertDialogHandler handler, boolean widthShort) {
+		final Dialog confirmDialog = new Dialog(context);
+		confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		confirmDialog.setContentView(R.layout.confirm);
+
+		// Setup size
+		LinearLayout confirmLayout = (LinearLayout) confirmDialog.findViewById(R.id.confirm_dialog_layout);
+		ViewGroup.LayoutParams params = confirmLayout.getLayoutParams();
+		if (widthShort) {
+			params.width = context.getResources().getDimensionPixelSize(R.dimen.dialog_width_short);
+		} else {
+			params.width = context.getResources().getDimensionPixelSize(R.dimen.dialog_width_long);
+		}
+		confirmLayout.setLayoutParams(params);
+
+		// Setup confirm text
+		TextView confirmTextView = (TextView) confirmDialog.findViewById(R.id.confirm_text);
+		confirmTextView.setText(confirmText);
+
+		// Remove negative button
+		Button negativeButton = (Button) confirmDialog.findViewById(R.id.no_btn);
+		negativeButton.setVisibility(View.GONE);
+
+		// Setup positive button
+		Button positiveButton = (Button) confirmDialog.findViewById(R.id.yes_btn);
+		positiveButton.setText(positiveText);
+		positiveButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				handler.onPositiveButton(confirmDialog);
+			}
+		});
+
+		confirmDialog.show();
+	}
 }
