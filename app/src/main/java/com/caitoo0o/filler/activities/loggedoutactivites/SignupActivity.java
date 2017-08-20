@@ -1,6 +1,7 @@
 package com.caitoo0o.filler.activities.loggedoutactivites;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity;
+import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -84,29 +86,29 @@ public class SignupActivity extends AppCompatActivity {
                                 // signed in user can be handled in the listener.
                                 if (!task.isSuccessful()) {
                                     Log.d(this.getClass().getName(), "Authentication failed: " + task.getException());
-                                    // TODO: Put this alert in a fragment so orientation change can be handled
-                                    // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                    new AlertDialog.Builder(SignupActivity.this)
-                                            .setMessage(getString(R.string.signup_success))
-                                            .setPositiveButton(getString(R.string.ok),
-                                                    new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            // Do nothing, just close the dialog
-                                                        }
-                                                    }).show();
+                                    Utils.showAlertDialog(
+                                            SignupActivity.this,
+                                            getString(R.string.signup_success),
+                                            getString(R.string.ok),
+                                            new Utils.AlertDialogHandler() {
+                                                public void onPositiveButton(Dialog confirmDialog) {
+                                                    // Do nothing, just close the dialog
+                                                    confirmDialog.dismiss();
+                                                }
+                                            },
+                                            false);
                                 } else {
-                                    // TODO: Put this alert in a fragment so orientation change can be handled
-                                    // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                    new AlertDialog.Builder(SignupActivity.this)
-                                            .setMessage(getString(R.string.signup_failed))
-                                            .setPositiveButton(getString(R.string.ok),
-                                                    new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            // Do nothing, just close the dialog
-                                                        }
-                                                    }).show();
+                                    Utils.showAlertDialog(
+                                            SignupActivity.this,
+                                            getString(R.string.signup_failed),
+                                            getString(R.string.ok),
+                                            new Utils.AlertDialogHandler() {
+                                                public void onPositiveButton(Dialog confirmDialog) {
+                                                    // Do nothing, just close the dialog
+                                                    confirmDialog.dismiss();
+                                                }
+                                            },
+                                            false);
                                     startActivity(new Intent(SignupActivity.this, PicSourceActivity.class));
                                     finish();
                                 }

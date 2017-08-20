@@ -41,7 +41,7 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class UploadActivity extends LoggedInActivity implements View.OnClickListener {
 
-    private static final String TAG = "Storage#UploadActivity";
+    private static final String TAG = UploadActivity.class.getName();
 
     private static final int RC_TAKE_PICTURE = 101;
 

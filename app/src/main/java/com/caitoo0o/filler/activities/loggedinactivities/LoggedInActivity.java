@@ -1,6 +1,7 @@
 package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.util.Log;
 
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.activities.loggedoutactivites.LoginActivity;
+import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -63,17 +65,17 @@ public class LoggedInActivity extends AppCompatActivity  implements
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // An error occurred that cannot be resolved. Cannot connect to Google APIs
         Log.d(this.getClass().getName(), "GoogleAPIClient onConnectionFailed:" + connectionResult);
-        // TODO: Put this alert in a fragment so orientation change can be handled
-        // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-        new AlertDialog.Builder(LoggedInActivity.this)
-                .setMessage(getString(R.string.google_play_services_error))
-                .setPositiveButton(getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing, just close the dialog
-                            }
-                        }).show();    }
+        Utils.showAlertDialog(
+                LoggedInActivity.this,
+                getString(R.string.google_play_services_error),
+                getString(R.string.ok),
+                new Utils.AlertDialogHandler() {
+                    public void onPositiveButton(Dialog confirmDialog) {
+                        confirmDialog.dismiss();
+                    }
+                },
+                false);
+    }
 
     //sign out method
     protected void signOut() {

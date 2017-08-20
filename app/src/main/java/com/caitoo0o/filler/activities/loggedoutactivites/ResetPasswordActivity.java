@@ -1,6 +1,7 @@
 package com.caitoo0o.filler.activities.loggedoutactivites;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,29 +57,29 @@ public class ResetPasswordActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    // TODO: Put this alert in a fragment so orientation change can be handled
-                                    // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                    new AlertDialog.Builder(ResetPasswordActivity.this)
-                                            .setMessage(getString(R.string.reset_password_success))
-                                            .setPositiveButton(getString(R.string.ok),
-                                                    new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            // Do nothing, just close the dialog
-                                                        }
-                                                    }).show();
+                                    Utils.showAlertDialog(
+                                            ResetPasswordActivity.this,
+                                            getString(R.string.reset_password_success),
+                                            getString(R.string.ok),
+                                            new Utils.AlertDialogHandler() {
+                                                public void onPositiveButton(Dialog confirmDialog) {
+                                                    // Do nothing, just close the dialog
+                                                    confirmDialog.dismiss();
+                                                }
+                                            },
+                                            false);
                                 } else {
-                                    // TODO: Put this alert in a fragment so orientation change can be handled
-                                    // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                    new AlertDialog.Builder(ResetPasswordActivity.this)
-                                            .setMessage(getString(R.string.reset_password_failed))
-                                            .setPositiveButton(getString(R.string.ok),
-                                                    new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            // Do nothing, just close the dialog
-                                                        }
-                                                    }).show();
+                                    Utils.showAlertDialog(
+                                            ResetPasswordActivity.this,
+                                            getString(R.string.reset_password_failed),
+                                            getString(R.string.ok),
+                                            new Utils.AlertDialogHandler() {
+                                                public void onPositiveButton(Dialog confirmDialog) {
+                                                    // Do nothing, just close the dialog
+                                                    confirmDialog.dismiss();
+                                                }
+                                            },
+                                            false);
                                 }
 
                                 progressBar.setVisibility(View.GONE);

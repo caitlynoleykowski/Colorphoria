@@ -1,6 +1,7 @@
 package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.activities.loggedoutactivites.LoginActivity;
 import com.caitoo0o.filler.activities.loggedoutactivites.SignupActivity;
+import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -95,17 +97,17 @@ public class AccountActivity extends LoggedInActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             progressBar.setVisibility(View.GONE);
-                                            // TODO: Put this alert in a fragment so orientation change can be handled
-                                            // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                            new AlertDialog.Builder(AccountActivity.this)
-                                                    .setMessage(getString(R.string.change_email_success))
-                                                    .setPositiveButton(getString(R.string.ok),
-                                                            new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    signOut();
-                                                                }
-                                                            }).show();
+                                            Utils.showAlertDialog(
+                                                    AccountActivity.this,
+                                                    getString(R.string.change_email_success),
+                                                    getString(R.string.ok),
+                                                    new Utils.AlertDialogHandler() {
+                                                        public void onPositiveButton(Dialog confirmDialog) {
+                                                            signOut();
+                                                            confirmDialog.dismiss();
+                                                        }
+                                                    },
+                                                    false);
                                         } else {
                                             progressBar.setVisibility(View.GONE);
                                             String failedMessage;
@@ -116,17 +118,17 @@ public class AccountActivity extends LoggedInActivity {
                                             } else {
                                                 failedMessage = getString(R.string.change_email_failed);
                                             }
-                                            // TODO: Put this alert in a fragment so orientation change can be handled
-                                            // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                            new AlertDialog.Builder(AccountActivity.this)
-                                                    .setMessage(failedMessage)
-                                                    .setPositiveButton(getString(R.string.ok),
-                                                            new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    // Do nothing, just close the dialog
-                                                                }
-                                                            }).show();
+                                            Utils.showAlertDialog(
+                                                    AccountActivity.this,
+                                                    failedMessage,
+                                                    getString(R.string.ok),
+                                                    new Utils.AlertDialogHandler() {
+                                                        public void onPositiveButton(Dialog confirmDialog) {
+                                                            // Do nothing, just close the dialog
+                                                            confirmDialog.dismiss();
+                                                        }
+                                                    },
+                                                    false);
                                         }
                                     }
                                 });
@@ -157,30 +159,30 @@ public class AccountActivity extends LoggedInActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 progressBar.setVisibility(View.GONE);
-                                                // TODO: Put this alert in a fragment so orientation change can be handled
-                                                // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                                new AlertDialog.Builder(AccountActivity.this)
-                                                        .setMessage(getString(R.string.change_password_success))
-                                                        .setPositiveButton(getString(R.string.ok),
-                                                                new DialogInterface.OnClickListener() {
-                                                                    @Override
-                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                        signOut();
-                                                                    }
-                                                                }).show();
+                                                Utils.showAlertDialog(
+                                                        AccountActivity.this,
+                                                        getString(R.string.change_password_success),
+                                                        getString(R.string.ok),
+                                                        new Utils.AlertDialogHandler() {
+                                                            public void onPositiveButton(Dialog confirmDialog) {
+                                                                signOut();
+                                                                confirmDialog.dismiss();
+                                                            }
+                                                        },
+                                                        false);
                                             } else {
                                                 progressBar.setVisibility(View.GONE);
-                                                // TODO: Put this alert in a fragment so orientation change can be handled
-                                                // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                                new AlertDialog.Builder(AccountActivity.this)
-                                                        .setMessage(getString(R.string.change_password_failed))
-                                                        .setPositiveButton(getString(R.string.ok),
-                                                                new DialogInterface.OnClickListener() {
-                                                                    @Override
-                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                        // Do nothing, just close the dialog
-                                                                    }
-                                                                }).show();
+                                                Utils.showAlertDialog(
+                                                        AccountActivity.this,
+                                                        getString(R.string.change_password_failed),
+                                                        getString(R.string.ok),
+                                                        new Utils.AlertDialogHandler() {
+                                                            public void onPositiveButton(Dialog confirmDialog) {
+                                                                // Do nothing, just close the dialog
+                                                                confirmDialog.dismiss();
+                                                            }
+                                                        },
+                                                        false);
                                             }
                                         }
                                     });
@@ -205,30 +207,30 @@ public class AccountActivity extends LoggedInActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         progressBar.setVisibility(View.GONE);
-                                        // TODO: Put this alert in a fragment so orientation change can be handled
-                                        // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                        new AlertDialog.Builder(AccountActivity.this)
-                                                .setMessage(getString(R.string.reset_password_success))
-                                                .setPositiveButton(getString(R.string.ok),
-                                                        new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                signOut();
-                                                            }
-                                                        }).show();
+                                        Utils.showAlertDialog(
+                                                AccountActivity.this,
+                                                getString(R.string.reset_password_success),
+                                                getString(R.string.ok),
+                                                new Utils.AlertDialogHandler() {
+                                                    public void onPositiveButton(Dialog confirmDialog) {
+                                                        signOut();
+                                                        confirmDialog.dismiss();
+                                                    }
+                                                },
+                                                false);
                                     } else {
                                         progressBar.setVisibility(View.GONE);
-                                        // TODO: Put this alert in a fragment so orientation change can be handled
-                                        // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                        new AlertDialog.Builder(AccountActivity.this)
-                                                .setMessage(getString(R.string.reset_password_failed))
-                                                .setPositiveButton(getString(R.string.ok),
-                                                        new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                // Do nothing, just close the dialog
-                                                            }
-                                                        }).show();
+                                        Utils.showAlertDialog(
+                                                AccountActivity.this,
+                                                getString(R.string.reset_password_failed),
+                                                getString(R.string.ok),
+                                                new Utils.AlertDialogHandler() {
+                                                    public void onPositiveButton(Dialog confirmDialog) {
+                                                        // Do nothing, just close the dialog
+                                                        confirmDialog.dismiss();
+                                                    }
+                                                },
+                                                false);
                                     }
                                 }
                             });
@@ -242,24 +244,22 @@ public class AccountActivity extends LoggedInActivity {
             @Override
             public void onClick(View v) {
                 hideInputs();
-                // TODO: Put this alert in a fragment so orientation change can be handled
-                // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                new AlertDialog.Builder(AccountActivity.this)
-                        .setMessage(getString(R.string.delete_account_confirmation))
-                        .setPositiveButton(getString(R.string.yes),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        deleteUser(user);
-                                    }
-                                })
-                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                // do nothing, just close the dialog
+                Utils.showConfirmDialog(
+                        AccountActivity.this,
+                        getString(R.string.delete_account_confirmation),
+                        getString(R.string.yes),
+                        getString(R.string.cancel),
+                        new Utils.ConfirmDialogHandler() {
+                            public void onPositiveButton(Dialog confirmDialog) {
+                                deleteUser(user);
+                                confirmDialog.dismiss();
                             }
-                        }).show();
-
+                            public void onNegativeButton(Dialog confirmDialog) {
+                                // Do nothing, just close the dialog
+                                confirmDialog.dismiss();
+                            }
+                        },
+                        false);
             }
         });
 
@@ -289,32 +289,32 @@ public class AccountActivity extends LoggedInActivity {
                             if (task.isSuccessful()) {
                                 googleSignOut(); // Have to do this when user is deleted in case it was a google sign in
                                 progressBar.setVisibility(View.GONE);
-                                // TODO: Put this alert in a fragment so orientation change can be handled
-                                // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                new AlertDialog.Builder(AccountActivity.this)
-                                        .setMessage(getString(R.string.delete_account_success))
-                                        .setPositiveButton(getString(R.string.ok),
-                                                new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        // Go to signup activity
-                                                        startActivity(new Intent(AccountActivity.this, SignupActivity.class));
-                                                        finish();
-                                                    }
-                                                }).show();
+                                Utils.showAlertDialog(
+                                        AccountActivity.this,
+                                        getString(R.string.delete_account_success),
+                                        getString(R.string.ok),
+                                        new Utils.AlertDialogHandler() {
+                                            public void onPositiveButton(Dialog confirmDialog) {
+                                                // Go to signup activity
+                                                startActivity(new Intent(AccountActivity.this, SignupActivity.class));
+                                                finish();
+                                                confirmDialog.dismiss();
+                                            }
+                                        },
+                                        false);
                             } else {
                                 progressBar.setVisibility(View.GONE);
-                                // TODO: Put this alert in a fragment so orientation change can be handled
-                                // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                new AlertDialog.Builder(AccountActivity.this)
-                                        .setMessage(getString(R.string.delete_account_failed))
-                                        .setPositiveButton(getString(R.string.ok),
-                                                new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        // Do nothing, just close the dialog
-                                                    }
-                                                }).show();
+                                Utils.showAlertDialog(
+                                        AccountActivity.this,
+                                        getString(R.string.delete_account_failed),
+                                        getString(R.string.ok),
+                                        new Utils.AlertDialogHandler() {
+                                            public void onPositiveButton(Dialog confirmDialog) {
+                                                // Do nothing, just close the dialog
+                                                confirmDialog.dismiss();
+                                            }
+                                        },
+                                        false);
                             }
                         }
                     });

@@ -1,6 +1,7 @@
 package com.caitoo0o.filler.activities.loggedoutactivites;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -18,7 +19,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.activities.loggedinactivities.AccountActivity;
 import com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity;
+import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -137,17 +140,17 @@ public class LoginActivity extends AppCompatActivity implements
                             if (password.length() < 6) {
                                 passwordEditText.setError(getString(R.string.password_too_short));
                             } else {
-                                // TODO: Put this alert in a fragment so orientation change can be handled
-                                // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                                new AlertDialog.Builder(LoginActivity.this)
-                                        .setMessage(getString(R.string.login_failed))
-                                        .setPositiveButton(getString(R.string.login_try_again),
-                                                new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
+                                Utils.showAlertDialog(
+                                        LoginActivity.this,
+                                        getString(R.string.login_failed),
+                                        getString(R.string.login_try_again),
+                                        new Utils.AlertDialogHandler() {
+                                            public void onPositiveButton(Dialog confirmDialog) {
                                                 // Do nothing, just close the dialog
+                                                confirmDialog.dismiss();
                                             }
-                                        }).show();
+                                        },
+                                        false);
                             }
                         } else {
                             Intent intent = new Intent(LoginActivity.this, PicSourceActivity.class);
@@ -203,17 +206,17 @@ public class LoginActivity extends AppCompatActivity implements
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // An error occurred that cannot be resolved. Cannot connect to Google APIs
         Log.d(this.getClass().getName(), "GoogleAPIClient onConnectionFailed:" + connectionResult);
-        // TODO: Put this alert in a fragment so orientation change can be handled
-        // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-        new AlertDialog.Builder(LoginActivity.this)
-                .setMessage(getString(R.string.google_play_services_error))
-                .setPositiveButton(getString(R.string.ok),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Do nothing, just close the dialog
-                            }
-                        }).show();
+        Utils.showAlertDialog(
+                LoginActivity.this,
+                getString(R.string.google_play_services_error),
+                getString(R.string.ok),
+                new Utils.AlertDialogHandler() {
+                    public void onPositiveButton(Dialog confirmDialog) {
+                        // Do nothing, just close the dialog
+                        confirmDialog.dismiss();
+                    }
+                },
+                false);
     }
 
     @Override
@@ -229,17 +232,17 @@ public class LoginActivity extends AppCompatActivity implements
                 firebaseAuthWithGoogle(account);
             } else {
                 // Show dialog to notify user that Google login failed
-                // TODO: Put this alert in a fragment so orientation change can be handled
-                // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                new AlertDialog.Builder(LoginActivity.this)
-                        .setMessage(getString(R.string.google_login_failed))
-                        .setPositiveButton(getString(R.string.login_try_again),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // Do nothing, just close the dialog
-                                    }
-                                }).show();
+                Utils.showAlertDialog(
+                        LoginActivity.this,
+                        getString(R.string.google_login_failed),
+                        getString(R.string.login_try_again),
+                        new Utils.AlertDialogHandler() {
+                            public void onPositiveButton(Dialog confirmDialog) {
+                                // Do nothing, just close the dialog
+                                confirmDialog.dismiss();
+                            }
+                        },
+                        false);
             }
         }
     }
@@ -259,17 +262,17 @@ public class LoginActivity extends AppCompatActivity implements
                         } else {
                             Log.w(this.getClass().getName(), "Google AuthCredential signInWithCredential failed: ", task.getException());
                             // Show dialog to notify user that Google login failed
-                            // TODO: Put this alert in a fragment so orientation change can be handled
-                            // TODO: See https://developer.android.com/guide/topics/ui/dialogs.html
-                            new AlertDialog.Builder(LoginActivity.this)
-                                    .setMessage(getString(R.string.google_login_authentication_failed))
-                                    .setPositiveButton(getString(R.string.login_try_again),
-                                            new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    // Do nothing, just close the dialog
-                                                }
-                                            }).show();
+                            Utils.showAlertDialog(
+                                    LoginActivity.this,
+                                    getString(R.string.google_login_authentication_failed),
+                                    getString(R.string.login_try_again),
+                                    new Utils.AlertDialogHandler() {
+                                        public void onPositiveButton(Dialog confirmDialog) {
+                                            // Do nothing, just close the dialog
+                                            confirmDialog.dismiss();
+                                        }
+                                    },
+                                    false);
                         }
 
                         progressBar.setVisibility(View.GONE);
