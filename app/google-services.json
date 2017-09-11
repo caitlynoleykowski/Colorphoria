@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "371033727613",
-    "firebase_url": "https://fillerandroid.firebaseio.com",
-    "project_id": "fillerandroid",
-    "storage_bucket": "fillerandroid.appspot.com"
+    "project_number": "606454574291",
+    "firebase_url": "https://filler-ea8ae.firebaseio.com",
+    "project_id": "filler-ea8ae",
+    "storage_bucket": "filler-ea8ae.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:371033727613:android:fccac4bf5da0802d",
+        "mobilesdk_app_id": "1:606454574291:android:fccac4bf5da0802d",
         "android_client_info": {
           "package_name": "com.caitoo0o.filler"
         }
       },
       "oauth_client": [
         {
-          "client_id": "371033727613-puljlte59libs6l296obnu9bndivm3ed.apps.googleusercontent.com",
+          "client_id": "606454574291-oe72kqfh75msg7b9i9u4a88fh8lv2ada.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.caitoo0o.filler",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "371033727613-662cao4hrcdmgugmucskssbppgegockt.apps.googleusercontent.com",
+          "client_id": "606454574291-20ci4kls1gleh1gi1o5sh3272d4lip9l.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBHgsATK85lRbpZOaYw1MoL_0fuivfVNnQ"
+          "current_key": "AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "371033727613-662cao4hrcdmgugmucskssbppgegockt.apps.googleusercontent.com",
+              "client_id": "606454574291-20ci4kls1gleh1gi1o5sh3272d4lip9l.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -27,10 +27,11 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.backgroundtasks.MyUploadService;
+import com.caitoo0o.filler.effects.BitmapLoaderAsyncTask;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -42,6 +43,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class UploadActivity extends LoggedInActivity implements View.OnClickListener {
 
     private static final String TAG = UploadActivity.class.getName();
+
+    public static final String IMAGE_URI = "IMAGE_URI";
 
     private static final int RC_TAKE_PICTURE = 101;
 
@@ -64,12 +67,16 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
         mAuth = FirebaseAuth.getInstance();
 
         // Click listeners
-        findViewById(R.id.button_camera).setOnClickListener(this);
+        findViewById(R.id.upload_button).setOnClickListener(this);
 
         // Restore instance state
         if (savedInstanceState != null) {
             mFileUri = savedInstanceState.getParcelable(KEY_FILE_URI);
             mDownloadUrl = savedInstanceState.getParcelable(KEY_DOWNLOAD_URL);
+        } else if (getIntent().hasExtra(IMAGE_URI)) {
+            mFileUri = (Uri)getIntent().getParcelableExtra(IMAGE_URI);
+            ImageView iv = (ImageView) findViewById(R.id.upload_image_view);
+            new BitmapLoaderAsyncTask(this, iv, mFileUri).execute();
         }
         onNewIntent(getIntent());
 
@@ -125,29 +132,12 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
         out.putParcelable(KEY_DOWNLOAD_URL, mDownloadUrl);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult:" + requestCode + ":" + resultCode + ":" + data);
-        if (requestCode == RC_TAKE_PICTURE) {
-            if (resultCode == RESULT_OK) {
-                mFileUri = data.getData();
-
-                if (mFileUri != null) {
-                    uploadFromUri(mFileUri);
-                } else {
-                    Log.w(TAG, "File URI is null");
-                }
-            } else {
-                Toast.makeText(this, "Taking picture failed.", Toast.LENGTH_SHORT).show();
-            }
-        }
+    public void onExit(View v) {
+        onBackPressed();
     }
 
     private void uploadFromUri(Uri fileUri) {
         Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
-
-        // Save the File URI
-        mFileUri = fileUri;
 
         // Clear the last download, if any
         updateUI(mAuth.getCurrentUser());
@@ -161,15 +151,6 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
 
         // Show loading spinner
         showProgressDialog(getString(R.string.progress_uploading));
-    }
-
-    private void launchCamera() {
-        Log.d(TAG, "launchCamera");
-
-        // Pick an image from storage
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        startActivityForResult(intent, RC_TAKE_PICTURE);
     }
 
     private void onUploadResultIntent(Intent intent) {
@@ -221,8 +202,12 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.button_camera) {
-            launchCamera();
+        if (i == R.id.upload_button) {
+            if (mFileUri != null) {
+                uploadFromUri(mFileUri);
+            } else {
+                Log.w(TAG, "File URI is null");
+            }
         }
     }
 }

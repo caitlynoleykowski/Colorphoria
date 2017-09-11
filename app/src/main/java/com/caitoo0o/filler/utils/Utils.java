@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -39,10 +40,10 @@ public class Utils {
 
 	public static void setupFillerRecentAppsBar(Activity activity) {
 		// Setup recent apps bar with app color
-		Bitmap bm = BitmapFactory.decodeResource(activity.getResources(), R.mipmap.ic_launcher);
-		ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
-				activity.getString(R.string.app_name), bm, activity.getColor(R.color.colorPrimaryDark));
-		activity.setTaskDescription(taskDesc);
+//		Bitmap bm = BitmapFactory.decodeResource(activity.getResources(), R.mipmap.ic_launcher);
+//		ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
+//				activity.getString(R.string.app_name), bm, activity.getColor(R.color.colorPrimaryDark));
+//		activity.setTaskDescription(taskDesc);
 	}
 
 	public interface OnExplanationDeclinedHandler {
@@ -109,7 +110,7 @@ public class Utils {
 	}
 
 	public interface SaveFillerBitmapHandler {
-		public void onSuccess();
+		public void onSuccess(Uri uri);
 
 		public void onFailure();
 	}
@@ -139,7 +140,7 @@ public class Utils {
 				bm.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
 				// PNG is a lossless format, the compression factor (100) is ignored
 				Log.i("picsource", "file written to: " + picFile.getAbsolutePath());
-				handler.onSuccess();
+				handler.onSuccess(Uri.fromFile(picFile)); // TODO: Error handling on this parse
 			} catch (Exception e) {
 				Log.e("picsource", "failed save.");
 				e.printStackTrace();

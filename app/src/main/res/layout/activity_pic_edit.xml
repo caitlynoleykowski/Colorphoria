@@ -74,6 +74,16 @@
             android:layout_weight="1"
             android:padding="@dimen/activity_vertical_margin"
             android:background="@drawable/my_menu_bar_button"
+            android:onClick="onUpload"
+            android:src="@drawable/ic_file_upload_24dp"
+            android:clickable="false" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/activity_vertical_margin"
+            android:background="@drawable/my_menu_bar_button"
             android:onClick="onShare"
             android:src="@drawable/ic_share_24dp"
             android:clickable="false" />

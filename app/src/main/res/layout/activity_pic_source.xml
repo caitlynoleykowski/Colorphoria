@@ -1,111 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/outer_layout"
+    tools:context="com.caitoo0o.filler.activities.loggedoutactivites.LoginActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity"
     android:background="@color/colorPrimaryDark"
-    android:orientation="vertical">
+    android:gravity="center">
 
     <LinearLayout
-        android:id="@+id/pic_source_menu_bar_linear_layout"
-        android:layout_gravity="center"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/outer_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary">
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onMore"
-            android:src="@drawable/ic_more_vert_24dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="17"
-        android:padding="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
-
-        <ListView
-            android:id="@+id/image_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:background="@color/colorPrimary"
+        android:layout_height="match_parent"
+        tools:context="com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity"
+        android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/pic_source_buttons_linear_layout"
+            android:id="@+id/pic_source_menu_bar_linear_layout"
             android:layout_gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_vertical_margin"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onMore"
+                android:src="@drawable/ic_more_vert_24dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
             android:padding="@dimen/activity_vertical_margin"
             android:orientation="horizontal">
 
-            <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/activity_vertical_margin"
-                android:id="@+id/cameraButton"
-                android:src="@drawable/ic_camera_alt_200dp"
-                android:scaleType="fitCenter"
-                android:layout_marginRight="@dimen/small_margin"
-                android:background="@drawable/mybutton"
-                android:onClick="onCamera"/>
+            <com.caitoo0o.filler.activities.loggedinactivities.ListRefreshView
+                android:id="@+id/image_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-            <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/activity_vertical_margin"
-                android:id="@+id/drawButton"
-                android:src="@drawable/ic_brush_200dp"
-                android:scaleType="fitCenter"
-                android:layout_marginRight="@dimen/small_margin"
-                android:background="@drawable/mybutton"
-                android:onClick="onDraw"/>
+        </LinearLayout>
 
-            <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/activity_vertical_margin"
-                android:id="@+id/openExistingButton"
-                android:src="@drawable/ic_collections_200dp"
-                android:scaleType="fitCenter"
-                android:layout_marginRight="@dimen/small_margin"
-                android:background="@drawable/mybutton"
-                android:onClick="onBrowse"/>
+        <LinearLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
 
-            <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/pic_source_buttons_linear_layout"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:id="@+id/uploadButton"
                 android:padding="@dimen/activity_vertical_margin"
-                android:src="@drawable/ic_collections_200dp"
-                android:scaleType="fitCenter"
-                android:layout_marginRight="@dimen/small_margin"
-                android:background="@drawable/mybutton"
-                android:onClick="onUpload"/>
+                android:orientation="horizontal">
+
+                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:id="@+id/cameraButton"
+                    android:src="@drawable/ic_camera_alt_200dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/mybutton"
+                    android:onClick="onCamera"/>
+
+                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:id="@+id/drawButton"
+                    android:src="@drawable/ic_brush_200dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/mybutton"
+                    android:onClick="onDraw"/>
+
+                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:id="@+id/openExistingButton"
+                    android:src="@drawable/ic_collections_200dp"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/mybutton"
+                    android:onClick="onBrowse"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progress_bar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="true"
+        android:visibility="gone"/>
+</RelativeLayout>

@@ -35,12 +35,19 @@ public class RestHelper {
 
     public static void myImages(Context appContext, FirebaseUser user, HttpCallbacks callbacks) {
 
+//        Map<String, String>  params = new HashMap<String, String>();
+//        params.put("key", getApiKey());
+//        params.put("user_id", user.getUid());
+//        //params.put("user_id", "Xq7yUgPOVFXpTNmbMT4TcPuC93r2");
+//
+//        getData(appContext, "my_images", params, callbacks);
+
         Map<String, String>  params = new HashMap<String, String>();
         params.put("key", getApiKey());
-        params.put("user_id", user.getUid());
+        params.put("timestamp", "" + System.currentTimeMillis());
         //params.put("user_id", "Xq7yUgPOVFXpTNmbMT4TcPuC93r2");
 
-        getData(appContext, "my_images", params, callbacks);
+        getData(appContext, "date_images", params, callbacks);
     }
 
     public interface HttpCallbacks {
@@ -49,11 +56,11 @@ public class RestHelper {
     }
 
     private static String getProjectId() {
-        return "fir-storage-bed15";
+        return "filler-ea8ae";
     }
 
     private static String getApiKey() {
-        return "AIzaSyDdvcYtIkdlaFqbIXXm--l04ZOPXVLKatE";
+        return "AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE";
     }
 
     private static void getData(Context appContext, final String endpoint, final Map<String, String> params, final HttpCallbacks callbacks) {

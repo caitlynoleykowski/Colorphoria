@@ -233,6 +233,10 @@ public class PicEditActivity extends AppCompatActivity {
         saveCurrImageStoragePermission();
     }
 
+    public void onUpload(View v) {
+        uploadCurrImageStoragePermission();
+    }
+
     public void onShare(View v) {
         shareCurrImageStoragePermission();
     }
@@ -427,7 +431,7 @@ public class PicEditActivity extends AppCompatActivity {
 
     private void saveCurrImage() {
         Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this, new Utils.SaveFillerBitmapHandler() {
-            public void onSuccess() {
+            public void onSuccess(Uri uri) {
                 Toast.makeText(PicEditActivity.this.getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
             }
             public void onFailure() {
@@ -451,6 +455,20 @@ public class PicEditActivity extends AppCompatActivity {
         }
     }
 
+    private void uploadCurrImageStoragePermission() {
+        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                getString(R.string.permission_write_external_storage_explanation),
+                REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE,
+                new Utils.OnExplanationDeclinedHandler() {
+                    @Override
+                    public void onExplanationDeclined() {
+                        Toast.makeText(PicEditActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    }
+                })) {
+            uploadCurrImage();
+        }
+    }
+
     private void shareCurrImage() {
         String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmW.getModifiedBitmap(), "Export from Filler", null);
         Uri uri = Uri.parse(path);
@@ -461,6 +479,26 @@ public class PicEditActivity extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(Intent.createChooser(intent, "Share Image"));
         }
+    }
+
+    private void uploadCurrImage() {
+        Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this, new Utils.SaveFillerBitmapHandler() {
+            public void onSuccess(Uri uri) {
+                Toast.makeText(PicEditActivity.this.getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
+                startUploadActivity(uri);
+            }
+            public void onFailure() {
+                // do nothing
+                Toast.makeText(PicEditActivity.this.getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void startUploadActivity(Uri uri) {
+        Intent intent = new Intent(this, UploadActivity.class);
+        intent.putExtra(UploadActivity.IMAGE_URI, uri);
+        startActivity(intent);
+//        overridePendingTransition(R.anim.slide_bottom_to_center, R.anim.slide_center_to_top);
     }
 
     @Override

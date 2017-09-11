@@ -1,6 +1,7 @@
 package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,10 +12,13 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -56,6 +60,9 @@ public class PicSourceActivity extends AppCompatActivity {
     private Handler handler = new Handler();
 
     private ImageAdapter adapter;
+    private ProgressBar progressBar;
+
+    private boolean refreshingFeed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +70,8 @@ public class PicSourceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pic_source);
 
         Utils.setupFillerRecentAppsBar(this);
+
+        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         if (savedInstanceState != null) {
             mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
@@ -117,8 +126,18 @@ public class PicSourceActivity extends AppCompatActivity {
         // Create the adapter to convert the array to views
         adapter = new ImageAdapter(getApplicationContext());
         // Attach the adapter to a ListView
-        ListView listView = (ListView) findViewById(R.id.image_list_view);
+        final ListRefreshView listView = (ListRefreshView) findViewById(R.id.image_list_view);
+
         listView.setAdapter(adapter);
+
+        listView.setOnRefreshHandler(new ListRefreshView.OnRefreshHandler() {
+            @Override
+            public void onRefresh() {
+                getMyImages();
+            }
+        });
+
+
         // Call to get the images
         getMyImages();
     }
@@ -136,41 +155,58 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     private void getMyImages() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        RestHelper.HttpCallbacks callbacks = new RestHelper.HttpCallbacks() {
-            public void onSuccess(String response) {
-                Log.i(this.getClass().getName(), response);
+        if (!refreshingFeed) {
+            progressBar.setVisibility(View.VISIBLE);
+            refreshingFeed = true;
 
-                try {
-                    JSONObject responseJson = new JSONObject(response);
-                    JSONArray urlArrayJson = responseJson.getJSONArray("urls");
-                    for (int i = 0; i < urlArrayJson.length(); i++) {
-                        String url = (String) urlArrayJson.get(i);
-                        adapter.addItem(url);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            RestHelper.HttpCallbacks callbacks = new RestHelper.HttpCallbacks() {
+                public void onSuccess(String response) {
+                    Log.i(this.getClass().getName(), response);
+
+                    try {
+                        adapter.clear(); // Remove all images (image urls) from the adapter
+                        JSONObject responseJson = new JSONObject(response);
+                        if (responseJson.has("urls")) {
+                            // TODO: Handle this better in case somehow it has "urls" but the array is empty
+                            JSONArray urlArrayJson = responseJson.getJSONArray("urls");
+                            for (int i = 0; i < urlArrayJson.length(); i++) {
+                                String url = (String) urlArrayJson.get(i);
+                                adapter.addItem(url);
+                            }
+                        } else {
+                            // TODO: This is weird to download this static image so change this later
+                            // TODO: when more time
+                            adapter.addItem("https://firebasestorage.googleapis.com/v0/b/filler-ea8ae.appspot.com/o/photos%2F1211826150?alt=media&token=df618132-a2a8-4f51-ad5e-65dd1754e8dd");
+                        }
+                        adapter.notifyDataSetChanged(); // Make list view pick up changes
+                    } catch (JSONException e) {
+                        // TODO: Handle this
+                        Log.i(this.getClass().getName(), "Error parsing json.", e);
                     }
-                    adapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    // TODO: Handle this
-                    Log.i(this.getClass().getName(), "Error parsing json.", e);
+                    refreshingFeed = false;
+                    progressBar.setVisibility(View.GONE);
                 }
-            }
 
-            public void onFailure(String error) {
-                // If get images fails notify the user
-                // TODO: Use Utils.showConfirmDialog
-                new android.app.AlertDialog.Builder(PicSourceActivity.this)
-                        .setMessage(getString(R.string.download_failure))
-                        .setPositiveButton(getString(android.R.string.ok),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // Do nothing, just close
-                                    }
-                                }).show();
-            }
-        };
-        RestHelper.myImages(getApplicationContext(), user, callbacks);
-
+                public void onFailure(String error) {
+                    refreshingFeed = false;
+                    progressBar.setVisibility(View.GONE);
+                    Utils.showAlertDialog(
+                            PicSourceActivity.this,
+                            getString(R.string.download_failure) + ": " + error,
+                            getString(R.string.ok),
+                            new Utils.AlertDialogHandler() {
+                                @Override
+                                public void onPositiveButton(Dialog confirmDialog) {
+                                    // Do nothing, just close the dialog
+                                    confirmDialog.dismiss();
+                                }
+                            },
+                            false);
+                }
+            };
+            RestHelper.myImages(getApplicationContext(), user, callbacks);
+        }
     }
 
     private Runnable startPicEditDelayed = new Runnable() {
@@ -199,10 +235,6 @@ public class PicSourceActivity extends AppCompatActivity {
 
     public void onDraw(View v) {
         startDrawActivity(mImageUri);
-    }
-
-    public void onUpload(View v) {
-        startUploadActivity(mImageUri);
     }
 
     private File createTemporaryFile(String part, String ext) throws Exception
@@ -266,12 +298,6 @@ public class PicSourceActivity extends AppCompatActivity {
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
         this.overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
-    }
-
-    private void startUploadActivity(Uri uri) {
-        Intent intent = new Intent(this, UploadActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_bottom_to_center, R.anim.slide_center_to_top);
     }
 
     private void startCameraActivityCameraPermission() {
@@ -377,6 +403,10 @@ public class PicSourceActivity extends AppCompatActivity {
 
         public void addItem(String url) {
             imageUrlList.add(url);
+        }
+
+        public void clear() {
+            imageUrlList.clear();
         }
 
         public int getCount() {

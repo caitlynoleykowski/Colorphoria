@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.activities.loggedinactivities.AccountActivity;
 import com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -92,8 +93,9 @@ public class SignupActivity extends AppCompatActivity {
                                             getString(R.string.ok),
                                             new Utils.AlertDialogHandler() {
                                                 public void onPositiveButton(Dialog confirmDialog) {
-                                                    // Do nothing, just close the dialog
+                                                    // Close the dialog and go to login screen
                                                     confirmDialog.dismiss();
+                                                    startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                                                 }
                                             },
                                             false);

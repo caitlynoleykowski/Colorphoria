@@ -289,7 +289,7 @@ public class DrawActivity extends AppCompatActivity {
         //save drawing
         drawView.setDrawingCacheEnabled(true);
         File imageFile = Utils.saveFillerBitmap(drawView.getDrawingCache(), this, new Utils.SaveFillerBitmapHandler() {
-            public void onSuccess() {
+            public void onSuccess(Uri uri) {
                 Toast.makeText(DrawActivity.this.getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
             }
             public void onFailure() {
