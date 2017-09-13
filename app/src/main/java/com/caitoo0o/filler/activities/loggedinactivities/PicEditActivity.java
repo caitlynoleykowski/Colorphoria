@@ -51,7 +51,6 @@ public class PicEditActivity extends AppCompatActivity {
     private static final String EFFECT_SELECTED_STATE_KEY = "EFFECT_SELECTED_STATE_KEY";
 
     public static final int REQUEST_PERMISSIONS_CALLBACK_SAVE_WRITE_EXTERNAL_STORAGE = 0;
-    public static final int REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE = 1;
 
     private static final int MAX_UNDO_QUEUE_SIZE = 2;
 
@@ -235,10 +234,6 @@ public class PicEditActivity extends AppCompatActivity {
 
     public void onUpload(View v) {
         uploadCurrImageStoragePermission();
-    }
-
-    public void onShare(View v) {
-        shareCurrImageStoragePermission();
     }
 
     public void onRotateRight(View v) {
@@ -441,24 +436,10 @@ public class PicEditActivity extends AppCompatActivity {
         });
     }
 
-    private void shareCurrImageStoragePermission() {
-        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                getString(R.string.permission_write_external_storage_explanation),
-                REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE,
-                new Utils.OnExplanationDeclinedHandler() {
-                    @Override
-                    public void onExplanationDeclined() {
-                        Toast.makeText(PicEditActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
-                    }
-                })) {
-            shareCurrImage();
-        }
-    }
-
     private void uploadCurrImageStoragePermission() {
         if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 getString(R.string.permission_write_external_storage_explanation),
-                REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE,
+                REQUEST_PERMISSIONS_CALLBACK_SAVE_WRITE_EXTERNAL_STORAGE,
                 new Utils.OnExplanationDeclinedHandler() {
                     @Override
                     public void onExplanationDeclined() {
@@ -466,18 +447,6 @@ public class PicEditActivity extends AppCompatActivity {
                     }
                 })) {
             uploadCurrImage();
-        }
-    }
-
-    private void shareCurrImage() {
-        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bmW.getModifiedBitmap(), "Export from Filler", null);
-        Uri uri = Uri.parse(path);
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("image/jpeg");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(Intent.createChooser(intent, "Share Image"));
         }
     }
 
@@ -513,17 +482,6 @@ public class PicEditActivity extends AppCompatActivity {
                     saveCurrImage();
                 } else {
                     Toast.makeText(PicEditActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
-                }
-                return;
-            }
-            case REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted, so continue.
-                    shareCurrImage();
-                } else {
-                    Toast.makeText(PicEditActivity.this, R.string.unable_to_share_image, Toast.LENGTH_LONG);
                 }
                 return;
             }

@@ -16,22 +16,29 @@
 
 package com.caitoo0o.filler.activities.loggedinactivities;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.backgroundtasks.MyUploadService;
 import com.caitoo0o.filler.effects.BitmapLoaderAsyncTask;
+import com.caitoo0o.filler.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -45,6 +52,8 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
     private static final String TAG = UploadActivity.class.getName();
 
     public static final String IMAGE_URI = "IMAGE_URI";
+
+    public static final int REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE = 1;
 
     private static final int RC_TAKE_PICTURE = 101;
 
@@ -89,6 +98,8 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
 
                 switch (intent.getAction()) {
                     case MyUploadService.UPLOAD_COMPLETED:
+                        onUploadResultIntent(intent);
+                        startPicSourceActivity();
                     case MyUploadService.UPLOAD_ERROR:
                         onUploadResultIntent(intent);
                         break;
@@ -167,6 +178,62 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
             findViewById(R.id.layout_storage).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.layout_storage).setVisibility(View.GONE);
+        }
+    }
+
+    private void startPicSourceActivity() {
+        Intent intent = new Intent(this, PicSourceActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_top_to_center, R.anim.slide_center_to_bottom);
+    }
+
+    public void onShare(View v) {
+        shareCurrImageStoragePermission();
+    }
+
+    private void shareCurrImageStoragePermission() {
+        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                getString(R.string.permission_write_external_storage_explanation),
+                REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE,
+                new Utils.OnExplanationDeclinedHandler() {
+                    @Override
+                    public void onExplanationDeclined() {
+                        Toast.makeText(UploadActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    }
+                })) {
+            shareCurrImage();
+        }
+    }
+
+    private void shareCurrImage() {
+        ImageView iv = (ImageView) findViewById(R.id.upload_image_view);
+        Bitmap bm =((BitmapDrawable)iv.getDrawable()).getBitmap();
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bm, "Export from Filler", null);
+        Uri uri = Uri.parse(path);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/jpeg");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(Intent.createChooser(intent, "Share Image"));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    shareCurrImage();
+                } else {
+                    Toast.makeText(UploadActivity.this, R.string.unable_to_share_image, Toast.LENGTH_LONG);
+                }
+                return;
+            }
         }
     }
 

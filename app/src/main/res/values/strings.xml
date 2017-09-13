@@ -121,6 +121,7 @@
     <!-- Used for UploadActivity and upload services -->
     <string name="upload_prompt">Upload image</string>
     <string name="upload">Post</string>
+    <string name="share_external">Share with other apps: </string>
     <string name="progress_uploading">Uploading…</string>
     <string name="upload_success">Upload finished</string>
     <string name="upload_failure">Upload failed</string>\

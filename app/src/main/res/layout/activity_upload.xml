@@ -38,9 +38,8 @@
                 android:id="@+id/upload_image_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="17"
+                android:layout_weight="14"
                 android:scaleType="fitCenter"
-                android:src="@drawable/color_spectrum"
                 android:layout_margin="@dimen/activity_horizontal_margin"/>
 
             <TextView
@@ -54,5 +53,30 @@
                 android:textColor="@color/colorAccent"
                 android:fontFamily="sans-serif-medium"
                 android:textAllCaps="true"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="match_parent"
+                    android:text="@string/share_external"
+                    android:gravity="left|center_vertical"
+                    android:textColor="@color/colorAccent"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:fontFamily="sans-serif-medium"/>
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:background="@drawable/my_menu_bar_button"
+                    android:onClick="onShare"
+                    android:src="@drawable/ic_share_24dp"
+                    android:clickable="false" />
+            </LinearLayout>
         </LinearLayout>
 </ScrollView>
