@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.activities.loggedinactivities;
+package com.caitoo0o.filler.reusableuserinterface;
 
 import android.content.Context;
 import android.util.AttributeSet;
