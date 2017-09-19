@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class BitmapWrapper {
 
-    private static final int MAX_PIXELS = 1000000;
+    protected static final int MAX_PIXELS = 1000000; // Protected for unit test
     private static final int ROTATION_ANGLE = 90;
     private static final int MAX_COLOR = 0xffffff;
 
@@ -38,7 +38,7 @@ public class BitmapWrapper {
         }
     }
 
-    public BitmapWrapper() {}
+    public BitmapWrapper() {} // Used when reloading asyncronously from saved state
 
     public static double getScaleFactor(int bitmapWidth, int bitmapHeight) {
         int numPixels = bitmapWidth * bitmapHeight;
