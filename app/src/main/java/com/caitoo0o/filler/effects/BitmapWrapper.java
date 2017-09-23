@@ -15,6 +15,7 @@ import java.util.Random;
 public class BitmapWrapper {
 
     protected static final int MAX_PIXELS = 1000000; // Protected for unit test
+    protected static final int MAX_CUMULATIVE_DELTA_OF_ALL_COLORS = (0xff + 0xff + 0xff); // Protected for unit test
     private static final int ROTATION_ANGLE = 90;
     private static final int MAX_COLOR = 0xffffff;
 
@@ -113,7 +114,7 @@ public class BitmapWrapper {
         setModifiedBitmap(source.copy(source.getConfig(), true));
     }
 
-    private Bitmap getRotatedSource() {
+    protected Bitmap getRotatedSource() { // protected for unit tests
         if (currRotationAngle != 0) {
             Matrix matrix = new Matrix();
             matrix.postRotate(currRotationAngle);
@@ -320,7 +321,7 @@ public class BitmapWrapper {
             int changeInGreen = Math.abs(getGreen(pixelCurrColor) - getGreen(targetColor));
             int changeInBlue = Math.abs(getBlue(pixelCurrColor) - getBlue(targetColor));
             int overallChange = changeInRed + changeInGreen + changeInBlue;
-            if (overallChange > ((0xff + 0xff + 0xff) * ctrl)) {
+            if (overallChange > (MAX_CUMULATIVE_DELTA_OF_ALL_COLORS * ctrl)) {
                 sigChange = true;
             }
             if (!sigChange) {
