@@ -7,6 +7,7 @@ import android.graphics.Color;
 
 import com.caitoo0o.filler.effects.BitmapWrapper;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -44,6 +45,21 @@ public class BitmapWrapperTest {
             Bitmap bitmap = Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888);
             shadowOf(bitmap).setMutable(true);
             return bitmap;
+        }
+
+        @Override
+        protected int getRed(int color) {
+            return super.getRed(color);
+        }
+
+        @Override
+        protected int getGreen(int color) {
+            return super.getGreen(color);
+        }
+
+        @Override
+        protected int getBlue(int color) {
+            return super.getBlue(color);
         }
     }
 
@@ -228,6 +244,79 @@ public class BitmapWrapperTest {
             x = coordinate[1];
             int pixelColor = bmw.getModifiedBitmap().getPixel(x, y);
             assertTrue(pixelColor == expectedColor);
+        }
+    }
+
+    private boolean isSignificantChange(int pixelColor1, int pixelColor2, BitmapWrapperExposed bmw, double ctrl) {
+        boolean sigChange = false;
+        int changeInRed = Math.abs(bmw.getRed(pixelColor1) - bmw.getRed(pixelColor2));
+        int changeInGreen = Math.abs(bmw.getGreen(pixelColor1) - bmw.getGreen(pixelColor2));
+        int changeInBlue = Math.abs(bmw.getBlue(pixelColor1) - bmw.getBlue(pixelColor2));
+        int overallChange = changeInRed + changeInGreen + changeInBlue;
+        if (overallChange > (bmw.getMaxCumDeltaOfAllColors() * ctrl)) {
+            sigChange = true;
+        }
+        return sigChange;
+    }
+
+    @Ignore
+    @Test
+    public void testRandomBleedFill() throws Exception {
+        double ctrl = .5;
+
+        Bitmap bitmap = Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888);
+        BitmapWrapperExposed bmw = new BitmapWrapperExposed(bitmap);
+        bmw.setModifiedBitmap(Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888));
+        bmw.randomBleedFill(ctrl, 1, null);
+
+        assertNotNull(bmw.getSourceBitmap());
+        assertNotNull(bmw.getModifiedBitmap());
+        assertTrue(bmw.getSourceBitmap() != bmw.getModifiedBitmap());
+
+        // Check that the sections are all the same color
+        int [] firstCoordinate = section1[0];
+        int y = firstCoordinate[0];
+        int x = firstCoordinate[1];
+        int expectedColor = bmw.getModifiedBitmap().getPixel(x,y);
+        for (int [] coordinate: section1) {
+            y = coordinate[0];
+            x = coordinate[1];
+            int pixelColor = bmw.getModifiedBitmap().getPixel(x, y);
+            boolean significantChange = isSignificantChange(pixelColor, expectedColor, bmw, ctrl);
+            assertFalse(significantChange);
+        }
+        firstCoordinate = section2[0];
+        y = firstCoordinate[0];
+        x = firstCoordinate[1];
+        expectedColor = bmw.getModifiedBitmap().getPixel(x,y);
+        for (int [] coordinate: section2) {
+            y = coordinate[0];
+            x = coordinate[1];
+            int pixelColor = bmw.getModifiedBitmap().getPixel(x, y);
+            boolean significantChange = isSignificantChange(pixelColor, expectedColor, bmw, ctrl);
+            assertFalse(significantChange);
+        }
+        firstCoordinate = section3[0];
+        y = firstCoordinate[0];
+        x = firstCoordinate[1];
+        expectedColor = bmw.getModifiedBitmap().getPixel(x,y);
+        for (int [] coordinate: section3) {
+            y = coordinate[0];
+            x = coordinate[1];
+            int pixelColor = bmw.getModifiedBitmap().getPixel(x, y);
+            boolean significantChange = isSignificantChange(pixelColor, expectedColor, bmw, ctrl);
+            assertFalse(significantChange);
+        }
+        firstCoordinate = section4[0];
+        y = firstCoordinate[0];
+        x = firstCoordinate[1];
+        expectedColor = bmw.getModifiedBitmap().getPixel(x,y);
+        for (int [] coordinate: section4) {
+            y = coordinate[0];
+            x = coordinate[1];
+            int pixelColor = bmw.getModifiedBitmap().getPixel(x, y);
+            boolean significantChange = isSignificantChange(pixelColor, expectedColor, bmw, ctrl);
+            assertFalse(significantChange);
         }
     }
 }

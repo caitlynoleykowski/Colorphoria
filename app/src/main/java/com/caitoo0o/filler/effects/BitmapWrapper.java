@@ -375,15 +375,18 @@ public class BitmapWrapper {
         return;
     }
 
-    private int getRed(int color) {
+    // protected for unit tests
+    protected int getRed(int color) {
         return (color & 0xff0000)>> 16;
     }
 
-    private int getGreen(int color) {
+    // protected for unit tests
+    protected int getGreen(int color) {
         return (color &  0x00ff00) >> 8;
     }
 
-    private int getBlue(int color) {
+    // protected for unit tests
+    protected int getBlue(int color) {
         return (color & 0x0000ff) >> 0;
     }
 }
