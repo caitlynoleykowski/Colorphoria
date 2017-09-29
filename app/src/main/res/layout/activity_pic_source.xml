@@ -69,6 +69,18 @@
                 android:orientation="horizontal">
 
                 <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                    android:id="@+id/drawButton"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/mybutton"
+                    android:onClick="onDraw"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_brush_200dp" />
+
+                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -79,18 +91,6 @@
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:background="@drawable/mybutton"
                     android:onClick="onCamera"/>
-
-                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="@dimen/activity_horizontal_margin"
-                    android:id="@+id/drawButton"
-                    android:src="@drawable/ic_brush_200dp"
-                    android:scaleType="fitCenter"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/mybutton"
-                    android:onClick="onDraw"/>
 
                 <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
                     android:layout_width="0dp"
