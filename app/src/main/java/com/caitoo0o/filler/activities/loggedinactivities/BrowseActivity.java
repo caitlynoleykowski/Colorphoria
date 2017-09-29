@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +19,15 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.caitoo0o.filler.backgroundtasks.GetBrowseThumbnailImageAsyncTask;
+import com.caitoo0o.filler.backgroundtasks.GetImageAsyncTask;
 import com.caitoo0o.filler.reusableuserinterface.OnSwipeTouchListener;
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.reusableuserinterface.PositionImageView;
 import com.caitoo0o.filler.utils.Utils;
 
 import java.io.File;
@@ -263,7 +268,7 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     // Used to get the index into the allFillerImages list in order to retrieve the files in order of most recent first
-    private int getIdxFromPos(ArrayList<File> files, int pos) {
+    public static int getIdxFromPos(ArrayList<File> files, int pos) {
         return files.size() - pos - 1;
     }
 
@@ -291,7 +296,7 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     // Adapter for Grid View
-    private class ImageAdapter extends BaseAdapter {
+    public class ImageAdapter extends BaseAdapter {
 
         private Context context;
         private ArrayList<File> files;
@@ -317,9 +322,8 @@ public class BrowseActivity extends AppCompatActivity {
             ViewHolder holder = new ViewHolder();
 
             if (convertView == null) {
-                holder.picturesView = new ImageView(context);
                 //Converting the Row Layout to be used in Grid View
-                convertView = getLayoutInflater().inflate(R.layout.row, parent, false);
+                convertView = getLayoutInflater().inflate(R.layout.thumnail_item, parent, false);
 
                 convertView.setTag(holder);
 
@@ -327,49 +331,27 @@ public class BrowseActivity extends AppCompatActivity {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-            // Must loop here in case the file at the current index is corrupted/not found/can't be read
-            Bitmap bm = null;
-            while (bm == null) {
-                int filesIndex = getIdxFromPos(files, position);
-                Uri uri = Uri.fromFile(files.get(filesIndex));
-                InputStream is;
-                try {
-                    is = context.getContentResolver().openInputStream(uri);
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    BitmapFactory.decodeStream(is, null, options);
-                    double scaleFactor = getScaleFactor(options.outWidth, options.outHeight);
-                    BitmapFactory.Options finalOptions = new BitmapFactory.Options();
-                    finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
-                    InputStream finalInputStream = context.getContentResolver().openInputStream(uri);
-                    bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
+            ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.thumbnail_item_progress_bar);
+            progressBar.setVisibility(View.VISIBLE);
 
-                    // If bitmap is null, the image couldn't load (i.e. bad/corrupted file), so
-                    // remove it from the list of files and move to the next one
-                    if (bm == null) {
-                        files.remove(filesIndex);
-                        continue;
-                    }
-
-                    holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
-                    holder.picturesView.setImageBitmap(bm);
-                    holder.picturesView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                } catch (FileNotFoundException e) {
-                    Log.e(TAG, "File not found to display thumbnail of image.");
-                    files.remove(filesIndex);
-                    continue;
-                }
-            }
+            PositionImageView positionImageView = (PositionImageView) convertView.findViewById(R.id.imageview);
+            positionImageView.setPosition(position);
+            holder.picturesView = positionImageView;
+            holder.picturesView.setImageDrawable(getResources().getDrawable(R.drawable.image_placeholder));
+            // TODO: Is is possible this will wind up with pictures out of order if one async task finishes later than one that started later?
+            // Answer: Yes. totally possible, but generally they finish in order.
+            // And u will see images flashing in the order they finish
+            new GetBrowseThumbnailImageAsyncTask(BrowseActivity.this, holder.picturesView, progressBar, files, position).execute();
 
             return convertView;
         }
         // View Holder pattern used for Smooth Scrolling. As View Holder pattern recycle the findViewById() object.
         class ViewHolder {
-            private ImageView picturesView;
+            public PositionImageView picturesView;
         }
     }
 
-    private static double getScaleFactor(int bitmapWidth, int bitmapHeight) {
+    public static double getThumbnailScaleFactor(int bitmapWidth, int bitmapHeight) {
         int numPixels = bitmapWidth * bitmapHeight;
         if (numPixels >= MAX_THUMBNAIL_PIXELS) {
             double scaleFactor = Math.sqrt((double) MAX_THUMBNAIL_PIXELS / (double) numPixels);
