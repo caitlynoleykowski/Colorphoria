@@ -207,7 +207,9 @@ public class PicSourceActivity extends AppCompatActivity {
 
     private Runnable startPicEditDelayed = new Runnable() {
         public void run() {
-            startPicEditActivity(mImageUri);
+            if (mImageUri != null) {
+                startPicEditActivity(mImageUri);
+            }
         }
     };
 
@@ -249,21 +251,18 @@ public class PicSourceActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode != RESULT_OK) {
+            mImageUri = null;
             Log.e(TAG, "No Image Selected.");
             return;
         }
-
+        // TODO: Is this code used anywhere anymore??
+        // TODO: This looks like it was from the external image picker
         if (requestCode == REQUEST_IMAGE_GET) {
             if (data != null && data.getData() != null) {
                 mImageUri = data.getData(); // save this as the uri so that on swipe left we can use it again
-                startPicEditActivity(data.getData());
-//                Bitmap bm = grabImage(data.getData());
-//                if (bm != null) {
-//                    startPicEditActivity(bm);
-//                } else {
-//                    Log.e(TAG, "bitmap from grabImage is null.");
-//                    Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
-//                }
+                if (mImageUri != null) {
+                    startPicEditActivity(mImageUri);
+                }
             } else {
                 Log.e(TAG, "data or data.getData from image picker intent is null.");
                 Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
@@ -276,10 +275,12 @@ public class PicSourceActivity extends AppCompatActivity {
     }
 
     private void startPicEditActivity(Uri uri) {
-        Intent intent = new Intent(this, PicEditActivity.class);
-        intent.putExtra(PicEditActivity.SOURCE_URI, uri);
-        startActivity(intent);
-        overridePendingTransition(R.anim.slide_bottom_to_center, R.anim.slide_center_to_top);
+        if (uri != null) {
+            Intent intent = new Intent(this, PicEditActivity.class);
+            intent.putExtra(PicEditActivity.SOURCE_URI, uri);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_bottom_to_center, R.anim.slide_center_to_top);
+        }
     }
 
     private void startBrowseActivity(Uri uri) {
