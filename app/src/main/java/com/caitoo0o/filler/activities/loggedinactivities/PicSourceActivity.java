@@ -187,18 +187,7 @@ public class PicSourceActivity extends AppCompatActivity {
                 public void onFailure(String error) {
                     refreshingFeed = false;
                     progressBar.setVisibility(View.GONE);
-                    Utils.showAlertDialog(
-                            PicSourceActivity.this,
-                            getString(R.string.download_failure) + ": " + error,
-                            getString(R.string.ok),
-                            new Utils.AlertDialogHandler() {
-                                @Override
-                                public void onPositiveButton(Dialog confirmDialog) {
-                                    // Do nothing, just close the dialog
-                                    confirmDialog.dismiss();
-                                }
-                            },
-                            false);
+                    Toast.makeText(PicSourceActivity.this, R.string.download_failure, Toast.LENGTH_LONG).show();
                 }
             };
             RestHelper.myImages(getApplicationContext(), user, callbacks);

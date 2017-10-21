@@ -69,7 +69,8 @@ public class RestHelper {
         String url = "https://" + getProjectId() + ".appspot.com/_ah/api/echo/v1/" + endpoint;
 
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(
+                Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -78,19 +79,36 @@ public class RestHelper {
                                 response);
                         callbacks.onSuccess(response);
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i(RestHelper.class.getName(), "Error when calling endpoint " + endpoint + ": " + error.getMessage());
-                callbacks.onFailure(error.getMessage());
-            }
-        }) {
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String failureMessage = "NONE";
+                        if (error == null) {
+                            Log.i(RestHelper.class.getName(), "error is null when calling endpoint " + endpoint);
+                            failureMessage = "error is null";
+                        } else if (error.networkResponse == null) {
+                            Log.i(RestHelper.class.getName(), "error.networkResponse is null when calling endpoint " + endpoint);
+                            failureMessage = "error.networkResponse is null. error.getMessage: " + error.getMessage();
+                        } else if (error.getMessage() == null) {
+                            Log.i(RestHelper.class.getName(), "error.getMessage() returns null when calling endpoint " + endpoint);
+                            failureMessage = "error message is null. statusCode is: " + error.networkResponse.statusCode;
+                        } else {
+                            failureMessage = error.getMessage();
+                        }
+                        Log.i(RestHelper.class.getName(), "Error when calling endpoint " + endpoint + ": " + failureMessage);
+                        // TODO: Figure out why in the world networkResponse is null and come back to this
+                        callbacks.onFailure(failureMessage);
+                        callbacks.onSuccess("{}");
+                    }
+                }
+        ) {
             @Override
             protected Map<String, String> getParams()
             {
                 return params;
             }
-        };;
+        };
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }

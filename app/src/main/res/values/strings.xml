@@ -116,7 +116,7 @@
 
     <!-- Used for ImageFeedActivity -->
     <string name="download_success">Download finished</string>
-    <string name="download_failure">Download failure</string>
+    <string name="download_failure">Unable to refresh feed</string>
 
     <!-- Used for UploadActivity and upload services -->
     <string name="upload_prompt">Upload image</string>
