@@ -12,6 +12,7 @@ import com.android.volley.toolbox.Volley;
 import com.caitoo0o.filler.data.Privacy;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,21 @@ import java.util.Map;
  */
 
 public class RestHelper {
+
+    public static void recordNewUser(Context appContext, FirebaseUser user,
+            String userId, String fullName, String username, String birthdayTimestamp,
+            HttpCallbacks callbacks) {
+
+        Map<String, String>  params = new HashMap<String, String>();
+        params.put("key", getApiKey());
+        params.put("user_id", user.getUid());
+        params.put("email", user.getEmail());
+        params.put("fullName", fullName);
+        params.put("username", username);
+        params.put("birthdayTimestamp", birthdayTimestamp);
+
+        getData(appContext, "usermetadata", "record_user_metadata", params, callbacks);
+    }
 
     public static void recordUpload(Context appContext, FirebaseUser user, String downloadUrl, Privacy privacy, String comment, HttpCallbacks callbacks) {
 
@@ -30,7 +46,7 @@ public class RestHelper {
         params.put("privacy", privacy.toString());
         params.put("comment", comment);
 
-        getData(appContext, "record_upload", params, callbacks);
+        getData(appContext, "mediametadata", "record_upload", params, callbacks);
     }
 
     public static void myImages(Context appContext, FirebaseUser user, HttpCallbacks callbacks) {
@@ -47,7 +63,7 @@ public class RestHelper {
         params.put("timestamp", "" + System.currentTimeMillis());
         //params.put("user_id", "Xq7yUgPOVFXpTNmbMT4TcPuC93r2");
 
-        getData(appContext, "date_images", params, callbacks);
+        getData(appContext, "mediametadata", "date_images", params, callbacks);
     }
 
     public interface HttpCallbacks {
@@ -63,10 +79,19 @@ public class RestHelper {
         return "AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE";
     }
 
-    private static void getData(Context appContext, final String endpoint, final Map<String, String> params, final HttpCallbacks callbacks) {
+    private static String getEndpointUrl(String api, String endpointName) {
+        return "https://" + getProjectId() + ".appspot.com/_ah/api/" + api + "/v1/" + endpointName;
+    }
+
+    private static void getData(
+                                Context appContext,
+                                final String api,
+                                final String endpointName,
+                                final Map<String, String> params,
+                                final HttpCallbacks callbacks) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(appContext);
-        String url = "https://" + getProjectId() + ".appspot.com/_ah/api/echo/v1/" + endpoint;
+        String url = getEndpointUrl(api, endpointName);
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(
@@ -74,9 +99,7 @@ public class RestHelper {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Log.i(RestHelper.class.getName(), "Response is: " +
-                                response);
+                        Log.i(RestHelper.class.getName(), "Response is: " + response);
                         callbacks.onSuccess(response);
                     }
                 },
@@ -85,18 +108,18 @@ public class RestHelper {
                     public void onErrorResponse(VolleyError error) {
                         String failureMessage = "NONE";
                         if (error == null) {
-                            Log.i(RestHelper.class.getName(), "error is null when calling endpoint " + endpoint);
+                            Log.i(RestHelper.class.getName(), "error is null when calling endpoint " + endpointName);
                             failureMessage = "error is null";
                         } else if (error.networkResponse == null) {
-                            Log.i(RestHelper.class.getName(), "error.networkResponse is null when calling endpoint " + endpoint);
+                            Log.i(RestHelper.class.getName(), "error.networkResponse is null when calling endpoint " + endpointName);
                             failureMessage = "error.networkResponse is null. error.getMessage: " + error.getMessage();
                         } else if (error.getMessage() == null) {
-                            Log.i(RestHelper.class.getName(), "error.getMessage() returns null when calling endpoint " + endpoint);
+                            Log.i(RestHelper.class.getName(), "error.getMessage() returns null when calling endpoint " + endpointName);
                             failureMessage = "error message is null. statusCode is: " + error.networkResponse.statusCode;
                         } else {
                             failureMessage = error.getMessage();
                         }
-                        Log.i(RestHelper.class.getName(), "Error when calling endpoint " + endpoint + ": " + failureMessage);
+                        Log.i(RestHelper.class.getName(), "Error when calling endpoint " + endpointName + ": " + failureMessage);
                         // TODO: Figure out why in the world networkResponse is null and come back to this
                         callbacks.onFailure(failureMessage);
                         callbacks.onSuccess("{}");

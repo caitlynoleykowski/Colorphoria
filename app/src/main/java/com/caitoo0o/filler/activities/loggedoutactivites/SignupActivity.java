@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.activities.loggedinactivities.AccountActivity;
 import com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity;
+import com.caitoo0o.filler.backgroundtasks.RestHelper;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -81,39 +82,7 @@ public class SignupActivity extends AppCompatActivity {
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                // If sign in fails, display a message to the user. If sign in succeeds
-                                // the auth state listener will be notified and logic to handle the
-                                // signed in user can be handled in the listener.
-                                if (!task.isSuccessful()) {
-                                    Log.d(this.getClass().getName(), "Authentication failed: " + task.getException());
-                                    Utils.showAlertDialog(
-                                            SignupActivity.this,
-                                            getString(R.string.signup_success),
-                                            getString(R.string.ok),
-                                            new Utils.AlertDialogHandler() {
-                                                public void onPositiveButton(Dialog confirmDialog) {
-                                                    // Close the dialog and go to login screen
-                                                    confirmDialog.dismiss();
-                                                    startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-                                                }
-                                            },
-                                            false);
-                                } else {
-                                    Utils.showAlertDialog(
-                                            SignupActivity.this,
-                                            getString(R.string.signup_failed),
-                                            getString(R.string.ok),
-                                            new Utils.AlertDialogHandler() {
-                                                public void onPositiveButton(Dialog confirmDialog) {
-                                                    // Do nothing, just close the dialog
-                                                    confirmDialog.dismiss();
-                                                }
-                                            },
-                                            false);
-                                    startActivity(new Intent(SignupActivity.this, PicSourceActivity.class));
-                                    finish();
-                                }
+                                signupCompletionCallback(task);
                             }
                         });
 
@@ -132,5 +101,42 @@ public class SignupActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         progressBar.setVisibility(View.GONE);
+    }
+
+    private void signupCompletionCallback(Task<AuthResult> task) {
+        progressBar.setVisibility(View.GONE);
+        if (!task.isSuccessful()) {
+            Log.d(this.getClass().getName(), "Signup failed: " + task.getException());
+            Utils.showAlertDialog(
+                    SignupActivity.this,
+                    getString(R.string.signup_failed),
+                    getString(R.string.ok),
+                    new Utils.AlertDialogHandler() {
+                        public void onPositiveButton(Dialog confirmDialog) {
+                            // Do nothing, just close the dialog
+                            confirmDialog.dismiss();
+                        }
+                    },
+                    false);
+        } else {
+            recordNewUserAfterSignupCompletionSuccess();
+        }
+    }
+
+    private void recordNewUserAfterSignupCompletionSuccess() {
+        //RestHelper.recordNewUser() // TODO: Issue with not having firebase user yet to get their id
+
+        Utils.showAlertDialog(
+                SignupActivity.this,
+                getString(R.string.signup_success),
+                getString(R.string.ok),
+                new Utils.AlertDialogHandler() {
+                    public void onPositiveButton(Dialog confirmDialog) {
+                        // Close the dialog and go to login screen
+                        confirmDialog.dismiss();
+                        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                    }
+                },
+                false);
     }
 }
