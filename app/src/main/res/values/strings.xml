@@ -64,7 +64,7 @@
     <!-- Used for SignupActivity begin -->
     <string name="signup_button">Sign Up</string>
 
-    <string name="signup_success">Account created! Please log in.</string>
+    <string name="signup_success">Account created!</string>
     <string name="signup_failed">Unable to create account. Please try again.</string>
     <!-- Used for SignupActivity end -->
 

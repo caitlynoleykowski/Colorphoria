@@ -1,8 +1,7 @@
 package com.caitoo0o.filler.activities.loggedoutactivites;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -16,16 +15,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.caitoo0o.filler.R;
-import com.caitoo0o.filler.activities.loggedinactivities.AccountActivity;
-import com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity;
 import com.caitoo0o.filler.backgroundtasks.RestHelper;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Date;
+
+import static com.caitoo0o.filler.utils.LoginUtils.recordNewUserAfterFirebaseSignupSuccess;
+import static com.caitoo0o.filler.utils.LoginUtils.signupFailure;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -36,10 +40,23 @@ public class SignupActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
 
+    String fullName;
+    Date birthdayDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        if (savedInstanceState != null) {
+            fullName = savedInstanceState.getString(TermsActivity.FULLNAME_STATE_KEY);
+            birthdayDate = (Date) savedInstanceState.getSerializable(BirthdayActivity.BIRTHDAY_STATE_KEY);
+        } else if (getIntent().hasExtra(BirthdayActivity.BIRTHDAY_STATE_KEY)) {
+            fullName = getIntent().getStringExtra(TermsActivity.FULLNAME_STATE_KEY);
+            birthdayDate = (Date) getIntent().getSerializableExtra(BirthdayActivity.BIRTHDAY_STATE_KEY);
+        } else {
+            // TODO: Error/bug, shouldn't get here
+        }
 
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -54,9 +71,14 @@ public class SignupActivity extends AppCompatActivity {
         passwordEditText.setTypeface(Typeface.DEFAULT);
         passwordEditText.setTransformationMethod(new PasswordTransformationMethod());
 
+
         signUpButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (fullName == null || birthdayDate == null) {
+                    Toast.makeText(SignupActivity.this, "fullName or birthday date null", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 String email = emailEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
@@ -107,36 +129,9 @@ public class SignupActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         if (!task.isSuccessful()) {
             Log.d(this.getClass().getName(), "Signup failed: " + task.getException());
-            Utils.showAlertDialog(
-                    SignupActivity.this,
-                    getString(R.string.signup_failed),
-                    getString(R.string.ok),
-                    new Utils.AlertDialogHandler() {
-                        public void onPositiveButton(Dialog confirmDialog) {
-                            // Do nothing, just close the dialog
-                            confirmDialog.dismiss();
-                        }
-                    },
-                    false);
+            signupFailure(this);
         } else {
-            recordNewUserAfterSignupCompletionSuccess();
+            recordNewUserAfterFirebaseSignupSuccess(this, fullName, birthdayDate);
         }
-    }
-
-    private void recordNewUserAfterSignupCompletionSuccess() {
-        //RestHelper.recordNewUser() // TODO: Issue with not having firebase user yet to get their id
-
-        Utils.showAlertDialog(
-                SignupActivity.this,
-                getString(R.string.signup_success),
-                getString(R.string.ok),
-                new Utils.AlertDialogHandler() {
-                    public void onPositiveButton(Dialog confirmDialog) {
-                        // Close the dialog and go to login screen
-                        confirmDialog.dismiss();
-                        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-                    }
-                },
-                false);
     }
 }

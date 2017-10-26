@@ -23,18 +23,27 @@ import java.util.Map;
 public class RestHelper {
 
     public static void recordNewUser(Context appContext, FirebaseUser user,
-            String userId, String fullName, String username, String birthdayTimestamp,
+            String fullName, String username, String birthdayTimestamp,
             HttpCallbacks callbacks) {
 
         Map<String, String>  params = new HashMap<String, String>();
         params.put("key", getApiKey());
         params.put("user_id", user.getUid());
         params.put("email", user.getEmail());
-        params.put("fullName", fullName);
+        params.put("full_name", fullName);
         params.put("username", username);
-        params.put("birthdayTimestamp", birthdayTimestamp);
+        params.put("birthday_timestamp_str", birthdayTimestamp);
 
-        getData(appContext, "usermetadata", "record_user_metadata", params, callbacks);
+        getData(appContext, "usermetadata", "record_new_user", params, callbacks);
+    }
+
+    public static void userRecordedStatus(Context appContext, FirebaseUser user,
+                                     HttpCallbacks callbacks) {
+
+        Map<String, String>  params = new HashMap<String, String>();
+        params.put("key", getApiKey());
+        params.put("user_id", user.getUid());
+        getData(appContext, "usermetadata", "user_recorded_status", params, callbacks);
     }
 
     public static void recordUpload(Context appContext, FirebaseUser user, String downloadUrl, Privacy privacy, String comment, HttpCallbacks callbacks) {

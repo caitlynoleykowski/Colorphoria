@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.activities.loggedinactivities.AccountActivity;
 import com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity;
+import com.caitoo0o.filler.backgroundtasks.RestHelper;
+import com.caitoo0o.filler.utils.LoginUtils;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -34,6 +36,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static com.caitoo0o.filler.backgroundtasks.RestHelper.userRecordedStatus;
 
 public class LoginActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener {
@@ -252,32 +259,78 @@ public class LoginActivity extends AppCompatActivity implements
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(this.getClass().getName(), "Google AuthCredential signInWithCredential succeeded");
-                            startActivity(new Intent(LoginActivity.this, PicSourceActivity.class));
-                        } else {
-                            Log.w(this.getClass().getName(), "Google AuthCredential signInWithCredential failed: ", task.getException());
-                            // Show dialog to notify user that Google login failed
-                            Utils.showAlertDialog(
-                                    LoginActivity.this,
-                                    getString(R.string.google_login_authentication_failed),
-                                    getString(R.string.login_try_again),
-                                    new Utils.AlertDialogHandler() {
-                                        public void onPositiveButton(Dialog confirmDialog) {
-                                            // Do nothing, just close the dialog
-                                            confirmDialog.dismiss();
+            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(this.getClass().getName(), "Google AuthCredential signInWithCredential succeeded");
+                    // Check that the user has been recorded to determine if
+                    // it has already been determined that the user's birthdate meets requirements
+                    userRecordedStatus(LoginActivity.this, auth.getCurrentUser(),
+                            new RestHelper.HttpCallbacks() {
+                                @Override
+                                public void onSuccess(String response) {
+                                    try {
+                                        JSONObject responseJson = new JSONObject(response);
+                                        if (responseJson.has("recorded")) {
+                                            boolean recorded = responseJson.getBoolean("recorded");
+                                            if (recorded) {
+                                                startActivity(new Intent(LoginActivity.this, PicSourceActivity.class));
+                                            } else {
+                                                Intent birthdayActivityIntent = new Intent(LoginActivity.this, BirthdayActivity.class);
+                                                birthdayActivityIntent.putExtra(BirthdayActivity.STARTED_FROM_SIGNUP, false);
+                                                startActivity(birthdayActivityIntent);
+                                            }
+                                        } else {
+                                            googleLoginFailure();
                                         }
-                                    },
-                                    false);
-                        }
+                                    } catch (JSONException e) {
+                                        googleLoginFailure();
+                                    }
+                                }
 
-                        progressBar.setVisibility(View.GONE);
+                                @Override
+                                public void onFailure(String error) {
+                                    googleLoginFailure();
+                                }
+                            });
+                } else {
+                    Log.w(this.getClass().getName(), "Google AuthCredential signInWithCredential failed: ", task.getException());
+                    // Show dialog to notify user that Google login failed
+                    Utils.showAlertDialog(
+                        LoginActivity.this,
+                        getString(R.string.google_login_authentication_failed),
+                        getString(R.string.login_try_again),
+                        new Utils.AlertDialogHandler() {
+                            public void onPositiveButton(Dialog confirmDialog) {
+                                // Do nothing, just close the dialog
+                                confirmDialog.dismiss();
+                            }
+                        },
+                        false);
+                }
+
+                progressBar.setVisibility(View.GONE);
+                }
+            });
+    }
+
+    private void googleLoginFailure() {
+        Utils.showAlertDialog(
+                LoginActivity.this,
+                getString(R.string.google_login_failed),
+                getString(R.string.ok),
+                new Utils.AlertDialogHandler() {
+                    public void onPositiveButton(Dialog confirmDialog) {
+                        // Need to sign out b/c google login actually succeeded
+                        // But the endpoint call to ensure birthdate was checked did not
+                        auth.signOut(); // TODO: This is sortof incomplete for google logout but will do for now
+                        // Close the dialog and go to login screen
+                        confirmDialog.dismiss();
                     }
-                });
+                },
+                false);
     }
 
     // Google login code end

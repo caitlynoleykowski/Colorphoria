@@ -20,10 +20,15 @@ public class BirthdayActivity extends AppCompatActivity {
 
     private static final String TAG = BirthdayActivity.class.getName();
 
+    public static final String BIRTHDAY_STATE_KEY = "BIRTHDAY_STATE_KEY";
+    public static final String STARTED_FROM_SIGNUP = "STARTED_FROM_SIGNUP";
+
     NumberPicker numberPickerMonth;
     NumberPicker numberPickerDay;
     NumberPicker numberPickerYear;
     TextView birthdayTextView;
+
+    boolean startedFromSignup = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +60,13 @@ public class BirthdayActivity extends AppCompatActivity {
             }
         });
 
-
-
         updateBirthdayTextView();
+
+        if (savedInstanceState != null) {
+            startedFromSignup = savedInstanceState.getBoolean(BirthdayActivity.STARTED_FROM_SIGNUP);
+        } else if (getIntent().hasExtra(BirthdayActivity.STARTED_FROM_SIGNUP)) {
+            startedFromSignup = getIntent().getBooleanExtra(BirthdayActivity.STARTED_FROM_SIGNUP, true);
+        }
     }
 
     private void setupDisplayedDateToCurrentDate() {
@@ -84,7 +93,10 @@ public class BirthdayActivity extends AppCompatActivity {
 
     public void onContinue(View v) {
         if (getBirthday().isGreaterThanOrEqualThirteenYearsAgo()) {
-            startActivity(new Intent(BirthdayActivity.this, TermsActivity.class));
+            Intent birthdayActivityIntent = new Intent(BirthdayActivity.this, TermsActivity.class);
+            birthdayActivityIntent.putExtra(BirthdayActivity.BIRTHDAY_STATE_KEY, getBirthday().getBirthdayDate());
+            birthdayActivityIntent.putExtra(BirthdayActivity.STARTED_FROM_SIGNUP, startedFromSignup);
+            startActivity(birthdayActivityIntent);
         } else {
             Utils.showAlertDialog(
                     this,
@@ -110,6 +122,13 @@ public class BirthdayActivity extends AppCompatActivity {
             this.month = month;
             this.day = day;
             this.year = year;
+        }
+
+        public Date getBirthdayDate() {
+            Calendar c = Calendar.getInstance();
+            c.set(year, month - 1, day);
+            Date birthdayDate = c.getTime();
+            return birthdayDate;
         }
 
         /* Returns true if this Birthday would make someone 13 years old or older
