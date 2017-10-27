@@ -46,12 +46,13 @@ public class RestHelper {
         getData(appContext, "usermetadata", "user_recorded_status", params, callbacks);
     }
 
-    public static void recordUpload(Context appContext, FirebaseUser user, String downloadUrl, Privacy privacy, String comment, HttpCallbacks callbacks) {
+    public static void recordUpload(Context appContext, FirebaseUser user, String downloadUrl, String filename, Privacy privacy, String comment, HttpCallbacks callbacks) {
 
         Map<String, String>  params = new HashMap<String, String>();
         params.put("key", getApiKey());
         params.put("user_id", user.getUid());
         params.put("download_url", downloadUrl);
+        params.put("filename", filename);
         params.put("privacy", privacy.toString());
         params.put("comment", comment);
 

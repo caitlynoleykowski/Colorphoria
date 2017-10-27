@@ -17,6 +17,7 @@
 package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -102,6 +103,21 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
                         startPicSourceActivity();
                     case MyUploadService.UPLOAD_ERROR:
                         onUploadResultIntent(intent);
+                        break;
+                    case MyUploadService.UPLOAD_ADULT_CONTENT_ERROR:
+                        onUploadResultIntent(intent);
+                        Utils.showAlertDialog(
+                                UploadActivity.this,
+                                getString(R.string.upload_adult_content_error),
+                                getString(R.string.ok),
+                                new Utils.AlertDialogHandler() {
+                                    @Override
+                                    public void onPositiveButton(Dialog confirmDialog) {
+                                        confirmDialog.dismiss();
+                                    }
+                                },
+                                false
+                        );
                         break;
                 }
             }

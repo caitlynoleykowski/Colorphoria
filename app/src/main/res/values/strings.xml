@@ -2,10 +2,10 @@
     <string name="app_name">Filler</string>
 
     <!-- General use begin -->
-    <string name="ok">OK</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="cancel">Cancel</string>
+    <string name="ok">@android:string/ok</string>
+    <string name="yes">@android:string/yes</string>
+    <string name="no">@android:string/no</string>
+    <string name="cancel">@android:string/cancel</string>
     <string name="are_you_sure">Are you sure?</string>
     <!-- General use end -->
 
@@ -124,6 +124,7 @@
     <string name="share_external">Share with other apps: </string>
     <string name="progress_uploading">Uploading…</string>
     <string name="upload_success">Upload finished</string>
-    <string name="upload_failure">Upload failed</string>\
+    <string name="upload_failure">Upload failed</string>
+    <string name="upload_adult_content_error">Image flagged as likely containing inappropriate content. Cannot be posted.</string>
 
 </resources>

@@ -21,6 +21,9 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Service to handle uploading files to Firebase Storage.
  */
@@ -32,6 +35,7 @@ public class MyUploadService extends MyBaseTaskService {
     public static final String ACTION_UPLOAD = "action_upload";
     public static final String UPLOAD_COMPLETED = "upload_completed";
     public static final String UPLOAD_ERROR = "upload_error";
+    public static final String UPLOAD_ADULT_CONTENT_ERROR = "upload_adult_content_error";
 
     /** Intent Extras **/
     public static final String EXTRA_FILE_URI = "extra_file_uri";
@@ -100,25 +104,48 @@ public class MyUploadService extends MyBaseTaskService {
                         Log.d(TAG, "uploadFromUri:onSuccess");
 
                         // Get the public download URL
-                        Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
+                        final Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
 
                         // TODO : Should this success callback come from the higher level?
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         RestHelper.HttpCallbacks callbacks = new RestHelper.HttpCallbacks() {
                             public void onSuccess(String response) {
-                                // TODO: Probs don't need 2 do anything
+                                try {
+                                    JSONObject responseJson = new JSONObject(response);
+                                    if (responseJson.has("message")) {
+                                        String message = responseJson.getString("message");
+                                        if (message.equals("adult_content")) {
+                                            broadcastUploadFinished(null, fileUri, true);
+                                            showUploadFinishedNotification(downloadUri, fileUri);
+                                            taskCompleted();
+                                        } else {
+                                            broadcastUploadFinished(downloadUri, fileUri, false);
+                                            showUploadFinishedNotification(downloadUri, fileUri);
+                                            taskCompleted();
+                                        }
+                                    } else {
+                                        // Shouldn't ever get here but if it happens count it as a failure
+                                        // by passing null downloadUri
+                                        broadcastUploadFinished(null, fileUri, false);
+                                        showUploadFinishedNotification(null, fileUri);
+                                        taskCompleted();
+                                    }
+                                } catch (JSONException e) {
+                                    // Shouldn't ever get here but if it happens count it as a failure
+                                    // by passing null downloadUri
+                                    broadcastUploadFinished(null, fileUri, false);
+                                    showUploadFinishedNotification(null, fileUri);
+                                    taskCompleted();
+                                }
                             }
                             public void onFailure(String error) {
                                 // TODO: If record upload fails u need to retry or notify the user
+                                broadcastUploadFinished(null, fileUri, false);
+                                showUploadFinishedNotification(null, fileUri);
+                                taskCompleted();
                             }
                         };
-                        RestHelper.recordUpload(getApplicationContext(), user, downloadUri.toString(), Privacy.ONLY_ME, "testing3", callbacks);
-
-                        // [START_EXCLUDE]
-                        broadcastUploadFinished(downloadUri, fileUri);
-                        showUploadFinishedNotification(downloadUri, fileUri);
-                        taskCompleted();
-                        // [END_EXCLUDE]
+                        RestHelper.recordUpload(getApplicationContext(), user, downloadUri.toString(), fileUri.getLastPathSegment(), Privacy.ONLY_ME, "testing3", callbacks);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -128,7 +155,7 @@ public class MyUploadService extends MyBaseTaskService {
                         Log.w(TAG, "uploadFromUri:onFailure", exception);
 
                         // [START_EXCLUDE]
-                        broadcastUploadFinished(null, fileUri);
+                        broadcastUploadFinished(null, fileUri, false);
                         showUploadFinishedNotification(null, fileUri);
                         taskCompleted();
                         // [END_EXCLUDE]
@@ -141,10 +168,15 @@ public class MyUploadService extends MyBaseTaskService {
      * Broadcast finished upload (success or failure).
      * @return true if a running receiver received the broadcast.
      */
-    private boolean broadcastUploadFinished(@Nullable Uri downloadUrl, @Nullable Uri fileUri) {
-        boolean success = downloadUrl != null;
-
-        String action = success ? UPLOAD_COMPLETED : UPLOAD_ERROR;
+    private boolean broadcastUploadFinished(@Nullable Uri downloadUrl, @Nullable Uri fileUri, boolean adultContent) {
+        String action;
+        if (downloadUrl != null) {
+            action = UPLOAD_COMPLETED;
+        } else if (adultContent) {
+            action = UPLOAD_ADULT_CONTENT_ERROR;
+        } else {
+            action = UPLOAD_ERROR;
+        }
 
         Intent broadcast = new Intent(action)
                 .putExtra(EXTRA_DOWNLOAD_URL, downloadUrl)
@@ -175,6 +207,7 @@ public class MyUploadService extends MyBaseTaskService {
         IntentFilter filter = new IntentFilter();
         filter.addAction(UPLOAD_COMPLETED);
         filter.addAction(UPLOAD_ERROR);
+        filter.addAction(UPLOAD_ADULT_CONTENT_ERROR);
 
         return filter;
     }
