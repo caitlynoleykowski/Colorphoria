@@ -32,6 +32,7 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:10.2.6'
     compile 'com.google.android.gms:play-services-auth:10.2.6'
     compile 'com.android.support:design:25.0.0'
+    compile 'com.loopj.android:android-async-http:1.4.9'
 
     // test dependencies
     testCompile 'junit:junit:4.12'

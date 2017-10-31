@@ -1,7 +1,9 @@
 package com.caitoo0o.filler.backgroundtasks;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -9,12 +11,25 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.data.Privacy;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by caitoo0o on 7/2/2017.
@@ -26,37 +41,34 @@ public class RestHelper {
             String fullName, String username, String birthdayTimestamp,
             HttpCallbacks callbacks) {
 
-        Map<String, String>  params = new HashMap<String, String>();
-        params.put("key", getApiKey());
-        params.put("user_id", user.getUid());
-        params.put("email", user.getEmail());
-        params.put("full_name", fullName);
-        params.put("username", username);
-        params.put("birthday_timestamp_str", birthdayTimestamp);
+        RequestParams  params = new RequestParams();
+        params.add("key", getApiKey());
+        params.add("email", user.getEmail());
+        params.add("full_name", fullName);
+        params.add("username", username);
+        params.add("birthday_timestamp_str", birthdayTimestamp);
 
-        getData(appContext, "usermetadata", "record_new_user", params, callbacks);
+        postDataWrapper(appContext, user, "mobile", "record_new_user", params, callbacks);
     }
 
     public static void userRecordedStatus(Context appContext, FirebaseUser user,
                                      HttpCallbacks callbacks) {
 
-        Map<String, String>  params = new HashMap<String, String>();
-        params.put("key", getApiKey());
-        params.put("user_id", user.getUid());
-        getData(appContext, "usermetadata", "user_recorded_status", params, callbacks);
+        RequestParams  params = new RequestParams();
+        params.add("key", getApiKey());
+        postDataWrapper(appContext, user, "mobile", "user_recorded_status", params, callbacks);
     }
 
     public static void recordUpload(Context appContext, FirebaseUser user, String downloadUrl, String filename, Privacy privacy, String comment, HttpCallbacks callbacks) {
 
-        Map<String, String>  params = new HashMap<String, String>();
-        params.put("key", getApiKey());
-        params.put("user_id", user.getUid());
-        params.put("download_url", downloadUrl);
-        params.put("filename", filename);
-        params.put("privacy", privacy.toString());
-        params.put("comment", comment);
+        RequestParams  params = new RequestParams();
+        params.add("key", getApiKey());
+        params.add("download_url", downloadUrl);
+        params.add("filename", filename);
+        params.add("privacy", privacy.toString());
+        params.add("comment", comment);
 
-        getData(appContext, "mediametadata", "record_upload", params, callbacks);
+        postDataWrapper(appContext, user, "mobile", "record_upload", params, callbacks);
     }
 
     public static void myImages(Context appContext, FirebaseUser user, HttpCallbacks callbacks) {
@@ -68,12 +80,23 @@ public class RestHelper {
 //
 //        getData(appContext, "my_images", params, callbacks);
 
-        Map<String, String>  params = new HashMap<String, String>();
-        params.put("key", getApiKey());
-        params.put("timestamp", "" + System.currentTimeMillis());
-        //params.put("user_id", "Xq7yUgPOVFXpTNmbMT4TcPuC93r2");
+        RequestParams  params = new RequestParams();
+        params.add("key", getApiKey());
+        params.add("timestamp", "" + System.currentTimeMillis());
 
-        getData(appContext, "mediametadata", "date_images", params, callbacks);
+        postDataWrapper(appContext, user, "mobile", "date_images", params, callbacks);
+    }
+
+//    public static void firebaseEndpointAuthTest(Context appContext, FirebaseUser user, HttpCallbacks callbacks) {
+//        Map<String, String>  params = new HashMap<String, String>();
+//        params.put("key", getApiKey());
+//        getData(appContext, user, Request.Method.GET, "mobile", "firebase_user", params, callbacks);
+//    }
+
+    public static void firebaseEndpointAuthTest(final Context appContext, final FirebaseUser user, final HttpCallbacks callbacks) {
+        RequestParams  params = new RequestParams();
+        params.add("key", getApiKey());
+        postDataWrapper(appContext, user, "mobile", "firebase_user2", params, callbacks);
     }
 
     public interface HttpCallbacks {
@@ -93,57 +116,86 @@ public class RestHelper {
         return "https://" + getProjectId() + ".appspot.com/_ah/api/" + api + "/v1/" + endpointName;
     }
 
+    private static void postDataWrapper(
+            final Context context,
+            final FirebaseUser user,
+            final String api,
+            final String endpointName,
+            final RequestParams requestParams,
+            final HttpCallbacks callbacks) {
+        user.getToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+            @Override
+            public void onSuccess(GetTokenResult getTokenResult) {
+                postData(context, user, getTokenResult.getToken(), api, endpointName, requestParams, callbacks);            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, "Failed to get token from Firebase: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private static void getData(
-                                Context appContext,
-                                final String api,
-                                final String endpointName,
-                                final Map<String, String> params,
-                                final HttpCallbacks callbacks) {
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(appContext);
+            final Context context,
+            final FirebaseUser user,
+            final String authToken,
+            final String api,
+            final String endpointName,
+            final HttpCallbacks callbacks) {
         String url = getEndpointUrl(api, endpointName);
 
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.i(RestHelper.class.getName(), "Response is: " + response);
-                        callbacks.onSuccess(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        String failureMessage = "NONE";
-                        if (error == null) {
-                            Log.i(RestHelper.class.getName(), "error is null when calling endpoint " + endpointName);
-                            failureMessage = "error is null";
-                        } else if (error.networkResponse == null) {
-                            Log.i(RestHelper.class.getName(), "error.networkResponse is null when calling endpoint " + endpointName);
-                            failureMessage = "error.networkResponse is null. error.getMessage: " + error.getMessage();
-                        } else if (error.getMessage() == null) {
-                            Log.i(RestHelper.class.getName(), "error.getMessage() returns null when calling endpoint " + endpointName);
-                            failureMessage = "error message is null. statusCode is: " + error.networkResponse.statusCode;
-                        } else {
-                            failureMessage = error.getMessage();
-                        }
-                        Log.i(RestHelper.class.getName(), "Error when calling endpoint " + endpointName + ": " + failureMessage);
-                        // TODO: Figure out why in the world networkResponse is null and come back to this
-                        callbacks.onFailure(failureMessage);
-                        callbacks.onSuccess("{}");
-                    }
-                }
-        ) {
+        AsyncHttpClient apiClient = new AsyncHttpClient();
+        apiClient.addHeader("Authorization", "Bearer " + authToken);
+        apiClient.get(context, url, new AsyncHttpResponseHandler() {
             @Override
-            protected Map<String, String> getParams()
-            {
-                return params;
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String response = null;
+                try {
+                    response = new String(responseBody, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    response = e.getMessage();
+                }
+                callbacks.onSuccess(response);
             }
-        };
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
+                                  Throwable error) {
+                callbacks.onFailure(error.getMessage());
+            }
+        });
+    }
+
+    private static void postData(
+            final Context context,
+            final FirebaseUser user,
+            final String authToken,
+            final String api,
+            final String endpointName,
+            final RequestParams params,
+            final HttpCallbacks callbacks) {
+        String url = getEndpointUrl(api, endpointName);
+
+        AsyncHttpClient apiClient = new AsyncHttpClient();
+        apiClient.addHeader("Authorization", "Bearer " + authToken);
+        apiClient.post(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String response = null;
+                try {
+                    response = new String(responseBody, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    response = e.getMessage();
+                }
+                Log.i(RestHelper.class.getName(), "Response is: " + response);
+                callbacks.onSuccess(response);
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
+                                  Throwable error) {
+                Log.i(RestHelper.class.getName(), "Error when calling endpoint " + endpointName + ": " + error.getMessage());
+                callbacks.onFailure(error.getMessage());
+            }
+        });
     }
 
     // End network calls

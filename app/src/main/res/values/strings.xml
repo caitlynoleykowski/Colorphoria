@@ -127,4 +127,8 @@
     <string name="upload_failure">Upload failed</string>
     <string name="upload_adult_content_error">Image flagged as likely containing inappropriate content. Cannot be posted.</string>
 
+    <!-- User for rest calls -->
+    <string name="rest_auth_token_failure">Failed to authorize</string>
+    <string name="rest_auth_token_interruption">Authorization interrupted</string>
+
 </resources>

@@ -35,7 +35,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 
-public class PicSourceActivity extends AppCompatActivity {
+public class PicSourceActivity extends LoggedInActivity {
 
     private static final String TAG = PicSourceActivity.class.getName();
 
@@ -136,6 +136,30 @@ public class PicSourceActivity extends AppCompatActivity {
 
         // Call to get the images
         getMyImages();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        // Call to test firebase endpoint auth
+        RestHelper.firebaseEndpointAuthTest(this, user, new RestHelper.HttpCallbacks() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    if (responseJson.has("email")) {
+                        String message = responseJson.getString("email");
+                        Toast.makeText(PicSourceActivity.this, "User's email:" + message, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(PicSourceActivity.this, "Error: json does not contain email", Toast.LENGTH_LONG).show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(PicSourceActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(PicSourceActivity.this, "FAILURE: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
@@ -158,40 +182,47 @@ public class PicSourceActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             RestHelper.HttpCallbacks callbacks = new RestHelper.HttpCallbacks() {
                 public void onSuccess(String response) {
-                    Log.i(this.getClass().getName(), response);
-
-                    try {
-                        adapter.clear(); // Remove all images (image urls) from the adapter
-                        JSONObject responseJson = new JSONObject(response);
-                        if (responseJson.has("urls")) {
-                            // TODO: Handle this better in case somehow it has "urls" but the array is empty
-                            JSONArray urlArrayJson = responseJson.getJSONArray("urls");
-                            for (int i = 0; i < urlArrayJson.length(); i++) {
-                                String url = (String) urlArrayJson.get(i);
-                                adapter.addItem(url);
-                            }
-                        } else {
-                            // TODO: This is weird to download this static image so change this later
-                            // TODO: when more time
-                            adapter.addItem("https://firebasestorage.googleapis.com/v0/b/filler-ea8ae.appspot.com/o/photos%2F1211826150?alt=media&token=df618132-a2a8-4f51-ad5e-65dd1754e8dd");
-                        }
-                        adapter.notifyDataSetChanged(); // Make list view pick up changes
-                    } catch (JSONException e) {
-                        // TODO: Handle this
-                        Log.i(this.getClass().getName(), "Error parsing json.", e);
-                    }
-                    refreshingFeed = false;
-                    progressBar.setVisibility(View.GONE);
+                    loadFeed(response);
                 }
 
                 public void onFailure(String error) {
                     refreshingFeed = false;
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(PicSourceActivity.this, R.string.download_failure, Toast.LENGTH_LONG).show();
+                    // TODO: Figure out why in the world networkResponse is null and come back to this
+                    // TODO: so that we don't have to just loadFeed as if there's no images for today
+                    loadFeed("{}");
                 }
             };
             RestHelper.myImages(getApplicationContext(), user, callbacks);
         }
+    }
+
+    private void loadFeed(String response) {
+        Log.i(this.getClass().getName(), response);
+
+        try {
+            adapter.clear(); // Remove all images (image urls) from the adapter
+            JSONObject responseJson = new JSONObject(response);
+            if (responseJson.has("urls")) {
+                // TODO: Handle this better in case somehow it has "urls" but the array is empty
+                JSONArray urlArrayJson = responseJson.getJSONArray("urls");
+                for (int i = 0; i < urlArrayJson.length(); i++) {
+                    String url = (String) urlArrayJson.get(i);
+                    adapter.addItem(url);
+                }
+            } else {
+                // TODO: This is weird to download this static image so change this later
+                // TODO: when more time
+                adapter.addItem("https://firebasestorage.googleapis.com/v0/b/filler-ea8ae.appspot.com/o/photos%2F1211826150?alt=media&token=df618132-a2a8-4f51-ad5e-65dd1754e8dd");
+            }
+            adapter.notifyDataSetChanged(); // Make list view pick up changes
+        } catch (JSONException e) {
+            // TODO: Handle this
+            Log.i(this.getClass().getName(), "Error parsing json.", e);
+        }
+        refreshingFeed = false;
+        progressBar.setVisibility(View.GONE);
     }
 
     private Runnable startPicEditDelayed = new Runnable() {
