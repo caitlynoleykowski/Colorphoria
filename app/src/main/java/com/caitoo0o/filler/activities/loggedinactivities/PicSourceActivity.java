@@ -12,6 +12,9 @@ import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -137,29 +140,30 @@ public class PicSourceActivity extends LoggedInActivity {
         // Call to get the images
         getMyImages();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        // Call to test firebase endpoint auth
-        RestHelper.firebaseEndpointAuthTest(this, user, new RestHelper.HttpCallbacks() {
-            @Override
-            public void onSuccess(String response) {
-                try {
-                    JSONObject responseJson = new JSONObject(response);
-                    if (responseJson.has("email")) {
-                        String message = responseJson.getString("email");
-                        Toast.makeText(PicSourceActivity.this, "User's email:" + message, Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(PicSourceActivity.this, "Error: json does not contain email", Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    Toast.makeText(PicSourceActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(String error) {
-                Toast.makeText(PicSourceActivity.this, "FAILURE: " + error, Toast.LENGTH_LONG).show();
-            }
-        });
+        // TODO: Remove this. It's just here to test firebase auth
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        // Call to test firebase endpoint auth
+//        RestHelper.firebaseEndpointAuthTest(this, user, new RestHelper.HttpCallbacks() {
+//            @Override
+//            public void onSuccess(String response) {
+//                try {
+//                    JSONObject responseJson = new JSONObject(response);
+//                    if (responseJson.has("email")) {
+//                        String message = responseJson.getString("email");
+//                        Toast.makeText(PicSourceActivity.this, "User's email:" + message, Toast.LENGTH_LONG).show();
+//                    } else {
+//                        Toast.makeText(PicSourceActivity.this, "Error: json does not contain email", Toast.LENGTH_LONG).show();
+//                    }
+//                } catch (Exception e) {
+//                    Toast.makeText(PicSourceActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String error) {
+//                Toast.makeText(PicSourceActivity.this, "FAILURE: " + error, Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 
     @Override
@@ -171,6 +175,25 @@ public class PicSourceActivity extends LoggedInActivity {
         } else if (startDraw) {
             startDraw = false;
             handler.postDelayed(startDrawDelayed, getResources().getInteger(R.integer.anim_duration));
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_account:
+                startActivity(new Intent(this, AccountActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -238,10 +261,6 @@ public class PicSourceActivity extends LoggedInActivity {
             startDrawActivity(mImageUri);
         }
     };
-
-    public void onMore(View v) {
-        startActivity(new Intent(this, AccountActivity.class));
-    }
 
     public void onCamera(View v) {
         startCameraActivityCameraPermission();

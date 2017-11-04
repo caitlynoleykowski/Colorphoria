@@ -5,7 +5,6 @@
     tools:context="com.caitoo0o.filler.activities.loggedoutactivites.ResetPasswordActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
     android:gravity="center"
     android:orientation="vertical" >
 
@@ -15,7 +14,6 @@
         tools:context="com.caitoo0o.filler.activities.loggedoutactivites.ResetPasswordActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDark"
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin">
 

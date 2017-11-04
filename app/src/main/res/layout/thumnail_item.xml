@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"
-    android:background="@color/colorPrimaryDark">
+    android:layout_marginBottom="@dimen/activity_vertical_margin" >
     <com.caitoo0o.filler.reusableuserinterface.PositionImageView
         android:layout_width="100dp"
         android:layout_height="100dp"

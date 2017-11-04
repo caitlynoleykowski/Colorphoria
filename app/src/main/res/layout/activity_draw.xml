@@ -4,77 +4,18 @@
     android:id="@+id/outer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     tools:context="com.caitoo0o.filler.activities.loggedinactivities.DrawActivity">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal" >
-
-        <ImageButton
-            android:id="@+id/new_btn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="fill_parent"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:src="@drawable/ic_new_canvas_24dp"
-            android:onClick="onNewButton"/>
-
-        <ImageButton
-            android:id="@+id/draw_btn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="fill_parent"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:src="@drawable/ic_brush_24dp"
-            android:onClick="onDrawButton"/>
-
-        <ImageButton
-            android:id="@+id/erase_btn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="fill_parent"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:src="@drawable/ic_eraser_24dp"
-            android:onClick="onEraseButton"/>
-
-        <ImageButton
-            android:id="@+id/save_btn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="fill_parent"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:src="@drawable/ic_get_app_24dp"
-            android:onClick="onSaveButton"/>
-
-        <ImageButton
-            android:id="@+id/done_btn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="fill_parent"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:src="@drawable/ic_done_24dp"
-            android:onClick="onDoneButton" />
-    </LinearLayout>
 
     <com.caitoo0o.filler.reusableuserinterface.DrawView
         android:id="@+id/drawing"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="7"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:background="#FFFFFFFF" />
 
     <LinearLayout
@@ -83,6 +24,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="@dimen/activity_horizontal_margin"
+        android:elevation="@dimen/elevation"
         android:background="@color/colorPrimary"
         android:orientation="horizontal" >
 

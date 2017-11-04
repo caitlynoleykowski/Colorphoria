@@ -19,7 +19,8 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.loggedoutactivites.LoginActivity">
+        <activity android:name=".activities.loggedoutactivites.LoginActivity"
+            android:theme="@style/LoggedOutTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,15 +42,19 @@
         <activity android:name=".activities.loggedinactivities.DrawActivity" />
         <activity android:name=".activities.loggedinactivities.UploadActivity" />
         <activity android:name=".activities.loggedinactivities.AccountActivity" />
-        <activity android:name=".activities.loggedoutactivites.BirthdayActivity" />
-        <activity android:name=".activities.loggedoutactivites.SignupActivity" />
-        <activity android:name=".activities.loggedoutactivites.ResetPasswordActivity" />
+
+        <activity android:name=".activities.loggedoutactivites.BirthdayActivity"
+            android:theme="@style/LoggedOutTheme"/>
+        <activity android:name=".activities.loggedoutactivites.TermsActivity"
+            android:theme="@style/LoggedOutTheme"/>
+        <activity android:name=".activities.loggedoutactivites.SignupActivity"
+            android:theme="@style/LoggedOutTheme"/>
+        <activity android:name=".activities.loggedoutactivites.ResetPasswordActivity"
+            android:theme="@style/LoggedOutTheme"/>
 
         <service
             android:name=".backgroundtasks.MyUploadService"
             android:exported="false" />
-
-        <activity android:name=".activities.loggedoutactivites.TermsActivity"></activity>
     </application>
 
 </manifest>

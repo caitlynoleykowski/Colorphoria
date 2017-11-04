@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_account"
+        android:title="@string/account_title"
+        android:icon="@drawable/ic_account_box_white_24dp" >
+    </item>
+</menu>

@@ -26,6 +26,11 @@
     <!-- Used for birthday activity end -->
 
     <!-- Used for brush and eraser sizes on DrawingActivity begin -->
+    <string name="draw_menu_new">New</string>
+    <string name="draw_menu_draw">Draw</string>
+    <string name="draw_menu_eraser">Eraser</string>
+    <string name="draw_menu_save">Save</string>
+    <string name="draw_menu_done">Done</string>
     <string name="sml">Small</string>
     <string name="med">Medium</string>
     <string name="lrg">Large</string>
@@ -69,6 +74,8 @@
     <!-- Used for SignupActivity end -->
 
     <!-- Used for AccountActivity begin -->
+    <string name="account_title">My Account</string>
+
     <string name="new_email_hint">New Email</string>
     <string name="new_password_hint">New Password</string>
 
@@ -93,7 +100,6 @@
     <string name="delete_account_confirmation">Are you sure you want to delete your account? This action can\'t be undone.</string>
     <string name="delete_account_success">You have deleted your account. Goodbye for now!</string>
     <string name="delete_account_failed">Failed to delete account.</string>
-
     <!-- Used for AccountActivity end -->
 
     <!-- Used for PicSourceActivity begin -->
@@ -104,6 +110,12 @@
     <!-- Used for PicEditActivity begin -->
     <string name="unable_to_save_image">Image could not be saved.</string>
     <string name="unable_to_share_image">Image could not be shared.</string>
+    <string name="pic_edit_menu_delete">Delete</string>
+    <string name="pic_edit_menu_reset">Reset</string>
+    <string name="pic_edit_menu_undo">Undo</string>
+    <string name="pic_edit_menu_redo">Redo</string>
+    <string name="pic_edit_menu_save">Save</string>
+    <string name="pic_edit_menu_share">Share</string>
     <!-- Used for PicEditActivity end -->
 
     <!-- Used for BrowseActivity begin -->

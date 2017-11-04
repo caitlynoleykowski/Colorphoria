@@ -5,89 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity"
-    android:background="@color/colorPrimaryDark">
-
-    <LinearLayout
-        android:id="@+id/firstButtonLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onDiscard"
-            android:src="@drawable/ic_delete_24dp"
-            android:clickable="false" />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onReset"
-            android:src="@drawable/ic_clear_24dp"
-            android:clickable="false" />
-
-        <ImageButton
-            android:id="@+id/undoButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onUndo"
-            android:src="@drawable/ic_undo_24dp"
-            android:clickable="false" />
-
-        <ImageButton
-            android:id="@+id/redoButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onRedo"
-            android:src="@drawable/ic_redo_24dp"
-            android:clickable="false" />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onSave"
-            android:src="@drawable/ic_get_app_24dp"
-            android:clickable="false" />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:onClick="onUpload"
-            android:src="@drawable/ic_share_24dp"
-            android:clickable="false" />
-    </LinearLayout>
+    tools:context="com.caitoo0o.filler.activities.loggedinactivities.PicEditActivity" >
 
     <RelativeLayout
         android:id="@+id/imageAreaLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="7"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:orientation="vertical">
 
         <ImageView

@@ -10,6 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -142,6 +145,37 @@ public class DrawActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.draw_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+
+        switch (menuItem.getItemId()) {
+            case R.id.draw_menu_new:
+                onNewButton();
+                return true;
+            case R.id.draw_menu_draw:
+                onDrawButton();
+                return true;
+            case R.id.draw_menu_eraser:
+                onEraseButton();
+                return true;
+            case R.id.draw_menu_save:
+                onSaveButton();
+                return true;
+            case R.id.draw_menu_done:
+                onDoneButton();
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
     // onClick for paint color buttons
     public void onPaintColorClicked(View view){
         // Update if the selected color is different than the currently selected color
@@ -158,7 +192,7 @@ public class DrawActivity extends AppCompatActivity {
     }
 
     // onClick for paintbrush button
-    public void onDrawButton(View view){
+    public void onDrawButton(){
         final Dialog brushDialog = new Dialog(this);
         brushDialog.setContentView(R.layout.paintbrush_options);
         ImageButton extraSmallBtn = (ImageButton) brushDialog.findViewById(R.id.extra_small_brush);
@@ -206,7 +240,7 @@ public class DrawActivity extends AppCompatActivity {
     }
 
     // onClick for erase button
-    public void onEraseButton(View view){
+    public void onEraseButton(){
         final Dialog eraseDialog = new Dialog(this);
         eraseDialog.setContentView(R.layout.paintbrush_options);
         ImageButton smallBtn = (ImageButton)eraseDialog.findViewById(R.id.small_brush);
@@ -240,7 +274,7 @@ public class DrawActivity extends AppCompatActivity {
     }
 
     // onClick for new image button
-    public void onNewButton(View view){
+    public void onNewButton(){
         Utils.showConfirmDialog(this,
                 getString(R.string.are_you_sure),
                 getString(R.string.yes),
@@ -258,12 +292,12 @@ public class DrawActivity extends AppCompatActivity {
     }
 
     // onClick for save image button
-    public void onSaveButton(View view){
+    public void onSaveButton(){
             saveDrawingStoragePermission();
     }
 
     // onClick for done button
-    public void onDoneButton(View view){
+    public void onDoneButton(){
         if (drawView.isEdited()) {
             startPicEditStoragePermission();
         } else {

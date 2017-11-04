@@ -2,10 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.caitoo0o.filler.activities.loggedoutactivites.LoginActivity"
+    tools:context="com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
     android:gravity="center">
 
     <LinearLayout
@@ -14,34 +13,15 @@
         android:id="@+id/outer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity"
-        android:background="@color/colorPrimaryDark"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/pic_source_menu_bar_linear_layout"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal"
-            android:background="@color/colorPrimary">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/activity_vertical_margin"
-                android:background="@drawable/my_menu_bar_button"
-                android:onClick="onMore"
-                android:src="@drawable/ic_more_vert_24dp" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="15"
-            android:padding="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_vertical_margin"
+            android:paddingRight="@dimen/activity_vertical_margin"
             android:orientation="horizontal">
 
             <com.caitoo0o.filler.reusableuserinterface.ListRefreshView
@@ -54,8 +34,8 @@
         <LinearLayout
             android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
+            android:layout_height="80dp"
+            android:elevation="@dimen/elevation"
             android:background="@color/colorPrimary"
             android:orientation="vertical">
 
@@ -65,18 +45,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:padding="@dimen/activity_vertical_margin"
+                android:layout_margin="@dimen/smallish_margin"
                 android:orientation="horizontal">
 
                 <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
                     android:id="@+id/drawButton"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_vertical_margin"
                     android:layout_weight="1"
-                    android:background="@drawable/mybutton"
+                    android:background="@drawable/my_menu_bar_button"
                     android:onClick="onDraw"
-                    android:padding="@dimen/activity_horizontal_margin"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_brush_200dp" />
 
@@ -84,23 +63,21 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:padding="@dimen/activity_horizontal_margin"
                     android:id="@+id/cameraButton"
                     android:src="@drawable/ic_camera_alt_200dp"
                     android:scaleType="fitCenter"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:background="@drawable/mybutton"
+                    android:layout_marginRight="@dimen/activity_vertical_margin"
+                    android:background="@drawable/my_menu_bar_button"
                     android:onClick="onCamera"/>
 
                 <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:padding="@dimen/activity_horizontal_margin"
                     android:id="@+id/openExistingButton"
                     android:src="@drawable/ic_collections_200dp"
                     android:scaleType="fitCenter"
-                    android:background="@drawable/mybutton"
+                    android:background="@drawable/my_menu_bar_button"
                     android:onClick="onBrowse"/>
             </LinearLayout>
         </LinearLayout>

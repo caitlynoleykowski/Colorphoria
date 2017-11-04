@@ -10,6 +10,9 @@ import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.graphics.Bitmap;
 import android.widget.ImageButton;
@@ -69,6 +72,7 @@ public class PicEditActivity extends AppCompatActivity {
     private Deque<BitmapWrapper> undoQueue;
     private Deque<BitmapWrapper> redoQueue;
     private Effect effectSelected;
+    private boolean processingImageDone = false;
 
     private Uri sourceUri;
 
@@ -197,42 +201,116 @@ public class PicEditActivity extends AppCompatActivity {
         outState.putParcelable(SOURCE_URI, sourceUri);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.pic_edit_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Only enable the menu items (which act on the image) when the image is done processing
+        boolean enableMenuItems = processingImageDone;
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setEnabled(enableMenuItems);
+        }
+        if (enableMenuItems) {
+            if (undoQueue.size() > 0) {
+                MenuItem undoItem = menu.findItem(R.id.pic_edit_menu_undo);
+                undoItem.setEnabled(true);
+            } else {
+                MenuItem undoItem = menu.findItem(R.id.pic_edit_menu_undo);
+                undoItem.setEnabled(false);
+            }
+            if (redoQueue.size() > 0) {
+                MenuItem undoItem = menu.findItem(R.id.pic_edit_menu_redo);
+                undoItem.setEnabled(true);
+            } else {
+                MenuItem undoItem = menu.findItem(R.id.pic_edit_menu_redo);
+                undoItem.setEnabled(false);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.pic_edit_menu_delete:
+                onDiscard();
+                return true;
+            case R.id.pic_edit_menu_reset:
+                onReset();
+                return true;
+            case R.id.pic_edit_menu_undo:
+                onUndo();
+                return true;
+            case R.id.pic_edit_menu_redo:
+                onRedo();
+                return true;
+            case R.id.pic_edit_menu_save:
+                onSave();
+                return true;
+            case R.id.pic_edit_menu_share:
+                onUpload();
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
     // End activity lifecycle handlers
+
+    private void setUIforImageDoneProcessing(boolean processingImageDone) {
+        this.processingImageDone = processingImageDone;
+        invalidateOptionsMenu();
+
+        // Disable buttons in bottom control panel (effects buttons/rotate button/palette button)
+        LinearLayout ll2 = (LinearLayout) findViewById(R.id.icon_linear_layout);
+        ll2.getChildCount();
+        for (int i = 0; i < ll2.getChildCount(); i++) {
+            ((ImageButton) ll2.getChildAt(i)).setClickable(processingImageDone);
+        }
+        setImageButtonClickable(findViewById(R.id.choose_palette), processingImageDone);
+        setImageButtonClickable(findViewById(R.id.rotate_right), processingImageDone);
+    }
 
     // Begin UI handlers
 
-    public void onDiscard(View v) {
+    public void onDiscard() {
         goToPicSourceActivity(sourceUri);
     }
 
-    public void onReset(View v) {
+    public void onReset() {
         effectSelected = Effect.RESET;
         applyEffect();
     }
 
-    public void onRedo(View v) {
+    public void onRedo() {
         undoEnqueue();
         bmW = redoQueue.removeLast();
         if (redoQueue.isEmpty()) {
-            setImageButtonClickable(findViewById(R.id.redoButton), false);
+            invalidateOptionsMenu();
         }
+        invalidateOptionsMenu();
         ((ImageView) findViewById(R.id.theImage)).setImageBitmap(bmW.getModifiedBitmap());
     }
 
-    public void onUndo(View v) {
+    public void onUndo() {
         redoEnqueue();
         bmW = undoQueue.removeLast();
         if (undoQueue.isEmpty()) {
-            setImageButtonClickable(findViewById(R.id.undoButton), false);
+            invalidateOptionsMenu();
         }
         ((ImageView) findViewById(R.id.theImage)).setImageBitmap(bmW.getModifiedBitmap());
     }
 
-    public void onSave(View v) {
+    public void onSave() {
         saveCurrImageStoragePermission();
     }
 
-    public void onUpload(View v) {
+    public void onUpload() {
         uploadCurrImageStoragePermission();
     }
 
@@ -324,36 +402,6 @@ public class PicEditActivity extends AppCompatActivity {
         setUIforImageDoneProcessing(true);
     }
 
-    private void setUIforImageDoneProcessing(boolean processingImageDone) {
-        LinearLayout ll1 = (LinearLayout) findViewById(R.id.firstButtonLinearLayout);
-        ll1.getChildCount();
-        for (int i = 0; i < ll1.getChildCount(); i++) {
-            setImageButtonClickable(ll1.getChildAt(i), processingImageDone);
-        }
-        LinearLayout ll2 = (LinearLayout) findViewById(R.id.icon_linear_layout);
-        ll2.getChildCount();
-        for (int i = 0; i < ll2.getChildCount(); i++) {
-            ((ImageButton) ll2.getChildAt(i)).setClickable(processingImageDone);
-        }
-        setImageButtonClickable(findViewById(R.id.choose_palette), processingImageDone);
-        setImageButtonClickable(findViewById(R.id.rotate_right), processingImageDone);
-        if (processingImageDone) {
-            if (undoQueue.size() > 0) {
-                setImageButtonClickable(findViewById(R.id.undoButton), true);
-            } else {
-                setImageButtonClickable(findViewById(R.id.undoButton), false);
-            }
-            if (redoQueue.size() > 0) {
-                setImageButtonClickable(findViewById(R.id.redoButton), true);
-            } else {
-                setImageButtonClickable(findViewById(R.id.redoButton), false);
-            }
-        } else {
-            setImageButtonClickable(findViewById(R.id.undoButton), false);
-            setImageButtonClickable(findViewById(R.id.redoButton), false);
-        }
-    }
-
     private void goToPicSourceActivity(Uri uri) {
         Intent intent = new Intent(this, PicSourceActivity.class);
         intent.putExtra(PicSourceActivity.IMAGE_URI_STATE_KEY, uri);
@@ -372,7 +420,7 @@ public class PicEditActivity extends AppCompatActivity {
         BitmapWrapper undoCopy = new BitmapWrapper(bmW.getSourceBitmap().copy(bmW.getSourceBitmap().getConfig(), true));
         undoCopy.setModifiedBitmap(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
         undoQueue.addLast(undoCopy);
-        setImageButtonClickable(findViewById(R.id.undoButton), true);
+        invalidateOptionsMenu();
     }
 
     private void redoEnqueue() {
@@ -380,12 +428,12 @@ public class PicEditActivity extends AppCompatActivity {
         BitmapWrapper redoCopy = new BitmapWrapper(bmW.getSourceBitmap().copy(bmW.getSourceBitmap().getConfig(), true));
         redoCopy.setModifiedBitmap(bmW.getModifiedBitmap().copy(bmW.getModifiedBitmap().getConfig(), true));
         redoQueue.addLast(redoCopy);
-        setImageButtonClickable(findViewById(R.id.redoButton), true);
+        invalidateOptionsMenu();
     }
 
     private void updateUndoRedoQueues() {
         redoQueue.clear();
-        ((ImageButton) findViewById(R.id.redoButton)).setClickable(false);
+        invalidateOptionsMenu();
         undoEnqueue();
     }
 

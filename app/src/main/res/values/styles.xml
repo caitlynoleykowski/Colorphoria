@@ -1,13 +1,35 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LoggedOutTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item> &lt;!&ndash; status bar, ... &ndash;&gt;-->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- status bar, ... -->
         <item name="colorAccent">@color/colorAccent</item> <!-- tab underline, progress spinner, ... -->
-        <item name="android:textColorPrimary">@color/colorAccent</item> <!-- number picker, selected tab title, ... -->
+        <item name="android:colorBackground">@color/colorPrimaryDark</item>
 
+        <item name="android:textColorPrimary">@color/colorAccent</item> <!-- number picker, selected tab title, ... -->
+        <!--<item name="android:textColorPrimaryInverse">@color/colorAccent</item>-->
+        <item name="android:textColorSecondary">@color/colorAccent</item> <!-- unselected tab title, ... -->
+        <!--<item name="android:textColorSecondaryInverse">@color/colorAccent</item>-->
+        <!--<item name="android:textColorTertiary">@color/colorAccent</item>-->
+        <!--<item name="android:textColorTertiaryInverse">@color/colorAccent</item>-->
+        <!--<item name="android:textColorPrimaryDisableOnly">@color/colorAccent</item>-->
+        <!--<item name="android:textColorPrimaryInverseDisableOnly">@color/colorAccent</item>-->
+        <!--<item name="android:textColorHint">@color/colorAccent</item>-->
+        <!--<item name="android:textColorHintInverse">@color/colorAccent</item>-->
+        <item name="android:textColorHighlight">@color/colorPrimary</item>
+        <item name="android:textColorLink">@color/colorHighlight</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- status bar, ... -->
+        <item name="colorAccent">@color/colorAccent</item> <!-- tab underline, progress spinner, ... -->
+        <item name="android:colorBackground">@color/colorPrimaryDark</item>
+
+        <item name="android:textColorPrimary">@color/colorAccent</item> <!-- number picker, selected tab title, ... -->
         <!--<item name="android:textColorPrimaryInverse">@color/colorAccent</item>-->
         <item name="android:textColorSecondary">@color/colorAccent</item> <!-- unselected tab title, ... -->
         <!--<item name="android:textColorSecondaryInverse">@color/colorAccent</item>-->

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -47,6 +48,9 @@ public class AccountActivity extends LoggedInActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_24dp);
 
         // Get firebase auth instance
         auth = FirebaseAuth.getInstance();
@@ -273,6 +277,17 @@ public class AccountActivity extends LoggedInActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
     private void hideInputs() {
         // Hide the inputs until the user selects the option that requires them
         newEmailEditText.setVisibility(View.GONE);
@@ -319,9 +334,5 @@ public class AccountActivity extends LoggedInActivity {
                         }
                     });
         }
-    }
-
-    public void onClose(View v) {
-        finish();
     }
 }

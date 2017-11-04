@@ -32,6 +32,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -72,6 +73,9 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_24dp);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -159,8 +163,16 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
         out.putParcelable(KEY_DOWNLOAD_URL, mDownloadUrl);
     }
 
-    public void onExit(View v) {
-        onBackPressed();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void uploadFromUri(Uri fileUri) {
