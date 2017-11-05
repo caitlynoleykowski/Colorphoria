@@ -89,6 +89,9 @@ public class PicEditActivity extends AppCompatActivity {
 
         Utils.setupFillerRecentAppsBar(this);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_24dp);
+
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
 
@@ -213,7 +216,11 @@ public class PicEditActivity extends AppCompatActivity {
         // Only enable the menu items (which act on the image) when the image is done processing
         boolean enableMenuItems = processingImageDone;
         for (int i = 0; i < menu.size(); i++) {
-            menu.getItem(i).setEnabled(enableMenuItems);
+            if (menu.getItem(i).getItemId() == R.id.home) {
+                // do nothing
+            } else {
+                menu.getItem(i).setEnabled(enableMenuItems);
+            }
         }
         if (enableMenuItems) {
             if (undoQueue.size() > 0) {
@@ -237,7 +244,7 @@ public class PicEditActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.pic_edit_menu_delete:
+            case android.R.id.home:
                 onDiscard();
                 return true;
             case R.id.pic_edit_menu_reset:
