@@ -1,63 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:scrollbars="vertical"
-    tools:context="com.caitoo0o.filler.activities.loggedinactivities.UploadActivity">
+    android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/layout_storage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/upload_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="14"
+            android:scaleType="fitCenter"
+            android:layout_margin="@dimen/activity_horizontal_margin"/>
+
+        <TextView
+            android:id="@+id/upload_button"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:background="@color/colorPrimary"
+            android:text="@string/upload"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="sans-serif-medium"
+            android:textAllCaps="true"/>
 
         <LinearLayout
-            android:id="@+id/layout_storage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <ImageView
-                android:id="@+id/upload_image_view"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="14"
-                android:scaleType="fitCenter"
-                android:layout_margin="@dimen/activity_horizontal_margin"/>
-
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal">
             <TextView
-                android:id="@+id/upload_button"
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3"
-                android:background="@color/colorPrimary"
-                android:text="@string/upload"
-                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_height="match_parent"
+                android:text="@string/share_external"
+                android:gravity="left|center_vertical"
                 android:textColor="@color/colorAccent"
-                android:fontFamily="sans-serif-medium"
-                android:textAllCaps="true"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="5"
-                    android:layout_height="match_parent"
-                    android:text="@string/share_external"
-                    android:gravity="left|center_vertical"
-                    android:textColor="@color/colorAccent"
-                    android:padding="@dimen/activity_horizontal_margin"
-                    android:fontFamily="sans-serif-medium"/>
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="@dimen/activity_vertical_margin"
-                    android:background="@drawable/my_menu_bar_button"
-                    android:onClick="onShare"
-                    android:src="@drawable/ic_share_24dp"
-                    android:clickable="false" />
-            </LinearLayout>
+                android:padding="@dimen/activity_horizontal_margin"
+                android:fontFamily="sans-serif-medium"/>
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/activity_vertical_margin"
+                android:background="@drawable/my_menu_bar_button"
+                android:onClick="onShare"
+                android:src="@drawable/ic_share_24dp"
+                android:clickable="false" />
         </LinearLayout>
-</ScrollView>
+    </LinearLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progress_bar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="true"
+        android:visibility="gone"/>
+</RelativeLayout>

@@ -77,7 +77,6 @@ public class MyUploadService extends MyBaseTaskService {
 
         // [START_EXCLUDE]
         taskStarted();
-        showProgressNotification(getString(R.string.progress_uploading), 0, 0);
         // [END_EXCLUDE]
 
         // [START get_child_ref]
@@ -92,9 +91,10 @@ public class MyUploadService extends MyBaseTaskService {
                 addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        showProgressNotification(getString(R.string.progress_uploading),
-                                taskSnapshot.getBytesTransferred(),
-                                taskSnapshot.getTotalByteCount());
+                        // Use this in future to indicate progress if desired
+//                        showProgress(getString(R.string.progress_uploading),
+//                                taskSnapshot.getBytesTransferred(),
+//                                taskSnapshot.getTotalByteCount());
                     }
                 })
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -116,32 +116,27 @@ public class MyUploadService extends MyBaseTaskService {
                                         String message = responseJson.getString("message");
                                         if (message.equals("adult_content")) {
                                             broadcastUploadFinished(null, fileUri, true);
-                                            showUploadFinishedNotification(downloadUri, fileUri);
                                             taskCompleted();
                                         } else {
                                             broadcastUploadFinished(downloadUri, fileUri, false);
-                                            showUploadFinishedNotification(downloadUri, fileUri);
                                             taskCompleted();
                                         }
                                     } else {
                                         // Shouldn't ever get here but if it happens count it as a failure
                                         // by passing null downloadUri
                                         broadcastUploadFinished(null, fileUri, false);
-                                        showUploadFinishedNotification(null, fileUri);
                                         taskCompleted();
                                     }
                                 } catch (JSONException e) {
                                     // Shouldn't ever get here but if it happens count it as a failure
                                     // by passing null downloadUri
                                     broadcastUploadFinished(null, fileUri, false);
-                                    showUploadFinishedNotification(null, fileUri);
                                     taskCompleted();
                                 }
                             }
                             public void onFailure(String error) {
                                 // TODO: If record upload fails u need to retry or notify the user
                                 broadcastUploadFinished(null, fileUri, false);
-                                showUploadFinishedNotification(null, fileUri);
                                 taskCompleted();
                             }
                         };
@@ -156,7 +151,6 @@ public class MyUploadService extends MyBaseTaskService {
 
                         // [START_EXCLUDE]
                         broadcastUploadFinished(null, fileUri, false);
-                        showUploadFinishedNotification(null, fileUri);
                         taskCompleted();
                         // [END_EXCLUDE]
                     }
@@ -183,24 +177,6 @@ public class MyUploadService extends MyBaseTaskService {
                 .putExtra(EXTRA_FILE_URI, fileUri);
         return LocalBroadcastManager.getInstance(getApplicationContext())
                 .sendBroadcast(broadcast);
-    }
-
-    /**
-     * Show a notification for a finished upload.
-     */
-    private void showUploadFinishedNotification(@Nullable Uri downloadUrl, @Nullable Uri fileUri) {
-        // Hide the progress notification
-        dismissProgressNotification();
-
-        // Make Intent to UploadActivity
-        Intent intent = new Intent(this, UploadActivity.class)
-                .putExtra(EXTRA_DOWNLOAD_URL, downloadUrl)
-                .putExtra(EXTRA_FILE_URI, fileUri)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        boolean success = downloadUrl != null;
-        String caption = success ? getString(R.string.upload_success) : getString(R.string.upload_failure);
-        showFinishedNotification(caption, intent, success);
     }
 
     public static IntentFilter getIntentFilter() {

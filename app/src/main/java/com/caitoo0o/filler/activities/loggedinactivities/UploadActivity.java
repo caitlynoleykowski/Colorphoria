@@ -35,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.caitoo0o.filler.R;
@@ -99,7 +100,7 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(TAG, "onReceive:" + intent);
-                hideProgressDialog();
+                hideProgressBar();
 
                 switch (intent.getAction()) {
                     case MyUploadService.UPLOAD_COMPLETED:
@@ -189,7 +190,7 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
                 .setAction(MyUploadService.ACTION_UPLOAD));
 
         // Show loading spinner
-        showProgressDialog(getString(R.string.progress_uploading));
+        showProgressBar();
     }
 
     private void onUploadResultIntent(Intent intent) {
@@ -273,25 +274,14 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
         ad.show();
     }
 
-    private void showProgressDialog(String caption) {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.setMessage(caption);
-        mProgressDialog.show();
+    private void showProgressBar() {
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
-    private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
+    private void hideProgressBar() {
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
