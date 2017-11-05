@@ -58,13 +58,10 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
 
     public static final int REQUEST_PERMISSIONS_CALLBACK_SHARE_WRITE_EXTERNAL_STORAGE = 1;
 
-    private static final int RC_TAKE_PICTURE = 101;
-
     private static final String KEY_FILE_URI = "key_file_uri";
     private static final String KEY_DOWNLOAD_URL = "key_download_url";
 
     private BroadcastReceiver mBroadcastReceiver;
-    private ProgressDialog mProgressDialog;
     private FirebaseAuth mAuth;
 
     private Uri mDownloadUrl = null;
@@ -88,6 +85,8 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
         if (savedInstanceState != null) {
             mFileUri = savedInstanceState.getParcelable(KEY_FILE_URI);
             mDownloadUrl = savedInstanceState.getParcelable(KEY_DOWNLOAD_URL);
+            ImageView iv = (ImageView) findViewById(R.id.upload_image_view);
+            new BitmapLoaderAsyncTask(this, iv, mFileUri).execute();
         } else if (getIntent().hasExtra(IMAGE_URI)) {
             mFileUri = (Uri)getIntent().getParcelableExtra(IMAGE_URI);
             ImageView iv = (ImageView) findViewById(R.id.upload_image_view);
