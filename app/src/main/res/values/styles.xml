@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="LoggedOutTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LoggedOutTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- status bar, ... -->
@@ -22,12 +22,13 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- status bar, ... -->
         <item name="colorAccent">@color/colorAccent</item> <!-- tab underline, progress spinner, ... -->
-        <item name="android:colorBackground">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/colorPrimaryDark</item> <!-- background -->
+        <item name="android:itemBackground">@color/colorPrimary</item> <!-- options menu background -->
 
         <item name="android:textColorPrimary">@color/colorAccent</item> <!-- number picker, selected tab title, ... -->
         <!--<item name="android:textColorPrimaryInverse">@color/colorAccent</item>-->

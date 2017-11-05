@@ -8,5 +8,6 @@ public enum Privacy {
     ONLY_ME,
     FRIENDS,
     FOLLOWERS,
-    RECIPIENTS
+    RECIPIENTS,
+    EVERYONE
 }

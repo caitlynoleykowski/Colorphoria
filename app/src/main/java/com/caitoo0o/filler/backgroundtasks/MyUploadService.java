@@ -145,7 +145,7 @@ public class MyUploadService extends MyBaseTaskService {
                                 taskCompleted();
                             }
                         };
-                        RestHelper.recordUpload(getApplicationContext(), user, downloadUri.toString(), fileUri.getLastPathSegment(), Privacy.ONLY_ME, "testing3", callbacks);
+                        RestHelper.recordUpload(getApplicationContext(), user, downloadUri.toString(), fileUri.getLastPathSegment(), Privacy.EVERYONE, "", callbacks);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
