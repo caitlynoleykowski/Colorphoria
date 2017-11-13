@@ -8,6 +8,7 @@
     <dimen name="elevation">8dp</dimen>
 
     <dimen name="image_button_border">2dp</dimen>
+    <dimen name="button_radius">8dp</dimen>
 
     <dimen name="dialog_radius">30dp</dimen>
     <dimen name="dialog_width_short">240dp</dimen>
