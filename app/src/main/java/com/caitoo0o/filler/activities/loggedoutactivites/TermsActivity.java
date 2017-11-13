@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.utils.LoginUtils;
 import com.caitoo0o.filler.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Date;
 
@@ -21,7 +23,7 @@ public class TermsActivity extends AppCompatActivity {
 
     private Date birthdayDate;
     private boolean startedFromSignup = true;
-
+    private boolean startingAnotherActivity = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +47,42 @@ public class TermsActivity extends AppCompatActivity {
         getapp.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
+    @Override
+    public void onResume() {
+        startingAnotherActivity = false;
+
+        // If started from a google sign in but has since been signed out, go back to login
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (!startedFromSignup && auth.getCurrentUser() == null) {
+            startActivity(new Intent(TermsActivity.this, LoginActivity.class));
+            finish();
+        }
+
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        if (!startingAnotherActivity) {
+            signOut();
+        }
+        super.onStop();
+    }
+
+    private void signOut() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            auth.signOut();
+        }
+    }
+
     public void onAccept(View v) {
         // Only continue forward to the SignupActivity if the terms form is filled out (name is entered)
         EditText nameEditText = (EditText) findViewById(R.id.name_edit_text);
         if (!nameEditText.getText().toString().isEmpty()) {
             String fullName = nameEditText.getText().toString();
+            startingAnotherActivity = true;
             if (startedFromSignup) {
                 // Start the Signup activity with birthday and fullname as extras
                 Intent signupActivityIntent = new Intent(TermsActivity.this, SignupActivity.class);

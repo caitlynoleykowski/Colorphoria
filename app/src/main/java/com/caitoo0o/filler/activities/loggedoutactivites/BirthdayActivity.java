@@ -11,7 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.activities.loggedinactivities.LoggedInActivity;
 import com.caitoo0o.filler.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +32,7 @@ public class BirthdayActivity extends AppCompatActivity {
     TextView birthdayTextView;
 
     boolean startedFromSignup = true;
+    boolean startingAnotherActivity = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,34 @@ public class BirthdayActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume() {
+        startingAnotherActivity = false;
+
+        // If started from a google sign in but has since been signed out, go back to login
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (!startedFromSignup && auth.getCurrentUser() == null) {
+            startActivity(new Intent(BirthdayActivity.this, LoginActivity.class));
+            finish();
+        }
+
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        signOut();
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onStop() {
+        if (!startingAnotherActivity) {
+            signOut();
+        }
+        super.onStop();
+    }
+
     private void setupDisplayedDateToCurrentDate() {
 
     }
@@ -93,11 +125,13 @@ public class BirthdayActivity extends AppCompatActivity {
 
     public void onContinue(View v) {
         if (getBirthday().isGreaterThanOrEqualThirteenYearsAgo()) {
-            Intent birthdayActivityIntent = new Intent(BirthdayActivity.this, TermsActivity.class);
-            birthdayActivityIntent.putExtra(BirthdayActivity.BIRTHDAY_STATE_KEY, getBirthday().getBirthdayDate());
-            birthdayActivityIntent.putExtra(BirthdayActivity.STARTED_FROM_SIGNUP, startedFromSignup);
-            startActivity(birthdayActivityIntent);
+            Intent termsActivityIntent = new Intent(BirthdayActivity.this, TermsActivity.class);
+            termsActivityIntent.putExtra(BirthdayActivity.BIRTHDAY_STATE_KEY, getBirthday().getBirthdayDate());
+            termsActivityIntent.putExtra(BirthdayActivity.STARTED_FROM_SIGNUP, startedFromSignup);
+            startingAnotherActivity = true;
+            startActivity(termsActivityIntent);
         } else {
+            signOut();
             Utils.showAlertDialog(
                     this,
                     getString(R.string.birthday_error_not_eligible),
@@ -110,6 +144,14 @@ public class BirthdayActivity extends AppCompatActivity {
                         }
                     },
                     false);
+        }
+    }
+
+    private void signOut() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            auth.signOut();
         }
     }
 
