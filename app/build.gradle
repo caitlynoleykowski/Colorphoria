@@ -1,14 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'fillerKey'
+            keyPassword 'therearecl0uds'
+            storeFile file('C:/Users/caitoo0o/Development/Filler/keystores/androidReleaseKey.jks')
+            storePassword 'therearecl0uds'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
-
     defaultConfig {
         applicationId "com.caitoo0o.filler"
         minSdkVersion 23
         targetSdkVersion 23
-        versionCode 20
+        versionCode 21
         versionName "3.0"
     }
     buildTypes {
@@ -20,7 +27,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     // Network call library
     // Firebase login
     // Firebase api to google cloud storage
@@ -33,7 +40,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:11.6.0'
     compile 'com.android.support:design:25.0.0'
     compile 'com.loopj.android:android-async-http:1.4.9'
-
     // test dependencies
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:2.4'
