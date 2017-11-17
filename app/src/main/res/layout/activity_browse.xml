@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_vertical_margin"
     android:id="@+id/outer_layout"
     tools:context=".activities.loggedinactivities.BrowseActivity">
 
@@ -12,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/tabHost"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true">
 
@@ -70,4 +70,8 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
+    <include layout="@layout/navigation_footer"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
 </RelativeLayout>

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
@@ -62,6 +63,11 @@ public class BrowseActivity extends AppCompatActivity {
 
         Utils.setupFillerRecentAppsBar(this);
 
+        ((ImageButton) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_dark_24dp);
+        ((ImageButton) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_dark_24dp);
+        ((ImageButton) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_dark_24dp);
+        ((ImageButton) findViewById(R.id.openExistingButton)).setImageResource(R.drawable.ic_collections_white_24dp);
+
         if (savedInstanceState != null) {
             mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
         }
@@ -91,6 +97,22 @@ public class BrowseActivity extends AppCompatActivity {
         });
 
         getFilesStoragePermission();
+    }
+
+    public void onDraw(View v) {
+        startDrawActivity(mImageUri);
+    }
+
+    public void onCamera(View v) {
+        startCameraActivity(mImageUri);
+    }
+
+    public void onHome(View v) {
+        startPicSourceActivity(mImageUri);
+    }
+
+    public void onBrowse(View v) {
+        // Do nothing
     }
 
     private void getFilesStoragePermission() {
@@ -284,6 +306,14 @@ public class BrowseActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PicSourceActivity.class);
         intent.putExtra(DrawActivity.SOURCE_URI, uri);
         intent.putExtra(PicSourceActivity.START_DRAW, true);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
+    }
+
+    private void startCameraActivity(Uri uri) {
+        Intent intent = new Intent(this, PicSourceActivity.class);
+        intent.putExtra(DrawActivity.SOURCE_URI, uri);
+        intent.putExtra(PicSourceActivity.START_CAMERA, true);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }

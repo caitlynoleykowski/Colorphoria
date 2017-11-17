@@ -25,7 +25,8 @@
     <string name="birthday_error_not_eligible">Sorry, you\'re not eligible to use Filler :/</string>
     <!-- Used for birthday activity end -->
 
-    <!-- Used for brush and eraser sizes on DrawingActivity begin -->
+    <!-- Used for DrawingActivity begin -->
+    <string name="draw_activity_title">Drawing Pad</string>
     <string name="draw_menu_new">New</string>
     <string name="draw_menu_draw">Draw</string>
     <string name="draw_menu_eraser">Eraser</string>
@@ -34,7 +35,7 @@
     <string name="sml">Small</string>
     <string name="med">Medium</string>
     <string name="lrg">Large</string>
-    <!-- Used for brush and eraser sizes on DrawingActivity end -->
+    <!-- Used for DrawingActivity end -->
 
     <!-- Used for LoginActivity begin -->
     <string name="email_hint">Email</string>
@@ -108,6 +109,7 @@
     <!-- Used for PicSourceActivity end -->
 
     <!-- Used for PicEditActivity begin -->
+    <string name="pic_edit_activity_title">Effects</string>
     <string name="unable_to_save_image">Image could not be saved.</string>
     <string name="unable_to_share_image">Image could not be shared.</string>
     <string name="pic_edit_menu_delete">Delete</string>
@@ -119,6 +121,7 @@
     <!-- Used for PicEditActivity end -->
 
     <!-- Used for BrowseActivity begin -->
+    <string name="browse_activity_title">Gallery</string>
     <string name="choose_image_destination">What would you like to do?</string>
     <string name="draw">Draw</string>
     <string name="fill">Fill</string>
@@ -131,6 +134,7 @@
     <string name="download_failure">Unable to refresh feed</string>
 
     <!-- Used for UploadActivity and upload services -->
+    <string name="upload_activity_title">Post</string>
     <string name="upload_prompt">Upload image</string>
     <string name="upload">Post</string>
     <string name="share_external">Share with other apps: </string>

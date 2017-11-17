@@ -31,56 +31,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:elevation="@dimen/elevation"
-            android:background="@color/colorPrimary"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/pic_source_buttons_linear_layout"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_margin="@dimen/smallish_margin"
-                android:orientation="horizontal">
-
-                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
-                    android:id="@+id/drawButton"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/activity_vertical_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/my_menu_bar_button"
-                    android:onClick="onDraw"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_brush_200dp" />
-
-                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/cameraButton"
-                    android:src="@drawable/ic_camera_alt_200dp"
-                    android:scaleType="fitCenter"
-                    android:layout_marginRight="@dimen/activity_vertical_margin"
-                    android:background="@drawable/my_menu_bar_button"
-                    android:onClick="onCamera"/>
-
-                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/openExistingButton"
-                    android:src="@drawable/ic_collections_200dp"
-                    android:scaleType="fitCenter"
-                    android:background="@drawable/my_menu_bar_button"
-                    android:onClick="onBrowse"/>
-            </LinearLayout>
-        </LinearLayout>
+        <include layout="@layout/navigation_footer" />
     </LinearLayout>
 
     <ProgressBar

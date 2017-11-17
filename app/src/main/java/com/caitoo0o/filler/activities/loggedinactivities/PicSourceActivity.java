@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -47,6 +48,8 @@ public class PicSourceActivity extends LoggedInActivity {
     public static final String IMAGE_URI_STATE_KEY = "IMAGE_URI_STATE_KEY";
     public static final String START_PIC_EDIT = "START_PIC_EDIT";
     public static final String START_DRAW = "START_DRAW";
+    public static final String START_BROWSE = "START_BROWSE";
+    public static final String START_CAMERA = "START_CAMERA";
 
     public static final int REQUEST_PERMISSIONS_CALLBACK_CAMERA = 0;
     public static final int REQUEST_PERMISSIONS_CALLBACK_CAMERA_WRITE_EXTERNAL_STORAGE = 2;
@@ -55,6 +58,8 @@ public class PicSourceActivity extends LoggedInActivity {
 
     private boolean startPicEdit = false;
     private boolean startDraw = false;
+    private boolean startBrowse = false;
+    private boolean startCamera = false;
 
     private Handler handler = new Handler();
 
@@ -69,6 +74,11 @@ public class PicSourceActivity extends LoggedInActivity {
         setContentView(R.layout.activity_pic_source);
 
         Utils.setupFillerRecentAppsBar(this);
+
+        ((ImageButton) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_dark_24dp);
+        ((ImageButton) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_dark_24dp);
+        ((ImageButton) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_white_24dp);
+        ((ImageButton) findViewById(R.id.openExistingButton)).setImageResource(R.drawable.ic_collections_dark_24dp);
 
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
@@ -87,10 +97,18 @@ public class PicSourceActivity extends LoggedInActivity {
                 mImageUri = getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI);
             } else if (getIntent().hasExtra(START_DRAW) &&
                     getIntent().getBooleanExtra(START_DRAW, false) == true &&
-                    getIntent().hasExtra(DrawActivity.SOURCE_URI) &&
-                    getIntent().getParcelableExtra(DrawActivity.SOURCE_URI) != null ) {
+                    getIntent().hasExtra(DrawActivity.SOURCE_URI)) {
                 startDraw = true;
                 mImageUri = getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI);
+            } else if (getIntent().hasExtra(START_BROWSE) &&
+                    getIntent().getBooleanExtra(START_BROWSE, false) == true) {
+                startBrowse = true;
+                if (getIntent().hasExtra(DrawActivity.SOURCE_URI)) {
+                    mImageUri = getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI);
+                }
+            } else if (getIntent().hasExtra(START_CAMERA) &&
+                    getIntent().getBooleanExtra(START_CAMERA, false) == true) {
+                startCamera = true;
             }
         }
 
@@ -175,6 +193,12 @@ public class PicSourceActivity extends LoggedInActivity {
         } else if (startDraw) {
             startDraw = false;
             handler.postDelayed(startDrawDelayed, getResources().getInteger(R.integer.anim_duration));
+        } else if (startBrowse) {
+            startBrowse = false;
+            handler.postDelayed(startBrowseDelayed, getResources().getInteger(R.integer.anim_duration));
+        } else if (startCamera) {
+            startCamera = false;
+            handler.postDelayed(startCameraDelayed, getResources().getInteger(R.integer.anim_duration));
         }
     }
 
@@ -262,16 +286,32 @@ public class PicSourceActivity extends LoggedInActivity {
         }
     };
 
+    private Runnable startBrowseDelayed = new Runnable() {
+        public void run() {
+            startBrowseActivity(mImageUri);
+        }
+    };
+
+    private Runnable startCameraDelayed = new Runnable() {
+        public void run() {
+            startCameraActivityCameraPermission();
+        }
+    };
+
+    public void onDraw(View v) {
+        startDrawActivity(mImageUri);
+    }
+
     public void onCamera(View v) {
         startCameraActivityCameraPermission();
     }
 
-    public void onBrowse(View v) {
-        startBrowseActivity(mImageUri);
+    public void onHome(View v) {
+        // Do nothing
     }
 
-    public void onDraw(View v) {
-        startDrawActivity(mImageUri);
+    public void onBrowse(View v) {
+        startBrowseActivity(mImageUri);
     }
 
     private File createTemporaryFile(String part, String ext) throws Exception

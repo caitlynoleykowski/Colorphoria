@@ -33,6 +33,8 @@ public class DrawActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSIONS_CALLBACK_SAVE_DRAWING_WRITE_EXTERNAL_STORAGE = 0;
     private static final int REQUEST_PERMISSIONS_CALLBACK_START_PIC_EDIT_WRITE_EXTERNAL_STORAGE = 1;
     private static final int REQUEST_PERMISSIONS_CALLBACK_START_PIC_SOURCE_WRITE_EXTERNAL_STORAGE = 2;
+    private static final int REQUEST_PERMISSIONS_CALLBACK_START_BROWSE_WRITE_EXTERNAL_STORAGE = 3;
+    private static final int REQUEST_PERMISSIONS_CALLBACK_START_CAMERA_WRITE_EXTERNAL_STORAGE = 4;
 
     private static final String IMAGE_STATE_KEY = "IMAGE_STATE_KEY";
     public static final String SOURCE_BITMAP = "SOURCE_BITMAP";
@@ -52,10 +54,15 @@ public class DrawActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_draw);
 
         Utils.setupFillerRecentAppsBar(this);
 
-        setContentView(R.layout.activity_draw);
+        ((ImageButton) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_white_24dp);
+        ((ImageButton) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_dark_24dp);
+        ((ImageButton) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_dark_24dp);
+        ((ImageButton) findViewById(R.id.openExistingButton)).setImageResource(R.drawable.ic_collections_dark_24dp);
+
         drawView = (DrawView)findViewById(R.id.drawing);
 
         if (savedInstanceState != null) {
@@ -135,7 +142,7 @@ public class DrawActivity extends AppCompatActivity {
 
             public void onSwipeLeft() {
                 // Swipe right to left
-                startPicSourceStoragePermission();
+                startPicSourceStoragePermission(false, false);
             }
 
             public void onSwipeBottom() {
@@ -143,6 +150,22 @@ public class DrawActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    public void onDraw(View v) {
+        // Do nothing
+    }
+
+    public void onCamera(View v) {
+        startPicSourceStoragePermission(false, true);
+    }
+
+    public void onHome(View v) {
+        startPicSourceStoragePermission(false, false);
+    }
+
+    public void onBrowse(View v) {
+        startPicSourceStoragePermission(true, false);
     }
 
     @Override
@@ -334,34 +357,52 @@ public class DrawActivity extends AppCompatActivity {
         return imageFile;
     }
 
-    private void startPicSourceStoragePermission() {
+    private void startPicSourceStoragePermission(final boolean startBrowse, final boolean startCamera) {
+        int callbackId;
+        if (!startBrowse && !startCamera) {
+            callbackId = REQUEST_PERMISSIONS_CALLBACK_START_PIC_SOURCE_WRITE_EXTERNAL_STORAGE;
+        } else if (startBrowse){
+            callbackId = REQUEST_PERMISSIONS_CALLBACK_START_BROWSE_WRITE_EXTERNAL_STORAGE;
+        } else {
+            callbackId = REQUEST_PERMISSIONS_CALLBACK_START_CAMERA_WRITE_EXTERNAL_STORAGE;
+        }
         if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 getString(R.string.permission_write_external_storage_explanation),
-                REQUEST_PERMISSIONS_CALLBACK_START_PIC_SOURCE_WRITE_EXTERNAL_STORAGE,
+                callbackId,
                 new Utils.OnExplanationDeclinedHandler() {
                     @Override
                     public void onExplanationDeclined() {
                         Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
-                        startPicSourceActivityWithoutSaving();
+                        startPicSourceActivityWithoutSaving(startBrowse, startCamera);
                     }
                 })) {
-            startPicSourceActivity();
+            startPicSourceActivity(startBrowse, startCamera);
         }
     }
 
-    private void startPicSourceActivity() {
+    private void startPicSourceActivity(boolean startBrowse, boolean startCamera) {
         Intent intent = new Intent(this, PicSourceActivity.class);
         if (drawView.isEdited()) {
             File imageFile = saveDrawing();
             // Load intent with uri
             intent.putExtra(PicSourceActivity.IMAGE_URI_STATE_KEY, Uri.fromFile(imageFile));
         }
+        if (startBrowse) {
+            intent.putExtra(PicSourceActivity.START_BROWSE, true);
+        } else if (startCamera) {
+            intent.putExtra(PicSourceActivity.START_CAMERA, true);
+        }
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
     }
 
-    private void startPicSourceActivityWithoutSaving() {
+    private void startPicSourceActivityWithoutSaving(boolean startBrowse, boolean startCamera) {
         Intent intent = new Intent(this, PicSourceActivity.class);
+        if (startBrowse) {
+            intent.putExtra(PicSourceActivity.START_BROWSE, true);
+        } else if (startCamera) {
+            intent.putExtra(PicSourceActivity.START_CAMERA, true);
+        }
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
     }
@@ -423,10 +464,34 @@ public class DrawActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted, so continue.
-                    startPicSourceActivity();
+                    startPicSourceActivity(false, false);
                 } else {
                     Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
-                    startPicSourceActivityWithoutSaving();
+                    startPicSourceActivityWithoutSaving(false, false);
+                }
+                return;
+            }
+            case REQUEST_PERMISSIONS_CALLBACK_START_BROWSE_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    startPicSourceActivity(true, false);
+                } else {
+                    Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    startPicSourceActivityWithoutSaving(true, false);
+                }
+                return;
+            }
+            case REQUEST_PERMISSIONS_CALLBACK_START_CAMERA_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    startPicSourceActivity(false, true);
+                } else {
+                    Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    startPicSourceActivityWithoutSaving(false, true);
                 }
                 return;
             }

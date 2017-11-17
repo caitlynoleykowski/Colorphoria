@@ -37,10 +37,14 @@
         <!-- </activity> -->
         <activity android:name=".activities.loggedinactivities.PicSourceActivity" />
         <!-- <activity android:name=".activities.loggedoutactivites.LoginActivity" /> -->
-        <activity android:name=".activities.loggedinactivities.PicEditActivity" />
-        <activity android:name=".activities.loggedinactivities.BrowseActivity" />
-        <activity android:name=".activities.loggedinactivities.DrawActivity" />
-        <activity android:name=".activities.loggedinactivities.UploadActivity" />
+        <activity android:name=".activities.loggedinactivities.PicEditActivity"
+            android:label="@string/pic_edit_activity_title"/>
+        <activity android:name=".activities.loggedinactivities.BrowseActivity"
+            android:label="@string/browse_activity_title"/>
+        <activity android:name=".activities.loggedinactivities.DrawActivity"
+            android:label="@string/draw_activity_title"/>
+        <activity android:name=".activities.loggedinactivities.UploadActivity"
+            android:label="@string/upload_activity_title"/>
         <activity android:name=".activities.loggedinactivities.AccountActivity" />
 
         <activity android:name=".activities.loggedoutactivites.BirthdayActivity"

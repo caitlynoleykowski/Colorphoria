@@ -174,4 +174,6 @@
 
     </LinearLayout>
 
+    <include layout="@layout/navigation_footer" />
+
 </LinearLayout>
