@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">Filler</string>
+    <string name="app_name" translatable="false">Filler</string>
 
     <!-- General use begin -->
-    <string name="ok">@android:string/ok</string>
-    <string name="yes">@android:string/yes</string>
-    <string name="no">@android:string/no</string>
-    <string name="cancel">@android:string/cancel</string>
+    <string name="ok" translatable="false">@android:string/ok</string>
+    <string name="yes" translatable="false">@android:string/yes</string>
+    <string name="no" translatable="false">@android:string/no</string>
+    <string name="cancel" translatable="false">@android:string/cancel</string>
     <string name="are_you_sure">Are you sure?</string>
     <!-- General use end -->
 
@@ -14,7 +14,7 @@
     <string name="name_placeholder">Name</string>
     <string name="terms_info">By pressing ACCEPT below, you agree to the \n<a href="https://www.websitepolicies.com/policies/view/S3KMJ1">Terms and Conditions</a> and <a href="https://www.iubenda.com/privacy-policy/8156204">Privacy Policy</a></string>
     <string name="terms_continue">Accept</string>
-    <string name="terms_error_enter_name">You\'ll have to enter your\nfull name to accept the\nterms and conditions\nand privacy policy</string>
+    <string name="terms_error_enter_name">You\'ll have to enter your full name to accept the terms and conditions and privacy policy</string>
     <!-- Used for terms activity end -->
 
     <!-- Used for birthday activity begin -->
@@ -28,7 +28,6 @@
     <!-- Used for DrawingActivity begin -->
     <string name="draw_activity_title">Drawing Pad</string>
     <string name="draw_menu_new">New</string>
-    <string name="draw_menu_draw">Draw</string>
     <string name="draw_menu_eraser">Eraser</string>
     <string name="draw_menu_save">Save</string>
     <string name="draw_menu_done">Done</string>
@@ -75,7 +74,6 @@
     <!-- Used for SignupActivity end -->
 
     <!-- Used for AccountActivity begin -->
-    <string name="account_title">My Account</string>
 
     <string name="new_email_hint">New Email</string>
     <string name="new_password_hint">New Password</string>
@@ -86,7 +84,6 @@
     <string name="reset_password">Reset Password</string>
 
     <string name="delete_account">Delete Account</string>
-    // TODO: add a confirmation dialog
 
     <string name="sign_out">Sign Out</string>
 
@@ -118,16 +115,16 @@
     <string name="pic_edit_menu_redo">Redo</string>
     <string name="pic_edit_menu_save">Save</string>
     <string name="pic_edit_menu_share">Share</string>
+    <string name="image_saved">Image saved.</string>
     <!-- Used for PicEditActivity end -->
 
     <!-- Used for BrowseActivity begin -->
     <string name="browse_activity_title">Gallery</string>
+    <string name="browse_activity_everywhere">Everywhere</string>
     <string name="choose_image_destination">What would you like to do?</string>
     <string name="draw">Draw</string>
     <string name="fill">Fill</string>
     <!-- Used for BrowseActivity end -->
-
-    // TODO: Add strings from other classes and convert some toasts to AlertDialogs
 
     <!-- Used for ImageFeedActivity -->
     <string name="download_success">Download finished</string>
@@ -137,8 +134,8 @@
     <string name="upload_activity_title">Post</string>
     <string name="upload_prompt">Upload image</string>
     <string name="upload">Post</string>
-    <string name="share_external">Share with other apps: </string>
-    <string name="progress_uploading">Uploading…</string>
+    <string name="share_external">Share with other apps</string>
+    <string name="progress_uploading">Uploading...</string>
     <string name="upload_success">Upload finished</string>
     <string name="upload_failure">Upload failed</string>
     <string name="upload_adult_content_error">Image flagged as likely containing inappropriate content. Cannot be posted.</string>
@@ -146,5 +143,7 @@
     <!-- User for rest calls -->
     <string name="rest_auth_token_failure">Failed to authorize</string>
     <string name="rest_auth_token_interruption">Authorization interrupted</string>
+    <string name="draw_menu_draw">Draw</string>
+    <string name="account_title">My Account</string>
 
 </resources>

@@ -15,7 +15,7 @@ android {
         applicationId "com.caitoo0o.filler"
         minSdkVersion 23
         targetSdkVersion 23
-        versionCode 21
+        versionCode 22
         versionName "3.0"
     }
     buildTypes {

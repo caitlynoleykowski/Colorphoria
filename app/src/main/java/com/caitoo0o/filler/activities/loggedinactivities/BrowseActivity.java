@@ -242,15 +242,15 @@ public class BrowseActivity extends AppCompatActivity {
         host.setup();
 
         //Tab 1
-        TabHost.TabSpec spec = host.newTabSpec("Filler");
+        TabHost.TabSpec spec = host.newTabSpec(getString(R.string.app_name));
         spec.setContent(R.id.tab1);
-        spec.setIndicator("Filler");
+        spec.setIndicator(getString(R.string.app_name));
         host.addTab(spec);
 
         //Tab 2
-        spec = host.newTabSpec("Everywhere");
+        spec = host.newTabSpec(getString(R.string.browse_activity_everywhere));
         spec.setContent(R.id.tab2);
-        spec.setIndicator("Everywhere");
+        spec.setIndicator(getString(R.string.browse_activity_everywhere));
         host.addTab(spec);
     }
 

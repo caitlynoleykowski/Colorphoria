@@ -482,7 +482,7 @@ public class PicEditActivity extends AppCompatActivity {
     private void saveCurrImage() {
         Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this, new Utils.SaveFillerBitmapHandler() {
             public void onSuccess(Uri uri) {
-                Toast.makeText(PicEditActivity.this.getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
+                Toast.makeText(PicEditActivity.this.getApplicationContext(), R.string.image_saved, Toast.LENGTH_LONG).show();
             }
             public void onFailure() {
                 // do nothing
@@ -508,7 +508,7 @@ public class PicEditActivity extends AppCompatActivity {
     private void uploadCurrImage() {
         Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this, new Utils.SaveFillerBitmapHandler() {
             public void onSuccess(Uri uri) {
-                Toast.makeText(PicEditActivity.this.getApplicationContext(), "Image saved.", Toast.LENGTH_LONG).show();
+                Toast.makeText(PicEditActivity.this.getApplicationContext(), R.string.image_saved, Toast.LENGTH_LONG).show();
                 startUploadActivity(uri);
             }
             public void onFailure() {
