@@ -13,10 +13,10 @@ android {
     buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.caitoo0o.filler"
-        minSdkVersion 23
+        minSdkVersion 16
         targetSdkVersion 23
-        versionCode 22
-        versionName "3.0"
+        versionCode 23
+        versionName "3.2"
     }
     buildTypes {
         release {

@@ -3,7 +3,8 @@
         android:height="24dp"
         android:viewportWidth="24.0"
         android:viewportHeight="24.0">
+    <!--Change to @color/colorAccent when minSdkVersion >= 21-->
     <path
-        android:fillColor="@color/colorAccent"
+        android:fillColor="#FFFFFFFF"
         android:pathData="M19,13H5v-2h14v2z"/>
 </vector>

@@ -69,7 +69,11 @@ public class BitmapWrapper {
         return bm.getPixel(x, y) & 0x00FFFFFF;
     }
     private void setPixelColor(Bitmap bm, int x, int y, int color) {
-        bm.setPixel(x, y, color);
+        int alphaChannelBitMask = (0xFF000000 & bm.getPixel(x,y));
+        int argbBitMask = alphaChannelBitMask | 0x00FFFFFF;
+        int argbColorBitMask = 0xFF000000 | color;
+        int argbColor = argbColorBitMask & argbBitMask;
+        bm.setPixel(x, y, argbColor);
     }
     public boolean isPixelNodeProcessed(PixelNode n, boolean [][] processed) {
         return processed[n.x()][n.y()];
@@ -377,16 +381,16 @@ public class BitmapWrapper {
 
     // protected for unit tests
     protected int getRed(int color) {
-        return (color & 0xff0000)>> 16;
+        return (color & 0x00ff0000)>> 16;
     }
 
     // protected for unit tests
     protected int getGreen(int color) {
-        return (color &  0x00ff00) >> 8;
+        return (color &  0x0000ff00) >> 8;
     }
 
     // protected for unit tests
     protected int getBlue(int color) {
-        return (color & 0x0000ff) >> 0;
+        return (color & 0x000000ff) >> 0;
     }
 }

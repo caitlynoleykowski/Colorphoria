@@ -395,11 +395,6 @@ public class PicEditActivity extends AppCompatActivity {
         // http://stackoverflow.com/questions/7228985/android-imagebutton-with-disabled-ui-feel
         ImageButton button = (ImageButton) view;
         button.setClickable(clickable);
-        if (clickable) {
-            button.getDrawable().setColorFilter(null);
-        } else {
-            button.getDrawable().setColorFilter(getColor(R.color.colorHighlight), PorterDuff.Mode.SRC_IN);
-        }
     }
 
     // public to be used by BitmapEffectAsyncTask

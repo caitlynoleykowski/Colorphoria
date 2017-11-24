@@ -66,6 +66,7 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
                 InputStream is = contextWeakReference.get().getContentResolver().openInputStream(uri);
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                 BitmapFactory.decodeStream(is, null, options);
                 double scaleFactor = BitmapWrapper.getScaleFactor(options.outWidth, options.outHeight);
                 BitmapFactory.Options finalOptions = new BitmapFactory.Options();
