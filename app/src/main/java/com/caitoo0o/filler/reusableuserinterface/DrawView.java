@@ -135,6 +135,10 @@ public class DrawView extends View {
     }
 
     public void startNew(){
+        // Clear out any existing canvasBitmap because it could be an image
+        canvasBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        drawCanvas = new Canvas(canvasBitmap);
+        // Clear the canvas
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         invalidate();
     }
