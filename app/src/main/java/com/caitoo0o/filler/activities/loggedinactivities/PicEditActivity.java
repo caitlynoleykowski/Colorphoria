@@ -102,6 +102,8 @@ public class PicEditActivity extends AppCompatActivity {
         Random randSeedGen = new Random();
         randomSeed = randSeedGen.nextInt();
 
+        setUIforImageDoneProcessing(false);
+
         if (savedInstanceState != null) {
             sourceUri = savedInstanceState.getParcelable(SOURCE_URI);
             Bitmap sourceImage = (Bitmap) savedInstanceState.getParcelable(SOURCE_STATE_KEY);
@@ -131,7 +133,6 @@ public class PicEditActivity extends AppCompatActivity {
                     (ImageButton) findViewById(R.id.random_flood_button),
                     getEffectCtrl(), randomSeed);
             bmwAsync.execute();
-            setUIforImageDoneProcessing(true);
         } else {
             // TODO: Error/bug, shouldn't get here
             setUIforImageDoneProcessing(false);
@@ -273,14 +274,21 @@ public class PicEditActivity extends AppCompatActivity {
         this.processingImageDone = processingImageDone;
         invalidateOptionsMenu();
 
+        if (processingImageDone) {
+            ((ProgressBar) findViewById(R.id.progress_bar)).setVisibility(View.GONE);
+        } else {
+            ((ProgressBar) findViewById(R.id.progress_bar)).setVisibility(View.VISIBLE);
+        }
+
         // Disable buttons in bottom control panel (effects buttons/rotate button/palette button)
         LinearLayout ll2 = (LinearLayout) findViewById(R.id.icon_linear_layout);
         ll2.getChildCount();
         for (int i = 0; i < ll2.getChildCount(); i++) {
             ((ImageButton) ll2.getChildAt(i)).setClickable(processingImageDone);
         }
-        setImageButtonClickable(findViewById(R.id.choose_palette), processingImageDone);
-        setImageButtonClickable(findViewById(R.id.rotate_right), processingImageDone);
+        findViewById(R.id.choose_palette).setClickable(processingImageDone);
+        findViewById(R.id.rotate_right).setClickable(processingImageDone);
+        findViewById(R.id.effect_ctrl_seekbar).setEnabled(processingImageDone);
     }
 
     // Begin UI handlers
@@ -388,13 +396,6 @@ public class PicEditActivity extends AppCompatActivity {
                 (ImageButton) findViewById(R.id.random_flood_button),
                 PicEditActivity.Effect.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
-    }
-
-    private void setImageButtonClickable(View view, boolean clickable) {
-        // TODO: Maybe change this to a selector in the layout.xml??
-        // http://stackoverflow.com/questions/7228985/android-imagebutton-with-disabled-ui-feel
-        ImageButton button = (ImageButton) view;
-        button.setClickable(clickable);
     }
 
     // public to be used by BitmapEffectAsyncTask

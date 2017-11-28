@@ -98,6 +98,9 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
                 imageView.setImageBitmap(bitmap);
             }
         }
+        if (activityWeakReference != null && activityWeakReference.get() != null) {
+            activityWeakReference.get().doneProgress();
+        }
 
         // Don't need a colorPalette here because there will never be one yet
         if (activityWeakReference != null && activityWeakReference.get() != null && bitmap != null) {
