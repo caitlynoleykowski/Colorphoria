@@ -1,6 +1,7 @@
 package com.caitoo0o.filler.reusableuserinterface;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -8,7 +9,7 @@ import android.widget.ImageView;
  * Created by caitoo0o on 9/29/2017.
  */
 
-public class PositionImageView extends ImageView {
+public class PositionImageView extends AppCompatImageView {
     private int position;
 
     public PositionImageView(Context context) {
@@ -21,11 +22,6 @@ public class PositionImageView extends ImageView {
 
     public PositionImageView(Context context, AttributeSet attrs, int defStyleAttr){
         super(context, attrs, defStyleAttr);
-    }
-
-    public PositionImageView(Context context, AttributeSet attrs, int defStyleAttr,
-                             int defStyleRes){
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     public void setPosition(int position) {

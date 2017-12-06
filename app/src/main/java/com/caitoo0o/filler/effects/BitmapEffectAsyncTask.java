@@ -67,6 +67,9 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
                 case RANDOM_FLOOD_FILL:
                     bmwWeakReference.get().randomFloodFill(ctrl, randomSeed, colorPalette);
                     break;
+                case INVERT:
+                    bmwWeakReference.get().invert(ctrl, randomSeed, colorPalette);
+                    break;
             }
         }
         return bmwWeakReference.get().getModifiedBitmap();

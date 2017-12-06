@@ -64,7 +64,8 @@ public class PicEditActivity extends AppCompatActivity {
         RANDOM_BLEED_FILL,
         THRESHOLD,
         RANDOM_LINE_FILL,
-        RANDOM_FLOOD_FILL
+        RANDOM_FLOOD_FILL,
+        INVERT
     }
 
     private BitmapWrapper bmW;
@@ -130,6 +131,7 @@ public class PicEditActivity extends AppCompatActivity {
                     (ImageButton) findViewById(R.id.threshold_button),
                     (ImageButton) findViewById(R.id.random_line_button),
                     (ImageButton) findViewById(R.id.random_flood_button),
+                    (ImageButton) findViewById(R.id.invert_button),
                     getEffectCtrl(), randomSeed);
             bmwAsync.execute();
         } else {
@@ -373,6 +375,11 @@ public class PicEditActivity extends AppCompatActivity {
         applyEffect();
     }
 
+    public void onInvert(View v) {
+        effectSelected = Effect.INVERT;
+        applyEffect();
+    }
+
     // End UI Handlers
 
     // Begin UI Helpers
@@ -394,6 +401,10 @@ public class PicEditActivity extends AppCompatActivity {
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_flood_button),
                 PicEditActivity.Effect.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed, colorPalette).execute();
+        new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.invert_button),
+                PicEditActivity.Effect.INVERT, bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
     }
 

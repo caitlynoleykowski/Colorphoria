@@ -181,6 +181,12 @@ public class BitmapWrapper {
         mod = temp;
     }
 
+    public void invert(double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
+        Bitmap temp = getRotatedSource();
+        applyInvert(temp, ctrl);
+        mod = temp;
+    }
+
     private void applyRotate(int rotationAngle) {
         // calculate the net rotation angle
         currRotationAngle += rotationAngle;
@@ -243,6 +249,23 @@ public class BitmapWrapper {
                         getPixelColor(bm, currNode.x(), currNode.y()) == 0xffffff) {
                     int nextColor = getNextColor(r, colorPalette);
                     floodFill(bm, currNode, 0xffffff, nextColor, processed);
+                }
+            }
+        }
+    }
+
+    void applyInvert(Bitmap bm, double ctrl) {
+        for (int y = 0; y < bm.getHeight(); y++) {
+            for (int x = 0; x < bm.getWidth(); x++) {
+                int color = getPixelColor(bm, x, y);
+                int red = (color >> 16) & 0xFF;
+                int green = (color >> 8) & 0xFF;
+                int blue = (color >> 0) & 0xFF;
+                int average = (red + blue + green) / 3;
+                if (average <= (255 * ctrl)) {
+                    setPixelColor(bm, x, y, 0x000000);
+                } else {
+                    setPixelColor(bm, x, y, 0xffffff);
                 }
             }
         }
