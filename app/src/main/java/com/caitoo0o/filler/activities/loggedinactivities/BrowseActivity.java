@@ -5,13 +5,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +16,17 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
-import android.widget.Toast;
 
 import com.caitoo0o.filler.backgroundtasks.GetBrowseThumbnailImageAsyncTask;
-import com.caitoo0o.filler.backgroundtasks.GetImageAsyncTask;
 import com.caitoo0o.filler.reusableuserinterface.OnSwipeTouchListener;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.reusableuserinterface.PositionImageView;
 import com.caitoo0o.filler.utils.Utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -265,14 +257,14 @@ public class BrowseActivity extends AppCompatActivity {
                 albumStorageDir.mkdir();
             }
             catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Failed to create Filler directory", Toast.LENGTH_LONG).show();
+                Utils.showCustomToast(this, "Failed to create Filler directory");
                 Log.e(TAG, "Failed to create Filler directory.");
                 e.printStackTrace();
             }
         }
         else {
             // TODO: move these strings to strings file
-            Toast.makeText(getApplicationContext(), "Create Filler storage failed. External storage not writeable.", Toast.LENGTH_LONG).show();
+            Utils.showCustomToast(this, "Create Filler storage failed. External storage not writeable.");
             Log.e(TAG, "Create Filler storage failed. External storage not writeable.");
         }
     }

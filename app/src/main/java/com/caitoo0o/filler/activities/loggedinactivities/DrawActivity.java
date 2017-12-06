@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.caitoo0o.filler.effects.BitmapWrapper;
 import com.caitoo0o.filler.reusableuserinterface.DrawView;
@@ -324,7 +323,7 @@ public class DrawActivity extends AppCompatActivity {
         if (drawView.isEdited()) {
             startPicEditStoragePermission();
         } else {
-            Toast.makeText(DrawActivity.this, "Draw an image to edit :)", Toast.LENGTH_LONG).show();
+            Utils.showCustomToast(this, "Draw an image to edit :)");
         }
     }
 
@@ -335,7 +334,7 @@ public class DrawActivity extends AppCompatActivity {
                 new Utils.OnExplanationDeclinedHandler() {
                     @Override
                     public void onExplanationDeclined() {
-                        Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                        Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
                     }
                 })) {
             saveDrawing();
@@ -347,10 +346,10 @@ public class DrawActivity extends AppCompatActivity {
         drawView.setDrawingCacheEnabled(true);
         File imageFile = Utils.saveFillerBitmap(drawView.getDrawingCache(), this, new Utils.SaveFillerBitmapHandler() {
             public void onSuccess(Uri uri) {
-                Toast.makeText(DrawActivity.this.getApplicationContext(), R.string.image_saved, Toast.LENGTH_LONG).show();
+                Utils.showCustomToast(DrawActivity.this, getString(R.string.image_saved));
             }
             public void onFailure() {
-                Toast.makeText(DrawActivity.this.getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
+                Utils.showCustomToast(DrawActivity.this, "Save failed.");
             }
         });
         drawView.destroyDrawingCache();
@@ -372,7 +371,7 @@ public class DrawActivity extends AppCompatActivity {
                 new Utils.OnExplanationDeclinedHandler() {
                     @Override
                     public void onExplanationDeclined() {
-                        Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                        Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
                         startPicSourceActivityWithoutSaving(startBrowse, startCamera);
                     }
                 })) {
@@ -414,7 +413,7 @@ public class DrawActivity extends AppCompatActivity {
                 new Utils.OnExplanationDeclinedHandler() {
                     @Override
                     public void onExplanationDeclined() {
-                        Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                        Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
                     }
                 })) {
             startPicEditActivity();
@@ -444,7 +443,7 @@ public class DrawActivity extends AppCompatActivity {
                     // Permission was granted, so continue.
                     saveDrawing();
                 } else {
-                    Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
                 }
                 return;
             }
@@ -455,7 +454,7 @@ public class DrawActivity extends AppCompatActivity {
                     // Permission was granted, so continue.
                     startPicEditActivity();
                 } else {
-                    Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
                 }
                 return;
             }
@@ -466,7 +465,7 @@ public class DrawActivity extends AppCompatActivity {
                     // Permission was granted, so continue.
                     startPicSourceActivity(false, false);
                 } else {
-                    Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
                     startPicSourceActivityWithoutSaving(false, false);
                 }
                 return;
@@ -478,7 +477,7 @@ public class DrawActivity extends AppCompatActivity {
                     // Permission was granted, so continue.
                     startPicSourceActivity(true, false);
                 } else {
-                    Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
                     startPicSourceActivityWithoutSaving(true, false);
                 }
                 return;
@@ -490,7 +489,7 @@ public class DrawActivity extends AppCompatActivity {
                     // Permission was granted, so continue.
                     startPicSourceActivity(false, true);
                 } else {
-                    Toast.makeText(DrawActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
                     startPicSourceActivityWithoutSaving(false, true);
                 }
                 return;

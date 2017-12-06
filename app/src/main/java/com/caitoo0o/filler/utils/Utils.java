@@ -16,6 +16,8 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.caitoo0o.filler.R;
-import com.caitoo0o.filler.activities.loggedoutactivites.LoginActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -125,7 +126,7 @@ public class Utils {
 				albumStorageDir.mkdir();
 			}
 			catch (Exception e) {
-				Toast.makeText(activity.getApplicationContext(), "Failed to create directory", Toast.LENGTH_LONG).show();
+				Utils.showCustomToast(activity, "Failed to create directory");
 				Log.e("picsource", "Failed to create Filler directory.");
 				e.printStackTrace();
 			}
@@ -159,7 +160,7 @@ public class Utils {
 			return picFile;
 		}
 		else {
-			Toast.makeText(activity.getApplicationContext(), "Save failed. External storage not writeable.", Toast.LENGTH_LONG).show();
+			Utils.showCustomToast(activity, "Save failed. External storage not writeable.");
 			Log.e("picsource", "failed save. external storage not writeable");
 			return null;
 		}
@@ -259,5 +260,20 @@ public class Utils {
 		});
 
 		confirmDialog.show();
+	}
+
+	public static void showCustomToast(Activity activity, String text) {
+		LayoutInflater inflater = activity.getLayoutInflater();
+		View layout = inflater.inflate(R.layout.toast,
+				(ViewGroup) activity.findViewById(R.id.toast_layout));
+
+		TextView textView = (TextView) layout.findViewById(R.id.toast_text);
+		textView.setText(text);
+
+		Toast toast = new Toast(activity.getApplicationContext());
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
 	}
 }

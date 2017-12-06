@@ -84,7 +84,7 @@
     <string name="upload_adult_content_error">不適切なコンテンツを含む可能性が高いとフラグされた画像。 投稿できません。</string>
     <string name="rest_auth_token_failure">承認に失敗しました</string>
     <string name="rest_auth_token_interruption">承認が中断されました</string>
-    <string name="image_saved">画像が保存されました。</string>
+    <string name="image_saved">画像が保存されました</string>
     <string name="browse_activity_everywhere">どこにでも</string>
     <string name="draw_activity_title">ドロー</string>
     <string name="account_title">アカウント</string>

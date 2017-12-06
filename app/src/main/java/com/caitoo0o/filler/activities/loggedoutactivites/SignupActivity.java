@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.backgroundtasks.RestHelper;
@@ -76,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (fullName == null || birthdayDate == null) {
-                    Toast.makeText(SignupActivity.this, "fullName or birthday date null", Toast.LENGTH_LONG).show();
+                    Utils.showCustomToast(SignupActivity.this, "fullName or birthday date null");
                     return;
                 }
 

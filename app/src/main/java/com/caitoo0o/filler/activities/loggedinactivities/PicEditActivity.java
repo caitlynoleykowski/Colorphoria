@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -468,7 +467,7 @@ public class PicEditActivity extends AppCompatActivity {
                 new Utils.OnExplanationDeclinedHandler() {
                     @Override
                     public void onExplanationDeclined() {
-                        Toast.makeText(PicEditActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                        Utils.showCustomToast(PicEditActivity.this, getString(R.string.unable_to_save_image));
                     }
                 })) {
             saveCurrImage();
@@ -478,11 +477,11 @@ public class PicEditActivity extends AppCompatActivity {
     private void saveCurrImage() {
         Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this, new Utils.SaveFillerBitmapHandler() {
             public void onSuccess(Uri uri) {
-                Toast.makeText(PicEditActivity.this.getApplicationContext(), R.string.image_saved, Toast.LENGTH_LONG).show();
+                Utils.showCustomToast(PicEditActivity.this, getString(R.string.image_saved));
             }
             public void onFailure() {
                 // do nothing
-                Toast.makeText(PicEditActivity.this.getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
+                Utils.showCustomToast(PicEditActivity.this, "Save failed.");
             }
         });
     }
@@ -494,7 +493,7 @@ public class PicEditActivity extends AppCompatActivity {
                 new Utils.OnExplanationDeclinedHandler() {
                     @Override
                     public void onExplanationDeclined() {
-                        Toast.makeText(PicEditActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                        Utils.showCustomToast(PicEditActivity.this, getString(R.string.unable_to_save_image));
                     }
                 })) {
             uploadCurrImage();
@@ -504,12 +503,12 @@ public class PicEditActivity extends AppCompatActivity {
     private void uploadCurrImage() {
         Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this, new Utils.SaveFillerBitmapHandler() {
             public void onSuccess(Uri uri) {
-                Toast.makeText(PicEditActivity.this.getApplicationContext(), R.string.image_saved, Toast.LENGTH_LONG).show();
+                Utils.showCustomToast(PicEditActivity.this, getString(R.string.image_saved));
                 startUploadActivity(uri);
             }
             public void onFailure() {
                 // do nothing
-                Toast.makeText(PicEditActivity.this.getApplicationContext(), "Save failed.", Toast.LENGTH_LONG).show();
+                Utils.showCustomToast(PicEditActivity.this, "Save failed.");
             }
         });
     }
@@ -532,7 +531,7 @@ public class PicEditActivity extends AppCompatActivity {
                     // Permission was granted, so continue.
                     saveCurrImage();
                 } else {
-                    Toast.makeText(PicEditActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                    Utils.showCustomToast(PicEditActivity.this, getString(R.string.unable_to_save_image));
                 }
                 return;
             }

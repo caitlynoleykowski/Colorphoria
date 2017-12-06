@@ -3,7 +3,6 @@ package com.caitoo0o.filler.backgroundtasks;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -123,16 +122,19 @@ public class RestHelper {
             final String endpointName,
             final RequestParams requestParams,
             final HttpCallbacks callbacks) {
-        user.getToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
-            @Override
-            public void onSuccess(GetTokenResult getTokenResult) {
-                postData(context, user, getTokenResult.getToken(), api, endpointName, requestParams, callbacks);            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, "Failed to get token from Firebase: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+        user.getToken(true)
+                .addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+                    @Override
+                    public void onSuccess(GetTokenResult getTokenResult) {
+                        postData(context, user, getTokenResult.getToken(), api, endpointName, requestParams, callbacks);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callbacks.onFailure("Failed to get token from Firebase: " + e.getMessage());
+                    }
+                });
     }
 
     private static void getData(

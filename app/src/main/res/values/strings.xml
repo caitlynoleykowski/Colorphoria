@@ -115,7 +115,7 @@
     <string name="pic_edit_menu_redo">Redo</string>
     <string name="pic_edit_menu_save">Save</string>
     <string name="pic_edit_menu_share">Share</string>
-    <string name="image_saved">Image saved.</string>
+    <string name="image_saved">Image saved</string>
     <!-- Used for PicEditActivity end -->
 
     <!-- Used for BrowseActivity begin -->

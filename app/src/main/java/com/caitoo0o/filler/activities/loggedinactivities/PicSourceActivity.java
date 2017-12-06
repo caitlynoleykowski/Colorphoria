@@ -21,7 +21,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.caitoo0o.filler.backgroundtasks.GetImageAsyncTask;
 import com.caitoo0o.filler.backgroundtasks.RestHelper;
@@ -168,18 +167,18 @@ public class PicSourceActivity extends LoggedInActivity {
 //                    JSONObject responseJson = new JSONObject(response);
 //                    if (responseJson.has("email")) {
 //                        String message = responseJson.getString("email");
-//                        Toast.makeText(PicSourceActivity.this, "User's email:" + message, Toast.LENGTH_LONG).show();
+//                        Utils.showCustomToast(PicSourceActivity.this, "User's email:" + message);
 //                    } else {
-//                        Toast.makeText(PicSourceActivity.this, "Error: json does not contain email", Toast.LENGTH_LONG).show();
+//                        Utils.showCustomToast(PicSourceActivity.this, "Error: json does not contain email");
 //                    }
 //                } catch (Exception e) {
-//                    Toast.makeText(PicSourceActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                    Utils.showCustomToast(PicSourceActivity.this, "Error: " + e.getMessage());
 //                }
 //            }
 //
 //            @Override
 //            public void onFailure(String error) {
-//                Toast.makeText(PicSourceActivity.this, "FAILURE: " + error, Toast.LENGTH_LONG).show();
+//                Utils.showCustomToast(PicSourceActivity.this, "FAILURE: " + error);
 //            }
 //        });
     }
@@ -235,7 +234,7 @@ public class PicSourceActivity extends LoggedInActivity {
                 public void onFailure(String error) {
                     refreshingFeed = false;
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(PicSourceActivity.this, R.string.download_failure, Toast.LENGTH_LONG).show();
+                    Utils.showCustomToast(PicSourceActivity.this, getString(R.string.download_failure));
                     // TODO: Figure out why in the world networkResponse is null and come back to this
                     // TODO: so that we don't have to just loadFeed as if there's no images for today
                     loadFeed("{}");
@@ -344,7 +343,7 @@ public class PicSourceActivity extends LoggedInActivity {
                 }
             } else {
                 Log.e(TAG, "data or data.getData from image picker intent is null.");
-                Toast.makeText(getApplicationContext(), "No image selection found.", Toast.LENGTH_LONG).show();
+                Utils.showCustomToast(PicSourceActivity.this, "No image selection found.");
             }
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE) {
@@ -391,7 +390,7 @@ public class PicSourceActivity extends LoggedInActivity {
             }
         }
         else {
-            Toast.makeText(getApplicationContext(), "Device has no camera.", Toast.LENGTH_LONG).show();
+            Utils.showCustomToast(this, "Device has no camera.");
         }
     }
 
@@ -421,7 +420,7 @@ public class PicSourceActivity extends LoggedInActivity {
         catch(Exception e)
         {
             Log.v(TAG, "Can't create file to take picture!", e);
-            Toast.makeText(this, "Please check SD card! Image shot is impossible!", Toast.LENGTH_LONG).show();
+            Utils.showCustomToast(this, "Please check SD card! Image shot is impossible!");
             return;
         }
         mImageUri = Uri.fromFile(photo);

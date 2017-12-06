@@ -36,7 +36,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.backgroundtasks.MyUploadService;
@@ -226,7 +225,7 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
                 new Utils.OnExplanationDeclinedHandler() {
                     @Override
                     public void onExplanationDeclined() {
-                        Toast.makeText(UploadActivity.this, R.string.unable_to_save_image, Toast.LENGTH_LONG);
+                        Utils.showCustomToast(UploadActivity.this, getString(R.string.unable_to_save_image));
                     }
                 })) {
             shareCurrImage();
@@ -258,7 +257,7 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
                     // Permission was granted, so continue.
                     shareCurrImage();
                 } else {
-                    Toast.makeText(UploadActivity.this, R.string.unable_to_share_image, Toast.LENGTH_LONG);
+                    Utils.showCustomToast(UploadActivity.this, getString(R.string.unable_to_share_image));
                 }
                 return;
             }
