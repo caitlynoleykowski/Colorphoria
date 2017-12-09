@@ -258,15 +258,11 @@ public class BitmapWrapper {
         for (int y = 0; y < bm.getHeight(); y++) {
             for (int x = 0; x < bm.getWidth(); x++) {
                 int color = getPixelColor(bm, x, y);
-                int red = (color >> 16) & 0xFF;
-                int green = (color >> 8) & 0xFF;
-                int blue = (color >> 0) & 0xFF;
-                int average = (red + blue + green) / 3;
-                if (average <= (255 * ctrl)) {
-                    setPixelColor(bm, x, y, 0x000000);
-                } else {
-                    setPixelColor(bm, x, y, 0xffffff);
-                }
+                int red = 0xFF - ((color >> 16) & 0xFF);
+                int green = 0xFF - ((color >> 8) & 0xFF);
+                int blue = 0xFF - ((color >> 0) & 0xFF);
+                int invertedColor = (red << 16) + (green << 8) + blue;
+                setPixelColor(bm, x, y, invertedColor);
             }
         }
     }
