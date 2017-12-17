@@ -184,31 +184,41 @@ public class PicEditActivity extends AppCompatActivity {
         ((SquareImageButton) findViewById(R.id.random_bleed_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onRandomBleedFill(view);
+                if (processingImageDone) {
+                    onRandomBleedFill(view);
+                }
             }
         });
         ((SquareImageButton) findViewById(R.id.threshold_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onThreshold(view);
+                if (processingImageDone) {
+                    onThreshold(view);
+                }
             }
         });
         ((SquareImageButton) findViewById(R.id.random_line_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onRandomLineFill(view);
+                if (processingImageDone) {
+                    onRandomLineFill(view);
+                }
             }
         });
         ((SquareImageButton) findViewById(R.id.random_flood_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onRandomFloodFill(view);
+                if (processingImageDone) {
+                    onRandomFloodFill(view);
+                }
             }
         });
         ((SquareImageButton) findViewById(R.id.invert_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onInvert(view);
+                if (processingImageDone) {
+                    onInvert(view);
+                }
             }
         });
     }
