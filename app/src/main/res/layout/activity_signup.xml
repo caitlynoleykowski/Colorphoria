@@ -26,11 +26,10 @@
             android:orientation="horizontal">
 
             <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
-                android:id="@+id/icon_square_button"
+                android:id="@+id/random_bleed_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/ic_launcher_400dp"
-                android:onClick="onRandomBleedFill"
                 android:scaleType="centerCrop"
                 android:clickable="false" />
 

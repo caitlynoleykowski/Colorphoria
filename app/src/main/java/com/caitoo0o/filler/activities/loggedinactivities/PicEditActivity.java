@@ -4,9 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.PorterDuff;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -34,6 +32,7 @@ import com.caitoo0o.filler.effects.BitmapWrapper;
 import com.caitoo0o.filler.reusableuserinterface.OnSwipeTouchListener;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.reusableuserinterface.PaletteChooserDialog;
+import com.caitoo0o.filler.reusableuserinterface.SquareImageButton;
 import com.caitoo0o.filler.utils.Utils;
 
 import java.util.ArrayDeque;
@@ -127,7 +126,7 @@ public class PicEditActivity extends AppCompatActivity {
             ImageView iv = (ImageView) findViewById(R.id.theImage);
             bmW = new BitmapWrapper();
             PicEditBitmapLoaderAsyncTask bmwAsync = new PicEditBitmapLoaderAsyncTask(this, getApplicationContext(), iv, uri, bmW,
-                    (ImageButton) findViewById(R.id.icon_square_button),
+                    (ImageButton) findViewById(R.id.random_bleed_button),
                     (ImageButton) findViewById(R.id.threshold_button),
                     (ImageButton) findViewById(R.id.random_line_button),
                     (ImageButton) findViewById(R.id.random_flood_button),
@@ -179,6 +178,37 @@ public class PicEditActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
                 // TODO Auto-generated method stub
+            }
+        });
+
+        ((SquareImageButton) findViewById(R.id.random_bleed_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRandomBleedFill(view);
+            }
+        });
+        ((SquareImageButton) findViewById(R.id.threshold_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onThreshold(view);
+            }
+        });
+        ((SquareImageButton) findViewById(R.id.random_line_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRandomLineFill(view);
+            }
+        });
+        ((SquareImageButton) findViewById(R.id.random_flood_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRandomFloodFill(view);
+            }
+        });
+        ((SquareImageButton) findViewById(R.id.invert_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onInvert(view);
             }
         });
     }
@@ -387,7 +417,7 @@ public class PicEditActivity extends AppCompatActivity {
     private void refreshEffectThumbnails(int randomSeed) {
         // Populate the effect preview buttons
         new BitmapEffectPreviewAsyncTask(this,
-                (ImageButton) findViewById(R.id.icon_square_button),
+                (ImageButton) findViewById(R.id.random_bleed_button),
                 PicEditActivity.Effect.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
