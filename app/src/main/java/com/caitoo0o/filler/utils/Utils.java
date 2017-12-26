@@ -20,8 +20,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -180,7 +183,9 @@ public class Utils {
         confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         confirmDialog.setContentView(R.layout.confirm);
 
-        // Setup size
+		confirmDialog.setCanceledOnTouchOutside(false);
+
+		// Setup size
         LinearLayout confirmLayout = (LinearLayout) confirmDialog.findViewById(R.id.confirm_dialog_layout);
         ViewGroup.LayoutParams params = confirmLayout.getLayoutParams();
         if (widthShort) {
@@ -231,6 +236,8 @@ public class Utils {
 		confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		confirmDialog.setContentView(R.layout.confirm);
 
+		confirmDialog.setCanceledOnTouchOutside(false);
+
 		// Setup size
 		LinearLayout confirmLayout = (LinearLayout) confirmDialog.findViewById(R.id.confirm_dialog_layout);
 		ViewGroup.LayoutParams params = confirmLayout.getLayoutParams();
@@ -275,5 +282,37 @@ public class Utils {
 		toast.setDuration(Toast.LENGTH_LONG);
 		toast.setView(layout);
 		toast.show();
+	}
+
+	/**
+	 * Blocks user interaction and shows a relative layout declared in the layout file
+	 * in use for the passed in activity. The relative layout id must be progress_bar_layout
+	 * otherwise this code will crash.
+	 * @param activity the activity on which to display the relative layout and block user interaction
+	 */
+	public static void showBlockingProgressBar(Activity activity) {
+		// Disable user interaction
+		activity.getWindow().setFlags(
+				WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+				WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+		// Show ProgressBar
+		RelativeLayout progressBarLayout = (RelativeLayout) activity.findViewById(R.id.progress_bar_layout);
+		progressBarLayout.setVisibility(View.VISIBLE);
+	}
+
+	/**
+	 * Enables user interaction and removes a relative layout declared in the layout file
+	 * in use for the passed in activity. The relative layout id must be progress_bar_layout
+	 * otherwise this code will crash.
+	 * @param activity the activity on which to remove the relative layout and enable user interaction
+	 */
+	public static void removeBlockingProgressBar(Activity activity) {
+		// Hide ProgressBar
+		RelativeLayout progressBarLayout = (RelativeLayout) activity.findViewById(R.id.progress_bar_layout);
+		progressBarLayout.setVisibility(View.GONE);
+
+		// Enable user interaction
+		activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 	}
 }

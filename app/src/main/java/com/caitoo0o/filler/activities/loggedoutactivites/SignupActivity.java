@@ -35,7 +35,6 @@ public class SignupActivity extends AppCompatActivity {
     private EditText emailEditText, passwordEditText;
     private TextView signUpButtonTextView;
     private Button signInButtonLink;
-    private ProgressBar progressBar;
 
     private FirebaseAuth auth;
 
@@ -64,7 +63,6 @@ public class SignupActivity extends AppCompatActivity {
         passwordEditText = (EditText) findViewById(R.id.password_edit_text);
         signUpButtonTextView = (TextView) findViewById(R.id.sign_up_button);
         signInButtonLink = (Button) findViewById(R.id.sign_in_button);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         // Make sure font in password text edit is the default
         passwordEditText.setTypeface(Typeface.DEFAULT);
@@ -97,7 +95,8 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
+                Utils.showBlockingProgressBar(SignupActivity.this);
+
                 //create user
                 auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
@@ -121,11 +120,10 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        progressBar.setVisibility(View.GONE);
+        Utils.removeBlockingProgressBar(SignupActivity.this);
     }
 
     private void signupCompletionCallback(Task<AuthResult> task) {
-        progressBar.setVisibility(View.GONE);
         if (!task.isSuccessful()) {
             Log.d(this.getClass().getName(), "Signup failed: " + task.getException());
             signupFailure(this);

@@ -1,5 +1,6 @@
 package com.caitoo0o.filler.utils;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,14 +21,16 @@ import java.util.Date;
 
 public class LoginUtils {
 
-    public static void recordNewUserAfterFirebaseSignupSuccess(final Context context,
+    public static void recordNewUserAfterFirebaseSignupSuccess(final Activity activity,
                                                                String fullName, Date birthdayDate) {
+        Utils.showBlockingProgressBar(activity);
+
         // Get firebase auth instance
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = auth.getCurrentUser();
 
         RestHelper.recordNewUser(
-                context,
+                activity,
                 firebaseUser,
                 fullName,
                 "", // TODO: username
@@ -35,44 +38,46 @@ public class LoginUtils {
                 new RestHelper.HttpCallbacks() {
                     @Override
                     public void onSuccess(String response) {
-                        signupSuccess(context);
+                        signupSuccess(activity);
                     }
                     @Override
                     public void onFailure(String error) {
-                        signupFailure(context);
+                        signupFailure(activity);
                     }
                 }
         );
     }
 
-    public static void signupSuccess(final Context context) {
+    public static void signupSuccess(final Activity activity) {
         Utils.showAlertDialog(
-                context,
-                context.getString(R.string.signup_success),
-                context.getString(R.string.ok),
+                activity,
+                activity.getString(R.string.signup_success),
+                activity.getString(R.string.ok),
                 new Utils.AlertDialogHandler() {
                     public void onPositiveButton(Dialog confirmDialog) {
                         // Close the dialog and go to login screen
                         confirmDialog.dismiss();
-                        context.startActivity(new Intent(context, PicSourceActivity.class));
+                        activity.startActivity(new Intent(activity, PicSourceActivity.class));
                     }
                 },
                 false);
+        Utils.removeBlockingProgressBar(activity);
     }
 
-    public static void signupFailure(final Context context) {
+    public static void signupFailure(final Activity activity) {
         // TODO: Delete user or don't display signup failed when rest endpoint call failed just try again???
         Utils.showAlertDialog(
-                context,
-                context.getString(R.string.signup_failed),
-                context.getString(R.string.ok),
+                activity,
+                activity.getString(R.string.signup_failed),
+                activity.getString(R.string.ok),
                 new Utils.AlertDialogHandler() {
                     public void onPositiveButton(Dialog confirmDialog) {
                         // Close the dialog and go to login screen
                         confirmDialog.dismiss();
-                        context.startActivity(new Intent(context, LoginActivity.class));
+                        activity.startActivity(new Intent(activity, LoginActivity.class));
                     }
                 },
                 false);
+        Utils.removeBlockingProgressBar(activity);
     }
 }

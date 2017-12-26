@@ -1,8 +1,6 @@
 package com.caitoo0o.filler.activities.loggedoutactivites;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -16,13 +14,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
-import com.caitoo0o.filler.activities.loggedinactivities.AccountActivity;
 import com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity;
 import com.caitoo0o.filler.backgroundtasks.RestHelper;
-import com.caitoo0o.filler.utils.LoginUtils;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -44,8 +41,6 @@ import static com.caitoo0o.filler.backgroundtasks.RestHelper.userRecordedStatus;
 
 public class LoginActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener {
-
-    private ProgressBar progressBar;
 
     private FirebaseAuth auth;
 
@@ -72,8 +67,6 @@ public class LoginActivity extends AppCompatActivity implements
 
         // set the view now
         setContentView(R.layout.activity_login);
-
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         setupEmailAndPasswordLogin();
 
@@ -131,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        Utils.showBlockingProgressBar(this);
 
         //authenticate user
         auth.signInWithEmailAndPassword(email, password)
@@ -141,8 +134,9 @@ public class LoginActivity extends AppCompatActivity implements
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
-                        progressBar.setVisibility(View.GONE);
                         if (!task.isSuccessful()) {
+                            Utils.removeBlockingProgressBar(LoginActivity.this);
+
                             // there was an error
                             if (password.length() < 6) {
                                 passwordEditText.setError(getString(R.string.password_too_short));
@@ -255,7 +249,7 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        progressBar.setVisibility(View.VISIBLE);
+        Utils.showBlockingProgressBar(this);
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         auth.signInWithCredential(credential)
@@ -310,13 +304,12 @@ public class LoginActivity extends AppCompatActivity implements
                         },
                         false);
                 }
-
-                progressBar.setVisibility(View.GONE);
                 }
             });
     }
 
     private void googleLoginFailure() {
+        Utils.removeBlockingProgressBar(this);
         Utils.showAlertDialog(
                 LoginActivity.this,
                 getString(R.string.google_login_failed),

@@ -24,7 +24,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
     private EditText emailEditText;
     private TextView resetButtonTextView;
     private Button backButtonLink;
-    private ProgressBar progressBar;
 
     private FirebaseAuth auth;
 
@@ -38,7 +37,6 @@ public class ResetPasswordActivity extends AppCompatActivity {
         emailEditText = (EditText) findViewById(R.id.email_edit_text);
         resetButtonTextView = (TextView) findViewById(R.id.reset_password_button);
         backButtonLink = (Button) findViewById(R.id.back_button_link);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         resetButtonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +49,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     return;
                 }
 
-                progressBar.setVisibility(View.VISIBLE);
+                Utils.showBlockingProgressBar(ResetPasswordActivity.this);
                 auth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -82,7 +80,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                                             false);
                                 }
 
-                                progressBar.setVisibility(View.GONE);
+                                Utils.removeBlockingProgressBar(ResetPasswordActivity.this);
                             }
                         });
             }
