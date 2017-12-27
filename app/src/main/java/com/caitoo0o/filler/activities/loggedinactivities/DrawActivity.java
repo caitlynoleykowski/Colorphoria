@@ -127,28 +127,6 @@ public class DrawActivity extends LoggedInActivity {
         largeBrush = getResources().getInteger(R.integer.large_size);
 
         drawView.setPaintbrushSize(extraSmallBrush);
-
-        // setup swipe gestures
-        View outerRelativeLayout = findViewById(R.id.outer_layout);
-        outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(DrawActivity.this) {
-            public void onSwipeTop() {
-                // Swipe bottom to top
-            }
-
-            public void onSwipeRight() {
-                // Swipe left to right
-            }
-
-            public void onSwipeLeft() {
-                // Swipe right to left
-                startPicSourceStoragePermission(false, false);
-            }
-
-            public void onSwipeBottom() {
-                // Swipe top to bottom
-            }
-
-        });
     }
 
     public void onDraw(View v) {

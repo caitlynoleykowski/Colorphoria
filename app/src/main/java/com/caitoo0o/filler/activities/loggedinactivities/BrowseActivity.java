@@ -67,27 +67,6 @@ public class BrowseActivity extends LoggedInActivity {
             mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
         }
 
-        View outerRelativeLayout = findViewById(R.id.outer_layout);
-        outerRelativeLayout.setOnTouchListener(new OnSwipeTouchListener(BrowseActivity.this) {
-            public void onSwipeTop() {
-                // Swipe from bottom to top
-            }
-
-            public void onSwipeRight() {
-                // Swipe from left to right
-                startPicSourceActivity(mImageUri);
-            }
-
-            public void onSwipeLeft() {
-                // Swipe from right to left
-            }
-
-            public void onSwipeBottom() {
-                // Swipe from top to bottom
-            }
-
-        });
-
         getFilesStoragePermission();
     }
 

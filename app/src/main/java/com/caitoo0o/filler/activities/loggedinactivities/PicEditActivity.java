@@ -140,27 +140,6 @@ public class PicEditActivity extends LoggedInActivity {
             ctrlLayout.setVisibility(View.GONE);
         }
 
-        View outerLinearLayout = findViewById(R.id.outer_layout);
-        outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicEditActivity.this) {
-            public void onSwipeTop() {
-                // Swipe bottom to top
-            }
-
-            public void onSwipeRight() {
-                // Swipe left to right
-            }
-
-            public void onSwipeLeft() {
-                // Swipe right to left
-            }
-
-            public void onSwipeBottom() {
-                // Swipe top to bottom
-                goToPicSourceActivity(sourceUri);
-            }
-
-        });
-
         SeekBar pb = (SeekBar) findViewById(R.id.effect_ctrl_seekbar);
         pb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 

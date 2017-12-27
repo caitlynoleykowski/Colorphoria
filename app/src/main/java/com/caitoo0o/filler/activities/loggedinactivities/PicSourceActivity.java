@@ -84,32 +84,6 @@ public class PicSourceActivity extends LoggedInActivity {
             }
         }
 
-        final View outerLinearLayout = findViewById(R.id.outer_layout);
-        outerLinearLayout.setOnTouchListener(new OnSwipeTouchListener(PicSourceActivity.this) {
-            public void onSwipeTop() {
-                // Swipe bottom to top
-                if (mImageUri != null) {
-                    startPicEditActivity(mImageUri);
-                }
-            }
-
-            public void onSwipeRight() {
-                // Swipe left to right
-                startDrawActivity(mImageUri);
-            }
-
-            public void onSwipeLeft() {
-                // Swipe right to left
-                startBrowseActivity(mImageUri);
-            }
-
-            public void onSwipeBottom() {
-                // Swipe top to bottom
-                startCameraActivityCameraPermission();
-            }
-
-        });
-
         // Handle image feed
         // Create the adapter to convert the array to views
         adapter = new ImageAdapter(getApplicationContext());
