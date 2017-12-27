@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.activities.BaseFillerActivity;
 import com.caitoo0o.filler.backgroundtasks.RestHelper;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,7 +31,7 @@ import java.util.Date;
 import static com.caitoo0o.filler.utils.LoginUtils.recordNewUserAfterFirebaseSignupSuccess;
 import static com.caitoo0o.filler.utils.LoginUtils.signupFailure;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends BaseFillerActivity {
 
     private EditText emailEditText, passwordEditText;
     private TextView signUpButtonTextView;

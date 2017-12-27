@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.activities.BaseFillerActivity;
 import com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity;
 import com.caitoo0o.filler.backgroundtasks.RestHelper;
 import com.caitoo0o.filler.utils.Utils;
@@ -39,7 +40,7 @@ import org.json.JSONObject;
 
 import static com.caitoo0o.filler.backgroundtasks.RestHelper.userRecordedStatus;
 
-public class LoginActivity extends AppCompatActivity implements
+public class LoginActivity extends BaseFillerActivity implements
         GoogleApiClient.OnConnectionFailedListener {
 
     private FirebaseAuth auth;

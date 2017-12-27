@@ -3,6 +3,7 @@ package com.caitoo0o.filler.activities.loggedoutactivites;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +15,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.activities.BaseFillerActivity;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ResetPasswordActivity extends AppCompatActivity {
+public class ResetPasswordActivity extends BaseFillerActivity {
 
     private EditText emailEditText;
     private TextView resetButtonTextView;
@@ -61,6 +63,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                                             getString(R.string.ok),
                                             new Utils.AlertDialogHandler() {
                                                 public void onPositiveButton(Dialog confirmDialog) {
+                                                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
                                                     // Do nothing, just close the dialog
                                                     confirmDialog.dismiss();
                                                 }

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.activities.BaseFillerActivity;
 import com.caitoo0o.filler.activities.loggedoutactivites.LoginActivity;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.auth.api.Auth;
@@ -25,7 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
  * Created by caitoo0o on 6/11/2017.
  */
 
-public class LoggedInActivity extends AppCompatActivity  implements
+public class LoggedInActivity extends BaseFillerActivity implements
         GoogleApiClient.OnConnectionFailedListener {
 
     protected FirebaseAuth.AuthStateListener authListener;

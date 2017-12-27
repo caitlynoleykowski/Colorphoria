@@ -27,7 +27,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class DrawActivity extends AppCompatActivity {
+public class DrawActivity extends LoggedInActivity {
 
     private static final int REQUEST_PERMISSIONS_CALLBACK_SAVE_DRAWING_WRITE_EXTERNAL_STORAGE = 0;
     private static final int REQUEST_PERMISSIONS_CALLBACK_START_PIC_EDIT_WRITE_EXTERNAL_STORAGE = 1;
@@ -380,30 +380,34 @@ public class DrawActivity extends AppCompatActivity {
     }
 
     private void startPicSourceActivity(boolean startBrowse, boolean startCamera) {
-        Intent intent = new Intent(this, PicSourceActivity.class);
+        Intent intent;
+        if (startBrowse) {
+            intent = new Intent(this, BrowseActivity.class);
+        } else if (startCamera) {
+            intent = new Intent(this, PicSourceActivity.class);
+            intent.putExtra(PicSourceActivity.START_CAMERA, true);
+        } else {
+            intent = new Intent(this, PicSourceActivity.class);
+        }
         if (drawView.isEdited()) {
             File imageFile = saveDrawing();
             // Load intent with uri
             intent.putExtra(PicSourceActivity.IMAGE_URI_STATE_KEY, Uri.fromFile(imageFile));
         }
-        if (startBrowse) {
-            intent.putExtra(PicSourceActivity.START_BROWSE, true);
-        } else if (startCamera) {
-            intent.putExtra(PicSourceActivity.START_CAMERA, true);
-        }
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
     }
 
     private void startPicSourceActivityWithoutSaving(boolean startBrowse, boolean startCamera) {
-        Intent intent = new Intent(this, PicSourceActivity.class);
+        Intent intent;
         if (startBrowse) {
-            intent.putExtra(PicSourceActivity.START_BROWSE, true);
+            intent = new Intent(this, BrowseActivity.class);
         } else if (startCamera) {
+            intent = new Intent(this, PicSourceActivity.class);
             intent.putExtra(PicSourceActivity.START_CAMERA, true);
+        } else {
+            intent = new Intent(this, PicSourceActivity.class);
         }
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
     }
 
     private void startPicEditStoragePermission() {
@@ -424,11 +428,9 @@ public class DrawActivity extends AppCompatActivity {
         if (drawView.isEdited()) {
             File imageFile = saveDrawing();
 
-            Intent intent = new Intent(this, PicSourceActivity.class);
+            Intent intent = new Intent(this, PicEditActivity.class);
             intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(imageFile)); // Load with uri
-            intent.putExtra(PicSourceActivity.START_PIC_EDIT, true);
             startActivity(intent);
-            overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
         }
     }
 

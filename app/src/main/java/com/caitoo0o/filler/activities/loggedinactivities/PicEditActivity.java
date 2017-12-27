@@ -42,7 +42,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class PicEditActivity extends AppCompatActivity {
+public class PicEditActivity extends LoggedInActivity {
 
     public static final String SOURCE_URI = "SOURCE_URI";
 
@@ -287,8 +287,8 @@ public class PicEditActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
-                onDiscard();
-                return true;
+                finish();
+                                return true;
             case R.id.pic_edit_menu_reset:
                 onReset();
                 return true;
@@ -333,11 +333,6 @@ public class PicEditActivity extends AppCompatActivity {
     }
 
     // Begin UI handlers
-
-    public void onDiscard() {
-        goToPicSourceActivity(sourceUri);
-    }
-
     public void onReset() {
         effectSelected = Effect.RESET;
         applyEffect();
@@ -459,8 +454,7 @@ public class PicEditActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PicSourceActivity.class);
         intent.putExtra(PicSourceActivity.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_top_to_center, R.anim.slide_center_to_bottom);
-    }
+            }
 
     // End UI Helpers
 
@@ -568,8 +562,7 @@ public class PicEditActivity extends AppCompatActivity {
         Intent intent = new Intent(this, UploadActivity.class);
         intent.putExtra(UploadActivity.IMAGE_URI, uri);
         startActivity(intent);
-//        overridePendingTransition(R.anim.slide_bottom_to_center, R.anim.slide_center_to_top);
-    }
+            }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,

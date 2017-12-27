@@ -9,6 +9,7 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.activities.BaseFillerActivity;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,7 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Calendar;
 import java.util.Date;
 
-public class BirthdayActivity extends AppCompatActivity {
+public class BirthdayActivity extends BaseFillerActivity {
 
     private static final String TAG = BirthdayActivity.class.getName();
 

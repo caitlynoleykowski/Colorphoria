@@ -211,7 +211,6 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
     private void startPicSourceActivity() {
         Intent intent = new Intent(this, PicSourceActivity.class);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_top_to_center, R.anim.slide_center_to_bottom);
     }
 
     public void onShare(View v) {

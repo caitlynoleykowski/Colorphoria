@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -45,22 +44,13 @@ public class PicSourceActivity extends LoggedInActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
     public static final String IMAGE_URI_STATE_KEY = "IMAGE_URI_STATE_KEY";
-    public static final String START_PIC_EDIT = "START_PIC_EDIT";
-    public static final String START_DRAW = "START_DRAW";
-    public static final String START_BROWSE = "START_BROWSE";
+
     public static final String START_CAMERA = "START_CAMERA";
 
     public static final int REQUEST_PERMISSIONS_CALLBACK_CAMERA = 0;
     public static final int REQUEST_PERMISSIONS_CALLBACK_CAMERA_WRITE_EXTERNAL_STORAGE = 2;
 
     private Uri mImageUri;
-
-    private boolean startPicEdit = false;
-    private boolean startDraw = false;
-    private boolean startBrowse = false;
-    private boolean startCamera = false;
-
-    private Handler handler = new Handler();
 
     private ImageAdapter adapter;
     private ProgressBar progressBar;
@@ -88,26 +78,9 @@ public class PicSourceActivity extends LoggedInActivity {
             if (getIntent().hasExtra(IMAGE_URI_STATE_KEY)) {
                 mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
             }
-            if (getIntent().hasExtra(START_PIC_EDIT) &&
-                    getIntent().getBooleanExtra(START_PIC_EDIT, false) == true &&
-                    getIntent().hasExtra(PicEditActivity.SOURCE_URI) &&
-                    getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI) != null ) {
-                startPicEdit = true;
-                mImageUri = getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI);
-            } else if (getIntent().hasExtra(START_DRAW) &&
-                    getIntent().getBooleanExtra(START_DRAW, false) == true &&
-                    getIntent().hasExtra(DrawActivity.SOURCE_URI)) {
-                startDraw = true;
-                mImageUri = getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI);
-            } else if (getIntent().hasExtra(START_BROWSE) &&
-                    getIntent().getBooleanExtra(START_BROWSE, false) == true) {
-                startBrowse = true;
-                if (getIntent().hasExtra(DrawActivity.SOURCE_URI)) {
-                    mImageUri = getIntent().getParcelableExtra(PicEditActivity.SOURCE_URI);
-                }
-            } else if (getIntent().hasExtra(START_CAMERA) &&
+            if (getIntent().hasExtra(START_CAMERA) &&
                     getIntent().getBooleanExtra(START_CAMERA, false) == true) {
-                startCamera = true;
+                startCameraActivityCameraPermission();
             }
         }
 
@@ -136,7 +109,6 @@ public class PicSourceActivity extends LoggedInActivity {
             }
 
         });
-
 
         // Handle image feed
         // Create the adapter to convert the array to views
@@ -181,24 +153,6 @@ public class PicSourceActivity extends LoggedInActivity {
 //                Utils.showCustomToast(PicSourceActivity.this, "FAILURE: " + error);
 //            }
 //        });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (startPicEdit) {
-            startPicEdit = false;
-            handler.postDelayed(startPicEditDelayed, getResources().getInteger(R.integer.anim_duration));
-        } else if (startDraw) {
-            startDraw = false;
-            handler.postDelayed(startDrawDelayed, getResources().getInteger(R.integer.anim_duration));
-        } else if (startBrowse) {
-            startBrowse = false;
-            handler.postDelayed(startBrowseDelayed, getResources().getInteger(R.integer.anim_duration));
-        } else if (startCamera) {
-            startCamera = false;
-            handler.postDelayed(startCameraDelayed, getResources().getInteger(R.integer.anim_duration));
-        }
     }
 
     @Override
@@ -271,32 +225,6 @@ public class PicSourceActivity extends LoggedInActivity {
         progressBar.setVisibility(View.GONE);
     }
 
-    private Runnable startPicEditDelayed = new Runnable() {
-        public void run() {
-            if (mImageUri != null) {
-                startPicEditActivity(mImageUri);
-            }
-        }
-    };
-
-    private Runnable startDrawDelayed = new Runnable() {
-        public void run() {
-            startDrawActivity(mImageUri);
-        }
-    };
-
-    private Runnable startBrowseDelayed = new Runnable() {
-        public void run() {
-            startBrowseActivity(mImageUri);
-        }
-    };
-
-    private Runnable startCameraDelayed = new Runnable() {
-        public void run() {
-            startCameraActivityCameraPermission();
-        }
-    };
-
     public void onDraw(View v) {
         startDrawActivity(mImageUri);
     }
@@ -348,7 +276,7 @@ public class PicSourceActivity extends LoggedInActivity {
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE) {
             getContentResolver().notifyChange(mImageUri, null);
-            handler.postDelayed(startPicEditDelayed,getResources().getInteger(R.integer.anim_duration));
+            startPicEditActivity(mImageUri);
         }
     }
 
@@ -357,7 +285,6 @@ public class PicSourceActivity extends LoggedInActivity {
             Intent intent = new Intent(this, PicEditActivity.class);
             intent.putExtra(PicEditActivity.SOURCE_URI, uri);
             startActivity(intent);
-            overridePendingTransition(R.anim.slide_bottom_to_center, R.anim.slide_center_to_top);
         }
     }
 
@@ -365,14 +292,12 @@ public class PicSourceActivity extends LoggedInActivity {
         Intent intent = new Intent(this, BrowseActivity.class);
         intent.putExtra(BrowseActivity.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_right_to_center, R.anim.slide_center_to_left);
     }
 
     private void startDrawActivity(Uri uri) {
         Intent intent = new Intent(this, DrawActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
-        this.overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }
 
     private void startCameraActivityCameraPermission() {
@@ -427,7 +352,6 @@ public class PicSourceActivity extends LoggedInActivity {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
         //start camera intent
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-        overridePendingTransition(R.anim.slide_top_to_center, R.anim.slide_center_to_bottom);
     }
 
     @Override

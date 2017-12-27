@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class BrowseActivity extends AppCompatActivity {
+public class BrowseActivity extends LoggedInActivity {
 
     private static final String TAG = BrowseActivity.class.getName();
 
@@ -287,19 +287,15 @@ public class BrowseActivity extends AppCompatActivity {
     }
 
     private void startPicEditActivity(Uri uri) {
-        Intent intent = new Intent(this, PicSourceActivity.class);
+        Intent intent = new Intent(this, PicEditActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
-        intent.putExtra(PicSourceActivity.START_PIC_EDIT, true);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
-    }
+            }
 
     private void startDrawActivity(Uri uri) {
-        Intent intent = new Intent(this, PicSourceActivity.class);
+        Intent intent = new Intent(this, DrawActivity.class);
         intent.putExtra(DrawActivity.SOURCE_URI, uri);
-        intent.putExtra(PicSourceActivity.START_DRAW, true);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }
 
     private void startCameraActivity(Uri uri) {
@@ -307,14 +303,12 @@ public class BrowseActivity extends AppCompatActivity {
         intent.putExtra(DrawActivity.SOURCE_URI, uri);
         intent.putExtra(PicSourceActivity.START_CAMERA, true);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }
 
     private void startPicSourceActivity(Uri uri) {
         Intent intent = new Intent(this, PicSourceActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_left_to_center, R.anim.slide_center_to_right);
     }
 
     // Adapter for Grid View

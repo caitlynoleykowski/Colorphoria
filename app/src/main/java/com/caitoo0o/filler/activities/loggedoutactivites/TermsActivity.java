@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.activities.BaseFillerActivity;
 import com.caitoo0o.filler.utils.LoginUtils;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,7 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Date;
 
-public class TermsActivity extends AppCompatActivity {
+public class TermsActivity extends BaseFillerActivity {
 
     public static final String FULLNAME_STATE_KEY = "FULLNAME_STATE_KEY";
 
