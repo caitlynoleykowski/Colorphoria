@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -181,7 +182,8 @@ public class Utils {
 	public static void showConfirmDialog(Context context, String confirmText, String positiveText, String negativeText, final ConfirmDialogHandler handler, boolean widthShort) {
         final Dialog confirmDialog = new Dialog(context);
         confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        confirmDialog.setContentView(R.layout.confirm);
+		confirmDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+		confirmDialog.setContentView(R.layout.confirm);
 
 		confirmDialog.setCanceledOnTouchOutside(false);
 
@@ -234,6 +236,7 @@ public class Utils {
 	public static void showAlertDialog(Context context, String confirmText, String positiveText, final AlertDialogHandler handler, boolean widthShort) {
 		final Dialog confirmDialog = new Dialog(context);
 		confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		confirmDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 		confirmDialog.setContentView(R.layout.confirm);
 
 		confirmDialog.setCanceledOnTouchOutside(false);

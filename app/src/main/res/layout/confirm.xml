@@ -3,7 +3,7 @@
     android:id="@+id/confirm_dialog_layout"
     android:layout_width="@dimen/dialog_width_short"
     android:layout_height="match_parent"
-    android:background="@drawable/dialog_background"
+    android:background="@drawable/bg_dialog"
     android:padding="@dimen/activity_horizontal_margin"
     android:orientation="vertical" >
     <TextView
@@ -15,7 +15,6 @@
         android:layout_marginRight="@dimen/small_margin"
         android:textSize="20sp"
         android:breakStrategy="simple"
-        android:textColor="@color/colorAccent"
         android:text="@string/are_you_sure" />
 
     <LinearLayout
@@ -30,8 +29,7 @@
             android:layout_weight="1"
             android:padding="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/small_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:textColor="@color/colorAccent"
+            style="?android:attr/borderlessButtonStyle"
             android:text="No" />
 
         <Button
@@ -40,8 +38,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="@dimen/activity_horizontal_margin"
-            android:background="@drawable/my_menu_bar_button"
-            android:textColor="@color/colorAccent"
+            style="?android:attr/borderlessButtonStyle"
             android:text="Yes" />
     </LinearLayout>
 </LinearLayout>

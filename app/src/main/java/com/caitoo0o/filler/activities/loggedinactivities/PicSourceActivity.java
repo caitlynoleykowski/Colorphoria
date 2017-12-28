@@ -1,7 +1,6 @@
 package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,7 +8,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,14 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.caitoo0o.filler.backgroundtasks.GetImageAsyncTask;
 import com.caitoo0o.filler.backgroundtasks.RestHelper;
 import com.caitoo0o.filler.reusableuserinterface.ListRefreshView;
-import com.caitoo0o.filler.reusableuserinterface.OnSwipeTouchListener;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,10 +62,16 @@ public class PicSourceActivity extends LoggedInActivity {
 
         Utils.setupFillerRecentAppsBar(this);
 
-        ((ImageButton) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_dark_24dp);
-        ((ImageButton) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_dark_24dp);
-        ((ImageButton) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_white_24dp);
-        ((ImageButton) findViewById(R.id.openExistingButton)).setImageResource(R.drawable.ic_collections_dark_24dp);
+        // Set navigation UI
+        ((ImageView) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_unselected_24dp);
+        ((ImageView) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_unselected_24dp);
+        ((ImageView) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_selected_24dp);
+        ((ImageView) findViewById(R.id.galleryButton)).setImageResource(R.drawable.ic_collections_unselected_24dp);
+        int defaultTextColor = ((TextView) findViewById(R.id.drawLabel)).getTextColors().getDefaultColor();
+        ((TextView) findViewById(R.id.drawLabel)).setTextColor(defaultTextColor);
+        ((TextView) findViewById(R.id.cameraLabel)).setTextColor(defaultTextColor);
+        ((TextView) findViewById(R.id.homeLabel)).setTextColor(ContextCompat.getColor(this, R.color.colorSecondary));
+        ((TextView) findViewById(R.id.galleryLabel)).setTextColor(defaultTextColor);
 
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
@@ -413,7 +417,7 @@ public class PicSourceActivity extends LoggedInActivity {
 
             holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
             if (position < imageUrlList.size()) {
-                holder.picturesView.setImageDrawable(getResources().getDrawable(R.drawable.image_placeholder));
+                holder.picturesView.setImageDrawable(getResources().getDrawable(R.drawable.bg_image_placeholder));
                 // TODO: Is is possible this will wind up with pictures out of order if one async task finishes later than one that started later?
                 new GetImageAsyncTask(PicSourceActivity.this, holder.picturesView, progressBar, imageUrlList.get(position)).execute();
             }

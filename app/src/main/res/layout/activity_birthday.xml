@@ -23,7 +23,6 @@ android:layout_height="match_parent">
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:textSize="20sp"
             android:breakStrategy="simple"
-            android:textColor="@color/colorAccent"
             android:text="@string/enter_birthday" />
 
         <LinearLayout
@@ -67,7 +66,7 @@ android:layout_height="match_parent">
             android:textSize="20sp"
             android:textStyle="bold"
             android:breakStrategy="simple"
-            android:textColor="@color/colorHighlight"
+            android:textColor="@color/colorSecondary"
             android:text="@string/birthday_placeholder" />
 
         <Space
@@ -77,15 +76,15 @@ android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/birthday_continue_button"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/navigation_footer_height"
+            android:background="@drawable/button_selector_large"
             android:text="@string/birthday_continue"
             android:gravity="center"
-            android:textColor="@color/colorAccent"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:textColor="@color/colorPrimary"
             android:fontFamily="sans-serif-medium"
-            android:textAllCaps="true"
+            android:textAllCaps="false"
             android:onClick="onContinue"/>
     </LinearLayout>
 

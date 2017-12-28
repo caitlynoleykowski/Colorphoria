@@ -3,7 +3,7 @@
     android:id="@+id/toast_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/toast_background"
+    android:background="@drawable/bg_toast"
     android:padding="@dimen/small_margin"
     android:orientation="vertical" >
     <TextView
@@ -13,6 +13,6 @@
         android:padding="@dimen/activity_horizontal_margin"
         android:textSize="14sp"
         android:breakStrategy="simple"
-        android:textColor="@color/colorAccent"
-        android:text="@string/are_you_sure" />
+        android:textColor="@color/colorPrimary"
+        android:text="It's a toast!" />
 </LinearLayout>

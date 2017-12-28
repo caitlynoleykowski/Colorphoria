@@ -1,6 +1,5 @@
 package com.caitoo0o.filler;
 
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -123,7 +122,7 @@ public class BitmapWrapperTest {
 
     @Test
     public void testRandomBleedFillBasic() throws Exception {
-        Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.test_pic_1);
+        Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.img_test_pic_1);
         BitmapWrapper bmw = new BitmapWrapper(testPic1);
         bmw.randomBleedFill(.5, 8, null);
         assertNotNull(bmw.getSourceBitmap());
@@ -134,7 +133,7 @@ public class BitmapWrapperTest {
 
     @Test
     public void testThresholdBasic() throws Exception {
-        Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.test_pic_1);
+        Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.img_test_pic_1);
         BitmapWrapper bmw = new BitmapWrapper(testPic1);
         bmw.threshold(.5);
         assertNotNull(bmw.getSourceBitmap());
@@ -145,7 +144,7 @@ public class BitmapWrapperTest {
 
     @Test
     public void testRandomLineFillBasic() throws Exception {
-        Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.test_pic_1);
+        Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.img_test_pic_1);
         BitmapWrapper bmw = new BitmapWrapper(testPic1);
         bmw.randomLineFill(.5, 8, null);
         assertNotNull(bmw.getSourceBitmap());
@@ -156,7 +155,7 @@ public class BitmapWrapperTest {
 
     @Test
     public void testRandomFloodFillBasic() throws Exception {
-        Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.test_pic_1);
+        Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.img_test_pic_1);
         BitmapWrapper bmw = new BitmapWrapper(testPic1);
         bmw.randomFloodFill(.5, 8, null);
         assertNotNull(bmw.getSourceBitmap());

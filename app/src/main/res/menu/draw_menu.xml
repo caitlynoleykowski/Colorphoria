@@ -6,7 +6,7 @@
         android:title="@string/draw_menu_new"
         app:showAsAction="always"/>
     <item android:id="@+id/draw_menu_draw"
-        android:icon="@drawable/ic_brush_white_24dp"
+        android:icon="@drawable/ic_brush_24dp"
         android:title="@string/draw_menu_draw"
         app:showAsAction="always"/>
     <item android:id="@+id/draw_menu_eraser"
