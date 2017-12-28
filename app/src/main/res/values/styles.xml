@@ -1,41 +1,24 @@
 <resources>
 
-    <style name="LoggedOutTheme" parent="Theme.AppCompat.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- status bar, ... -->
-        <item name="colorAccent">@color/colorAccent</item> <!-- tab underline, progress spinner, ... -->
-        <item name="android:colorBackground">@color/colorPrimaryDark</item>
-        <item name="android:windowBackground">@color/colorPrimaryDark</item> <!-- background for below api 21 -->
-        <item name="android:itemBackground">@color/colorPrimary</item> <!-- options menu background -->
-
-        <item name="android:textColorPrimary">@color/colorAccent</item> <!-- number picker, selected tab title, ... -->
-        <!--<item name="android:textColorPrimaryInverse">@color/colorAccent</item>-->
-        <item name="android:textColorSecondary">@color/colorAccent</item> <!-- unselected tab title, ... -->
-        <!--<item name="android:textColorSecondaryInverse">@color/colorAccent</item>-->
-        <!--<item name="android:textColorTertiary">@color/colorAccent</item>-->
-        <!--<item name="android:textColorTertiaryInverse">@color/colorAccent</item>-->
-        <!--<item name="android:textColorPrimaryDisableOnly">@color/colorAccent</item>-->
-        <!--<item name="android:textColorPrimaryInverseDisableOnly">@color/colorAccent</item>-->
-        <!--<item name="android:textColorHint">@color/colorAccent</item>-->
-        <!--<item name="android:textColorHintInverse">@color/colorAccent</item>-->
-        <item name="android:textColorHighlight">@color/colorPrimary</item>
-        <item name="android:textColorLink">@color/colorHighlight</item>
+    <style name="LoggedOutTheme" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
-        <!-- Customize your theme here. -->
+    <style name="BaseTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- status bar, ... -->
         <item name="colorAccent">@color/colorAccent</item> <!-- tab underline, progress spinner, ... -->
-        <item name="android:colorBackground">@color/colorPrimaryDark</item> <!-- background -->
-        <item name="android:windowBackground">@color/colorPrimaryDark</item> <!-- background for below api 21 -->
-        <item name="android:itemBackground">@color/colorPrimary</item> <!-- options menu background -->
 
-        <item name="android:textColorPrimary">@color/colorAccent</item> <!-- number picker, selected tab title, ... -->
+        <item name="android:colorBackground">@color/colorBackground</item> <!-- background -->
+        <item name="android:windowBackground">@color/colorBackground</item> <!-- background for below api 21 -->
+        <item name="android:itemBackground">@color/colorPrimary</item> <!-- options menu background -->
+        <item name="android:colorForeground">@color/colorForeground</item>
+
+        <item name="android:textColorPrimary">@color/colorSecondary</item> <!-- number picker, selected tab title, ... -->
         <!--<item name="android:textColorPrimaryInverse">@color/colorAccent</item>-->
-        <item name="android:textColorSecondary">@color/colorAccent</item> <!-- unselected tab title, ... -->
+        <item name="android:textColorSecondary">@color/colorSecondary</item> <!-- unselected tab title, ... -->
         <!--<item name="android:textColorSecondaryInverse">@color/colorAccent</item>-->
         <!--<item name="android:textColorTertiary">@color/colorAccent</item>-->
         <!--<item name="android:textColorTertiaryInverse">@color/colorAccent</item>-->
@@ -44,36 +27,21 @@
         <!--<item name="android:textColorHint">@color/colorAccent</item>-->
         <!--<item name="android:textColorHintInverse">@color/colorAccent</item>-->
         <item name="android:textColorHighlight">@color/colorPrimary</item>
-        <item name="android:textColorLink">@color/colorHighlight</item>
+        <item name="android:textColorLink">@color/colorSecondary</item>
+
+        <item name="android:actionOverflowButtonStyle">@style/Overflow</item>
+
+        <item name="editTextStyle">@style/EditText</item>
     </style>
 
-    <!-- Dark Buttons -->
-    <style name="ThemeOverlay.MyDarkButton" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="colorButtonNormal">@color/colorAccent</item>
-        <item name="android:layout_marginRight">4dp</item>
-        <item name="android:layout_marginLeft">4dp</item>
-        <item name="android:textColor">@android:color/white</item>
+    <style name="AppTheme" parent="BaseTheme">
     </style>
 
-    <style name="ThemeOverlay.MyTextDetail" parent="AppTheme">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:fadeScrollbars">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:maxLines">5</item>
-        <item name="android:padding">4dp</item>
-        <item name="android:scrollbars">vertical</item>
-        <item name="android:textSize">14sp</item>
+    <style name="Overflow" parent="@style/Widget.AppCompat.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_more_vert_24dp</item>
     </style>
 
-    <style name="ThemeOverlay.FirebaseIcon" parent="AppTheme">
-        <item name="android:layout_marginTop">@dimen/activity_horizontal_margin</item>
-        <item name="android:layout_marginBottom">@dimen/activity_horizontal_margin</item>
+    <style name="EditText" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/colorEditText</item>
     </style>
-
-    <style name="ThemeOverlay.MyTitleText" parent="AppTheme">
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">36sp</item>
-    </style>
-
 </resources>

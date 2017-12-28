@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="340dp"
     android:layout_height="wrap_content"
-    android:background="@color/colorDark"
+    android:background="@color/colorPrimary"
     android:padding="@dimen/small_margin"
     android:orientation="vertical" >
-    <ImageView
+    <com.caitoo0o.filler.reusableuserinterface.ProportionalImageView
         android:id="@+id/color_spectrum_image_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,24 +14,21 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:padding="2dp"
-        android:background="@drawable/effect_button"
-        android:src="@drawable/color_spectrum"/>
+        android:src="@drawable/img_color_spectrum"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorDark"
-        android:padding="@dimen/small_margin"
         android:orientation="horizontal" >
-        <ImageButton
+        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
             android:id="@+id/color_selected_image_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:background="#FFFFFFFF"/>
+            android:background="#FFFFFFFF"
+            android:src="@drawable/button_paint_color_bg"/>
 
         <EditText
             android:id="@+id/color_selected_edit_text"
@@ -43,10 +40,8 @@
             android:text="#FFFFFF"
             android:inputType="textNoSuggestions"
             android:cursorVisible="false"
-            android:textAlignment="textEnd"
+            android:gravity="right|center_vertical"
             android:textSize="20sp"
-            android:textColor="@color/colorAccent"
-            android:background="@color/colorPrimary"
             android:imeOptions="actionDone" />
 
         <ImageButton
@@ -55,7 +50,7 @@
             android:layout_weight="1"
             android:layout_height="fill_parent"
             android:padding="@dimen/activity_vertical_margin"
-            android:background="@drawable/my_menu_bar_button"
+            android:background="@drawable/button_selector_small"
             android:src="@drawable/ic_add_24dp" />
 
         <ImageButton
@@ -65,7 +60,7 @@
             android:layout_height="fill_parent"
             android:padding="@dimen/activity_vertical_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:background="@drawable/my_menu_bar_button"
+            android:background="@drawable/button_selector_small"
             android:src="@drawable/ic_remove_24dp" />
 
         </LinearLayout>

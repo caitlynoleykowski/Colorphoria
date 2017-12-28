@@ -6,9 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -35,6 +37,10 @@ public class PaletteChooserDialog extends Dialog {
 
     public PaletteChooserDialog(Context context, final ArrayList<Integer> colorPalette) {
         super(context);
+
+        // Remove title bar for pre api 21
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.effect_color_options);
 
         this.colorPalette = colorPalette;
@@ -211,7 +217,7 @@ public class PaletteChooserDialog extends Dialog {
             if (position < colorPalette.size()) {
                 color = colorPalette.get(position);
             } else {
-                color = context.getColor(R.color.colorPrimary);
+                color = ContextCompat.getColor(context, R.color.colorBackground);
             }
             holder.colorView = (SquareImageButton) convertView.findViewById(R.id.square_color_button);
             holder.colorView.setBackgroundColor(color);

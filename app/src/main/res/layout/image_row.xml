@@ -9,7 +9,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
-        android:src="@drawable/test_pic_2"
+        android:src="@drawable/img_test_pic_2"
         android:id="@+id/imageview"/>
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"

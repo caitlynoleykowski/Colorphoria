@@ -26,7 +26,7 @@
     <!-- Used for birthday activity end -->
 
     <!-- Used for DrawingActivity begin -->
-    <string name="draw_activity_title">Drawing Pad</string>
+    <string name="draw_activity_title">Draw</string>
     <string name="draw_menu_new">New</string>
     <string name="draw_menu_eraser">Eraser</string>
     <string name="draw_menu_save">Save</string>
@@ -126,14 +126,18 @@
     <string name="fill">Fill</string>
     <!-- Used for BrowseActivity end -->
 
+    <!-- Used for non-existent camera activitiy begin -->
+    <string name="camera_activity_title">Camera</string>
+
     <!-- Used for ImageFeedActivity -->
+    <string name="image_feed_activity_title">Home</string>
     <string name="download_success">Download finished</string>
     <string name="download_failure">Unable to refresh feed</string>
 
     <!-- Used for UploadActivity and upload services -->
-    <string name="upload_activity_title">Post</string>
+    <string name="upload_activity_title">Share</string>
     <string name="upload_prompt">Upload image</string>
-    <string name="upload">Post</string>
+    <string name="upload">Share</string>
     <string name="share_external">Share with other apps</string>
     <string name="progress_uploading">Uploading...</string>
     <string name="upload_success">Upload finished</string>

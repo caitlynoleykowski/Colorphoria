@@ -74,9 +74,7 @@
     <string name="fill">塗りつぶす</string>
     <string name="download_success">ダウンロードが完了しました</string>
     <string name="download_failure">フィードをリフレッシュできません</string>
-    <string name="upload_activity_title">役職</string>
     <string name="upload_prompt">画像をアップロードする</string>
-    <string name="upload">役職</string>
     <string name="share_external">他のアプリと共有する</string>
     <string name="progress_uploading">アップロード中...</string>
     <string name="upload_success">アップロードが完了しました</string>
@@ -88,4 +86,8 @@
     <string name="browse_activity_everywhere">どこにでも</string>
     <string name="draw_activity_title">ドロー</string>
     <string name="account_title">アカウント</string>
+    <string name="camera_activity_title">カメラ</string>
+    <string name="image_feed_activity_title">ホーム</string>
+    <string name="upload_activity_title">シェア</string>
+    <string name="upload">シェア</string>
 </resources>

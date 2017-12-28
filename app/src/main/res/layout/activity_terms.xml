@@ -21,7 +21,6 @@
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:textSize="20sp"
             android:breakStrategy="simple"
-            android:textColor="@color/colorAccent"
             android:text="@string/enter_name" />
 
         <EditText
@@ -33,10 +32,7 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:padding="@dimen/activity_horizontal_margin"
-            android:background="@color/colorInput"
-            android:inputType="textCapWords"
-            android:textColor="@color/colorAccent"
-            android:textColorHint="@color/colorAccent" />
+            android:inputType="textCapWords" />
 
         <TextView
             android:id="@+id/terms_agreement_text_view"
@@ -48,20 +44,19 @@
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:textSize="14sp"
             android:breakStrategy="simple"
-            android:textColor="@color/colorAccent"
             android:text="@string/terms_info" />
 
         <TextView
             android:id="@+id/terms_continue_button"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/navigation_footer_height"
+            android:background="@drawable/button_selector_large"
             android:text="@string/terms_continue"
             android:gravity="center"
-            android:textColor="@color/colorAccent"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:textColor="@color/colorPrimary"
             android:fontFamily="sans-serif-medium"
-            android:textAllCaps="true"
+            android:textAllCaps="false"
             android:onClick="onAccept"/>
     </LinearLayout>
 

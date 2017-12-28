@@ -6,20 +6,23 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.caitoo0o.filler.effects.BitmapWrapper;
 import com.caitoo0o.filler.reusableuserinterface.DrawView;
-import com.caitoo0o.filler.reusableuserinterface.OnSwipeTouchListener;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.utils.Utils;
 
@@ -57,10 +60,16 @@ public class DrawActivity extends LoggedInActivity {
 
         Utils.setupFillerRecentAppsBar(this);
 
-        ((ImageButton) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_white_24dp);
-        ((ImageButton) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_dark_24dp);
-        ((ImageButton) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_dark_24dp);
-        ((ImageButton) findViewById(R.id.openExistingButton)).setImageResource(R.drawable.ic_collections_dark_24dp);
+        // Set navigation UI
+        ((ImageView) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_selected_24dp);
+        ((ImageView) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_unselected_24dp);
+        ((ImageView) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_unselected_24dp);
+        ((ImageView) findViewById(R.id.galleryButton)).setImageResource(R.drawable.ic_collections_unselected_24dp);
+        int defaultTextColor = ((TextView) findViewById(R.id.drawLabel)).getTextColors().getDefaultColor();
+        ((TextView) findViewById(R.id.drawLabel)).setTextColor(ContextCompat.getColor(this, R.color.colorSecondary));
+        ((TextView) findViewById(R.id.cameraLabel)).setTextColor(defaultTextColor);
+        ((TextView) findViewById(R.id.homeLabel)).setTextColor(defaultTextColor);
+        ((TextView) findViewById(R.id.galleryLabel)).setTextColor(defaultTextColor);
 
         drawView = (DrawView)findViewById(R.id.drawing);
 
@@ -118,7 +127,7 @@ public class DrawActivity extends LoggedInActivity {
         // Setup button refs and onClick listeners
         LinearLayout paintLayout = (LinearLayout)findViewById(R.id.paint_colors);
         currColorButton = (ImageButton)paintLayout.getChildAt(0);
-        currColorButton.setImageDrawable(getResources().getDrawable(R.drawable.paint_selected_bg));
+        currColorButton.setImageDrawable(getResources().getDrawable(R.drawable.button_paint_selected_bg));
 
         // instantiate brushes
         extraSmallBrush = getResources().getInteger(R.integer.extra_small_size);
@@ -185,8 +194,8 @@ public class DrawActivity extends LoggedInActivity {
             ImageButton imgView = (ImageButton)view;
             String color = view.getTag().toString();
             drawView.setPaintColor(color);
-            imgView.setImageDrawable(getResources().getDrawable(R.drawable.paint_selected_bg));
-            currColorButton.setImageDrawable(getResources().getDrawable(R.drawable.paint_color_bg));
+            imgView.setImageDrawable(getResources().getDrawable(R.drawable.button_paint_selected_bg));
+            currColorButton.setImageDrawable(getResources().getDrawable(R.drawable.button_paint_color_bg));
             currColorButton =(ImageButton)view;
         }
     }
@@ -194,7 +203,9 @@ public class DrawActivity extends LoggedInActivity {
     // onClick for paintbrush button
     public void onDrawButton(){
         final Dialog brushDialog = new Dialog(this);
+        brushDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         brushDialog.setContentView(R.layout.paintbrush_options);
+
         ImageButton extraSmallBtn = (ImageButton) brushDialog.findViewById(R.id.extra_small_brush);
         extraSmallBtn.setOnClickListener(new View.OnClickListener() {
             @Override

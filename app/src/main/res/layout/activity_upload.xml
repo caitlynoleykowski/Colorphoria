@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity"
+    tools:context="com.caitoo0o.filler.activities.loggedinactivities.UploadActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
@@ -22,41 +22,45 @@
             android:layout_weight="14"
             android:scaleType="fitCenter"/>
 
-        <TextView
-            android:id="@+id/upload_button"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:background="@color/colorPrimary"
-            android:text="@string/upload"
-            android:gravity="center"
-            android:textColor="@color/colorAccent"
-            android:fontFamily="sans-serif-medium"
-            android:textAllCaps="true"/>
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="5"
-                android:layout_height="match_parent"
-                android:text="@string/share_external"
-                android:gravity="left|center_vertical"
-                android:textColor="@color/colorAccent"
-                android:padding="@dimen/activity_horizontal_margin"
-                android:fontFamily="sans-serif-medium"/>
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="@dimen/activity_vertical_margin"
-                android:background="@drawable/my_menu_bar_button"
-                android:onClick="onShare"
-                android:src="@drawable/ic_share_24dp"
-                android:clickable="false" />
+                android:id="@+id/upload_button"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/navigation_footer_height"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@drawable/button_selector_large"
+                android:text="@string/upload"
+                android:gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="false"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/navigation_footer_height"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="match_parent"
+                    android:text="@string/share_external"
+                    android:gravity="left|center_vertical"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:fontFamily="sans-serif-medium"/>
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:background="@drawable/button_selector_small"
+                    android:onClick="onShare"
+                    android:src="@drawable/ic_share_24dp"
+                    android:clickable="false" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
