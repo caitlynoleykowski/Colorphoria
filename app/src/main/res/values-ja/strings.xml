@@ -85,7 +85,7 @@
     <string name="image_saved">画像が保存されました</string>
     <string name="browse_activity_everywhere">どこにでも</string>
     <string name="draw_activity_title">ドロー</string>
-    <string name="account_title">アカウント</string>
+    <string name="account_activity_title">アカウント</string>
     <string name="camera_activity_title">カメラ</string>
     <string name="image_feed_activity_title">ホーム</string>
     <string name="upload_activity_title">シェア</string>

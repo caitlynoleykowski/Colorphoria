@@ -148,6 +148,6 @@
     <string name="rest_auth_token_failure">Failed to authorize</string>
     <string name="rest_auth_token_interruption">Authorization interrupted</string>
     <string name="draw_menu_draw">Draw</string>
-    <string name="account_title">My Account</string>
+    <string name="account_activity_title">My Account</string>
 
 </resources>

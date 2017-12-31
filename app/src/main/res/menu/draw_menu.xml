@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/draw_menu_new"
-        android:icon="@drawable/ic_new_canvas_24dp"
-        android:title="@string/draw_menu_new"
-        app:showAsAction="always"/>
     <item android:id="@+id/draw_menu_draw"
         android:icon="@drawable/ic_brush_24dp"
         android:title="@string/draw_menu_draw"
@@ -13,12 +9,15 @@
         android:icon="@drawable/ic_eraser_24dp"
         android:title="@string/draw_menu_eraser"
         app:showAsAction="always"/>
+    <item android:id="@+id/draw_menu_done"
+        android:title="@string/draw_menu_done"
+        app:showAsAction="always"/>
     <item android:id="@+id/draw_menu_save"
         android:icon="@drawable/ic_get_app_24dp"
         android:title="@string/draw_menu_save"
-        app:showAsAction="always"/>
-    <item android:id="@+id/draw_menu_done"
-        android:icon="@drawable/ic_done_24dp"
-        android:title="@string/draw_menu_done"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
+    <item android:id="@+id/draw_menu_new"
+        android:icon="@drawable/ic_new_canvas_24dp"
+        android:title="@string/draw_menu_new"
+        app:showAsAction="never"/>
 </menu>
