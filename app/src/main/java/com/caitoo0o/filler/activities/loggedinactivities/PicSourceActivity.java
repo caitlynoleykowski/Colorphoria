@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,6 +62,10 @@ public class PicSourceActivity extends LoggedInActivity {
         setContentView(R.layout.activity_pic_source);
 
         Utils.setupFillerRecentAppsBar(this);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.actionbar_logo);
 
         // Set navigation UI
         ((ImageView) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_unselected_24dp);

@@ -71,7 +71,7 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_24dp);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Initialize Firebase Auth
