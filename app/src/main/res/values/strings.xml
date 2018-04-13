@@ -150,4 +150,7 @@
     <string name="draw_menu_draw">Draw</string>
     <string name="account_activity_title">My Account</string>
 
+    <string name="gcp_project_id">filler-ea8ae</string>
+    <string name="gcp_api_key">AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE</string>
+
 </resources>

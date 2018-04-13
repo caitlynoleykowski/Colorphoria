@@ -41,7 +41,7 @@ public class RestHelper {
             HttpCallbacks callbacks) {
 
         RequestParams  params = new RequestParams();
-        params.add("key", getApiKey());
+        params.add("key", getApiKey(appContext));
         params.add("email", user.getEmail());
         params.add("full_name", fullName);
         params.add("username", username);
@@ -54,14 +54,14 @@ public class RestHelper {
                                      HttpCallbacks callbacks) {
 
         RequestParams  params = new RequestParams();
-        params.add("key", getApiKey());
+        params.add("key", getApiKey(appContext));
         postDataWrapper(appContext, user, "mobile", "user_recorded_status", params, callbacks);
     }
 
     public static void recordUpload(Context appContext, FirebaseUser user, String downloadUrl, String filename, Privacy privacy, String comment, HttpCallbacks callbacks) {
 
         RequestParams  params = new RequestParams();
-        params.add("key", getApiKey());
+        params.add("key", getApiKey(appContext));
         params.add("download_url", downloadUrl);
         params.add("filename", filename);
         params.add("privacy", privacy.toString());
@@ -80,7 +80,7 @@ public class RestHelper {
 //        getData(appContext, "my_images", params, callbacks);
 
         RequestParams  params = new RequestParams();
-        params.add("key", getApiKey());
+        params.add("key", getApiKey(appContext));
         params.add("timestamp", "" + System.currentTimeMillis());
 
         postDataWrapper(appContext, user, "mobile", "date_images", params, callbacks);
@@ -94,7 +94,7 @@ public class RestHelper {
 
     public static void firebaseEndpointAuthTest(final Context appContext, final FirebaseUser user, final HttpCallbacks callbacks) {
         RequestParams  params = new RequestParams();
-        params.add("key", getApiKey());
+        params.add("key", getApiKey(appContext));
         postDataWrapper(appContext, user, "mobile", "firebase_user2", params, callbacks);
     }
 
@@ -103,16 +103,16 @@ public class RestHelper {
         void onFailure(String error);
     }
 
-    private static String getProjectId() {
-        return "filler-ea8ae";
+    private static String getProjectId(Context context) {
+        return context.getResources().getString(R.string.gcp_project_id);
     }
 
-    private static String getApiKey() {
-        return "AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE";
+    private static String getApiKey(Context context) {
+        return context.getResources().getString(R.string.gcp_api_key);
     }
 
-    private static String getEndpointUrl(String api, String endpointName) {
-        return "https://" + getProjectId() + ".appspot.com/_ah/api/" + api + "/v1/" + endpointName;
+    private static String getEndpointUrl(Context context, String api, String endpointName) {
+        return "https://" + getProjectId(context) + ".appspot.com/_ah/api/" + api + "/v1/" + endpointName;
     }
 
     private static void postDataWrapper(
@@ -144,7 +144,7 @@ public class RestHelper {
             final String api,
             final String endpointName,
             final HttpCallbacks callbacks) {
-        String url = getEndpointUrl(api, endpointName);
+        String url = getEndpointUrl(context, api, endpointName);
 
         AsyncHttpClient apiClient = new AsyncHttpClient();
         apiClient.addHeader("Authorization", "Bearer " + authToken);
@@ -175,7 +175,7 @@ public class RestHelper {
             final String endpointName,
             final RequestParams params,
             final HttpCallbacks callbacks) {
-        String url = getEndpointUrl(api, endpointName);
+        String url = getEndpointUrl(context, api, endpointName);
 
         AsyncHttpClient apiClient = new AsyncHttpClient();
         apiClient.addHeader("Authorization", "Bearer " + authToken);

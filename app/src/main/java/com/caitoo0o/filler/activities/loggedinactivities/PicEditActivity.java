@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.graphics.Bitmap;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,7 +27,6 @@ import com.caitoo0o.filler.effects.BitmapEffectAsyncTask;
 import com.caitoo0o.filler.effects.BitmapEffectPreviewAsyncTask;
 import com.caitoo0o.filler.effects.PicEditBitmapLoaderAsyncTask;
 import com.caitoo0o.filler.effects.BitmapWrapper;
-import com.caitoo0o.filler.reusableuserinterface.OnSwipeTouchListener;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.reusableuserinterface.PaletteChooserDialog;
 import com.caitoo0o.filler.reusableuserinterface.SquareImageButton;
@@ -46,9 +43,9 @@ public class PicEditActivity extends LoggedInActivity {
 
     public static final String SOURCE_URI = "SOURCE_URI";
 
-    private static final String SOURCE_STATE_KEY = "SOURCE_STATE_KEY";
+    private static final String SOURCE_URI_STATE_KEY = "SOURCE_STATE_KEY";
+    private static final String MOD_URI_STATE_KEY = "MOD_STATE_KEY";
     private static final String ROTATION_ANGLE_STATE_KEY = "ROTATION_ANGLE_STATE_KEY";
-    private static final String MOD_STATE_KEY = "MOD_STATE_KEY";
     private static final String EFFECT_SELECTED_STATE_KEY = "EFFECT_SELECTED_STATE_KEY";
 
     public static final int REQUEST_PERMISSIONS_CALLBACK_SAVE_WRITE_EXTERNAL_STORAGE = 0;
@@ -104,28 +101,38 @@ public class PicEditActivity extends LoggedInActivity {
         setUIforImageDoneProcessing(false);
 
         if (savedInstanceState != null) {
-            sourceUri = savedInstanceState.getParcelable(SOURCE_URI);
-            Bitmap sourceImage = (Bitmap) savedInstanceState.getParcelable(SOURCE_STATE_KEY);
+            sourceUri = savedInstanceState.getParcelable(SOURCE_URI_STATE_KEY);
+            Uri modImageUri = savedInstanceState.getParcelable(MOD_URI_STATE_KEY);
             int rotationAngle = savedInstanceState.getInt(ROTATION_ANGLE_STATE_KEY);
-            Bitmap modImage = (Bitmap) savedInstanceState.getParcelable(MOD_STATE_KEY);
-            if (sourceImage != null && modImage != null) {
-                bmW = new BitmapWrapper(sourceImage);
-                bmW.setRotationAngle(rotationAngle);
-                bmW.setModifiedBitmap(modImage);
-                setUIforImageDoneProcessing(true);
-                ((ImageView) findViewById(R.id.theImage)).setImageBitmap(bmW.getModifiedBitmap());
-
-                refreshEffectThumbnails(randomSeed);
-            } else {
-                // TODO: Error/bug, shouldn't get here
-                setUIforImageDoneProcessing(false); // Shouldn't get here
-            }
-        } else if (getIntent().hasExtra(SOURCE_URI)) {
-            sourceUri = (Uri)getIntent().getParcelableExtra(SOURCE_URI);
-            Uri uri = sourceUri;
+            // MAJOR TODO: Need to save and read modified bitmap from a uri and do the subsequent steps here
+//            if (sourceImage != null && modImage != null) {
+//                bmW = new BitmapWrapper(sourceImage);
+//                bmW.setRotationAngle(rotationAngle);
+//                bmW.setModifiedBitmap(modImage);
+//                setUIforImageDoneProcessing(true);
+//                ((ImageView) findViewById(R.id.theImage)).setImageBitmap(bmW.getModifiedBitmap());
+//
+//                refreshEffectThumbnails(randomSeed);
+//            } else {
+//                // TODO: Error/bug, shouldn't get here
+//                setUIforImageDoneProcessing(false); // Shouldn't get here
+//            }
+            // Have to do this in place of the to do above. Same steps as new intent below
             ImageView iv = (ImageView) findViewById(R.id.theImage);
             bmW = new BitmapWrapper();
-            PicEditBitmapLoaderAsyncTask bmwAsync = new PicEditBitmapLoaderAsyncTask(this, getApplicationContext(), iv, uri, bmW,
+            PicEditBitmapLoaderAsyncTask bmwAsync = new PicEditBitmapLoaderAsyncTask(this, getApplicationContext(), iv, sourceUri, bmW,
+                    (ImageButton) findViewById(R.id.random_bleed_button),
+                    (ImageButton) findViewById(R.id.threshold_button),
+                    (ImageButton) findViewById(R.id.random_line_button),
+                    (ImageButton) findViewById(R.id.random_flood_button),
+                    (ImageButton) findViewById(R.id.invert_button),
+                    getEffectCtrl(), randomSeed);
+            bmwAsync.execute();
+        } else if (getIntent().hasExtra(SOURCE_URI)) {
+            sourceUri = (Uri)getIntent().getParcelableExtra(SOURCE_URI);
+            ImageView iv = (ImageView) findViewById(R.id.theImage);
+            bmW = new BitmapWrapper();
+            PicEditBitmapLoaderAsyncTask bmwAsync = new PicEditBitmapLoaderAsyncTask(this, getApplicationContext(), iv, sourceUri, bmW,
                     (ImageButton) findViewById(R.id.random_bleed_button),
                     (ImageButton) findViewById(R.id.threshold_button),
                     (ImageButton) findViewById(R.id.random_line_button),
@@ -206,23 +213,16 @@ public class PicEditActivity extends LoggedInActivity {
     protected void onSaveInstanceState (Bundle outState) {
         super.onSaveInstanceState(outState);
         if (bmW != null) {
-            outState.putParcelable(SOURCE_STATE_KEY, bmW.getSourceBitmap());
+            outState.putParcelable(SOURCE_URI_STATE_KEY, sourceUri);
+//            outState.putParcelable(MOD_URI_STATE_KEY, modUri);
             outState.putInt(ROTATION_ANGLE_STATE_KEY, bmW.getRotationAngle());
-            outState.putParcelable(MOD_STATE_KEY, bmW.getModifiedBitmap());
-            // TODO: Is there any possible reason i would need to save the URI?
-            // it should only be needed on return from an intent in which case state is preserved
-            // TODO: Handle saving the undo and redo queues
         }
         else {
-            outState.putParcelable(SOURCE_STATE_KEY, null);
+            outState.putParcelable(SOURCE_URI_STATE_KEY, null);
+//            outState.putParcelable(MOD_URI_STATE_KEY, modUri);
             outState.putInt(ROTATION_ANGLE_STATE_KEY, 0);
-            outState.putParcelable(MOD_STATE_KEY, null);
-            // TODO: Is there any possible reason i would need to save the URI?
-            // it should only be needed on return from an intent in which case state is preserved
-            // TODO: Handle saving the undo and redo queues
         }
         outState.putSerializable(EFFECT_SELECTED_STATE_KEY, effectSelected);
-        outState.putParcelable(SOURCE_URI, sourceUri);
     }
 
     @Override
@@ -520,15 +520,15 @@ public class PicEditActivity extends LoggedInActivity {
                         Utils.showCustomToast(PicEditActivity.this, getString(R.string.unable_to_save_image));
                     }
                 })) {
-            uploadCurrImage();
+            saveImageAndStartShareActivity();
         }
     }
 
-    private void uploadCurrImage() {
+    private void saveImageAndStartShareActivity() {
         Utils.saveFillerBitmap(bmW.getModifiedBitmap(), this, new Utils.SaveFillerBitmapHandler() {
             public void onSuccess(Uri uri) {
                 Utils.showCustomToast(PicEditActivity.this, getString(R.string.image_saved));
-                startUploadActivity(uri);
+                startShareActivity(uri);
             }
             public void onFailure() {
                 // do nothing
@@ -537,11 +537,11 @@ public class PicEditActivity extends LoggedInActivity {
         });
     }
 
-    private void startUploadActivity(Uri uri) {
+    private void startShareActivity(Uri uri) {
         Intent intent = new Intent(this, UploadActivity.class);
         intent.putExtra(UploadActivity.IMAGE_URI, uri);
         startActivity(intent);
-            }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,

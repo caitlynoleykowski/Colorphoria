@@ -38,7 +38,7 @@ public class DrawActivity extends LoggedInActivity {
     private static final int REQUEST_PERMISSIONS_CALLBACK_START_BROWSE_WRITE_EXTERNAL_STORAGE = 3;
     private static final int REQUEST_PERMISSIONS_CALLBACK_START_CAMERA_WRITE_EXTERNAL_STORAGE = 4;
 
-    private static final String IMAGE_STATE_KEY = "IMAGE_STATE_KEY";
+    private static final String SOURCE_URI_STATE_KEY = "SOURCE_URI_STATE_KEY";
     public static final String SOURCE_BITMAP = "SOURCE_BITMAP";
     public static final String SOURCE_URI = "SOURCE_URI";
 
@@ -52,6 +52,8 @@ public class DrawActivity extends LoggedInActivity {
     private float largeBrush;
 
     private ImageButton currColorButton;
+
+    private Uri sourceUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,54 +76,15 @@ public class DrawActivity extends LoggedInActivity {
         drawView = (DrawView)findViewById(R.id.drawing);
 
         if (savedInstanceState != null) {
-            if (savedInstanceState.getParcelable(IMAGE_STATE_KEY) != null) {
-                Bitmap bm = savedInstanceState.getParcelable(IMAGE_STATE_KEY);
-                drawView.setCanvasBitmap(bm);
+            if (savedInstanceState.getParcelable(SOURCE_URI_STATE_KEY) != null) {
+                sourceUri = (Uri) getIntent().getParcelableExtra(SOURCE_URI_STATE_KEY);
+                loadImageIntoUIFromUri(sourceUri);
             }
         } else if (getIntent().hasExtra(SOURCE_URI)) {
-        //} else if (getIntent().hasExtra(SOURCE_BITMAP)) {
-//            if (getIntent().getParcelableExtra(SOURCE_BITMAP) != null) {
-//                Bitmap bm = (Bitmap) getIntent().getParcelableExtra(SOURCE_BITMAP);
-//                drawView.setCanvasBitmap(bm);
-//            }
-
-
             if (getIntent().getParcelableExtra(SOURCE_URI) != null) {
-                Uri uri = (Uri) getIntent().getParcelableExtra(SOURCE_URI);
-
-                try {
-                    InputStream is = getContentResolver().openInputStream(uri);
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    BitmapFactory.decodeStream(is, null, options);
-                    // TODO: Maybe can move the getScaleFactor function somewhere else or create a generic one?
-                    double scaleFactor = BitmapWrapper.getScaleFactor(options.outWidth, options.outHeight);
-                    BitmapFactory.Options finalOptions = new BitmapFactory.Options();
-                    finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
-                    InputStream finalInputStream = getContentResolver().openInputStream(uri);
-                    Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
-                    drawView.setCanvasBitmap(bm);
-                } catch (FileNotFoundException e) {
-                    Log.e(TAG, "File with uri provided in Intent can not be found.");
-                    // TODO: Handle this error
-                }
-
-
+                sourceUri = (Uri) getIntent().getParcelableExtra(SOURCE_URI);
+                loadImageIntoUIFromUri(sourceUri);
             }
-
-
-//
-//            Uri uri = sourceUri;
-//            ImageView iv = (ImageView) findViewById(R.id.theImage);
-//            bmW = new BitmapWrapper();
-//            PicEditBitmapLoaderAsyncTask bmwAsync = new PicEditBitmapLoaderAsyncTask(this, getApplicationContext(), iv, uri, bmW,
-//                    (ImageButton) findViewById(R.id.icon_square_button),
-//                    (ImageButton) findViewById(R.id.threshold_button),
-//                    (ImageButton) findViewById(R.id.random_line_button),
-//                    (ImageButton) findViewById(R.id.random_flood_button),
-//                    getEffectCtrl(), randomSeed);
-//            bmwAsync.execute();
-//            setUIforImageDoneProcessing(true);
         }
 
         // Setup button refs and onClick listeners
@@ -136,6 +99,25 @@ public class DrawActivity extends LoggedInActivity {
         largeBrush = getResources().getInteger(R.integer.large_size);
 
         drawView.setPaintbrushSize(extraSmallBrush);
+    }
+
+    private void loadImageIntoUIFromUri(Uri uri) {
+        try {
+            InputStream is = getContentResolver().openInputStream(sourceUri);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(is, null, options);
+            // TODO: Maybe can move the getScaleFactor function somewhere else or create a generic one?
+            double scaleFactor = BitmapWrapper.getScaleFactor(options.outWidth, options.outHeight);
+            BitmapFactory.Options finalOptions = new BitmapFactory.Options();
+            finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
+            InputStream finalInputStream = getContentResolver().openInputStream(sourceUri);
+            Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
+            drawView.setCanvasBitmap(bm);
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "File with uri provided in Intent can not be found.");
+            // TODO: Handle this error
+        }
     }
 
     public void onDraw(View v) {
@@ -295,6 +277,7 @@ public class DrawActivity extends LoggedInActivity {
                         confirmDialog.dismiss();
                     }
                     public void onPositiveButton(Dialog confirmDialog) {
+                        sourceUri = null;
                         drawView.startNew();
                         confirmDialog.dismiss();
                     }
@@ -336,6 +319,7 @@ public class DrawActivity extends LoggedInActivity {
         File imageFile = Utils.saveFillerBitmap(drawView.getDrawingCache(), this, new Utils.SaveFillerBitmapHandler() {
             public void onSuccess(Uri uri) {
                 Utils.showCustomToast(DrawActivity.this, getString(R.string.image_saved));
+                sourceUri = uri;
             }
             public void onFailure() {
                 Utils.showCustomToast(DrawActivity.this, "Save failed.");
@@ -495,7 +479,7 @@ public class DrawActivity extends LoggedInActivity {
         Bitmap bm = drawView.getDrawingCache();
         if (bm != null) {
             Bitmap bm2 = bm.copy(bm.getConfig(), true);
-            outState.putParcelable(IMAGE_STATE_KEY, bm2);
+            outState.putParcelable(SOURCE_URI_STATE_KEY, sourceUri);
         }
         drawView.setDrawingCacheEnabled(false);
     }

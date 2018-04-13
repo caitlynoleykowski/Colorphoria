@@ -9,12 +9,11 @@ android {
             storePassword 'therearecl0uds'
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.caitoo0o.filler"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode 26
         versionName "3.4.0"
     }
@@ -22,7 +21,20 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            resValue 'string', 'gcp_project_id', 'filler-ea8ae'
+//            resValue 'string', 'gcp_api_key', 'AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE'
         }
+//        debug {
+//            debuggable true
+//            resValue 'string', 'gcp_project_id', 'filler-ea8ae'
+//            resValue 'string', 'gcp_api_key', 'AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE'
+//        }
+//        staging {
+//            initWith debug
+//            applicationIdSuffix ".debugStaging"
+//            resValue 'string', 'gcp_project_id', 'filler-staging'
+//            resValue 'string', 'gcp_api_key', 'AIzaSyCDFMtoQCjiv0YKqeYfCjH5evztxbon__Q'
+//        }
     }
 }
 
@@ -33,12 +45,12 @@ dependencies {
     // Firebase api to google cloud storage
     // Needed for google login - still going through firebase though
     // Needed for special UI components in login layouts
-    compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.android.volley:volley:1.0.0'
-    compile 'com.google.firebase:firebase-auth:11.6.0'
-    compile 'com.google.firebase:firebase-storage:11.6.0'
-    compile 'com.google.android.gms:play-services-auth:11.6.0'
-    compile 'com.android.support:design:25.0.0'
+    compile 'com.google.firebase:firebase-auth:12.0.1'
+    compile 'com.google.firebase:firebase-storage:12.0.1'
+    compile 'com.google.android.gms:play-services-auth:12.0.1'
+    compile 'com.android.support:appcompat-v7:27.1.0'
+    compile 'com.android.support:design:27.1.0'
     compile 'com.loopj.android:android-async-http:1.4.9'
     // test dependencies
     testCompile 'junit:junit:4.12'
