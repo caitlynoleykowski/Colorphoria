@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.effects;
+package com.caitoo0o.filler.effecthelpers;
 
 /**
  * Created by Cait on 8/14/2016.

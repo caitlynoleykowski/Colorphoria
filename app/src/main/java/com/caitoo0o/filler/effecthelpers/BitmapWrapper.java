@@ -1,8 +1,10 @@
-package com.caitoo0o.filler.effects;
+package com.caitoo0o.filler.effecthelpers;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.util.Log;
+
+import com.caitoo0o.filler.effects.ThresholdBitmapEffect;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -65,10 +67,10 @@ public class BitmapWrapper {
 
     public Bitmap getModifiedBitmap() { return mod; }
 
-    private int getPixelColor(Bitmap bm, int x, int y) {
+    public static int getPixelColor(Bitmap bm, int x, int y) {
         return bm.getPixel(x, y) & 0x00FFFFFF;
     }
-    private void setPixelColor(Bitmap bm, int x, int y, int color) {
+    public static void setPixelColor(Bitmap bm, int x, int y, int color) {
         int alphaChannelBitMask = (0xFF000000 & bm.getPixel(x,y));
         int argbBitMask = alphaChannelBitMask | 0x00FFFFFF;
         int argbColorBitMask = 0xFF000000 | color;
@@ -163,7 +165,7 @@ public class BitmapWrapper {
 
     public void threshold(double ctrl) {
         Bitmap temp = getRotatedSource();
-        applyThreshold(temp, ctrl);
+        ThresholdBitmapEffect.applyThreshold(temp, ctrl);
         mod = temp;
     }
 
@@ -198,7 +200,7 @@ public class BitmapWrapper {
         setModifiedBitmap(Bitmap.createBitmap(mod, 0, 0, mod.getWidth(), mod.getHeight(), matrix, true));
     }
 
-    void applyThreshold(Bitmap bm, double ctrl) {
+    static void applyThreshold(Bitmap bm, double ctrl) {
         for (int y = 0; y < bm.getHeight(); y++) {
             for (int x = 0; x < bm.getWidth(); x++) {
                 int color = getPixelColor(bm, x, y);

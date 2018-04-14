@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
-import com.caitoo0o.filler.effects.BitmapWrapper;
+import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
 
 import org.junit.Ignore;
 import org.junit.Test;

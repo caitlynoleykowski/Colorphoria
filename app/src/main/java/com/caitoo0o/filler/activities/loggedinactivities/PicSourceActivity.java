@@ -332,10 +332,12 @@ public class PicSourceActivity extends LoggedInActivity {
             Utils.showCustomToast(this, "Please check SD card! Image shot is impossible!");
             return;
         }
-//        mImageUri = Uri.fromFile(photo);
-        mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".myspecialfileprovider", photo);
+        if (android.os.Build.VERSION.SDK_INT < 24) {
+            mImageUri = Uri.fromFile(photo);
+        } else {
+            mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".myspecialfileprovider", photo);
+        }
 
-//        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
         //start camera intent
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);

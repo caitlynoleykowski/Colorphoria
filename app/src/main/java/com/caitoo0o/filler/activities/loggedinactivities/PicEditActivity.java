@@ -23,10 +23,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.caitoo0o.filler.effects.BitmapEffectAsyncTask;
-import com.caitoo0o.filler.effects.BitmapEffectPreviewAsyncTask;
-import com.caitoo0o.filler.effects.PicEditBitmapLoaderAsyncTask;
-import com.caitoo0o.filler.effects.BitmapWrapper;
+import com.caitoo0o.filler.effecthelpers.BitmapEffectAsyncTask;
+import com.caitoo0o.filler.effecthelpers.BitmapEffectPreviewAsyncTask;
+import com.caitoo0o.filler.effecthelpers.EffectTypes;
+import com.caitoo0o.filler.effecthelpers.PicEditBitmapLoaderAsyncTask;
+import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.reusableuserinterface.PaletteChooserDialog;
 import com.caitoo0o.filler.reusableuserinterface.SquareImageButton;
@@ -52,22 +53,10 @@ public class PicEditActivity extends LoggedInActivity {
 
     private static final int MAX_UNDO_QUEUE_SIZE = 2;
 
-    public enum Effect {
-        NONE,
-        RESET,
-        ROTATE_LEFT,
-        ROTATE_RIGHT,
-        RANDOM_BLEED_FILL,
-        THRESHOLD,
-        RANDOM_LINE_FILL,
-        RANDOM_FLOOD_FILL,
-        INVERT
-    }
-
     private BitmapWrapper bmW;
     private Deque<BitmapWrapper> undoQueue;
     private Deque<BitmapWrapper> redoQueue;
-    private Effect effectSelected;
+    private EffectTypes effectSelected;
     private boolean processingImageDone = false;
 
     private Uri sourceUri;
@@ -91,7 +80,7 @@ public class PicEditActivity extends LoggedInActivity {
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
 
-        effectSelected = Effect.NONE;
+        effectSelected = EffectTypes.NONE;
 
         // So that the effects aren't the same every time the activity is restarted,
         // the random seed itself needs to be random
@@ -313,7 +302,7 @@ public class PicEditActivity extends LoggedInActivity {
 
     // Begin UI handlers
     public void onReset() {
-        effectSelected = Effect.RESET;
+        effectSelected = EffectTypes.RESET;
         applyEffect();
     }
 
@@ -345,12 +334,12 @@ public class PicEditActivity extends LoggedInActivity {
     }
 
     public void onRotateRight(View v) {
-        effectSelected = Effect.ROTATE_RIGHT;
+        effectSelected = EffectTypes.ROTATE_RIGHT;
         applyEffect();
     }
 
     public void onRotateLeft(View v) {
-        effectSelected = Effect.ROTATE_LEFT;
+        effectSelected = EffectTypes.ROTATE_LEFT;
         applyEffect();
     }
 
@@ -370,27 +359,27 @@ public class PicEditActivity extends LoggedInActivity {
     }
 
     public void onRandomBleedFill(View v) {
-        effectSelected = Effect.RANDOM_BLEED_FILL;
+        effectSelected = EffectTypes.RANDOM_BLEED_FILL;
         applyEffect();
     }
 
     public void onThreshold(View v) {
-        effectSelected = Effect.THRESHOLD;
+        effectSelected = EffectTypes.THRESHOLD;
         applyEffect();
     }
 
     public void onRandomLineFill(View v) {
-        effectSelected = Effect.RANDOM_LINE_FILL;
+        effectSelected = EffectTypes.RANDOM_LINE_FILL;
         applyEffect();
     }
 
     public void onRandomFloodFill(View v) {
-        effectSelected = Effect.RANDOM_FLOOD_FILL;
+        effectSelected = EffectTypes.RANDOM_FLOOD_FILL;
         applyEffect();
     }
 
     public void onInvert(View v) {
-        effectSelected = Effect.INVERT;
+        effectSelected = EffectTypes.INVERT;
         applyEffect();
     }
 
@@ -402,23 +391,23 @@ public class PicEditActivity extends LoggedInActivity {
         // Populate the effect preview buttons
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_bleed_button),
-                PicEditActivity.Effect.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
+                EffectTypes.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.threshold_button),
-                PicEditActivity.Effect.THRESHOLD, bmW.getSourceBitmap(), getEffectCtrl(),
+                EffectTypes.THRESHOLD, bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_line_button),
-                PicEditActivity.Effect.RANDOM_LINE_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
+                EffectTypes.RANDOM_LINE_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_flood_button),
-                PicEditActivity.Effect.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
+                EffectTypes.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.invert_button),
-                PicEditActivity.Effect.INVERT, bmW.getSourceBitmap(), getEffectCtrl(),
+                EffectTypes.INVERT, bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
     }
 

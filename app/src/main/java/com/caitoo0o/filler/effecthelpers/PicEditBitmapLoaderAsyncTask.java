@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.effects;
+package com.caitoo0o.filler.effecthelpers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -109,27 +109,27 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
         if (activityWeakReference != null && activityWeakReference.get() != null && bitmap != null) {
             if (bleedImgBtnWeakReference != null && bleedImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        bleedImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_BLEED_FILL,
+                        bleedImgBtnWeakReference.get(), EffectTypes.RANDOM_BLEED_FILL,
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (thresholdImgBtnWeakReference != null && thresholdImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        thresholdImgBtnWeakReference.get(), PicEditActivity.Effect.THRESHOLD,
+                        thresholdImgBtnWeakReference.get(), EffectTypes.THRESHOLD,
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (lineImgBtnWeakReference != null && lineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        lineImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_LINE_FILL,
+                        lineImgBtnWeakReference.get(), EffectTypes.RANDOM_LINE_FILL,
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (floodImgBtnWeakReference != null && floodImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        floodImgBtnWeakReference.get(), PicEditActivity.Effect.RANDOM_FLOOD_FILL,
+                        floodImgBtnWeakReference.get(), EffectTypes.RANDOM_FLOOD_FILL,
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (invertImgBtnWeakReference != null && invertImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        invertImgBtnWeakReference.get(), PicEditActivity.Effect.INVERT,
+                        invertImgBtnWeakReference.get(), EffectTypes.INVERT,
                         bitmap, ctrl, randomSeed, null).execute();
             }
         }

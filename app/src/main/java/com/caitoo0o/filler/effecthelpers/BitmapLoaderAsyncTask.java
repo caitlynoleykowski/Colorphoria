@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.effects;
+package com.caitoo0o.filler.effecthelpers;
 
 import android.content.Context;
 import android.graphics.Bitmap;

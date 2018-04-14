@@ -18,7 +18,6 @@ package com.caitoo0o.filler.activities.loggedinactivities;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +30,6 @@ import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,7 +37,7 @@ import android.widget.ProgressBar;
 
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.backgroundtasks.MyUploadService;
-import com.caitoo0o.filler.effects.BitmapLoaderAsyncTask;
+import com.caitoo0o.filler.effecthelpers.BitmapLoaderAsyncTask;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

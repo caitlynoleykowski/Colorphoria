@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.effects;
+package com.caitoo0o.filler.effecthelpers;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -16,19 +16,19 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     private WeakReference<PicEditActivity> activityWeakReference;
     protected WeakReference<ImageView> imageViewWeakReference;
     private WeakReference<BitmapWrapper> bmwWeakReference;
-    private WeakReference<PicEditActivity.Effect> effectWeakReference;
+    private WeakReference<EffectTypes> effectWeakReference;
     private final double ctrl;
     private final int randomSeed;
     private final ArrayList<Integer> colorPalette;
 
     public BitmapEffectAsyncTask(PicEditActivity activity, ImageView imageView,
-                                 PicEditActivity.Effect effect, BitmapWrapper bmw, double ctrl,
+                                 EffectTypes effect, BitmapWrapper bmw, double ctrl,
                                  int randomSeed, ArrayList<Integer> colorPalette) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
         activityWeakReference = new WeakReference<PicEditActivity>(activity);
         imageViewWeakReference = new WeakReference<ImageView>(imageView);
         bmwWeakReference = new WeakReference<BitmapWrapper>(bmw);
-        effectWeakReference = new WeakReference<PicEditActivity.Effect>(effect);
+        effectWeakReference = new WeakReference<EffectTypes>(effect);
         this.ctrl = ctrl;
         this.randomSeed = randomSeed;
         this.colorPalette = colorPalette;

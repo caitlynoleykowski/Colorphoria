@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.caitoo0o.filler.effects.BitmapWrapper;
+import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
 import com.caitoo0o.filler.reusableuserinterface.DrawView;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.utils.Utils;

@@ -1,4 +1,4 @@
-package com.caitoo0o.filler.effects;
+package com.caitoo0o.filler.effecthelpers;
 
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
@@ -17,7 +17,7 @@ public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
     WeakReference<Bitmap> sourceBitmapWeakReference;
 
     public BitmapEffectPreviewAsyncTask(PicEditActivity activity, ImageView imageView,
-                                        PicEditActivity.Effect effect, Bitmap sourceBitmap,
+                                        EffectTypes effect, Bitmap sourceBitmap,
                                         double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
         super(activity, imageView, effect, null, ctrl, randomSeed, colorPalette);
         sourceBitmapWeakReference = new WeakReference<Bitmap>(sourceBitmap);
