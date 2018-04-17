@@ -5,15 +5,17 @@ import android.graphics.Bitmap;
 import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
 import com.caitoo0o.filler.effecthelpers.EffectTypes;
 
+import java.util.ArrayList;
+
 /**
  * Created by caitoo0o on 4/12/2018.
  */
 
-public class ThresholdBitmapEffect {
+public class ThresholdEffect implements BitmapEffect {
 
     EffectTypes type = EffectTypes.THRESHOLD;
 
-    public static void applyThreshold(Bitmap bm, double ctrl) {
+    public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         for (int y = 0; y < bm.getHeight(); y++) {
             for (int x = 0; x < bm.getWidth(); x++) {
                 int color = BitmapWrapper.getPixelColor(bm, x, y);

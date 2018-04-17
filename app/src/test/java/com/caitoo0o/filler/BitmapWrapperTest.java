@@ -5,6 +5,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
+import com.caitoo0o.filler.effects.RandomBleedFillEffect;
+import com.caitoo0o.filler.effects.RandomFloodFillEffect;
+import com.caitoo0o.filler.effects.RandomLineFillEffect;
+import com.caitoo0o.filler.effects.ThresholdEffect;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -44,21 +48,6 @@ public class BitmapWrapperTest {
             Bitmap bitmap = Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888);
             shadowOf(bitmap).setMutable(true);
             return bitmap;
-        }
-
-        @Override
-        protected int getRed(int color) {
-            return super.getRed(color);
-        }
-
-        @Override
-        protected int getGreen(int color) {
-            return super.getGreen(color);
-        }
-
-        @Override
-        protected int getBlue(int color) {
-            return super.getBlue(color);
         }
     }
 
@@ -124,7 +113,7 @@ public class BitmapWrapperTest {
     public void testRandomBleedFillBasic() throws Exception {
         Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.img_test_pic_1);
         BitmapWrapper bmw = new BitmapWrapper(testPic1);
-        bmw.randomBleedFill(.5, 8, null);
+        bmw.applyEffect(new RandomBleedFillEffect(), .5, 8, null);
         assertNotNull(bmw.getSourceBitmap());
         assertNotNull(bmw.getModifiedBitmap());
         assertTrue(bmw.getSourceBitmap() != bmw.getModifiedBitmap());
@@ -135,7 +124,7 @@ public class BitmapWrapperTest {
     public void testThresholdBasic() throws Exception {
         Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.img_test_pic_1);
         BitmapWrapper bmw = new BitmapWrapper(testPic1);
-        bmw.threshold(.5);
+        bmw.applyEffect(new ThresholdEffect(), .5, 8, null); // random seed unused for threshold
         assertNotNull(bmw.getSourceBitmap());
         assertNotNull(bmw.getModifiedBitmap());
         assertTrue(bmw.getSourceBitmap() != bmw.getModifiedBitmap());
@@ -146,7 +135,7 @@ public class BitmapWrapperTest {
     public void testRandomLineFillBasic() throws Exception {
         Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.img_test_pic_1);
         BitmapWrapper bmw = new BitmapWrapper(testPic1);
-        bmw.randomLineFill(.5, 8, null);
+        bmw.applyEffect(new RandomLineFillEffect(), .5, 8, null);
         assertNotNull(bmw.getSourceBitmap());
         assertNotNull(bmw.getModifiedBitmap());
         assertTrue(bmw.getSourceBitmap() != bmw.getModifiedBitmap());
@@ -157,7 +146,7 @@ public class BitmapWrapperTest {
     public void testRandomFloodFillBasic() throws Exception {
         Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.img_test_pic_1);
         BitmapWrapper bmw = new BitmapWrapper(testPic1);
-        bmw.randomFloodFill(.5, 8, null);
+        bmw.applyEffect(new RandomFloodFillEffect(), .5, 8, null);
         assertNotNull(bmw.getSourceBitmap());
         assertNotNull(bmw.getModifiedBitmap());
         assertTrue(bmw.getSourceBitmap() != bmw.getModifiedBitmap());
@@ -169,7 +158,7 @@ public class BitmapWrapperTest {
         Bitmap bitmap = Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888);
         BitmapWrapperExposed bmw = new BitmapWrapperExposed(bitmap);
         bmw.setModifiedBitmap(Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888));
-        bmw.threshold(.5);
+        bmw.applyEffect(new ThresholdEffect(), .5, 8, null); // randomseed / colorPalette not used for threshold
 
         assertNotNull(bmw.getSourceBitmap());
         assertNotNull(bmw.getModifiedBitmap());
@@ -188,7 +177,7 @@ public class BitmapWrapperTest {
         Bitmap bitmap = Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888);
         BitmapWrapperExposed bmw = new BitmapWrapperExposed(bitmap);
         bmw.setModifiedBitmap(Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888));
-        bmw.randomFloodFill(.5, 1, null);
+        bmw.applyEffect(new RandomFloodFillEffect(),.5, 1, null);
 
         assertNotNull(bmw.getSourceBitmap());
         assertNotNull(bmw.getModifiedBitmap());
@@ -266,7 +255,7 @@ public class BitmapWrapperTest {
         Bitmap bitmap = Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888);
         BitmapWrapperExposed bmw = new BitmapWrapperExposed(bitmap);
         bmw.setModifiedBitmap(Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888));
-        bmw.randomBleedFill(ctrl, 1, null);
+        bmw.applyEffect(new RandomBleedFillEffect(), ctrl, 1, null);
 
         assertNotNull(bmw.getSourceBitmap());
         assertNotNull(bmw.getModifiedBitmap());

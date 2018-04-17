@@ -5,6 +5,11 @@ import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.caitoo0o.filler.activities.loggedinactivities.PicEditActivity;
+import com.caitoo0o.filler.effects.InvertEffect;
+import com.caitoo0o.filler.effects.RandomBleedFillEffect;
+import com.caitoo0o.filler.effects.RandomFloodFillEffect;
+import com.caitoo0o.filler.effects.RandomLineFillEffect;
+import com.caitoo0o.filler.effects.ThresholdEffect;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -47,28 +52,28 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
                     // do nothing
                     break;
                 case RESET:
-                    bmwWeakReference.get().reset();
+                    bmwWeakReference.get().reset(ctrl, randomSeed, colorPalette);
                     break;
                 case ROTATE_RIGHT:
-                    bmwWeakReference.get().rotateRight();
+                    bmwWeakReference.get().rotateRight(ctrl, randomSeed, colorPalette);
                     break;
                 case ROTATE_LEFT:
-                    bmwWeakReference.get().rotateLeft();
+                    bmwWeakReference.get().rotateLeft(ctrl, randomSeed, colorPalette);
                     break;
                 case RANDOM_BLEED_FILL:
-                    bmwWeakReference.get().randomBleedFill(ctrl, randomSeed, colorPalette);
+                    bmwWeakReference.get().applyEffect(new RandomBleedFillEffect(), ctrl, randomSeed, colorPalette);
                     break;
                 case THRESHOLD:
-                    bmwWeakReference.get().threshold(ctrl);
+                    bmwWeakReference.get().applyEffect(new ThresholdEffect(), ctrl, randomSeed, colorPalette);
                     break;
                 case RANDOM_LINE_FILL:
-                    bmwWeakReference.get().randomLineFill(ctrl, randomSeed, colorPalette);
+                    bmwWeakReference.get().applyEffect(new RandomLineFillEffect(), ctrl, randomSeed, colorPalette);
                     break;
                 case RANDOM_FLOOD_FILL:
-                    bmwWeakReference.get().randomFloodFill(ctrl, randomSeed, colorPalette);
+                    bmwWeakReference.get().applyEffect(new RandomFloodFillEffect(), ctrl, randomSeed, colorPalette);
                     break;
                 case INVERT:
-                    bmwWeakReference.get().invert(ctrl, randomSeed, colorPalette);
+                    bmwWeakReference.get().applyEffect(new InvertEffect(), ctrl, randomSeed, colorPalette);
                     break;
             }
         }

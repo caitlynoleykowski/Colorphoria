@@ -23,7 +23,7 @@ public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
         sourceBitmapWeakReference = new WeakReference<Bitmap>(sourceBitmap);
     }
 
-    // Create the thumbnail bitmap and use that to apply the effect to instead of the large bitmap
+    // Create the thumbnail bitmap and use that to applyEffect the effect to instead of the large bitmap
     @Override
     protected Bitmap doInBackground(Integer... params) {
         // Don't bother doing this stuff if the imageView isn't there anymore
@@ -32,7 +32,7 @@ public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
                 Bitmap sourceBitmap = sourceBitmapWeakReference.get();
                 // Create scaled down thumbnail (not the final one which will be square) so that
                 // the effect preview will fill in the same way the larger image will
-                // (With the square part of the image could be cut off and so the effect would apply
+                // (With the square part of the image could be cut off and so the effect would applyEffect
                 // differently)
                 double scaleFactor;
                 Bitmap imgThumbnail;
