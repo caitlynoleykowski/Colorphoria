@@ -2,6 +2,8 @@ package com.caitoo0o.filler.effects;
 
 import android.graphics.Bitmap;
 
+import com.caitoo0o.filler.effecthelpers.EffectTypes;
+
 import java.util.ArrayList;
 
 /**
@@ -9,5 +11,6 @@ import java.util.ArrayList;
  */
 
 public interface BitmapEffect {
-    public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle);
+    EffectTypes getEffectType();
+    void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle);
 }

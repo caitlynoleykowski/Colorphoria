@@ -29,6 +29,14 @@ import com.caitoo0o.filler.effecthelpers.EffectTypes;
 import com.caitoo0o.filler.effecthelpers.PicEditBitmapLoaderAsyncTask;
 import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
 import com.caitoo0o.filler.R;
+import com.caitoo0o.filler.effects.BitmapEffect;
+import com.caitoo0o.filler.effects.InvertEffect;
+import com.caitoo0o.filler.effects.RandomBleedFillEffect;
+import com.caitoo0o.filler.effects.RandomFloodFillEffect;
+import com.caitoo0o.filler.effects.RandomLineFillEffect;
+import com.caitoo0o.filler.effects.ResetEffect;
+import com.caitoo0o.filler.effects.RotateEffect;
+import com.caitoo0o.filler.effects.ThresholdEffect;
 import com.caitoo0o.filler.reusableuserinterface.PaletteChooserDialog;
 import com.caitoo0o.filler.reusableuserinterface.SquareImageButton;
 import com.caitoo0o.filler.utils.Utils;
@@ -56,7 +64,6 @@ public class PicEditActivity extends LoggedInActivity {
     private BitmapWrapper bmW;
     private Deque<BitmapWrapper> undoQueue;
     private Deque<BitmapWrapper> redoQueue;
-    private EffectTypes effectSelected;
     private boolean processingImageDone = false;
 
     private Uri sourceUri;
@@ -79,8 +86,6 @@ public class PicEditActivity extends LoggedInActivity {
 
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();
-
-        effectSelected = EffectTypes.NONE;
 
         // So that the effects aren't the same every time the activity is restarted,
         // the random seed itself needs to be random
@@ -211,7 +216,6 @@ public class PicEditActivity extends LoggedInActivity {
 //            outState.putParcelable(MOD_URI_STATE_KEY, modUri);
             outState.putInt(ROTATION_ANGLE_STATE_KEY, 0);
         }
-        outState.putSerializable(EFFECT_SELECTED_STATE_KEY, effectSelected);
     }
 
     @Override
@@ -302,8 +306,7 @@ public class PicEditActivity extends LoggedInActivity {
 
     // Begin UI handlers
     public void onReset() {
-        effectSelected = EffectTypes.RESET;
-        applyEffect();
+        applyEffect(new ResetEffect());
     }
 
     public void onRedo() {
@@ -334,13 +337,7 @@ public class PicEditActivity extends LoggedInActivity {
     }
 
     public void onRotateRight(View v) {
-        effectSelected = EffectTypes.ROTATE_RIGHT;
-        applyEffect();
-    }
-
-    public void onRotateLeft(View v) {
-        effectSelected = EffectTypes.ROTATE_LEFT;
-        applyEffect();
+        applyEffect(new RotateEffect());
     }
 
     public void onChoosePalette(View v) {
@@ -359,28 +356,23 @@ public class PicEditActivity extends LoggedInActivity {
     }
 
     public void onRandomBleedFill(View v) {
-        effectSelected = EffectTypes.RANDOM_BLEED_FILL;
-        applyEffect();
+        applyEffect(new RandomBleedFillEffect());
     }
 
     public void onThreshold(View v) {
-        effectSelected = EffectTypes.THRESHOLD;
-        applyEffect();
+        applyEffect(new ThresholdEffect());
     }
 
     public void onRandomLineFill(View v) {
-        effectSelected = EffectTypes.RANDOM_LINE_FILL;
-        applyEffect();
+        applyEffect(new RandomLineFillEffect());
     }
 
     public void onRandomFloodFill(View v) {
-        effectSelected = EffectTypes.RANDOM_FLOOD_FILL;
-        applyEffect();
+        applyEffect(new RandomFloodFillEffect());
     }
 
     public void onInvert(View v) {
-        effectSelected = EffectTypes.INVERT;
-        applyEffect();
+        applyEffect(new InvertEffect());
     }
 
     // End UI Handlers
@@ -391,23 +383,23 @@ public class PicEditActivity extends LoggedInActivity {
         // Populate the effect preview buttons
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_bleed_button),
-                EffectTypes.RANDOM_BLEED_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
+                new RandomBleedFillEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.threshold_button),
-                EffectTypes.THRESHOLD, bmW.getSourceBitmap(), getEffectCtrl(),
+                new ThresholdEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_line_button),
-                EffectTypes.RANDOM_LINE_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
+                new RandomLineFillEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_flood_button),
-                EffectTypes.RANDOM_FLOOD_FILL, bmW.getSourceBitmap(), getEffectCtrl(),
+                new RandomFloodFillEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.invert_button),
-                EffectTypes.INVERT, bmW.getSourceBitmap(), getEffectCtrl(),
+                new InvertEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
     }
 
@@ -452,14 +444,14 @@ public class PicEditActivity extends LoggedInActivity {
         undoEnqueue();
     }
 
-    private void applyEffect() {
+    private void applyEffect(BitmapEffect effect) {
         ((ProgressBar) findViewById(R.id.progress_bar)).setVisibility(View.VISIBLE);
         updateUndoRedoQueues();
         setUIforImageDoneProcessing(false);
         double ctrl = getEffectCtrl();
         ImageView iv = (ImageView) findViewById(R.id.theImage);
         ProgressBar pb = (ProgressBar) findViewById(R.id.progress_bar);
-        new BitmapEffectAsyncTask(this,iv,effectSelected,bmW,ctrl,randomSeed,colorPalette).execute();
+        new BitmapEffectAsyncTask(this,iv,effect,bmW,ctrl,randomSeed,colorPalette).execute();
         Random randSeedGen = new Random();
         randomSeed = randSeedGen.nextInt();
         refreshEffectThumbnails(randomSeed);

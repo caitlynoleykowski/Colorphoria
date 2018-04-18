@@ -5,6 +5,7 @@ import android.media.ThumbnailUtils;
 import android.widget.ImageView;
 
 import com.caitoo0o.filler.activities.loggedinactivities.PicEditActivity;
+import com.caitoo0o.filler.effects.BitmapEffect;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
     WeakReference<Bitmap> sourceBitmapWeakReference;
 
     public BitmapEffectPreviewAsyncTask(PicEditActivity activity, ImageView imageView,
-                                        EffectTypes effect, Bitmap sourceBitmap,
+                                        BitmapEffect effect, Bitmap sourceBitmap,
                                         double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
         super(activity, imageView, effect, null, ctrl, randomSeed, colorPalette);
         sourceBitmapWeakReference = new WeakReference<Bitmap>(sourceBitmap);

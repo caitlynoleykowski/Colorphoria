@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.caitoo0o.filler.activities.loggedinactivities.PicEditActivity;
+import com.caitoo0o.filler.effects.BitmapEffect;
 import com.caitoo0o.filler.effects.InvertEffect;
 import com.caitoo0o.filler.effects.RandomBleedFillEffect;
 import com.caitoo0o.filler.effects.RandomFloodFillEffect;
@@ -21,19 +22,19 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     private WeakReference<PicEditActivity> activityWeakReference;
     protected WeakReference<ImageView> imageViewWeakReference;
     private WeakReference<BitmapWrapper> bmwWeakReference;
-    private WeakReference<EffectTypes> effectWeakReference;
+    private WeakReference<BitmapEffect> effectWeakReference;
     private final double ctrl;
     private final int randomSeed;
     private final ArrayList<Integer> colorPalette;
 
     public BitmapEffectAsyncTask(PicEditActivity activity, ImageView imageView,
-                                 EffectTypes effect, BitmapWrapper bmw, double ctrl,
+                                 BitmapEffect effect, BitmapWrapper bmw, double ctrl,
                                  int randomSeed, ArrayList<Integer> colorPalette) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
         activityWeakReference = new WeakReference<PicEditActivity>(activity);
         imageViewWeakReference = new WeakReference<ImageView>(imageView);
         bmwWeakReference = new WeakReference<BitmapWrapper>(bmw);
-        effectWeakReference = new WeakReference<EffectTypes>(effect);
+        effectWeakReference = new WeakReference<BitmapEffect>(effect);
         this.ctrl = ctrl;
         this.randomSeed = randomSeed;
         this.colorPalette = colorPalette;
@@ -47,35 +48,13 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(Integer... params) {
         if (effectWeakReference.get() != null && bmwWeakReference.get() != null) {
-            switch (effectWeakReference.get()) {
-                case NONE:
-                    // do nothing
-                    break;
-                case RESET:
-                    bmwWeakReference.get().reset(ctrl, randomSeed, colorPalette);
-                    break;
-                case ROTATE_RIGHT:
-                    bmwWeakReference.get().rotateRight(ctrl, randomSeed, colorPalette);
-                    break;
-                case ROTATE_LEFT:
-                    bmwWeakReference.get().rotateLeft(ctrl, randomSeed, colorPalette);
-                    break;
-                case RANDOM_BLEED_FILL:
-                    bmwWeakReference.get().applyEffect(new RandomBleedFillEffect(), ctrl, randomSeed, colorPalette);
-                    break;
-                case THRESHOLD:
-                    bmwWeakReference.get().applyEffect(new ThresholdEffect(), ctrl, randomSeed, colorPalette);
-                    break;
-                case RANDOM_LINE_FILL:
-                    bmwWeakReference.get().applyEffect(new RandomLineFillEffect(), ctrl, randomSeed, colorPalette);
-                    break;
-                case RANDOM_FLOOD_FILL:
-                    bmwWeakReference.get().applyEffect(new RandomFloodFillEffect(), ctrl, randomSeed, colorPalette);
-                    break;
-                case INVERT:
-                    bmwWeakReference.get().applyEffect(new InvertEffect(), ctrl, randomSeed, colorPalette);
-                    break;
-            }
+            BitmapEffect effect = effectWeakReference.get();
+            if (effect.getEffectType() == EffectTypes.RESET)
+                bmwWeakReference.get().reset(ctrl, randomSeed, colorPalette);
+            else if (effect.getEffectType() == EffectTypes.ROTATE_RIGHT)
+                bmwWeakReference.get().rotateRight(ctrl, randomSeed, colorPalette);
+            else
+                bmwWeakReference.get().applyEffect(effect, ctrl, randomSeed, colorPalette);
         }
         return bmwWeakReference.get().getModifiedBitmap();
     }

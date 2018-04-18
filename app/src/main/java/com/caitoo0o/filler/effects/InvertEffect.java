@@ -13,7 +13,9 @@ import java.util.ArrayList;
 
 public class InvertEffect implements BitmapEffect {
 
-    EffectTypes type = EffectTypes.INVERT;
+    public EffectTypes getEffectType() {
+        return EffectTypes.INVERT;
+    }
 
     public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         for (int y = 0; y < bm.getHeight(); y++) {

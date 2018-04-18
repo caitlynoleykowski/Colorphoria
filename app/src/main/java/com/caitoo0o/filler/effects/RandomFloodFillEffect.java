@@ -17,7 +17,9 @@ import java.util.Random;
 
 public class RandomFloodFillEffect implements BitmapEffect {
 
-    EffectTypes type = EffectTypes.RANDOM_FLOOD_FILL;
+    public EffectTypes getEffectType() {
+        return EffectTypes.RANDOM_FLOOD_FILL;
+    }
 
     public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         (new ThresholdEffect()).applyEffect(bm, ctrl, randomSeed, colorPalette, rotationAngle);

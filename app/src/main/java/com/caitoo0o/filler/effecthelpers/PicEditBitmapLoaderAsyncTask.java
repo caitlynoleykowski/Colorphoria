@@ -10,6 +10,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.caitoo0o.filler.activities.loggedinactivities.PicEditActivity;
+import com.caitoo0o.filler.effects.InvertEffect;
+import com.caitoo0o.filler.effects.RandomBleedFillEffect;
+import com.caitoo0o.filler.effects.RandomFloodFillEffect;
+import com.caitoo0o.filler.effects.RandomLineFillEffect;
+import com.caitoo0o.filler.effects.ThresholdEffect;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -109,27 +114,27 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
         if (activityWeakReference != null && activityWeakReference.get() != null && bitmap != null) {
             if (bleedImgBtnWeakReference != null && bleedImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        bleedImgBtnWeakReference.get(), EffectTypes.RANDOM_BLEED_FILL,
+                        bleedImgBtnWeakReference.get(), new RandomBleedFillEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (thresholdImgBtnWeakReference != null && thresholdImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        thresholdImgBtnWeakReference.get(), EffectTypes.THRESHOLD,
+                        thresholdImgBtnWeakReference.get(), new ThresholdEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (lineImgBtnWeakReference != null && lineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        lineImgBtnWeakReference.get(), EffectTypes.RANDOM_LINE_FILL,
+                        lineImgBtnWeakReference.get(), new RandomLineFillEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (floodImgBtnWeakReference != null && floodImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        floodImgBtnWeakReference.get(), EffectTypes.RANDOM_FLOOD_FILL,
+                        floodImgBtnWeakReference.get(), new RandomFloodFillEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (invertImgBtnWeakReference != null && invertImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        invertImgBtnWeakReference.get(), EffectTypes.INVERT,
+                        invertImgBtnWeakReference.get(), new InvertEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
         }

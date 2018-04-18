@@ -17,7 +17,10 @@ import java.util.Random;
 
 public class RandomBleedFillEffect implements BitmapEffect {
 
-    EffectTypes type = EffectTypes.RANDOM_BLEED_FILL;
+    public EffectTypes getEffectType() {
+        return EffectTypes.RANDOM_BLEED_FILL;
+    }
+
 
     public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         boolean [][] processed = new boolean[bm.getWidth()][bm.getHeight()];

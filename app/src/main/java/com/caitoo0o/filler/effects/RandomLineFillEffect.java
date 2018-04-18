@@ -14,7 +14,9 @@ import java.util.Random;
 
 public class RandomLineFillEffect implements BitmapEffect {
 
-    EffectTypes type = EffectTypes.RANDOM_LINE_FILL;
+    public EffectTypes getEffectType() {
+        return EffectTypes.RANDOM_LINE_FILL;
+    }
 
     public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         (new ThresholdEffect()).applyEffect(bm, ctrl, randomSeed, colorPalette, rotationAngle);

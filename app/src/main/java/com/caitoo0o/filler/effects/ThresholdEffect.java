@@ -13,7 +13,9 @@ import java.util.ArrayList;
 
 public class ThresholdEffect implements BitmapEffect {
 
-    EffectTypes type = EffectTypes.THRESHOLD;
+    public EffectTypes getEffectType() {
+        return EffectTypes.THRESHOLD;
+    }
 
     public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         for (int y = 0; y < bm.getHeight(); y++) {
