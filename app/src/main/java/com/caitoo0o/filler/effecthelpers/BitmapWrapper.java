@@ -16,10 +16,10 @@ import java.util.Random;
  */
 public class BitmapWrapper {
 
+    private static final String TAG = "BitmapWrapper";
+
     protected static final int MAX_PIXELS = 1000000; // Protected for unit test
-    public static final int MAX_CUMULATIVE_DELTA_OF_ALL_COLORS = (0xff + 0xff + 0xff); // Protected for unit test
     private static final int ROTATION_ANGLE = 90;
-    private static final int MAX_COLOR = 0xffffff;
 
     Bitmap source;
     Bitmap mod;
@@ -44,13 +44,22 @@ public class BitmapWrapper {
     public BitmapWrapper() {} // Used when reloading asyncronously from saved state
 
     public static double getScaleFactor(int bitmapWidth, int bitmapHeight) {
+        return getScaleFactor(bitmapWidth, bitmapHeight, MAX_PIXELS);
+    }
+
+    public static double getScaleFactor(int bitmapWidth, int bitmapHeight, int maxPixels) {
         int numPixels = bitmapWidth * bitmapHeight;
-        if (numPixels >= MAX_PIXELS) {
-            double scaleFactor = Math.sqrt((double) MAX_PIXELS / (double) numPixels);
+        if (numPixels >= maxPixels) {
+            double scaleFactor = Math.sqrt((double) maxPixels / (double) numPixels);
             return scaleFactor;
         } else {
             return 1;
         }
+    }
+
+    public void setSource(Bitmap bm) {
+        source = bm;
+        setModifiedBitmap(source.copy(source.getConfig(), true));
     }
 
     public Bitmap getSourceBitmap() {
@@ -58,25 +67,14 @@ public class BitmapWrapper {
     }
 
     public void setModifiedBitmap(Bitmap bm) {
-        // TODO: throw exception if mod is not mutable
         if (!bm.isMutable()) {
-            Log.e("bitmapwrapper", "error!! bitmap not mutable");
+            Log.e(TAG, "Error!! BitmapWrapper mod bitmap not mutable");
+//            throw new IllegalArgumentException("The mod bitmap in BitmapWrapper must be mutable!");
         }
         mod = bm;
     }
 
     public Bitmap getModifiedBitmap() { return mod; }
-
-    public static int getPixelColor(Bitmap bm, int x, int y) {
-        return bm.getPixel(x, y) & 0x00FFFFFF;
-    }
-    public static void setPixelColor(Bitmap bm, int x, int y, int color) {
-        int alphaChannelBitMask = (0xFF000000 & bm.getPixel(x,y));
-        int argbBitMask = alphaChannelBitMask | 0x00FFFFFF;
-        int argbColorBitMask = 0xFF000000 | color;
-        int argbColor = argbColorBitMask & argbBitMask;
-        bm.setPixel(x, y, argbColor);
-    }
 
     public int getRotationAngle() {
         return currRotationAngle;
@@ -86,12 +84,7 @@ public class BitmapWrapper {
         currRotationAngle = rotationAngle;
     }
 
-    public void setSource(Bitmap bm) {
-        source = bm;
-        setModifiedBitmap(source.copy(source.getConfig(), true));
-    }
-
-    protected Bitmap getRotatedSource() { // protected for unit tests
+    protected Bitmap getRotatedSourceCopy() { // protected for unit tests
         if (currRotationAngle != 0) {
             Matrix matrix = new Matrix();
             matrix.postRotate(currRotationAngle);
@@ -101,67 +94,24 @@ public class BitmapWrapper {
         }
     }
 
-    // effect helpers
-
-    public static int getNextColor(Random r, ArrayList<Integer> colorPalette) {
-        int nextColor;
-        if (colorPalette != null && colorPalette.size() > 0) {
-            nextColor = colorPalette.get(r.nextInt(colorPalette.size()));
-        } else {
-            nextColor = r.nextInt(MAX_COLOR);
-        }
-        return nextColor;
-    }
-
-    // Start effects
-
     public void applyEffect(BitmapEffect effect, double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
-        Bitmap temp = getRotatedSource();
-        effect.applyEffect(temp, ctrl, randomSeed, colorPalette, 0);
+        // Special handling for reset
+        if (effect instanceof ResetEffect) {
+            currRotationAngle = 0;
+        }
+
+        Bitmap temp = getRotatedSourceCopy();
+
+        int rotationAngle = 0;
+        // Special handling for rotate right
+        if (effect instanceof RotateEffect) {
+            rotationAngle = ROTATION_ANGLE;
+            // calculate the net rotation angle
+            currRotationAngle += rotationAngle;
+            currRotationAngle %= 360;
+        }
+
+        effect.applyEffect(temp, ctrl, randomSeed, colorPalette, rotationAngle);
         mod = temp;
-    }
-
-    public void reset(double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
-        currRotationAngle = 0;
-        Bitmap temp = getRotatedSource();
-        (new ResetEffect()).applyEffect(temp, ctrl, randomSeed, colorPalette, 0);
-        mod = temp;
-    }
-
-    public void rotateRight(double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
-        Bitmap temp = getRotatedSource();
-
-        int rotationAngle = ROTATION_ANGLE;
-        // calculate the net rotation angle
-        currRotationAngle += rotationAngle;
-        currRotationAngle %= 360;
-        (new RotateEffect()).applyEffect(temp, ctrl, randomSeed, colorPalette, rotationAngle);
-        mod = temp;
-    }
-
-    public void rotateLeft(double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
-        int rotationAngle = -1 * ROTATION_ANGLE;
-        // calculate the net rotation angle
-        currRotationAngle += rotationAngle;
-        currRotationAngle %= 360;
-
-        Bitmap temp = getRotatedSource();
-        (new RotateEffect()).applyEffect(temp, ctrl, randomSeed, colorPalette, rotationAngle);
-        mod = temp;
-    }
-
-    // protected for unit tests
-    public static int getRed(int color) {
-        return (color & 0x00ff0000)>> 16;
-    }
-
-    // protected for unit tests
-    public static int getGreen(int color) {
-        return (color &  0x0000ff00) >> 8;
-    }
-
-    // protected for unit tests
-    public static int getBlue(int color) {
-        return (color & 0x000000ff) >> 0;
     }
 }

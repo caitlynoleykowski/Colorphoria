@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +33,7 @@ import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.effects.BitmapEffect;
 import com.caitoo0o.filler.effects.InvertEffect;
+import com.caitoo0o.filler.effects.OutlineEffect;
 import com.caitoo0o.filler.effects.RandomBleedFillEffect;
 import com.caitoo0o.filler.effects.RandomFloodFillEffect;
 import com.caitoo0o.filler.effects.RandomLineFillEffect;
@@ -55,7 +58,6 @@ public class PicEditActivity extends LoggedInActivity {
     private static final String SOURCE_URI_STATE_KEY = "SOURCE_STATE_KEY";
     private static final String MOD_URI_STATE_KEY = "MOD_STATE_KEY";
     private static final String ROTATION_ANGLE_STATE_KEY = "ROTATION_ANGLE_STATE_KEY";
-    private static final String EFFECT_SELECTED_STATE_KEY = "EFFECT_SELECTED_STATE_KEY";
 
     public static final int REQUEST_PERMISSIONS_CALLBACK_SAVE_WRITE_EXTERNAL_STORAGE = 0;
 
@@ -120,6 +122,7 @@ public class PicEditActivity extends LoggedInActivity {
                     (ImageButton) findViewById(R.id.random_line_button),
                     (ImageButton) findViewById(R.id.random_flood_button),
                     (ImageButton) findViewById(R.id.invert_button),
+                    (ImageButton) findViewById(R.id.outline_button),
                     getEffectCtrl(), randomSeed);
             bmwAsync.execute();
         } else if (getIntent().hasExtra(SOURCE_URI)) {
@@ -132,6 +135,7 @@ public class PicEditActivity extends LoggedInActivity {
                     (ImageButton) findViewById(R.id.random_line_button),
                     (ImageButton) findViewById(R.id.random_flood_button),
                     (ImageButton) findViewById(R.id.invert_button),
+                    (ImageButton) findViewById(R.id.outline_button),
                     getEffectCtrl(), randomSeed);
             bmwAsync.execute();
         } else {
@@ -198,6 +202,14 @@ public class PicEditActivity extends LoggedInActivity {
             public void onClick(View view) {
                 if (processingImageDone) {
                     onInvert(view);
+                }
+            }
+        });
+        ((SquareImageButton) findViewById(R.id.outline_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (processingImageDone) {
+                    onOutlineEffect(view);
                 }
             }
         });
@@ -375,6 +387,10 @@ public class PicEditActivity extends LoggedInActivity {
         applyEffect(new InvertEffect());
     }
 
+    public void onOutlineEffect(View v) {
+        applyEffect(new OutlineEffect());
+    }
+
     // End UI Handlers
 
     // Begin UI Helpers
@@ -400,6 +416,10 @@ public class PicEditActivity extends LoggedInActivity {
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.invert_button),
                 new InvertEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed, colorPalette).execute();
+        new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.outline_button),
+                new OutlineEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
     }
 

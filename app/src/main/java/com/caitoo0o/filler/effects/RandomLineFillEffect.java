@@ -2,7 +2,7 @@ package com.caitoo0o.filler.effects;
 
 import android.graphics.Bitmap;
 
-import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
+import com.caitoo0o.filler.effecthelpers.ColorHelper;
 import com.caitoo0o.filler.effecthelpers.EffectTypes;
 
 import java.util.ArrayList;
@@ -13,10 +13,6 @@ import java.util.Random;
  */
 
 public class RandomLineFillEffect implements BitmapEffect {
-
-    public EffectTypes getEffectType() {
-        return EffectTypes.RANDOM_LINE_FILL;
-    }
 
     public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         (new ThresholdEffect()).applyEffect(bm, ctrl, randomSeed, colorPalette, rotationAngle);
@@ -29,14 +25,14 @@ public class RandomLineFillEffect implements BitmapEffect {
         Random r = new Random(randomSeed);
         for (int y = 0; y < bm.getHeight(); y++) {
             for (int x = 0; x < bm.getWidth(); x++) {
-                int color = BitmapWrapper.getPixelColor(bm, x, y);
+                int color = ColorHelper.getPixelColor(bm, x, y);
                 if (color == 0xffffff && prevPixelColor == 0x000000) {
-                    currColor = BitmapWrapper.getNextColor(r, colorPalette);
+                    currColor = ColorHelper.getNextColor(r, colorPalette);
                     prevPixelColor = color;
-                    BitmapWrapper.setPixelColor(bm, x, y, currColor);
+                    ColorHelper.setPixelColor(bm, x, y, currColor);
                 } else if (color == 0xffffff && prevPixelColor == 0xffffff) {
                     prevPixelColor = color;
-                    BitmapWrapper.setPixelColor(bm, x, y, currColor);
+                    ColorHelper.setPixelColor(bm, x, y, currColor);
                 } else if (color == 0x000000) {
                     prevPixelColor = color;
                 } else {

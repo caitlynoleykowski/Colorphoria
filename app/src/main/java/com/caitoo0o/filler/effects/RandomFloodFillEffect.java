@@ -2,7 +2,7 @@ package com.caitoo0o.filler.effects;
 
 import android.graphics.Bitmap;
 
-import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
+import com.caitoo0o.filler.effecthelpers.ColorHelper;
 import com.caitoo0o.filler.effecthelpers.EffectTypes;
 import com.caitoo0o.filler.effecthelpers.PixelNode;
 
@@ -17,10 +17,6 @@ import java.util.Random;
 
 public class RandomFloodFillEffect implements BitmapEffect {
 
-    public EffectTypes getEffectType() {
-        return EffectTypes.RANDOM_FLOOD_FILL;
-    }
-
     public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         (new ThresholdEffect()).applyEffect(bm, ctrl, randomSeed, colorPalette, rotationAngle);
         applyRandomFill(bm, ctrl, randomSeed, colorPalette);
@@ -33,8 +29,8 @@ public class RandomFloodFillEffect implements BitmapEffect {
             for (int j = 0; j < bm.getHeight(); j++) {
                 PixelNode currNode = new PixelNode(i, j);
                 if (!currNode.isPixelNodeProcessed(processed) &&
-                        BitmapWrapper.getPixelColor(bm, currNode.x(), currNode.y()) == 0xffffff) {
-                    int nextColor = BitmapWrapper.getNextColor(r, colorPalette);
+                        ColorHelper.getPixelColor(bm, currNode.x(), currNode.y()) == 0xffffff) {
+                    int nextColor = ColorHelper.getNextColor(r, colorPalette);
                     floodFill(bm, currNode, 0xffffff, nextColor, processed);
                 }
             }
@@ -52,9 +48,9 @@ public class RandomFloodFillEffect implements BitmapEffect {
             // 6.    Remove first element from Q.
             PixelNode n = queue.remove();
             // 7.     If the color of n is equal to target-color:
-            if (BitmapWrapper.getPixelColor(bm, n.x(), n.y()) == targetColor) {
+            if (ColorHelper.getPixelColor(bm, n.x(), n.y()) == targetColor) {
                 // 8.    Set the color of n to replacement-color and mark "n" as processed.
-                BitmapWrapper.setPixelColor(bm, n.x(), n.y(), replacementColor);
+                ColorHelper.setPixelColor(bm, n.x(), n.y(), replacementColor);
                 n.markPixelNodeProcessed(processed);
                 // 9.    Add west node to end of Q if west has not been processed yet.
                 PixelNode west = n.getWest(bm);

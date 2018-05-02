@@ -19,13 +19,13 @@ import java.util.ArrayList;
  * Created by Cait on 9/22/2016.
  */
 public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
-    private WeakReference<PicEditActivity> activityWeakReference;
+    protected WeakReference<PicEditActivity> activityWeakReference;
     protected WeakReference<ImageView> imageViewWeakReference;
-    private WeakReference<BitmapWrapper> bmwWeakReference;
-    private WeakReference<BitmapEffect> effectWeakReference;
-    private final double ctrl;
-    private final int randomSeed;
-    private final ArrayList<Integer> colorPalette;
+    protected WeakReference<BitmapWrapper> bmwWeakReference;
+    protected WeakReference<BitmapEffect> effectWeakReference;
+    protected final double ctrl;
+    protected final int randomSeed;
+    protected final ArrayList<Integer> colorPalette;
 
     public BitmapEffectAsyncTask(PicEditActivity activity, ImageView imageView,
                                  BitmapEffect effect, BitmapWrapper bmw, double ctrl,
@@ -49,14 +49,12 @@ public class BitmapEffectAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     protected Bitmap doInBackground(Integer... params) {
         if (effectWeakReference.get() != null && bmwWeakReference.get() != null) {
             BitmapEffect effect = effectWeakReference.get();
-            if (effect.getEffectType() == EffectTypes.RESET)
-                bmwWeakReference.get().reset(ctrl, randomSeed, colorPalette);
-            else if (effect.getEffectType() == EffectTypes.ROTATE_RIGHT)
-                bmwWeakReference.get().rotateRight(ctrl, randomSeed, colorPalette);
-            else
-                bmwWeakReference.get().applyEffect(effect, ctrl, randomSeed, colorPalette);
+            BitmapWrapper bmW = bmwWeakReference.get();
+            bmwWeakReference.get().applyEffect(effect, ctrl, randomSeed, colorPalette);
+            return bmW.getModifiedBitmap();
+        } else {
+            return null;
         }
-        return bmwWeakReference.get().getModifiedBitmap();
     }
 
     // Once complete, see if ImageView is still around and set bitmap.

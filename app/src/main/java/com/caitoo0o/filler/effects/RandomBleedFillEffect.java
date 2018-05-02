@@ -2,7 +2,7 @@ package com.caitoo0o.filler.effects;
 
 import android.graphics.Bitmap;
 
-import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
+import com.caitoo0o.filler.effecthelpers.ColorHelper;
 import com.caitoo0o.filler.effecthelpers.EffectTypes;
 import com.caitoo0o.filler.effecthelpers.PixelNode;
 
@@ -17,11 +17,6 @@ import java.util.Random;
 
 public class RandomBleedFillEffect implements BitmapEffect {
 
-    public EffectTypes getEffectType() {
-        return EffectTypes.RANDOM_BLEED_FILL;
-    }
-
-
     public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         boolean [][] processed = new boolean[bm.getWidth()][bm.getHeight()];
         Random r = new Random(randomSeed);
@@ -29,8 +24,8 @@ public class RandomBleedFillEffect implements BitmapEffect {
             for (int j = 0; j < bm.getHeight(); j++) {
                 PixelNode currNode = new PixelNode(i, j);
                 if (!currNode.isPixelNodeProcessed(processed)) {
-                    int targetColor = BitmapWrapper.getPixelColor(bm, currNode.x(), currNode.y());
-                    int nextColor = BitmapWrapper.getNextColor(r, colorPalette);
+                    int targetColor = ColorHelper.getPixelColor(bm, currNode.x(), currNode.y());
+                    int nextColor = ColorHelper.getNextColor(r, colorPalette);
                     bleedFill(bm, currNode, targetColor, nextColor, ctrl, processed);
                 }
             }
@@ -49,24 +44,24 @@ public class RandomBleedFillEffect implements BitmapEffect {
             PixelNode n = queue.remove();
             // 7.     If the color of n is not significantly different than the target-color:
             boolean sigChange = false;
-            int pixelCurrColor = BitmapWrapper.getPixelColor(bm, n.x(), n.y());
-            int changeInRed = Math.abs(BitmapWrapper.getRed(pixelCurrColor) - BitmapWrapper.getRed(targetColor));
-            int changeInGreen = Math.abs(BitmapWrapper.getGreen(pixelCurrColor) - BitmapWrapper.getGreen(targetColor));
-            int changeInBlue = Math.abs(BitmapWrapper.getBlue(pixelCurrColor) - BitmapWrapper.getBlue(targetColor));
+            int pixelCurrColor = ColorHelper.getPixelColor(bm, n.x(), n.y());
+            int changeInRed = Math.abs(ColorHelper.getRed(pixelCurrColor) - ColorHelper.getRed(targetColor));
+            int changeInGreen = Math.abs(ColorHelper.getGreen(pixelCurrColor) - ColorHelper.getGreen(targetColor));
+            int changeInBlue = Math.abs(ColorHelper.getBlue(pixelCurrColor) - ColorHelper.getBlue(targetColor));
             int overallChange = changeInRed + changeInGreen + changeInBlue;
-            if (overallChange > (BitmapWrapper.MAX_CUMULATIVE_DELTA_OF_ALL_COLORS * ctrl)) {
+            if (overallChange > (ColorHelper.MAX_CUMULATIVE_DELTA_OF_ALL_COLORS * ctrl)) {
                 sigChange = true;
             }
             if (!sigChange) {
                 // 8.    Set the color of n to adjusted replacement-color and mark "n" as processed.
                 int adjustedReplacementColor;
-                int pixelDarkness = BitmapWrapper.getRed(pixelCurrColor) + BitmapWrapper.getGreen(pixelCurrColor) + BitmapWrapper.getBlue(pixelCurrColor);
-                int darknessInRepColor = BitmapWrapper.getRed(replacementColor) + BitmapWrapper.getGreen(replacementColor) + BitmapWrapper.getBlue(replacementColor);
+                int pixelDarkness = ColorHelper.getRed(pixelCurrColor) + ColorHelper.getGreen(pixelCurrColor) + ColorHelper.getBlue(pixelCurrColor);
+                int darknessInRepColor = ColorHelper.getRed(replacementColor) + ColorHelper.getGreen(replacementColor) + ColorHelper.getBlue(replacementColor);
                 double redRatioInRepColor, greenRatioInRepColor, blueRatioInRepColor;
                 if (darknessInRepColor > 0) {
-                    redRatioInRepColor = (double)BitmapWrapper.getRed(replacementColor) / (double)darknessInRepColor;
-                    greenRatioInRepColor = (double)BitmapWrapper.getGreen(replacementColor) / (double)darknessInRepColor;
-                    blueRatioInRepColor = (double)BitmapWrapper.getBlue(replacementColor) / (double)darknessInRepColor;
+                    redRatioInRepColor = (double) ColorHelper.getRed(replacementColor) / (double)darknessInRepColor;
+                    greenRatioInRepColor = (double) ColorHelper.getGreen(replacementColor) / (double)darknessInRepColor;
+                    blueRatioInRepColor = (double) ColorHelper.getBlue(replacementColor) / (double)darknessInRepColor;
                 } else {
                     redRatioInRepColor = 0;
                     greenRatioInRepColor = 0;
@@ -76,7 +71,7 @@ public class RandomBleedFillEffect implements BitmapEffect {
                 int greenInAdjRepColor = (int) (greenRatioInRepColor * pixelDarkness);
                 int blueInAdjRepColor = (int) (blueRatioInRepColor * pixelDarkness);
                 adjustedReplacementColor = (redInAdjRepColor << 16) + (greenInAdjRepColor << 8) + blueInAdjRepColor;
-                BitmapWrapper.setPixelColor(bm, n.x(), n.y(), adjustedReplacementColor);
+                ColorHelper.setPixelColor(bm, n.x(), n.y(), adjustedReplacementColor);
                 n.markPixelNodeProcessed(processed);
                 // 9.    Add west node to end of Q if west has not been processed yet.
                 PixelNode west = n.getWest(bm);

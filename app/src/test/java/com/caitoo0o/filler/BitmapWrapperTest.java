@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
+import com.caitoo0o.filler.effecthelpers.ColorHelper;
 import com.caitoo0o.filler.effects.RandomBleedFillEffect;
 import com.caitoo0o.filler.effects.RandomFloodFillEffect;
 import com.caitoo0o.filler.effects.RandomLineFillEffect;
@@ -28,7 +29,7 @@ public class BitmapWrapperTest {
     // Override the BitmapWrapper class to expose some of its members/functions for purposes of the tests
     public class BitmapWrapperExposed extends BitmapWrapper {
         public int getMaxPixels() { return MAX_PIXELS; }
-        public int getMaxCumDeltaOfAllColors() { return MAX_CUMULATIVE_DELTA_OF_ALL_COLORS; }
+        public int getMaxCumDeltaOfAllColors() { return ColorHelper.MAX_CUMULATIVE_DELTA_OF_ALL_COLORS; }
 
         // Can't make the functions of this inner class static so this is just used to access getMaxPixels
         public BitmapWrapperExposed() {
@@ -39,12 +40,7 @@ public class BitmapWrapperTest {
         }
 
         @Override
-        protected Bitmap getRotatedSource() {
-            int[] colors = new int[] {
-                    Color.parseColor("#ff0000"), Color.parseColor("#00ff00"), Color.parseColor("#0000ff"),
-                    Color.parseColor("#990000"), Color.parseColor("#009900"), Color.parseColor("#000099")
-            };
-
+        protected Bitmap getRotatedSourceCopy() {
             Bitmap bitmap = Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888);
             shadowOf(bitmap).setMutable(true);
             return bitmap;
@@ -237,9 +233,9 @@ public class BitmapWrapperTest {
 
     private boolean isSignificantChange(int pixelColor1, int pixelColor2, BitmapWrapperExposed bmw, double ctrl) {
         boolean sigChange = false;
-        int changeInRed = Math.abs(bmw.getRed(pixelColor1) - bmw.getRed(pixelColor2));
-        int changeInGreen = Math.abs(bmw.getGreen(pixelColor1) - bmw.getGreen(pixelColor2));
-        int changeInBlue = Math.abs(bmw.getBlue(pixelColor1) - bmw.getBlue(pixelColor2));
+        int changeInRed = Math.abs(ColorHelper.getRed(pixelColor1) - ColorHelper.getRed(pixelColor2));
+        int changeInGreen = Math.abs(ColorHelper.getGreen(pixelColor1) - ColorHelper.getGreen(pixelColor2));
+        int changeInBlue = Math.abs(ColorHelper.getBlue(pixelColor1) - ColorHelper.getBlue(pixelColor2));
         int overallChange = changeInRed + changeInGreen + changeInBlue;
         if (overallChange > (bmw.getMaxCumDeltaOfAllColors() * ctrl)) {
             sigChange = true;

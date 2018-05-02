@@ -190,15 +190,20 @@ public class PicSourceActivity extends LoggedInActivity {
             JSONObject responseJson = new JSONObject(response);
             if (responseJson.has("urls")) {
                 // TODO: Handle this better in case somehow it has "urls" but the array is empty
+
+                // Make error image visibility gone
+                ImageView feedUnavailableImageView = (ImageView) findViewById(R.id.feed_unavailable_image_view);
+                feedUnavailableImageView.setVisibility(View.GONE);
+
                 JSONArray urlArrayJson = responseJson.getJSONArray("urls");
                 for (int i = 0; i < urlArrayJson.length(); i++) {
                     String url = (String) urlArrayJson.get(i);
                     adapter.addItem(url);
                 }
             } else {
-                // TODO: This is weird to download this static image so change this later
-                // TODO: when more time
-                adapter.addItem("https://firebasestorage.googleapis.com/v0/b/filler-ea8ae.appspot.com/o/photos%2F1211826150?alt=media&token=df618132-a2a8-4f51-ad5e-65dd1754e8dd");
+                // Make visible the error image
+                ImageView feedUnavailableImageView = (ImageView) findViewById(R.id.feed_unavailable_image_view);
+                feedUnavailableImageView.setVisibility(View.VISIBLE);
             }
             adapter.notifyDataSetChanged(); // Make list view pick up changes
         } catch (JSONException e) {

@@ -105,6 +105,17 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/button_effect"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginRight="@dimen/small_margin"
+                    android:padding="@dimen/image_button_border"
+                    android:scaleType="centerCrop"
+                    android:clickable="false" />
+
+                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                    android:id="@+id/outline_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/button_effect"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:padding="@dimen/image_button_border"
                     android:scaleType="centerCrop"
                     android:clickable="false" />

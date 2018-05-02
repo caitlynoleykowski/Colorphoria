@@ -17,11 +17,14 @@ public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
 
     WeakReference<Bitmap> sourceBitmapWeakReference;
 
+    BitmapEffect effect;
+
     public BitmapEffectPreviewAsyncTask(PicEditActivity activity, ImageView imageView,
                                         BitmapEffect effect, Bitmap sourceBitmap,
                                         double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
         super(activity, imageView, effect, null, ctrl, randomSeed, colorPalette);
         sourceBitmapWeakReference = new WeakReference<Bitmap>(sourceBitmap);
+        this.effect = effect;
     }
 
     // Create the thumbnail bitmap and use that to applyEffect the effect to instead of the large bitmap
@@ -44,10 +47,8 @@ public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
                     scaleFactor = (double) 100 / (double) sourceBitmap.getWidth();
                     imgThumbnail = ThumbnailUtils.extractThumbnail(sourceBitmap, 100, (int) (sourceBitmap.getHeight() * scaleFactor));
                 }
-                BitmapWrapper thumbnailBmw = new BitmapWrapper();
-                thumbnailBmw.setSource(imgThumbnail);
-                super.setBmwWeakReference(thumbnailBmw);
-                return super.doInBackground();
+                effect.applyEffect(imgThumbnail, ctrl, randomSeed, colorPalette, 0);
+                return imgThumbnail;
             } else {
                 return null;
             }
@@ -60,6 +61,6 @@ public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
     protected void onPostExecute(Bitmap bitmap) {
         // Cut the preview down to the final square thumbnail
         Bitmap imgThumbnail = ThumbnailUtils.extractThumbnail(bitmap, 100, 100);
-        super.onPostExecute(imgThumbnail);
+        super.onPostExecute(bitmap);
     }
 }

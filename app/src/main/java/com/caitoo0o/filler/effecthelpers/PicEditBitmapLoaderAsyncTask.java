@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.caitoo0o.filler.activities.loggedinactivities.PicEditActivity;
 import com.caitoo0o.filler.effects.InvertEffect;
+import com.caitoo0o.filler.effects.OutlineEffect;
 import com.caitoo0o.filler.effects.RandomBleedFillEffect;
 import com.caitoo0o.filler.effects.RandomFloodFillEffect;
 import com.caitoo0o.filler.effects.RandomLineFillEffect;
@@ -33,13 +34,14 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
     private final WeakReference<ImageButton> lineImgBtnWeakReference;
     private final WeakReference<ImageButton> floodImgBtnWeakReference;
     private final WeakReference<ImageButton> invertImgBtnWeakReference;
+    private final WeakReference<ImageButton> outlineImgBtnWeakReference;
     private final double ctrl;
     private final int randomSeed;
 
     public PicEditBitmapLoaderAsyncTask(PicEditActivity activity, Context context, ImageView imageView, Uri uri, BitmapWrapper bmw,
                                         ImageButton bleedImageBtn, ImageButton thresholdImageBtn,
                                         ImageButton lineImageBtn, ImageButton floodImageBtn,
-                                        ImageButton invertImageBtn, double ctrl,
+                                        ImageButton invertImageBtn, ImageButton outlineImageBtn, double ctrl,
                                         int randomSeed) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
         activityWeakReference = new WeakReference<PicEditActivity>(activity);
@@ -52,6 +54,7 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
         lineImgBtnWeakReference = new WeakReference<ImageButton>(lineImageBtn);
         floodImgBtnWeakReference = new WeakReference<ImageButton>(floodImageBtn);
         invertImgBtnWeakReference = new WeakReference<ImageButton>(invertImageBtn);
+        outlineImgBtnWeakReference = new WeakReference<ImageButton>(outlineImageBtn);
         this.ctrl = ctrl;
         this.randomSeed = randomSeed;
     }
@@ -135,6 +138,11 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
             if (invertImgBtnWeakReference != null && invertImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         invertImgBtnWeakReference.get(), new InvertEffect(),
+                        bitmap, ctrl, randomSeed, null).execute();
+            }
+            if (outlineImgBtnWeakReference != null && outlineImgBtnWeakReference.get() != null) {
+                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
+                        outlineImgBtnWeakReference.get(), new OutlineEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
         }

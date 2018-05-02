@@ -11,6 +11,5 @@ import java.util.ArrayList;
  */
 
 public interface BitmapEffect {
-    EffectTypes getEffectType();
     void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle);
 }
