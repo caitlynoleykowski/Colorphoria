@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -13,13 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.caitoo0o.filler.R;
 import com.caitoo0o.filler.activities.BaseFillerActivity;
-import com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity;
+import com.caitoo0o.filler.activities.loggedinactivities.ImageFeedActivity;
 import com.caitoo0o.filler.backgroundtasks.RestHelper;
 import com.caitoo0o.filler.utils.Utils;
 import com.google.android.gms.auth.api.Auth;
@@ -62,7 +59,7 @@ public class LoginActivity extends BaseFillerActivity implements
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, PicSourceActivity.class));
+            startActivity(new Intent(LoginActivity.this, ImageFeedActivity.class));
             finish();
         }
 
@@ -155,7 +152,7 @@ public class LoginActivity extends BaseFillerActivity implements
                                         false);
                             }
                         } else {
-                            Intent intent = new Intent(LoginActivity.this, PicSourceActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, ImageFeedActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -271,7 +268,7 @@ public class LoginActivity extends BaseFillerActivity implements
                                         if (responseJson.has("recorded")) {
                                             boolean recorded = responseJson.getBoolean("recorded");
                                             if (recorded) {
-                                                startActivity(new Intent(LoginActivity.this, PicSourceActivity.class));
+                                                startActivity(new Intent(LoginActivity.this, ImageFeedActivity.class));
                                             } else {
                                                 Intent birthdayActivityIntent = new Intent(LoginActivity.this, BirthdayActivity.class);
                                                 birthdayActivityIntent.putExtra(BirthdayActivity.STARTED_FROM_SIGNUP, false);

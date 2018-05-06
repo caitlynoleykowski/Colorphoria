@@ -207,7 +207,7 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
     }
 
     private void startPicSourceActivity() {
-        Intent intent = new Intent(this, PicSourceActivity.class);
+        Intent intent = new Intent(this, ImageFeedActivity.class);
         startActivity(intent);
     }
 

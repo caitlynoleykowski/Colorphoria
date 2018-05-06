@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity"
+    tools:context="com.caitoo0o.filler.activities.loggedinactivities.ImageFeedActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
@@ -14,14 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <com.caitoo0o.filler.reusableuserinterface.ProportionalImageView
-            android:id="@+id/feed_unavailable_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_feed_unavailable"
-            android:visibility="gone"
-            />
 
         <LinearLayout
             android:layout_gravity="center"

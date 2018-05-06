@@ -357,15 +357,15 @@ public class DrawActivity extends LoggedInActivity {
         if (startBrowse) {
             intent = new Intent(this, BrowseActivity.class);
         } else if (startCamera) {
-            intent = new Intent(this, PicSourceActivity.class);
-            intent.putExtra(PicSourceActivity.START_CAMERA, true);
+            intent = new Intent(this, ImageFeedActivity.class);
+            intent.putExtra(ImageFeedActivity.START_CAMERA, true);
         } else {
-            intent = new Intent(this, PicSourceActivity.class);
+            intent = new Intent(this, ImageFeedActivity.class);
         }
         if (drawView.isEdited()) {
             File imageFile = saveDrawing();
             // Load intent with uri
-            intent.putExtra(PicSourceActivity.IMAGE_URI_STATE_KEY, Uri.fromFile(imageFile));
+            intent.putExtra(ImageFeedActivity.IMAGE_URI_STATE_KEY, Uri.fromFile(imageFile));
         }
         startActivity(intent);
     }
@@ -375,10 +375,10 @@ public class DrawActivity extends LoggedInActivity {
         if (startBrowse) {
             intent = new Intent(this, BrowseActivity.class);
         } else if (startCamera) {
-            intent = new Intent(this, PicSourceActivity.class);
-            intent.putExtra(PicSourceActivity.START_CAMERA, true);
+            intent = new Intent(this, ImageFeedActivity.class);
+            intent.putExtra(ImageFeedActivity.START_CAMERA, true);
         } else {
-            intent = new Intent(this, PicSourceActivity.class);
+            intent = new Intent(this, ImageFeedActivity.class);
         }
         startActivity(intent);
     }

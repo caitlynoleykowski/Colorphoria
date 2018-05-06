@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +25,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.caitoo0o.filler.effecthelpers.BitmapEffectAsyncTask;
 import com.caitoo0o.filler.effecthelpers.BitmapEffectPreviewAsyncTask;
-import com.caitoo0o.filler.effecthelpers.EffectTypes;
 import com.caitoo0o.filler.effecthelpers.PicEditBitmapLoaderAsyncTask;
 import com.caitoo0o.filler.effecthelpers.BitmapWrapper;
 import com.caitoo0o.filler.R;
@@ -431,8 +428,8 @@ public class PicEditActivity extends LoggedInActivity {
     }
 
     private void goToPicSourceActivity(Uri uri) {
-        Intent intent = new Intent(this, PicSourceActivity.class);
-        intent.putExtra(PicSourceActivity.IMAGE_URI_STATE_KEY, uri);
+        Intent intent = new Intent(this, ImageFeedActivity.class);
+        intent.putExtra(ImageFeedActivity.IMAGE_URI_STATE_KEY, uri);
         startActivity(intent);
             }
 

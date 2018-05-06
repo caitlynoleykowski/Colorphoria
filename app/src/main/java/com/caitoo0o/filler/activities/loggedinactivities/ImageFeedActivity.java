@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,9 +36,9 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 
-public class PicSourceActivity extends LoggedInActivity {
+public class ImageFeedActivity extends LoggedInActivity {
 
-    private static final String TAG = PicSourceActivity.class.getName();
+    private static final String TAG = ImageFeedActivity.class.getName();
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_GET = 0;
@@ -123,18 +122,18 @@ public class PicSourceActivity extends LoggedInActivity {
 //                    JSONObject responseJson = new JSONObject(response);
 //                    if (responseJson.has("email")) {
 //                        String message = responseJson.getString("email");
-//                        Utils.showCustomToast(PicSourceActivity.this, "User's email:" + message);
+//                        Utils.showCustomToast(ImageFeedActivity.this, "User's email:" + message);
 //                    } else {
-//                        Utils.showCustomToast(PicSourceActivity.this, "Error: json does not contain email");
+//                        Utils.showCustomToast(ImageFeedActivity.this, "Error: json does not contain email");
 //                    }
 //                } catch (Exception e) {
-//                    Utils.showCustomToast(PicSourceActivity.this, "Error: " + e.getMessage());
+//                    Utils.showCustomToast(ImageFeedActivity.this, "Error: " + e.getMessage());
 //                }
 //            }
 //
 //            @Override
 //            public void onFailure(String error) {
-//                Utils.showCustomToast(PicSourceActivity.this, "FAILURE: " + error);
+//                Utils.showCustomToast(ImageFeedActivity.this, "FAILURE: " + error);
 //            }
 //        });
     }
@@ -172,7 +171,7 @@ public class PicSourceActivity extends LoggedInActivity {
                 public void onFailure(String error) {
                     refreshingFeed = false;
                     progressBar.setVisibility(View.GONE);
-                    Utils.showCustomToast(PicSourceActivity.this, getString(R.string.download_failure));
+                    Utils.showCustomToast(ImageFeedActivity.this, getString(R.string.download_failure));
                     // TODO: Figure out why in the world networkResponse is null and come back to this
                     // TODO: so that we don't have to just loadFeed as if there's no images for today
                     loadFeed("{}");
@@ -191,19 +190,11 @@ public class PicSourceActivity extends LoggedInActivity {
             if (responseJson.has("urls")) {
                 // TODO: Handle this better in case somehow it has "urls" but the array is empty
 
-                // Make error image visibility gone
-                ImageView feedUnavailableImageView = (ImageView) findViewById(R.id.feed_unavailable_image_view);
-                feedUnavailableImageView.setVisibility(View.GONE);
-
                 JSONArray urlArrayJson = responseJson.getJSONArray("urls");
                 for (int i = 0; i < urlArrayJson.length(); i++) {
                     String url = (String) urlArrayJson.get(i);
                     adapter.addItem(url);
                 }
-            } else {
-                // Make visible the error image
-                ImageView feedUnavailableImageView = (ImageView) findViewById(R.id.feed_unavailable_image_view);
-                feedUnavailableImageView.setVisibility(View.VISIBLE);
             }
             adapter.notifyDataSetChanged(); // Make list view pick up changes
         } catch (JSONException e) {
@@ -260,7 +251,7 @@ public class PicSourceActivity extends LoggedInActivity {
                 }
             } else {
                 Log.e(TAG, "data or data.getData from image picker intent is null.");
-                Utils.showCustomToast(PicSourceActivity.this, "No image selection found.");
+                Utils.showCustomToast(ImageFeedActivity.this, "No image selection found.");
             }
         }
         else if (requestCode == REQUEST_IMAGE_CAPTURE) {
@@ -403,7 +394,13 @@ public class PicSourceActivity extends LoggedInActivity {
         }
 
         public int getCount() {
-            return imageUrlList.size();
+            // Always return at least 1 b/c in order to show the feed unavailable image
+            // when the list is empty
+            if (imageUrlList.size() == 0) {
+                return 1;
+            } else {
+                return imageUrlList.size();
+            }
         }
 
         public Object getItem(int position) {
@@ -428,14 +425,20 @@ public class PicSourceActivity extends LoggedInActivity {
                 holder = (ImageAdapter.ViewHolder) convertView.getTag();
             }
 
-            ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.image_row_progress_bar);
-            progressBar.setVisibility(View.VISIBLE);
+            if (imageUrlList.size() != 0) {
+                ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.image_row_progress_bar);
+                progressBar.setVisibility(View.VISIBLE);
 
-            holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
-            if (position < imageUrlList.size()) {
-                holder.picturesView.setImageDrawable(getResources().getDrawable(R.drawable.bg_image_placeholder));
-                // TODO: Is is possible this will wind up with pictures out of order if one async task finishes later than one that started later?
-                new GetImageAsyncTask(PicSourceActivity.this, holder.picturesView, progressBar, imageUrlList.get(position)).execute();
+                holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
+                if (position < imageUrlList.size()) {
+                    holder.picturesView.setImageDrawable(getResources().getDrawable(R.drawable.bg_image_placeholder));
+                    // This will wind up with pictures out of order if one async task finishes later than one that started later
+                    // But it works well enough and its unlikely that the scenario will happen often
+                    new GetImageAsyncTask(ImageFeedActivity.this, holder.picturesView, progressBar, imageUrlList.get(position)).execute();
+                }
+            } else {
+                holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
+                holder.picturesView.setImageDrawable(getResources().getDrawable(R.drawable.img_feed_unavailable));
             }
 
             return convertView;

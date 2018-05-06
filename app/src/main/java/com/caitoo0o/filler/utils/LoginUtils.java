@@ -2,13 +2,11 @@ package com.caitoo0o.filler.utils;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 
 import com.caitoo0o.filler.R;
-import com.caitoo0o.filler.activities.loggedinactivities.PicSourceActivity;
+import com.caitoo0o.filler.activities.loggedinactivities.ImageFeedActivity;
 import com.caitoo0o.filler.activities.loggedoutactivites.LoginActivity;
-import com.caitoo0o.filler.activities.loggedoutactivites.SignupActivity;
 import com.caitoo0o.filler.backgroundtasks.RestHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -57,7 +55,7 @@ public class LoginUtils {
                     public void onPositiveButton(Dialog confirmDialog) {
                         // Close the dialog and go to login screen
                         confirmDialog.dismiss();
-                        activity.startActivity(new Intent(activity, PicSourceActivity.class));
+                        activity.startActivity(new Intent(activity, ImageFeedActivity.class));
                     }
                 },
                 false);

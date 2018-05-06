@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- <activity android:name=".activities.loggedinactivities.PicSourceActivity"> -->
+        <!-- <activity android:name=".activities.loggedinactivitImageFeedActivityvity"> -->
         <!-- <intent-filter> -->
         <!-- <action android:name="android.intent.action.MAIN" /> -->
 
@@ -35,7 +35,7 @@
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <activity android:name=".activities.loggedinactivities.PicSourceActivity" />
+        <activity android:name=".activities.loggedinactivities.ImageFeedActivity" />
         <!-- <activity android:name=".activities.loggedoutactivites.LoginActivity" /> -->
         <activity android:name=".activities.loggedinactivities.PicEditActivity"
             android:label="@string/pic_edit_activity_title"/>

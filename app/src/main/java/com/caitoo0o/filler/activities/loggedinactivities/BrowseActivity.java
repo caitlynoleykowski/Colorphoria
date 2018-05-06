@@ -284,14 +284,14 @@ public class BrowseActivity extends LoggedInActivity {
     }
 
     private void startCameraActivity(Uri uri) {
-        Intent intent = new Intent(this, PicSourceActivity.class);
+        Intent intent = new Intent(this, ImageFeedActivity.class);
         intent.putExtra(DrawActivity.SOURCE_URI, uri);
-        intent.putExtra(PicSourceActivity.START_CAMERA, true);
+        intent.putExtra(ImageFeedActivity.START_CAMERA, true);
         startActivity(intent);
     }
 
     private void startPicSourceActivity(Uri uri) {
-        Intent intent = new Intent(this, PicSourceActivity.class);
+        Intent intent = new Intent(this, ImageFeedActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
     }
