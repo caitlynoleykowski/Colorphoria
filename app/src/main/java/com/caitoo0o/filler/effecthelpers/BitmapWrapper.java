@@ -100,18 +100,21 @@ public class BitmapWrapper {
             currRotationAngle = 0;
         }
 
-        Bitmap temp = getRotatedSourceCopy();
+        Bitmap temp ;
 
         int rotationAngle = 0;
         // Special handling for rotate right
         if (effect instanceof RotateEffect) {
+            temp = getModifiedBitmap();
+
             rotationAngle = ROTATION_ANGLE;
             // calculate the net rotation angle
             currRotationAngle += rotationAngle;
             currRotationAngle %= 360;
+        } else {
+            temp = getRotatedSourceCopy();
         }
 
-        effect.applyEffect(temp, ctrl, randomSeed, colorPalette, rotationAngle);
-        mod = temp;
+        mod = effect.applyEffect(temp, ctrl, randomSeed, colorPalette, rotationAngle);
     }
 }

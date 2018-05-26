@@ -160,6 +160,7 @@ public class ImageFeedActivity extends LoggedInActivity {
     private void getMyImages() {
         if (!refreshingFeed) {
             progressBar.setVisibility(View.VISIBLE);
+            adapter.setDoneLoading(false);
             refreshingFeed = true;
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -171,7 +172,6 @@ public class ImageFeedActivity extends LoggedInActivity {
                 public void onFailure(String error) {
                     refreshingFeed = false;
                     progressBar.setVisibility(View.GONE);
-                    Utils.showCustomToast(ImageFeedActivity.this, getString(R.string.download_failure));
                     // TODO: Figure out why in the world networkResponse is null and come back to this
                     // TODO: so that we don't have to just loadFeed as if there's no images for today
                     loadFeed("{}");
@@ -184,8 +184,9 @@ public class ImageFeedActivity extends LoggedInActivity {
     private void loadFeed(String response) {
         Log.i(this.getClass().getName(), response);
 
+        adapter.setDoneLoading(true);
+        adapter.clear(); // Remove all images (image urls) from the adapter
         try {
-            adapter.clear(); // Remove all images (image urls) from the adapter
             JSONObject responseJson = new JSONObject(response);
             if (responseJson.has("urls")) {
                 // TODO: Handle this better in case somehow it has "urls" but the array is empty
@@ -196,11 +197,11 @@ public class ImageFeedActivity extends LoggedInActivity {
                     adapter.addItem(url);
                 }
             }
-            adapter.notifyDataSetChanged(); // Make list view pick up changes
         } catch (JSONException e) {
             // TODO: Handle this
             Log.i(this.getClass().getName(), "Error parsing json.", e);
         }
+        adapter.notifyDataSetChanged(); // Make list view pick up changes
         refreshingFeed = false;
         progressBar.setVisibility(View.GONE);
     }
@@ -379,10 +380,19 @@ public class ImageFeedActivity extends LoggedInActivity {
 
         private Context context;
         private ArrayList<String> imageUrlList;
+        private boolean doneLoading = false;
 
         public ImageAdapter(Context context) {
             this.context = context;
             this.imageUrlList = new ArrayList<String>();
+        }
+
+        public boolean isDoneLoading() {
+            return doneLoading;
+        }
+
+        public void setDoneLoading(boolean doneLoading) {
+            this.doneLoading = doneLoading;
         }
 
         public void addItem(String url) {
@@ -394,9 +404,9 @@ public class ImageFeedActivity extends LoggedInActivity {
         }
 
         public int getCount() {
-            // Always return at least 1 b/c in order to show the feed unavailable image
-            // when the list is empty
-            if (imageUrlList.size() == 0) {
+            // If doneLoading and the list is empty,
+            // return 1 in order to show the feed unavailable image
+            if (imageUrlList.size() == 0 && doneLoading) {
                 return 1;
             } else {
                 return imageUrlList.size();

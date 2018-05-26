@@ -90,4 +90,6 @@
     <string name="image_feed_activity_title">ホーム</string>
     <string name="upload_activity_title">シェア</string>
     <string name="upload">シェア</string>
+    <string name="gcp_project_id">filler-ea8ae</string>
+    <string name="gcp_api_key">AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE</string>
 </resources>

@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class OutlineEffect implements BitmapEffect {
 
-    public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
+    public Bitmap applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         boolean [][] processed = new boolean[bm.getWidth()][bm.getHeight()];
         Random r = new Random(randomSeed);
         for (int i = 0; i < bm.getWidth(); i++) {
@@ -30,6 +30,7 @@ public class OutlineEffect implements BitmapEffect {
                 }
             }
         }
+        return bm;
     }
 
     // Flood-fill (node, target-color, replacement-color):

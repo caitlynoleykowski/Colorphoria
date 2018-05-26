@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class RotateEffect implements BitmapEffect {
 
-    public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
+    public Bitmap applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(rotationAngle);
-        bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+        return Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
     }
 }

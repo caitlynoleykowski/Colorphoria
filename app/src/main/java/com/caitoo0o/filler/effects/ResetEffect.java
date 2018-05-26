@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ResetEffect implements BitmapEffect {
 
-    public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
-        bm = bm.copy(bm.getConfig(), true);
+    public Bitmap applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
+        return bm; // Yeah this is weird but it's because the rotation angle is in the BitmapWrapper
     }
 }

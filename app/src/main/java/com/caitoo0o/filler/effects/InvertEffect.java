@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class InvertEffect implements BitmapEffect {
 
-    public void applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
+    public Bitmap applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
         for (int y = 0; y < bm.getHeight(); y++) {
             for (int x = 0; x < bm.getWidth(); x++) {
                 int color = ColorHelper.getPixelColor(bm, x, y);
@@ -34,5 +34,6 @@ public class InvertEffect implements BitmapEffect {
                 }
             }
         }
+        return bm;
     }
 }
