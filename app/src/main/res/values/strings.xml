@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name" translatable="false">Filler</string>
+    <string name="app_name" translatable="false">Colorphoria</string>
+
+    <string name="admob_app_id" translatable="false">ca-app-pub-7546412369288210~5401783923</string>
+    <string name="admob_ad_unit_id_test_banner" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_ad_unit_id_test_interstitial_video" translatable="false">ca-app-pub-3940256099942544/8691691433</string>
 
     <!-- General use begin -->
     <string name="ok" translatable="false">@android:string/ok</string>
@@ -12,7 +16,7 @@
     <!-- Used for terms activity begin -->
     <string name="enter_name">What is your full name?</string>
     <string name="name_placeholder">Name</string>
-    <string name="terms_info">By pressing ACCEPT below, you agree to the \n<a href="https://www.websitepolicies.com/policies/view/S3KMJ1">Terms and Conditions</a> and <a href="https://www.iubenda.com/privacy-policy/8156204">Privacy Policy</a></string>
+    <string name="terms_info">By pressing ACCEPT below, you agree to the \n<a href="https://www.websitepolicies.com/policies/view/Qe1SlB">Terms and Conditions</a> and <a href="https://www.websitepolicies.com/policies/view/5Rij1h">Privacy Policy</a></string>
     <string name="terms_continue">Accept</string>
     <string name="terms_error_enter_name">You\'ll have to enter your full name to accept the terms and conditions and privacy policy</string>
     <!-- Used for terms activity end -->
@@ -22,7 +26,7 @@
     <string name="birthday_placeholder">01/01/2000</string>
     <string name="birthday_label">Birthday</string>
     <string name="birthday_continue">Continue</string>
-    <string name="birthday_error_not_eligible">Sorry, you\'re not eligible to use Filler :/</string>
+    <string name="birthday_error_not_eligible">Sorry, you\'re not eligible to use Colorphoria :/</string>
     <!-- Used for birthday activity end -->
 
     <!-- Used for DrawingActivity begin -->
@@ -101,8 +105,8 @@
     <!-- Used for AccountActivity end -->
 
     <!-- Used for PicSourceActivity begin -->
-    <string name="permission_camera_explanation">Filler requires camera permission to take pictures. Would you like to continue?</string>
-    <string name="permission_write_external_storage_explanation">Filler requires storage permission to open and save pictures. Would you like to continue?</string>
+    <string name="permission_camera_explanation">Colorphoria requires camera permission to take pictures. Would you like to continue?</string>
+    <string name="permission_write_external_storage_explanation">Colorphoria requires storage permission to open and save pictures. Would you like to continue?</string>
     <!-- Used for PicSourceActivity end -->
 
     <!-- Used for PicEditActivity begin -->
@@ -123,7 +127,7 @@
     <string name="browse_activity_everywhere">Everywhere</string>
     <string name="choose_image_destination">What would you like to do?</string>
     <string name="draw">Draw</string>
-    <string name="fill">Fill</string>
+    <string name="apply_effects">Apply Effects</string>
     <!-- Used for BrowseActivity end -->
 
     <!-- Used for non-existent camera activitiy begin -->
@@ -150,7 +154,7 @@
     <string name="draw_menu_draw">Draw</string>
     <string name="account_activity_title">My Account</string>
 
-    <string name="gcp_project_id">filler-ea8ae</string>
-    <string name="gcp_api_key">AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE</string>
+    <string name="gcp_project_id">colorphoria-app</string>
+    <string name="gcp_api_key">AIzaSyCP8m-QhcLveDg2e6KjXaoxEWhk8bFszWg</string>
 
 </resources>

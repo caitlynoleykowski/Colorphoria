@@ -1,43 +1,27 @@
 {
   "project_info": {
-    "project_number": "606454574291",
-    "firebase_url": "https://filler-ea8ae.firebaseio.com",
-    "project_id": "filler-ea8ae",
-    "storage_bucket": "filler-ea8ae.appspot.com"
+    "project_number": "890138283766",
+    "firebase_url": "https://colorphoria-app.firebaseio.com",
+    "project_id": "colorphoria-app",
+    "storage_bucket": "colorphoria-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:606454574291:android:fccac4bf5da0802d",
+        "mobilesdk_app_id": "1:890138283766:android:a998662759b0309d",
         "android_client_info": {
-          "package_name": "com.caitoo0o.filler"
+          "package_name": "com.oo0o0o.colorphoria"
         }
       },
       "oauth_client": [
         {
-          "client_id": "606454574291-jmudp2o9ukkd350t3pa59gr16kpdq3fj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.caitoo0o.filler",
-            "certificate_hash": "dac137dea2364c476ceadebf78ee45c6fd7f321e"
-          }
-        },
-        {
-          "client_id": "606454574291-oe72kqfh75msg7b9i9u4a88fh8lv2ada.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.caitoo0o.filler",
-            "certificate_hash": "1991c10b1c88f386ffa343e227baa939091df9fc"
-          }
-        },
-        {
-          "client_id": "606454574291-20ci4kls1gleh1gi1o5sh3272d4lip9l.apps.googleusercontent.com",
+          "client_id": "890138283766-k5f28l1c6jl70m0k9jmj1f3gr474jq8g.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE"
+          "current_key": "AIzaSyCP8m-QhcLveDg2e6KjXaoxEWhk8bFszWg"
         }
       ],
       "services": {
@@ -45,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "606454574291-20ci4kls1gleh1gi1o5sh3272d4lip9l.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

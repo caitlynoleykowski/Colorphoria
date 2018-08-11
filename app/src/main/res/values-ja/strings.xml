@@ -71,7 +71,7 @@
     <string name="browse_activity_title">ギャラリー</string>
     <string name="choose_image_destination">あなたは何をしたいですか？</string>
     <string name="draw">ドロー</string>
-    <string name="fill">塗りつぶす</string>
+    <string name="apply_effects">エフェクトを適用する</string>
     <string name="download_success">ダウンロードが完了しました</string>
     <string name="download_failure">フィードをリフレッシュできません</string>
     <string name="upload_prompt">画像をアップロードする</string>
@@ -90,6 +90,6 @@
     <string name="image_feed_activity_title">ホーム</string>
     <string name="upload_activity_title">シェア</string>
     <string name="upload">シェア</string>
-    <string name="gcp_project_id">filler-ea8ae</string>
+    <string name="gcp_project_id">colorphoria-ea8ae</string>
     <string name="gcp_api_key">AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE</string>
 </resources>

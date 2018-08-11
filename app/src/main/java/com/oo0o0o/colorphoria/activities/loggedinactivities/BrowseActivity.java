@@ -1,0 +1,426 @@
+package com.oo0o0o.colorphoria.activities.loggedinactivities;
+
+import android.Manifest;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TabHost;
+import android.widget.TextView;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.oo0o0o.colorphoria.backgroundtasks.GetBrowseThumbnailImageAsyncTask;
+import com.oo0o0o.colorphoria.R;
+import com.oo0o0o.colorphoria.reusableuserinterface.PositionImageView;
+import com.oo0o0o.colorphoria.utils.Utils;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+public class BrowseActivity extends LoggedInActivity {
+
+    private static final String TAG = BrowseActivity.class.getName();
+
+    private ArrayList<File> allcolorphoriaImages;
+    private ArrayList<File> allOtherImages;
+
+    private static final int MAX_THUMBNAIL_PIXELS = 50000;
+
+    public static final String IMAGE_URI_STATE_KEY = "IMAGE_URI_STATE_KEY";
+
+    public static final int REQUEST_PERMISSIONS_CALLBACK_WRITE_EXTERNAL_STORAGE = 2;
+
+    private Uri mImageUri;
+
+    AdView adView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_browse);
+
+        setupTabTitles();
+
+        Utils.setupcolorphoriaRecentAppsBar(this);
+
+        // Set navigation bar UI
+        ((ImageView) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_unselected_24dp);
+        ((ImageView) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_unselected_24dp);
+        ((ImageView) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_unselected_24dp);
+        ((ImageView) findViewById(R.id.galleryButton)).setImageResource(R.drawable.ic_collections_selected_24dp);
+        int defaultTextColor = ((TextView) findViewById(R.id.drawLabel)).getTextColors().getDefaultColor();
+        ((TextView) findViewById(R.id.drawLabel)).setTextColor(defaultTextColor);
+        ((TextView) findViewById(R.id.cameraLabel)).setTextColor(defaultTextColor);
+        ((TextView) findViewById(R.id.homeLabel)).setTextColor(defaultTextColor);
+        ((TextView) findViewById(R.id.galleryLabel)).setTextColor(ContextCompat.getColor(this, R.color.colorSecondary));
+
+        // Initialize ads (to setup ad banner)
+        AdView adView = findViewById(R.id.adView);
+//        adView.setAdSize(AdSize.SMART_BANNER);
+//        adView.setAdUnitId(getResources().getString(R.string.admob_ad_unit_id_banner_gallery));
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        if (savedInstanceState != null) {
+            mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
+        }
+        else if (getIntent() != null && getIntent().hasExtra(IMAGE_URI_STATE_KEY)) {
+            mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
+        }
+    }
+
+    /** Called when leaving the activity */
+    @Override
+    public void onPause() {
+        if (adView != null) {
+            adView.pause();
+        }
+        super.onPause();
+    }
+    /** Called when returning to the activity */
+    @Override
+    public void onResume() {
+        super.onResume();
+        getFilesStoragePermission();
+        if (adView != null) {
+            adView.resume();
+        }
+    }
+    /** Called before the activity is destroyed */
+    @Override
+    public void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+        super.onDestroy();
+    }
+
+    public void onDraw(View v) {
+        startDrawActivity(mImageUri);
+    }
+
+    public void onCamera(View v) {
+        startCameraActivity(mImageUri);
+    }
+
+    public void onHome(View v) {
+        startPicSourceActivity(mImageUri);
+    }
+
+    public void onBrowse(View v) {
+        // Do nothing
+    }
+
+    private void getFilesStoragePermission() {
+        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                getString(R.string.permission_write_external_storage_explanation),
+                REQUEST_PERMISSIONS_CALLBACK_WRITE_EXTERNAL_STORAGE,
+                new Utils.OnExplanationDeclinedHandler() {
+                    @Override
+                    public void onExplanationDeclined() {
+                        startPicSourceActivity(mImageUri);
+                    }
+                })) {
+            getFiles();
+        }
+    }
+    
+    private void getFiles() {
+        createcolorphoriaImageStorage();
+
+        // Find colorphoria pictures
+        File picturesStorageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        final File albumStorageDir = new File(picturesStorageDir, "colorphoria");
+        allcolorphoriaImages = new ArrayList<File>();
+        FilenameFilter allcolorphoriaImagesFF = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                // If filename is a directory or a picture accept it
+                if (!filename.contains(".") ||
+                        filename.toLowerCase().endsWith(".png") ||
+                        filename.toLowerCase().endsWith(".jpg") ||
+                        filename.toLowerCase(). endsWith(".jpeg")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        listFiles(albumStorageDir, allcolorphoriaImages, allcolorphoriaImagesFF);
+        // Sort images by date ascending
+        Collections.sort(allcolorphoriaImages, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                Long o1lastModified = o1.lastModified();
+                Long o2lastModified = o2.lastModified();
+                return o1lastModified.compareTo(o2lastModified);
+            }
+        });
+
+        // Find all pictures other than those in colorphoria directory
+        final File sdcardDir = Environment.getExternalStorageDirectory();
+        allOtherImages = new ArrayList<File>();
+        FilenameFilter allOtherImagesFF = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                // Don't accept the colorphoria storage directory here because that will be viewed elsewhere
+                if (dir.equals(albumStorageDir)) {
+                    return false;
+                }
+                // If filename is a directory or a picture accept it
+                if (!filename.contains(".") ||
+                        filename.toLowerCase().endsWith(".png") ||
+                        filename.toLowerCase().endsWith(".jpg") ||
+                        filename.toLowerCase(). endsWith(".jpeg")) {
+                    return true;
+                }
+                return false;
+            }
+        };
+        listFiles(sdcardDir, allOtherImages, allOtherImagesFF);
+        // Sort images by date ascending
+        Collections.sort(allOtherImages, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                Long o1lastModified = o1.lastModified();
+                Long o2lastModified = o2.lastModified();
+                return o1lastModified.compareTo(o2lastModified);
+            }
+        });
+
+        GridView colorphoriaImagesGV = (GridView) findViewById(R.id.colorphoria_images_gridview);
+        ImageAdapter adapter = new ImageAdapter(getApplicationContext(), allcolorphoriaImages);
+        colorphoriaImagesGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> adapterView, View v, int pos,
+                                    long arg3) {
+                // dont need but what is it??
+                Object i = adapterView.getItemAtPosition(pos);
+                // Load the image that was clicked into the editor
+                chooseImageDestination(Uri.fromFile(allcolorphoriaImages.get(getIdxFromPos(allcolorphoriaImages, pos))));
+            }
+        });
+        colorphoriaImagesGV.setAdapter(adapter);
+
+        GridView allImagesGV = (GridView) findViewById(R.id.all_images_gridview);
+        ImageAdapter adapter2 = new ImageAdapter(getApplicationContext(), allOtherImages);
+        allImagesGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> adapterView, View v, int pos,
+                                    long arg3) {
+                // Load the image that was clicked into the editor
+                chooseImageDestination(Uri.fromFile(allOtherImages.get(getIdxFromPos(allOtherImages, pos))));
+            }
+        });
+        allImagesGV.setAdapter(adapter2);
+    }
+
+    private void chooseImageDestination(final Uri uri) {
+        Utils.showConfirmDialog(this,
+                getString(R.string.choose_image_destination),
+                getString(R.string.apply_effects),
+                getString(R.string.draw),
+                new Utils.ConfirmDialogHandler() {
+                    public void onNegativeButton(Dialog confirmDialog) {
+                        startDrawActivity(uri);
+                        confirmDialog.dismiss();
+                    }
+                    public void onPositiveButton(Dialog confirmDialog) {
+                        startPicEditActivity(uri);
+                        confirmDialog.dismiss();
+                    }
+                },
+                false);
+    }
+
+    private void setupTabTitles() {
+        TabHost host = (TabHost)findViewById(R.id.tabHost);
+        host.setup();
+
+        //Tab 1
+        TabHost.TabSpec spec = host.newTabSpec(getString(R.string.app_name));
+        spec.setContent(R.id.tab1);
+        spec.setIndicator(getString(R.string.app_name));
+        host.addTab(spec);
+
+        //Tab 2
+        spec = host.newTabSpec(getString(R.string.browse_activity_everywhere));
+        spec.setContent(R.id.tab2);
+        spec.setIndicator(getString(R.string.browse_activity_everywhere));
+        host.addTab(spec);
+    }
+
+    private void createcolorphoriaImageStorage() {
+        if (Utils.isExternalStorageWritable()) {
+            // TODO: Don't really need to do this every time - check if its there first?
+            //File albumStorageDir = getAlbumStorageDir("colorphoriaSaves");
+            File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES);
+            File albumStorageDir = new File(pictureStorageDir, "colorphoria");
+            try {
+                albumStorageDir.mkdir();
+            }
+            catch (Exception e) {
+                Utils.showCustomToast(this, "Failed to create colorphoria directory");
+                Log.e(TAG, "Failed to create colorphoria directory.");
+                e.printStackTrace();
+            }
+        }
+        else {
+            // TODO: move these strings to strings file
+            Utils.showCustomToast(this, "Create colorphoria storage failed. External storage not writeable.");
+            Log.e(TAG, "Create colorphoria storage failed. External storage not writeable.");
+        }
+    }
+
+    private void listFiles(File directory, ArrayList<File> files, FilenameFilter filenameFilter) {
+        // get all the files from a directory
+        File[] fList = directory.listFiles(filenameFilter);
+        for (File file : fList) {
+            if (file.isFile()) {
+                files.add(file);
+            } else if (file.isDirectory()) {
+                listFiles(file, files, filenameFilter);
+            }
+        }
+    }
+
+    // Used to get the index into the allcolorphoriaImages list in order to retrieve the files in order of most recent first
+    public static int getIdxFromPos(ArrayList<File> files, int pos) {
+        return files.size() - pos - 1;
+    }
+
+    private void startPicEditActivity(Uri uri) {
+        Intent intent = new Intent(this, PicEditActivity.class);
+        intent.putExtra(PicEditActivity.SOURCE_URI, uri);
+        startActivity(intent);
+            }
+
+    private void startDrawActivity(Uri uri) {
+        Intent intent = new Intent(this, DrawActivity.class);
+        intent.putExtra(DrawActivity.SOURCE_URI, uri);
+        startActivity(intent);
+    }
+
+    private void startCameraActivity(Uri uri) {
+        Intent intent = new Intent(this, ImageFeedActivity.class);
+        intent.putExtra(DrawActivity.SOURCE_URI, uri);
+        intent.putExtra(ImageFeedActivity.START_CAMERA, true);
+        startActivity(intent);
+    }
+
+    private void startPicSourceActivity(Uri uri) {
+        Intent intent = new Intent(this, ImageFeedActivity.class);
+        intent.putExtra(PicEditActivity.SOURCE_URI, uri);
+        startActivity(intent);
+    }
+
+    // Adapter for Grid View
+    public class ImageAdapter extends BaseAdapter {
+
+        private Context context;
+        private ArrayList<File> files;
+
+        public ImageAdapter(Context context, ArrayList<File> files) {
+            this.context = context;
+            this.files = files;
+        }
+
+        public int getCount() {
+            return files.size();
+        }
+
+        public Object getItem(int position) {
+            return position;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder = new ViewHolder();
+
+            if (convertView == null) {
+                //Converting the Row Layout to be used in Grid View
+                convertView = getLayoutInflater().inflate(R.layout.thumnail_item, parent, false);
+
+                convertView.setTag(holder);
+
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.thumbnail_item_progress_bar);
+            progressBar.setVisibility(View.VISIBLE);
+
+            PositionImageView positionImageView = (PositionImageView) convertView.findViewById(R.id.imageview);
+            positionImageView.setPosition(position);
+            holder.picturesView = positionImageView;
+            holder.picturesView.setImageDrawable(getResources().getDrawable(R.drawable.bg_image_placeholder));
+            // TODO: Is is possible this will wind up with pictures out of order if one async task finishes later than one that started later?
+            // Answer: Yes. totally possible, but generally they finish in order.
+            // And u will see images flashing in the order they finish
+            new GetBrowseThumbnailImageAsyncTask(BrowseActivity.this, holder.picturesView, progressBar, files, position).execute();
+
+            return convertView;
+        }
+        // View Holder pattern used for Smooth Scrolling. As View Holder pattern recycle the findViewById() object.
+        class ViewHolder {
+            public PositionImageView picturesView;
+        }
+    }
+
+    public static double getThumbnailScaleFactor(int bitmapWidth, int bitmapHeight) {
+        int numPixels = bitmapWidth * bitmapHeight;
+        if (numPixels >= MAX_THUMBNAIL_PIXELS) {
+            double scaleFactor = Math.sqrt((double) MAX_THUMBNAIL_PIXELS / (double) numPixels);
+            return scaleFactor;
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_CALLBACK_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted, so continue.
+                    getFiles();
+                } else {
+                    // No permission granted so go back to main page (this page will have no content)
+                    startPicSourceActivity(mImageUri);
+                }
+                return;
+            }
+
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState (Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(IMAGE_URI_STATE_KEY, mImageUri);
+    }
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.caitoo0o.filler">
+    package="com.oo0o0o.colorphoria">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- below is redundant but useful for readabiliity/if we dont need write anymore -->
@@ -19,7 +19,7 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.loggedoutactivites.FillerEolActivity"
+        <activity android:name=".activities.loggedoutactivites.LoginActivity"
             android:theme="@style/LoggedOutTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,11 +27,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity android:name=".activities.loggedoutactivites.LoginActivity" />
-
         <!-- <activity android:name=".activities.loggedinactivitImageFeedActivityvity"> -->
         <!-- <intent-filter> -->
         <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
@@ -63,7 +63,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.caitoo0o.filler.myspecialfileprovider"
+            android:authorities="com.oo0o0o.colorphoria.myspecialfileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

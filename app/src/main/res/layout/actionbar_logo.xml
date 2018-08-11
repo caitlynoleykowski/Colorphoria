@@ -7,10 +7,11 @@
     <!--android:paddingLeft="24dp"> &lt;!&ndash; Adjusts the centering to account for the overflow icon &ndash;&gt;-->
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="24dp"
         android:paddingTop="@dimen/smallest_margin"
         android:paddingBottom="@dimen/smallest_margin"
+        android:paddingLeft="24dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:src="@drawable/logo_72px"/>

@@ -3,105 +3,137 @@
     android:id="@+id/pic_source_buttons_linear_layout"
     android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/navigation_footer_height"
+    android:layout_height="wrap_content"
     android:elevation="@dimen/elevation"
     android:background="@color/colorNavigationFooter"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/navigation_margin_top"
-        android:paddingBottom="@dimen/navigation_margin_bottom"
-        android:background="@drawable/button_selector_small"
-        android:orientation="vertical"
-        android:onClick="onDraw">
-        <ImageView
-            android:id="@+id/drawButton"
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_brush_unselected_24dp" />
-        <TextView
-            android:id="@+id/drawLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textAlignment="center"
-            android:text="@string/draw_activity_title"/>
-    </LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/navigation_footer_height"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/navigation_margin_top"
+            android:paddingBottom="@dimen/navigation_margin_bottom"
+            android:background="@drawable/button_selector_small"
+            android:orientation="vertical"
+            android:onClick="onDraw">
+            <ImageView
+                android:id="@+id/drawButton"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_brush_unselected_24dp" />
+            <TextView
+                android:id="@+id/drawLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:text="@string/draw_activity_title"/>
+        </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/navigation_margin_top"
-        android:paddingBottom="@dimen/navigation_margin_bottom"
-        android:background="@drawable/button_selector_small"
-        android:orientation="vertical"
-        android:onClick="onCamera">
-        <ImageView
-            android:id="@+id/cameraButton"
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_camera_alt_unselected_24dp" />
-        <TextView
-            android:id="@+id/cameraLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textAlignment="center"
-            android:text="@string/camera_activity_title"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/navigation_margin_top"
+            android:paddingBottom="@dimen/navigation_margin_bottom"
+            android:background="@drawable/button_selector_small"
+            android:orientation="vertical"
+            android:onClick="onCamera">
+            <ImageView
+                android:id="@+id/cameraButton"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_camera_alt_unselected_24dp" />
+            <TextView
+                android:id="@+id/cameraLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:text="@string/camera_activity_title"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/navigation_margin_top"
+            android:paddingBottom="@dimen/navigation_margin_bottom"
+            android:background="@drawable/button_selector_small"
+            android:orientation="vertical"
+            android:onClick="onHome">
+            <ImageView
+                android:id="@+id/homeButton"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_home_unselected_24dp" />
+            <TextView
+                android:id="@+id/homeLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:text="@string/image_feed_activity_title"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/navigation_margin_top"
+            android:paddingBottom="@dimen/navigation_margin_bottom"
+            android:background="@drawable/button_selector_small"
+            android:orientation="vertical"
+            android:onClick="onBrowse">
+            <ImageView
+                android:id="@+id/galleryButton"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_collections_unselected_24dp" />
+            <TextView
+                android:id="@+id/galleryLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:text="@string/browse_activity_title"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/navigation_margin_top"
-        android:paddingBottom="@dimen/navigation_margin_bottom"
-        android:background="@drawable/button_selector_small"
-        android:orientation="vertical"
-        android:onClick="onHome">
-        <ImageView
-            android:id="@+id/homeButton"
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_home_unselected_24dp" />
-        <TextView
-            android:id="@+id/homeLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textAlignment="center"
-            android:text="@string/image_feed_activity_title"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/navigation_margin_top"
-        android:paddingBottom="@dimen/navigation_margin_bottom"
-        android:background="@drawable/button_selector_small"
-        android:orientation="vertical"
-        android:onClick="onBrowse">
-        <ImageView
-            android:id="@+id/galleryButton"
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_collections_unselected_24dp" />
-        <TextView
-            android:id="@+id/galleryLabel"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#333333"
+        >
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:text="Loading Banner..."-->
+            <!--/>-->
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:textAlignment="center"
-            android:text="@string/browse_activity_title"/>
-    </LinearLayout>
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/admob_ad_unit_id_banner_navigation_footer">
+        </com.google.android.gms.ads.AdView>
+    </RelativeLayout>
 </LinearLayout>

@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.caitoo0o.filler.activities.loggedinactivities.DrawActivity">
+    tools:context="com.oo0o0o.colorphoria.activities.loggedinactivities.DrawActivity">
 
-    <com.caitoo0o.filler.reusableuserinterface.DrawView
+    <com.oo0o0o.colorphoria.reusableuserinterface.DrawView
         android:id="@+id/drawing"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -28,7 +28,7 @@
         android:background="@color/colorPrimary"
         android:orientation="horizontal" >
 
-            <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+            <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -38,7 +38,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FF000000" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -48,7 +48,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FF888888" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -58,7 +58,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FFFFFFFF" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -68,7 +68,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FFFFCCCC" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -78,7 +78,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FFFF00FF" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -88,7 +88,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FF0000FF" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -98,7 +98,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FF00FFFF" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -108,7 +108,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FF00FF00" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -118,7 +118,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FFFFCC00" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -128,7 +128,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FFFF8800" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"
@@ -138,7 +138,7 @@
                 android:src="@drawable/button_paint_color_bg"
                 android:tag="#FFFF0000" />
 
-        <com.caitoo0o.filler.reusableuserinterface.SmallerSquareImageButton
+        <com.oo0o0o.colorphoria.reusableuserinterface.SmallerSquareImageButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="fill_parent"

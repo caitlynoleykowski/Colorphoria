@@ -40,7 +40,7 @@
                     android:orientation="vertical">
 
                     <GridView
-                        android:id="@+id/filler_images_gridview"
+                        android:id="@+id/colorphoria_images_gridview"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:columnWidth="90dp"
@@ -75,5 +75,5 @@
     <include layout="@layout/navigation_footer"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"/>
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

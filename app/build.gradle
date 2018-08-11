@@ -1,21 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'fillerKey'
-            keyPassword 'therearecl0uds'
-            storeFile file('C:/Users/caitoo0o/Development/Filler/keystores/androidReleaseKey.jks')
-            storePassword 'therearecl0uds'
-        }
-    }
-    compileSdkVersion 27
+    compileSdkVersion 26
     defaultConfig {
-        applicationId "com.caitoo0o.filler"
+        applicationId "com.oo0o0o.colorphoria"
         minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 28
-        versionName "4.0"
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -23,12 +16,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 //            resValue 'string', 'gcp_project_id', 'filler-ea8ae'
 //            resValue 'string', 'gcp_api_key', 'AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE'
+            resValue 'string', 'admob_ad_unit_id_banner_navigation_footer', 'ca-app-pub-7546412369288210/8155530654'
+            resValue 'string', 'admob_ad_unit_id_banner_pic_edit', 'ca-app-pub-7546412369288210/5909475416'
+            resValue 'string', 'admob_ad_unit_id_interstitial_share', 'ca-app-pub-7546412369288210/2816408211'
         }
-//        debug {
-//            debuggable true
+        debug {
+            debuggable true
 //            resValue 'string', 'gcp_project_id', 'filler-ea8ae'
 //            resValue 'string', 'gcp_api_key', 'AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE'
-//        }
+            resValue 'string', 'admob_ad_unit_id_banner_navigation_footer', 'ca-app-pub-3940256099942544/6300978111'
+            resValue 'string', 'admob_ad_unit_id_banner_pic_edit', 'ca-app-pub-3940256099942544/6300978111'
+            resValue 'string', 'admob_ad_unit_id_interstitial_share', 'ca-app-pub-3940256099942544/8691691433'
+        }
 //        staging {
 //            initWith debug
 //            applicationIdSuffix ".debugStaging"
@@ -39,6 +38,8 @@ android {
 }
 
 dependencies {
+    def room_version = "1.1.1"
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     // Network call library
     // Firebase login
@@ -52,6 +53,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:27.1.0'
     compile 'com.android.support:design:27.1.0'
     compile 'com.loopj.android:android-async-http:1.4.9'
+
+    implementation 'com.google.firebase:firebase-ads:12.0.1'
+
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+
     // test dependencies
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:2.4'

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.caitoo0o.filler.activities.loggedinactivities.PicEditActivity" >
+    tools:context="com.oo0o0o.colorphoria.activities.loggedinactivities.PicEditActivity" >
 
     <RelativeLayout
         android:id="@+id/imageAreaLayout"
@@ -34,7 +34,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:orientation="vertical"
@@ -55,7 +55,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
                     android:id="@+id/random_bleed_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -66,7 +66,7 @@
                     android:scaleType="centerCrop"
                     android:clickable="false" />
 
-                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
                     android:id="@+id/threshold_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -77,7 +77,7 @@
                     android:scaleType="centerCrop"
                     android:clickable="false" />
 
-                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
                     android:id="@+id/random_line_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -88,7 +88,7 @@
                     android:scaleType="centerCrop"
                     android:clickable="false" />
 
-                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
                     android:id="@+id/random_flood_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -99,7 +99,7 @@
                     android:scaleType="centerCrop"
                     android:clickable="false" />
 
-                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
                     android:id="@+id/invert_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -110,7 +110,7 @@
                     android:scaleType="centerCrop"
                     android:clickable="false" />
 
-                <com.caitoo0o.filler.reusableuserinterface.SquareImageButton
+                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
                     android:id="@+id/outline_button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -159,5 +159,16 @@
                 android:clickable="false" />
 
         </LinearLayout>
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_gravity="center"
+            android:background="#333333"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="@string/admob_ad_unit_id_banner_pic_edit">
+        </com.google.android.gms.ads.AdView>
     </LinearLayout>
 </LinearLayout>

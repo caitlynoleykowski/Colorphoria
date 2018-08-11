@@ -12,7 +12,7 @@ android:layout_height="match_parent">
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.caitoo0o.filler.activities.loggedoutactivites.BirthdayActivity">
+        tools:context="com.oo0o0o.colorphoria.activities.loggedoutactivites.BirthdayActivity">
 
         <TextView
             android:id="@+id/birthday_prompt_text_view"
@@ -28,7 +28,7 @@ android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.caitoo0o.filler.reusableuserinterface.ConfigurableNumberPicker
+            <com.oo0o0o.colorphoria.reusableuserinterface.ConfigurableNumberPicker
                 android:id="@+id/number_picker_month"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -36,7 +36,7 @@ android:layout_height="match_parent">
                 default_value="1"
                 minimum="1"
                 maximum="12"/>
-            <com.caitoo0o.filler.reusableuserinterface.ConfigurableNumberPicker
+            <com.oo0o0o.colorphoria.reusableuserinterface.ConfigurableNumberPicker
                 android:id="@+id/number_picker_day"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -44,7 +44,7 @@ android:layout_height="match_parent">
                 default_value="1"
                 minimum="1"
                 maximum="31"/>
-            <com.caitoo0o.filler.reusableuserinterface.ConfigurableNumberPicker
+            <com.oo0o0o.colorphoria.reusableuserinterface.ConfigurableNumberPicker
                 android:id="@+id/number_picker_year"
                 android:layout_width="0dp"
                 android:layout_weight="1"

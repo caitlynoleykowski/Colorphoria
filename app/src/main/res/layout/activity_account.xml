@@ -30,6 +30,7 @@
             android:layout_weight="1"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:text="@string/change_email"
+            android:textColor="@color/colorSecondary"
             android:background="@color/colorPrimary"
             android:gravity="center"
             android:fontFamily="sans-serif-medium"
@@ -55,8 +56,8 @@
             android:layout_weight="1"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:text="@string/change_password"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
+            android:textColor="@color/colorSecondary"
+            android:background="@color/colorPrimary"            android:gravity="center"
             android:fontFamily="sans-serif-medium"
             android:textAllCaps="false"/>
 
@@ -68,8 +69,8 @@
             android:layout_weight="1"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:text="@string/reset_password"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
+            android:textColor="@color/colorSecondary"
+            android:background="@color/colorPrimary"            android:gravity="center"
             android:fontFamily="sans-serif-medium"
             android:textAllCaps="false"/>
 
@@ -81,8 +82,8 @@
             android:layout_weight="1"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:text="@string/delete_account"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
+            android:textColor="@color/colorSecondary"
+            android:background="@color/colorPrimary"            android:gravity="center"
             android:fontFamily="sans-serif-medium"
             android:textAllCaps="false"/>
 
@@ -93,8 +94,8 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:background="@color/colorPrimary"
-            android:text="@string/sign_out"
+            android:textColor="@color/colorSecondary"
+            android:background="@color/colorPrimary"            android:text="@string/sign_out"
             android:gravity="center"
             android:fontFamily="sans-serif-medium"
             android:textAllCaps="false"/>
