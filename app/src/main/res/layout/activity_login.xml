@@ -20,22 +20,23 @@
         <android.support.v4.widget.Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="4"/>
 
         <LinearLayout
             android:id="@+id/icon_linear_layout"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="6"
+            android:layout_weight="2"
             android:layout_gravity="center"
             android:orientation="horizontal">
 
-            <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                android:id="@+id/random_bleed_button"
+            <com.oo0o0o.colorphoria.reusableuserinterface.ProportionalImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/ic_launcher_400dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/logo_72px"
                 android:scaleType="centerCrop"
+                android:layout_marginRight="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_vertical_margin"
                 android:clickable="false" />
 
         </LinearLayout>
@@ -43,7 +44,7 @@
         <android.support.v4.widget.Space
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="2"/>
 
         <EditText
             android:id="@+id/email_edit_text"

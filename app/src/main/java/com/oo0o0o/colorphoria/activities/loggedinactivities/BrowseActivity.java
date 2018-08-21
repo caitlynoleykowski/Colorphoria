@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.oo0o0o.colorphoria.backgroundtasks.GetBrowseThumbnailImageAsyncTask;
 import com.oo0o0o.colorphoria.R;
 import com.oo0o0o.colorphoria.reusableuserinterface.PositionImageView;
@@ -50,6 +51,8 @@ public class BrowseActivity extends LoggedInActivity {
     private Uri mImageUri;
 
     AdView adView;
+
+    private FirebaseAnalytics firebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,11 @@ public class BrowseActivity extends LoggedInActivity {
         else if (getIntent() != null && getIntent().hasExtra(IMAGE_URI_STATE_KEY)) {
             mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
         }
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, BrowseActivity.class.getName());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     /** Called when leaving the activity */

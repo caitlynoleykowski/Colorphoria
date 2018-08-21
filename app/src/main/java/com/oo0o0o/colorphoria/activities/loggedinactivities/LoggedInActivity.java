@@ -1,14 +1,12 @@
 package com.oo0o0o.colorphoria.activities.loggedinactivities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.oo0o0o.colorphoria.R;
 import com.oo0o0o.colorphoria.activities.BaseColorphoriaActivity;
 import com.oo0o0o.colorphoria.activities.loggedoutactivites.LoginActivity;
@@ -31,6 +29,7 @@ public class LoggedInActivity extends BaseColorphoriaActivity implements
 
     protected FirebaseAuth.AuthStateListener authListener;
     protected FirebaseAuth auth;
+    private FirebaseAnalytics firebaseAnalytics;
 
     // Google login vars (used for logout in this activity)
     protected GoogleApiClient googleApiClient;
@@ -59,6 +58,8 @@ public class LoggedInActivity extends BaseColorphoriaActivity implements
             }
         };
 
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, new Bundle());
     }
 
     // Google sign out stuff

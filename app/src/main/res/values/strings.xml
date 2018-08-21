@@ -2,8 +2,6 @@
     <string name="app_name" translatable="false">Colorphoria</string>
 
     <string name="admob_app_id" translatable="false">ca-app-pub-7546412369288210~5401783923</string>
-    <string name="admob_ad_unit_id_test_banner" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="admob_ad_unit_id_test_interstitial_video" translatable="false">ca-app-pub-3940256099942544/8691691433</string>
 
     <!-- General use begin -->
     <string name="ok" translatable="false">@android:string/ok</string>
@@ -73,6 +71,7 @@
     <!-- Used for SignupActivity begin -->
     <string name="signup_button">Sign Up</string>
 
+    <string name="signup_message">Enter your email to sign up for an account</string>
     <string name="signup_success">Account created!</string>
     <string name="signup_failed">Unable to create account. Please try again.</string>
     <!-- Used for SignupActivity end -->

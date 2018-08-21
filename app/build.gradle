@@ -6,8 +6,8 @@ android {
         applicationId "com.oo0o0o.colorphoria"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 6
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -55,6 +55,7 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.9'
 
     implementation 'com.google.firebase:firebase-ads:12.0.1'
+    implementation 'com.google.firebase:firebase-core:12.0.1'
 
     implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"

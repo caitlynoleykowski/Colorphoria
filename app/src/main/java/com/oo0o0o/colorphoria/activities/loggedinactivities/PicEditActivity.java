@@ -28,6 +28,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.oo0o0o.colorphoria.effecthelpers.BitmapEffectAsyncTask;
 import com.oo0o0o.colorphoria.effecthelpers.BitmapEffectPreviewAsyncTask;
 import com.oo0o0o.colorphoria.effecthelpers.PicEditBitmapLoaderAsyncTask;
@@ -81,6 +82,8 @@ public class PicEditActivity extends LoggedInActivity {
     AdView adView;
 
     InterstitialAd interstitialAd;
+
+    private FirebaseAnalytics firebaseAnalytics;
 
     // Begin activity lifecycle handlers
 
@@ -263,6 +266,11 @@ public class PicEditActivity extends LoggedInActivity {
                 }
             }
         });
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, PicEditActivity.class.getName());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     /** Called when leaving the activity */
@@ -420,6 +428,9 @@ public class PicEditActivity extends LoggedInActivity {
     }
 
     public void onShare() {
+        if (firebaseAnalytics != null) {
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, new Bundle());
+        }
         shareCurrImageStoragePermission();
     }
 
@@ -443,26 +454,56 @@ public class PicEditActivity extends LoggedInActivity {
     }
 
     public void onRandomBleedFill(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, RandomBleedFillEffect.class.getName());
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        }
         applyEffect(new RandomBleedFillEffect());
     }
 
     public void onThreshold(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, ThresholdEffect.class.getName());
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        }
         applyEffect(new ThresholdEffect());
     }
 
     public void onRandomLineFill(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, RandomLineFillEffect.class.getName());
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        }
         applyEffect(new RandomLineFillEffect());
     }
 
     public void onRandomFloodFill(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, RandomFloodFillEffect.class.getName());
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        }
         applyEffect(new RandomFloodFillEffect());
     }
 
     public void onInvert(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, InvertEffect.class.getName());
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        }
         applyEffect(new InvertEffect());
     }
 
     public void onOutlineEffect(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, OutlineEffect.class.getName());
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        }
         applyEffect(new OutlineEffect());
     }
 

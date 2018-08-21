@@ -27,6 +27,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.oo0o0o.colorphoria.backgroundtasks.GetImageAsyncTask;
 import com.oo0o0o.colorphoria.backgroundtasks.RestHelper;
 import com.oo0o0o.colorphoria.data.AppDatabase;
@@ -67,6 +68,8 @@ public class ImageFeedActivity extends LoggedInActivity {
     private boolean refreshingFeed = false;
 
     AdView adView;
+
+    private FirebaseAnalytics firebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +153,12 @@ public class ImageFeedActivity extends LoggedInActivity {
                 getMyImages();
             }
         }.execute();
+
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, ImageFeedActivity.class.getName());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     /** Called when leaving the activity */
@@ -289,6 +298,11 @@ public class ImageFeedActivity extends LoggedInActivity {
     }
 
     public void onCamera(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "CameraActivity");
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        }
         startCameraActivityCameraPermission();
     }
 

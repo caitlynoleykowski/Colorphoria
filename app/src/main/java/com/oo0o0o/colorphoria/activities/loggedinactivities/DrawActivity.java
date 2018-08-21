@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.oo0o0o.colorphoria.effecthelpers.BitmapWrapper;
 import com.oo0o0o.colorphoria.reusableuserinterface.DrawView;
 import com.oo0o0o.colorphoria.R;
@@ -59,6 +60,8 @@ public class DrawActivity extends LoggedInActivity {
     private Uri sourceUri;
 
     AdView adView;
+
+    private FirebaseAnalytics firebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +114,11 @@ public class DrawActivity extends LoggedInActivity {
         largeBrush = getResources().getInteger(R.integer.large_size);
 
         drawView.setPaintbrushSize(extraSmallBrush);
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, DrawActivity.class.getName());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     /** Called when leaving the activity */

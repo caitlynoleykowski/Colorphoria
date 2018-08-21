@@ -92,4 +92,5 @@
     <string name="upload">シェア</string>
     <string name="gcp_project_id">colorphoria-ea8ae</string>
     <string name="gcp_api_key">AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE</string>
+    <string name="signup_message">あなたのメールアドレスを入力してアカウントにサインアップしてください</string>
 </resources>
