@@ -14,5 +14,5 @@
         android:paddingLeft="24dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
-        android:src="@drawable/logo_72px"/>
+        android:src="@drawable/img_logo"/>
 </LinearLayout>

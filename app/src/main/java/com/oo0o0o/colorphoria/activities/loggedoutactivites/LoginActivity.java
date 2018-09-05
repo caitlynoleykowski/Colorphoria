@@ -53,6 +53,8 @@ public class LoginActivity extends BaseColorphoriaActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.LoggedOutTheme);
+
         super.onCreate(savedInstanceState);
 
         //Get Firebase auth instance

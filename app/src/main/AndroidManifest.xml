@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.loggedoutactivites.LoginActivity"
-            android:theme="@style/LoggedOutTheme">
+            android:theme="@style/LoggedOutTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
