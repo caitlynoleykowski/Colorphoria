@@ -40,7 +40,7 @@
                     android:orientation="vertical">
 
                     <GridView
-                        android:id="@+id/colorphoria_images_gridview"
+                        android:id="@+id/all_images_gridview"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:columnWidth="90dp"
@@ -58,7 +58,7 @@
                     android:orientation="vertical">
 
                     <GridView
-                        android:id="@+id/all_images_gridview"
+                        android:id="@+id/colorphoria_images_gridview"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:columnWidth="90dp"
@@ -72,8 +72,14 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
-    <include layout="@layout/navigation_footer"
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/admob_ad_unit_id_banner_navigation_footer">
+    </com.google.android.gms.ads.AdView>
 </RelativeLayout>

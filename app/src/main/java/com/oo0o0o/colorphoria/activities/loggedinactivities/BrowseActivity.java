@@ -5,17 +5,23 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -52,6 +58,10 @@ public class BrowseActivity extends LoggedInActivity {
 
     AdView adView;
 
+    int selectedIndex = -1;
+    View selectedView = null;
+    Uri selectedUri = null;
+
     private FirebaseAnalytics firebaseAnalytics;
 
     @Override
@@ -59,20 +69,12 @@ public class BrowseActivity extends LoggedInActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
+
         setupTabTitles();
 
         Utils.setupcolorphoriaRecentAppsBar(this);
-
-        // Set navigation bar UI
-        ((ImageView) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_unselected_24dp);
-        ((ImageView) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_unselected_24dp);
-        ((ImageView) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_unselected_24dp);
-        ((ImageView) findViewById(R.id.galleryButton)).setImageResource(R.drawable.ic_collections_selected_24dp);
-        int defaultTextColor = ((TextView) findViewById(R.id.drawLabel)).getTextColors().getDefaultColor();
-        ((TextView) findViewById(R.id.drawLabel)).setTextColor(defaultTextColor);
-        ((TextView) findViewById(R.id.cameraLabel)).setTextColor(defaultTextColor);
-        ((TextView) findViewById(R.id.homeLabel)).setTextColor(defaultTextColor);
-        ((TextView) findViewById(R.id.galleryLabel)).setTextColor(ContextCompat.getColor(this, R.color.colorSecondary));
 
         // Initialize ads (to setup ad banner)
         AdView adView = findViewById(R.id.adView);
@@ -128,6 +130,10 @@ public class BrowseActivity extends LoggedInActivity {
         startCameraActivity(mImageUri);
     }
 
+    public void onAdd(View v) {
+        // Do nothing
+    }
+
     public void onHome(View v) {
         startPicSourceActivity(mImageUri);
     }
@@ -151,11 +157,11 @@ public class BrowseActivity extends LoggedInActivity {
     }
     
     private void getFiles() {
+
         createcolorphoriaImageStorage();
 
         // Find colorphoria pictures
-        File picturesStorageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
+        File picturesStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         final File albumStorageDir = new File(picturesStorageDir, "colorphoria");
         allcolorphoriaImages = new ArrayList<File>();
         FilenameFilter allcolorphoriaImagesFF = new FilenameFilter() {
@@ -217,12 +223,25 @@ public class BrowseActivity extends LoggedInActivity {
         ImageAdapter adapter = new ImageAdapter(getApplicationContext(), allcolorphoriaImages);
         colorphoriaImagesGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            public void onItemClick(AdapterView<?> adapterView, View v, int pos,
-                                    long arg3) {
-                // dont need but what is it??
-                Object i = adapterView.getItemAtPosition(pos);
-                // Load the image that was clicked into the editor
-                chooseImageDestination(Uri.fromFile(allcolorphoriaImages.get(getIdxFromPos(allcolorphoriaImages, pos))));
+            public void onItemClick(AdapterView<?> adapterView, View v, int pos, long arg3) {
+                LinearLayout selectionOverlay = (LinearLayout) v.findViewById(R.id.thumbnail_item_selection_overlay);
+                if (selectionOverlay.getVisibility() == View.VISIBLE) {
+                    selectionOverlay.setVisibility(View.INVISIBLE);
+                    selectedIndex = -1;
+                    selectedView = null;
+                    selectedUri = null;
+                } else {
+                    selectionOverlay.setVisibility(View.VISIBLE);
+                    if (selectedIndex != -1) {
+                        LinearLayout selectedViewSelectionOverlay = (LinearLayout) selectedView.findViewById(R.id.thumbnail_item_selection_overlay);
+                        if (selectedViewSelectionOverlay != null) {
+                            selectedViewSelectionOverlay.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                    selectedIndex = pos;
+                    selectedView = v;
+                    selectedUri = Uri.fromFile(allcolorphoriaImages.get(getIdxFromPos(allcolorphoriaImages, selectedIndex)));
+                }
             }
         });
         colorphoriaImagesGV.setAdapter(adapter);
@@ -233,46 +252,27 @@ public class BrowseActivity extends LoggedInActivity {
 
             public void onItemClick(AdapterView<?> adapterView, View v, int pos,
                                     long arg3) {
-                // Load the image that was clicked into the editor
-                chooseImageDestination(Uri.fromFile(allOtherImages.get(getIdxFromPos(allOtherImages, pos))));
+                LinearLayout selectionOverlay = (LinearLayout) v.findViewById(R.id.thumbnail_item_selection_overlay);
+                if (selectionOverlay.getVisibility() == View.VISIBLE) {
+                    selectionOverlay.setVisibility(View.INVISIBLE);
+                    selectedIndex = -1;
+                    selectedView = null;
+                    selectedUri = null;
+                } else {
+                    selectionOverlay.setVisibility(View.VISIBLE);
+                    if (selectedIndex != -1) {
+                        LinearLayout selectedViewSelectionOverlay = (LinearLayout) selectedView.findViewById(R.id.thumbnail_item_selection_overlay);
+                        if (selectedViewSelectionOverlay != null) {
+                            selectedViewSelectionOverlay.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                    selectedIndex = pos;
+                    selectedView = v;
+                    selectedUri = Uri.fromFile(allOtherImages.get(getIdxFromPos(allOtherImages, selectedIndex)));
+                }
             }
         });
         allImagesGV.setAdapter(adapter2);
-    }
-
-    private void chooseImageDestination(final Uri uri) {
-        Utils.showConfirmDialog(this,
-                getString(R.string.choose_image_destination),
-                getString(R.string.apply_effects),
-                getString(R.string.draw),
-                new Utils.ConfirmDialogHandler() {
-                    public void onNegativeButton(Dialog confirmDialog) {
-                        startDrawActivity(uri);
-                        confirmDialog.dismiss();
-                    }
-                    public void onPositiveButton(Dialog confirmDialog) {
-                        startPicEditActivity(uri);
-                        confirmDialog.dismiss();
-                    }
-                },
-                false);
-    }
-
-    private void setupTabTitles() {
-        TabHost host = (TabHost)findViewById(R.id.tabHost);
-        host.setup();
-
-        //Tab 1
-        TabHost.TabSpec spec = host.newTabSpec(getString(R.string.app_name));
-        spec.setContent(R.id.tab1);
-        spec.setIndicator(getString(R.string.app_name));
-        host.addTab(spec);
-
-        //Tab 2
-        spec = host.newTabSpec(getString(R.string.browse_activity_everywhere));
-        spec.setContent(R.id.tab2);
-        spec.setIndicator(getString(R.string.browse_activity_everywhere));
-        host.addTab(spec);
     }
 
     private void createcolorphoriaImageStorage() {
@@ -296,6 +296,67 @@ public class BrowseActivity extends LoggedInActivity {
             Utils.showCustomToast(this, "Create colorphoria storage failed. External storage not writeable.");
             Log.e(TAG, "Create colorphoria storage failed. External storage not writeable.");
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.browse_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.browse_menu_next:
+                if (selectedIndex != -1 && selectedUri != null) {
+                    chooseImageDestination(selectedUri);
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(menuItem);
+        }
+    }
+
+    private void chooseImageDestination(final Uri uri) {
+//        Utils.showConfirmDialog(this,
+//                getString(R.string.choose_image_destination),
+//                getString(R.string.apply_effects),
+//                getString(R.string.draw),
+//                new Utils.ConfirmDialogHandler() {
+//                    public void onNegativeButton(Dialog confirmDialog) {
+//                        startDrawActivity(uri);
+//                        confirmDialog.dismiss();
+//                    }
+//                    public void onPositiveButton(Dialog confirmDialog) {
+//                        startPicEditActivity(uri);
+//                        confirmDialog.dismiss();
+//                    }
+//                },
+//                false);
+        startPicEditActivity(uri);
+    }
+
+    private void setupTabTitles() {
+        TabHost host = (TabHost)findViewById(R.id.tabHost);
+        host.setup();
+
+        //Tab 1
+        TabHost.TabSpec spec1 = host.newTabSpec(getString(R.string.browse_activity_everywhere));
+        spec1.setContent(R.id.tab1);
+        spec1.setIndicator(getString(R.string.browse_activity_everywhere));
+        host.addTab(spec1);
+
+        //Tab 2
+        TabHost.TabSpec spec2 = host.newTabSpec(getString(R.string.app_name));
+        spec2.setContent(R.id.tab2);
+        spec2.setIndicator(getString(R.string.app_name));
+        host.addTab(spec2);
+
     }
 
     private void listFiles(File directory, ArrayList<File> files, FilenameFilter filenameFilter) {
@@ -378,6 +439,8 @@ public class BrowseActivity extends LoggedInActivity {
 
             ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.thumbnail_item_progress_bar);
             progressBar.setVisibility(View.VISIBLE);
+            LinearLayout selectionOverlay = (LinearLayout) convertView.findViewById(R.id.thumbnail_item_selection_overlay);
+            selectionOverlay.setVisibility(View.INVISIBLE);
 
             PositionImageView positionImageView = (PositionImageView) convertView.findViewById(R.id.imageview);
             positionImageView.setPosition(position);

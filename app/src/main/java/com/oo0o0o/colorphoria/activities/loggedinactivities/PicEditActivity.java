@@ -95,7 +95,7 @@ public class PicEditActivity extends LoggedInActivity {
         Utils.setupcolorphoriaRecentAppsBar(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_24dp);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
 
         undoQueue = new ArrayDeque<>();
         redoQueue = new ArrayDeque<>();

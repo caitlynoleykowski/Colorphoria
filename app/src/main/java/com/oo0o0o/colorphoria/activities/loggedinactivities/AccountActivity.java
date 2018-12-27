@@ -49,9 +49,6 @@ public class AccountActivity extends LoggedInActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_24dp);
-
         // Get firebase auth instance
         auth = FirebaseAuth.getInstance();
 
@@ -277,15 +274,18 @@ public class AccountActivity extends LoggedInActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(menuItem);
-        }
+    public void onAdd(View v) {
+        Intent intent = new Intent(this, SourceActivity.class);
+        startActivity(intent);
+    }
+
+    public void onHome(View v) {
+        Intent intent = new Intent(this, ImageFeedActivity.class);
+        startActivity(intent);
+    }
+
+    public void onAccount(View v) {
+        // Do nothing
     }
 
     private void hideInputs() {

@@ -122,7 +122,7 @@ public class RestHelper {
             final String endpointName,
             final RequestParams requestParams,
             final HttpCallbacks callbacks) {
-        user.getToken(true)
+        user.getIdToken(true)
                 .addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
                     @Override
                     public void onSuccess(GetTokenResult getTokenResult) {

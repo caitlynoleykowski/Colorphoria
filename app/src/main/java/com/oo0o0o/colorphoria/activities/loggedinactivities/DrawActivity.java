@@ -70,16 +70,8 @@ public class DrawActivity extends LoggedInActivity {
 
         Utils.setupcolorphoriaRecentAppsBar(this);
 
-        // Set navigation UI
-        ((ImageView) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_selected_24dp);
-        ((ImageView) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_unselected_24dp);
-        ((ImageView) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_unselected_24dp);
-        ((ImageView) findViewById(R.id.galleryButton)).setImageResource(R.drawable.ic_collections_unselected_24dp);
-        int defaultTextColor = ((TextView) findViewById(R.id.drawLabel)).getTextColors().getDefaultColor();
-        ((TextView) findViewById(R.id.drawLabel)).setTextColor(ContextCompat.getColor(this, R.color.colorSecondary));
-        ((TextView) findViewById(R.id.cameraLabel)).setTextColor(defaultTextColor);
-        ((TextView) findViewById(R.id.homeLabel)).setTextColor(defaultTextColor);
-        ((TextView) findViewById(R.id.galleryLabel)).setTextColor(defaultTextColor);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
 
         // Initialize ads (to setup ad banner)
         AdView adView = findViewById(R.id.adView);
@@ -173,6 +165,10 @@ public class DrawActivity extends LoggedInActivity {
         startPicSourceStoragePermission(false, true);
     }
 
+    public void onAdd(View v) {
+        // Do nothing
+    }
+
     public void onHome(View v) {
         startPicSourceStoragePermission(false, false);
     }
@@ -192,6 +188,9 @@ public class DrawActivity extends LoggedInActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
 
         switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.draw_menu_new:
                 onNewButton();
                 return true;

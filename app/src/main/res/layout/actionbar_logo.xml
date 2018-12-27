@@ -11,7 +11,6 @@
         android:layout_height="24dp"
         android:paddingTop="@dimen/smallest_margin"
         android:paddingBottom="@dimen/smallest_margin"
-        android:paddingLeft="24dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
         android:src="@drawable/img_logo"/>

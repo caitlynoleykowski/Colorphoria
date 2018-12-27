@@ -1,6 +1,7 @@
 package com.oo0o0o.colorphoria.activities.loggedinactivities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
@@ -24,14 +25,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.oo0o0o.colorphoria.backgroundtasks.GetImageAsyncTask;
 import com.oo0o0o.colorphoria.backgroundtasks.RestHelper;
 import com.oo0o0o.colorphoria.data.AppDatabase;
-import com.oo0o0o.colorphoria.data.MediaDao;
 import com.oo0o0o.colorphoria.data.MediaEntity;
 import com.oo0o0o.colorphoria.reusableuserinterface.ListRefreshView;
 import com.oo0o0o.colorphoria.R;
@@ -74,7 +73,7 @@ public class ImageFeedActivity extends LoggedInActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pic_source);
+        setContentView(R.layout.activity_image_feed);
 
         Utils.setupcolorphoriaRecentAppsBar(this);
 
@@ -83,15 +82,11 @@ public class ImageFeedActivity extends LoggedInActivity {
         getSupportActionBar().setCustomView(R.layout.actionbar_logo);
 
         // Set navigation UI
-        ((ImageView) findViewById(R.id.drawButton)).setImageResource(R.drawable.ic_brush_unselected_24dp);
-        ((ImageView) findViewById(R.id.cameraButton)).setImageResource(R.drawable.ic_camera_alt_unselected_24dp);
         ((ImageView) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_selected_24dp);
-        ((ImageView) findViewById(R.id.galleryButton)).setImageResource(R.drawable.ic_collections_unselected_24dp);
-        int defaultTextColor = ((TextView) findViewById(R.id.drawLabel)).getTextColors().getDefaultColor();
-        ((TextView) findViewById(R.id.drawLabel)).setTextColor(defaultTextColor);
-        ((TextView) findViewById(R.id.cameraLabel)).setTextColor(defaultTextColor);
+        ((ImageView) findViewById(R.id.accountButton)).setImageResource(R.drawable.ic_person_unselected_24dp);
+        int defaultTextColor = ((TextView) findViewById(R.id.homeLabel)).getTextColors().getDefaultColor();
         ((TextView) findViewById(R.id.homeLabel)).setTextColor(ContextCompat.getColor(this, R.color.colorSecondary));
-        ((TextView) findViewById(R.id.galleryLabel)).setTextColor(defaultTextColor);
+        ((TextView) findViewById(R.id.accountLabel)).setTextColor(defaultTextColor);
 
         MobileAds.initialize(this, getResources().getString(R.string.admob_app_id));
 
@@ -184,25 +179,6 @@ public class ImageFeedActivity extends LoggedInActivity {
             adView.destroy();
         }
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.menu_account:
-                startActivity(new Intent(this, AccountActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     private void getMyImages() {
@@ -306,12 +282,22 @@ public class ImageFeedActivity extends LoggedInActivity {
         startCameraActivityCameraPermission();
     }
 
+    public void onAdd(View v) {
+        Intent intent = new Intent(this, SourceActivity.class);
+        startActivity(intent);
+    }
+
     public void onHome(View v) {
         // Do nothing
     }
 
     public void onBrowse(View v) {
         startBrowseActivity(mImageUri);
+    }
+
+    public void onAccount(View v) {
+        Intent intent = new Intent(this, AccountActivity.class);
+        startActivity(intent);
     }
 
     private File createTemporaryFile(String part, String ext) throws Exception

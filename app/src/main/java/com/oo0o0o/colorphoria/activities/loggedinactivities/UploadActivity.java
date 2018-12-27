@@ -30,6 +30,8 @@ import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -47,7 +49,7 @@ import com.google.firebase.auth.FirebaseUser;
  *
  * See {@link MyUploadService} for upload example.
  */
-public class UploadActivity extends LoggedInActivity implements View.OnClickListener {
+public class UploadActivity extends LoggedInActivity {
 
     private static final String TAG = UploadActivity.class.getName();
 
@@ -74,9 +76,6 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
-        // Click listeners
-        findViewById(R.id.upload_button).setOnClickListener(this);
 
         // Restore instance state
         if (savedInstanceState != null) {
@@ -161,11 +160,21 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.upload_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.upload_menu_share:
+                onInternalShare();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -279,15 +288,11 @@ public class UploadActivity extends LoggedInActivity implements View.OnClickList
         progressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.upload_button) {
-            if (mFileUri != null) {
-                uploadFromUri(mFileUri);
-            } else {
-                Log.w(TAG, "File URI is null");
-            }
+    public void onInternalShare() {
+        if (mFileUri != null) {
+            uploadFromUri(mFileUri);
+        } else {
+            Log.w(TAG, "File URI is null");
         }
     }
 }

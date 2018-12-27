@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
 import com.oo0o0o.colorphoria.R;
 import com.oo0o0o.colorphoria.data.Privacy;
 import com.oo0o0o.colorphoria.activities.loggedinactivities.UploadActivity;
@@ -104,43 +105,59 @@ public class MyUploadService extends MyBaseTaskService {
                         Log.d(TAG, "uploadFromUri:onSuccess");
 
                         // Get the public download URL
-                        final Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
 
-                        // TODO : Should this success callback come from the higher level?
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        RestHelper.HttpCallbacks callbacks = new RestHelper.HttpCallbacks() {
-                            public void onSuccess(String response) {
-                                try {
-                                    JSONObject responseJson = new JSONObject(response);
-                                    if (responseJson.has("message")) {
-                                        String message = responseJson.getString("message");
-                                        if (message.equals("adult_content")) {
-                                            broadcastUploadFinished(null, fileUri, true);
-                                            taskCompleted();
-                                        } else {
-                                            broadcastUploadFinished(downloadUri, fileUri, false);
+                        final Task<Uri> downloadUriTask = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+
+                        downloadUriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(final Uri downloadUri) {
+
+                                // TODO : Should this success callback come from the higher level?
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                RestHelper.HttpCallbacks callbacks = new RestHelper.HttpCallbacks() {
+                                    public void onSuccess(String response) {
+                                        try {
+                                            JSONObject responseJson = new JSONObject(response);
+                                            if (responseJson.has("message")) {
+                                                String message = responseJson.getString("message");
+                                                if (message.equals("adult_content")) {
+                                                    broadcastUploadFinished(null, fileUri, true);
+                                                    taskCompleted();
+                                                } else {
+                                                    broadcastUploadFinished(downloadUri, fileUri, false);
+                                                    taskCompleted();
+                                                }
+                                            } else {
+                                                // Shouldn't ever get here but if it happens count it as a failure
+                                                // by passing null downloadUri
+                                                broadcastUploadFinished(null, fileUri, false);
+                                                taskCompleted();
+                                            }
+                                        } catch (JSONException e) {
+                                            // Shouldn't ever get here but if it happens count it as a failure
+                                            // by passing null downloadUri
+                                            broadcastUploadFinished(null, fileUri, false);
                                             taskCompleted();
                                         }
-                                    } else {
-                                        // Shouldn't ever get here but if it happens count it as a failure
-                                        // by passing null downloadUri
+                                    }
+                                    public void onFailure(String error) {
+                                        // TODO: If record upload fails u need to retry or notify the user
                                         broadcastUploadFinished(null, fileUri, false);
                                         taskCompleted();
                                     }
-                                } catch (JSONException e) {
-                                    // Shouldn't ever get here but if it happens count it as a failure
-                                    // by passing null downloadUri
-                                    broadcastUploadFinished(null, fileUri, false);
-                                    taskCompleted();
-                                }
+                                };
+                                RestHelper.recordUpload(getApplicationContext(), user, downloadUri.toString(), fileUri.getLastPathSegment(), Privacy.EVERYONE, "", callbacks);
                             }
-                            public void onFailure(String error) {
-                                // TODO: If record upload fails u need to retry or notify the user
+                        });
+
+                        downloadUriTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Count this as a failure by passing null downloadUri
                                 broadcastUploadFinished(null, fileUri, false);
                                 taskCompleted();
                             }
-                        };
-                        RestHelper.recordUpload(getApplicationContext(), user, downloadUri.toString(), fileUri.getLastPathSegment(), Privacy.EVERYONE, "", callbacks);
+                        });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

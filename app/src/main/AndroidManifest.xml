@@ -19,7 +19,13 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.loggedoutactivites.LoginActivity"
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7546412369288210~5401783923"/>
+
+        <activity
+            android:name=".activities.loggedoutactivites.LoginActivity"
             android:theme="@style/LoggedOutTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,25 +43,36 @@
         <!-- </activity> -->
         <activity android:name=".activities.loggedinactivities.ImageFeedActivity" />
         <!-- <activity android:name=".activities.loggedoutactivites.LoginActivity" /> -->
-        <activity android:name=".activities.loggedinactivities.PicEditActivity"
-            android:label="@string/pic_edit_activity_title"/>
-        <activity android:name=".activities.loggedinactivities.BrowseActivity"
-            android:label="@string/browse_activity_title"/>
-        <activity android:name=".activities.loggedinactivities.DrawActivity"
-            android:label="@string/draw_activity_title"/>
-        <activity android:name=".activities.loggedinactivities.UploadActivity"
-            android:label="@string/upload_activity_title"/>
-        <activity android:name=".activities.loggedinactivities.AccountActivity"
-            android:label="@string/account_activity_title"/>
-
-        <activity android:name=".activities.loggedoutactivites.BirthdayActivity"
-            android:theme="@style/LoggedOutTheme"/>
-        <activity android:name=".activities.loggedoutactivites.TermsActivity"
-            android:theme="@style/LoggedOutTheme"/>
-        <activity android:name=".activities.loggedoutactivites.SignupActivity"
-            android:theme="@style/LoggedOutTheme"/>
-        <activity android:name=".activities.loggedoutactivites.ResetPasswordActivity"
-            android:theme="@style/LoggedOutTheme"/>
+        <activity
+            android:name=".activities.loggedinactivities.SourceActivity"
+            android:label="Select Source" />
+        <activity
+            android:name=".activities.loggedinactivities.PicEditActivity"
+            android:label="@string/pic_edit_activity_title" />
+        <activity
+            android:name=".activities.loggedinactivities.BrowseActivity"
+            android:label="@string/browse_activity_title" />
+        <activity
+            android:name=".activities.loggedinactivities.DrawActivity"
+            android:label="@string/draw_activity_title" />
+        <activity
+            android:name=".activities.loggedinactivities.UploadActivity"
+            android:label="@string/upload_activity_title" />
+        <activity
+            android:name=".activities.loggedinactivities.AccountActivity"
+            android:label="@string/account_activity_title" />
+        <activity
+            android:name=".activities.loggedoutactivites.BirthdayActivity"
+            android:theme="@style/LoggedOutTheme" />
+        <activity
+            android:name=".activities.loggedoutactivites.TermsActivity"
+            android:theme="@style/LoggedOutTheme" />
+        <activity
+            android:name=".activities.loggedoutactivites.SignupActivity"
+            android:theme="@style/LoggedOutTheme" />
+        <activity
+            android:name=".activities.loggedoutactivites.ResetPasswordActivity"
+            android:theme="@style/LoggedOutTheme" />
 
         <service
             android:name=".backgroundtasks.MyUploadService"
@@ -68,8 +85,9 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/paths"/>
+                android:resource="@xml/paths" />
         </provider>
+
     </application>
 
 </manifest>

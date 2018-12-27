@@ -15,7 +15,7 @@
     <string name="draw_menu_draw">ドロー</string>
     <string name="draw_menu_eraser">消しゴム</string>
     <string name="draw_menu_save">セーブ</string>
-    <string name="draw_menu_done">完了</string>
+    <string name="draw_menu_done">次</string>
     <string name="sml">小さい</string>
     <string name="med">中</string>
     <string name="lrg">大</string>
@@ -67,7 +67,7 @@
     <string name="pic_edit_menu_undo">元に戻す</string>
     <string name="pic_edit_menu_redo">やり直し</string>
     <string name="pic_edit_menu_save">セーブ</string>
-    <string name="pic_edit_menu_share">シェア</string>
+    <string name="pic_edit_menu_share">次</string>
     <string name="browse_activity_title">ギャラリー</string>
     <string name="choose_image_destination">あなたは何をしたいですか？</string>
     <string name="draw">ドロー</string>
@@ -88,7 +88,7 @@
     <string name="account_activity_title">アカウント</string>
     <string name="camera_activity_title">カメラ</string>
     <string name="image_feed_activity_title">ホーム</string>
-    <string name="upload_activity_title">シェア</string>
+    <string name="upload_activity_title"></string>
     <string name="upload">シェア</string>
     <string name="gcp_project_id">colorphoria-ea8ae</string>
     <string name="gcp_api_key">AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE</string>

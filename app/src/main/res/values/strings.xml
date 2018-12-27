@@ -32,7 +32,7 @@
     <string name="draw_menu_new">New</string>
     <string name="draw_menu_eraser">Eraser</string>
     <string name="draw_menu_save">Save</string>
-    <string name="draw_menu_done">Done</string>
+    <string name="draw_menu_done">Next</string>
     <string name="sml">Small</string>
     <string name="med">Medium</string>
     <string name="lrg">Large</string>
@@ -117,7 +117,7 @@
     <string name="pic_edit_menu_undo">Undo</string>
     <string name="pic_edit_menu_redo">Redo</string>
     <string name="pic_edit_menu_save">Save</string>
-    <string name="pic_edit_menu_share">Share</string>
+    <string name="pic_edit_menu_share">Next</string>
     <string name="image_saved">Image saved</string>
     <!-- Used for PicEditActivity end -->
 
@@ -138,7 +138,6 @@
     <string name="download_failure">Unable to refresh feed</string>
 
     <!-- Used for UploadActivity and upload services -->
-    <string name="upload_activity_title">Share</string>
     <string name="upload_prompt">Upload image</string>
     <string name="upload">Share</string>
     <string name="share_external">Share with other apps</string>
@@ -155,5 +154,6 @@
 
     <string name="gcp_project_id">colorphoria-app</string>
     <string name="gcp_api_key">AIzaSyCP8m-QhcLveDg2e6KjXaoxEWhk8bFszWg</string>
+    <string name="upload_activity_title"></string>
 
 </resources>

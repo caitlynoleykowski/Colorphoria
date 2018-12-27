@@ -25,12 +25,12 @@
     <dimen name="dialog_width_long">300dp</dimen>
 
     <!-- paint brush sizes -->
-    <dimen name="extra_small_brush">5dp</dimen>
-    <integer name="extra_small_size">5</integer>
-    <dimen name="small_brush">10dp</dimen>
-    <integer name="small_size">10</integer>
+    <dimen name="extra_small_brush">1dp</dimen>
+    <integer name="extra_small_size">1</integer>
+    <dimen name="small_brush">5dp</dimen>
+    <integer name="small_size">5</integer>
     <dimen name="medium_brush">20dp</dimen>
     <integer name="medium_size">20</integer>
-    <dimen name="large_brush">30dp</dimen>
-    <integer name="large_size">30</integer>
+    <dimen name="large_brush">40dp</dimen>
+    <integer name="large_size">40</integer>
 </resources>

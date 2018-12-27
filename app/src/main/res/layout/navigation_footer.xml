@@ -22,55 +22,6 @@
             android:paddingBottom="@dimen/navigation_margin_bottom"
             android:background="@drawable/button_selector_small"
             android:orientation="vertical"
-            android:onClick="onDraw">
-            <ImageView
-                android:id="@+id/drawButton"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_brush_unselected_24dp" />
-            <TextView
-                android:id="@+id/drawLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textAlignment="center"
-                android:text="@string/draw_activity_title"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingTop="@dimen/navigation_margin_top"
-            android:paddingBottom="@dimen/navigation_margin_bottom"
-            android:background="@drawable/button_selector_small"
-            android:orientation="vertical"
-            android:onClick="onCamera">
-            <ImageView
-                android:id="@+id/cameraButton"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_camera_alt_unselected_24dp" />
-            <TextView
-                android:id="@+id/cameraLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textAlignment="center"
-                android:text="@string/camera_activity_title"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingTop="@dimen/navigation_margin_top"
-            android:paddingBottom="@dimen/navigation_margin_bottom"
-            android:background="@drawable/button_selector_small"
-            android:orientation="vertical"
             android:onClick="onHome">
             <ImageView
                 android:id="@+id/homeButton"
@@ -95,20 +46,44 @@
             android:paddingBottom="@dimen/navigation_margin_bottom"
             android:background="@drawable/button_selector_small"
             android:orientation="vertical"
-            android:onClick="onBrowse">
+            android:onClick="onAdd">
             <ImageView
-                android:id="@+id/galleryButton"
+                android:id="@+id/addButton"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:background="@color/transparent"
-                android:src="@drawable/ic_collections_unselected_24dp" />
+                android:src="@drawable/ic_add_24dp" />
             <TextView
-                android:id="@+id/galleryLabel"
+                android:id="@+id/addLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:textAlignment="center"
-                android:text="@string/browse_activity_title"/>
+                android:text="Create"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="@dimen/navigation_margin_top"
+            android:paddingBottom="@dimen/navigation_margin_bottom"
+            android:background="@drawable/button_selector_small"
+            android:orientation="vertical"
+            android:onClick="onAccount">
+            <ImageView
+                android:id="@+id/accountButton"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_person_unselected_24dp" />
+            <TextView
+                android:id="@+id/accountLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textAlignment="center"
+                android:text="My Account"/>
         </LinearLayout>
     </LinearLayout>
 
