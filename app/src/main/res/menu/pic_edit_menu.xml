@@ -10,11 +10,6 @@
         android:icon="@drawable/ic_get_app_24dp"
         app:showAsAction="never" >
     </item>
-    <item android:id="@+id/pic_edit_menu_reset"
-        android:title="@string/pic_edit_menu_reset"
-        android:icon="@drawable/ic_layers_clear_white_24dp"
-        app:showAsAction="never" >
-    </item>
     <item android:id="@+id/pic_edit_menu_undo"
         android:title="@string/pic_edit_menu_undo"
         android:icon="@drawable/ic_undo_24dp"
@@ -23,6 +18,11 @@
     <item android:id="@+id/pic_edit_menu_redo"
         android:title="@string/pic_edit_menu_redo"
         android:icon="@drawable/ic_redo_24dp"
+        app:showAsAction="never" >
+    </item>
+    <item android:id="@+id/pic_edit_menu_reset"
+        android:title="@string/pic_edit_menu_reset"
+        android:icon="@drawable/ic_layers_clear_white_24dp"
         app:showAsAction="never" >
     </item>
 </menu>

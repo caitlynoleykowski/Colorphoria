@@ -164,29 +164,33 @@ public class SourceActivity extends LoggedInActivity {
     }
 
     private void startCameraActivity() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo;
-        try
-        {
-            // place where to store camera taken picture
-            photo = this.createTemporaryFile("picture", ".jpg");
-            photo.delete();
-        }
-        catch(Exception e)
-        {
-            Log.v(TAG, "Can't create file to take picture!", e);
-            Utils.showCustomToast(this, "Please check SD card! Image shot is impossible!");
-            return;
-        }
-        if (android.os.Build.VERSION.SDK_INT < 24) {
-            mImageUri = Uri.fromFile(photo);
-        } else {
-            mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".myspecialfileprovider", photo);
-        }
+        Intent intent = new Intent(this, CameraActivity.class);
+//        intent.putExtra(PicEditActivity.SOURCE_URI, uri);
+        startActivity(intent);
 
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-        //start camera intent
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+//        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+//        File photo;
+//        try
+//        {
+//            // place where to store camera taken picture
+//            photo = this.createTemporaryFile("picture", ".jpg");
+//            photo.delete();
+//        }
+//        catch(Exception e)
+//        {
+//            Log.v(TAG, "Can't create file to take picture!", e);
+//            Utils.showCustomToast(this, "Please check SD card! Image shot is impossible!");
+//            return;
+//        }
+//        if (android.os.Build.VERSION.SDK_INT < 24) {
+//            mImageUri = Uri.fromFile(photo);
+//        } else {
+//            mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".myspecialfileprovider", photo);
+//        }
+//
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+//        //start camera intent
+//        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
     }
 
     @Override

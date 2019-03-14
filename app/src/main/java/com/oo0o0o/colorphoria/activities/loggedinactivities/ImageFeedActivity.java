@@ -1,7 +1,6 @@
 package com.oo0o0o.colorphoria.activities.loggedinactivities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +10,10 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +22,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
 import com.oo0o0o.colorphoria.backgroundtasks.GetImageAsyncTask;
 import com.oo0o0o.colorphoria.backgroundtasks.RestHelper;
 import com.oo0o0o.colorphoria.data.AppDatabase;
@@ -43,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,28 +80,13 @@ public class ImageFeedActivity extends LoggedInActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.actionbar_logo);
 
-        // Set navigation UI
-        ((ImageView) findViewById(R.id.homeButton)).setImageResource(R.drawable.ic_home_selected_24dp);
-        ((ImageView) findViewById(R.id.accountButton)).setImageResource(R.drawable.ic_person_unselected_24dp);
-        int defaultTextColor = ((TextView) findViewById(R.id.homeLabel)).getTextColors().getDefaultColor();
-        ((TextView) findViewById(R.id.homeLabel)).setTextColor(ContextCompat.getColor(this, R.color.colorSecondary));
-        ((TextView) findViewById(R.id.accountLabel)).setTextColor(defaultTextColor);
-
         MobileAds.initialize(this, getResources().getString(R.string.admob_app_id));
-
-                // Initialize ads (to setup ad banner)
-        AdView adView = findViewById(R.id.adView);
-//        adView.setAdSize(AdSize.SMART_BANNER);
-//        adView.setAdUnitId(getResources().getString(R.string.admob_ad_unit_id_banner_image_feed));
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
 
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         if (savedInstanceState != null) {
             mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
-        }
-        else if (getIntent() != null) {
+        } else if (getIntent() != null) {
             if (getIntent().hasExtra(IMAGE_URI_STATE_KEY)) {
                 mImageUri = (Uri) getIntent().getParcelableExtra(IMAGE_URI_STATE_KEY);
             }
@@ -133,7 +117,10 @@ public class ImageFeedActivity extends LoggedInActivity {
             @Override
             protected List<MediaEntity> doInBackground(String... strings) {
                 AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                        AppDatabase.class, "colorphoria-database").build();
+                        AppDatabase.class, "colorphoria-database")
+                        .fallbackToDestructiveMigration()
+                        .build();
+
                 List<MediaEntity> mediaEntities = db.mediaDao().getAll();
                 return mediaEntities;
             }
@@ -154,6 +141,27 @@ public class ImageFeedActivity extends LoggedInActivity {
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, ImageFeedActivity.class.getName());
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+        ((BottomNavigationView) findViewById(R.id.bottom_navigation))
+                .setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.image_feed_nav:
+                                onHome();
+                                return true;
+                            case R.id.create_nav:
+                                onAdd();
+                                return true;
+                            case R.id.account_nav:
+                                onAccount();
+                                return true;
+                            default:
+                                // Do nothing
+                        }
+                        return false;
+                    }
+                });
     }
 
     /** Called when leaving the activity */
@@ -202,14 +210,15 @@ public class ImageFeedActivity extends LoggedInActivity {
 
                             try {
                                 JSONObject responseJson = new JSONObject(response);
-                                if (responseJson.has("urls")) {
+                                if (responseJson.has("mediaEntities")) {
                                     // TODO: Handle this better in case somehow it has "urls" but the array is empty
 
-                                    JSONArray urlArrayJson = responseJson.getJSONArray("urls");
-                                    for (int i = 0; i < urlArrayJson.length(); i++) {
-                                        String url = (String) urlArrayJson.get(i);
-
-                                        MediaEntity mediaEntity = new MediaEntity(i, url);
+                                    JSONArray mediaEntitiesJson = responseJson.getJSONArray("mediaEntities");
+                                    Gson gson = new Gson();
+                                    for (int i = 0; i < mediaEntitiesJson.length(); i++) {
+                                        String mediaEntityJson = (String) mediaEntitiesJson.get(i).toString();
+                                        MediaEntity mediaEntity = gson.fromJson(mediaEntityJson, MediaEntity.class);
+                                        mediaEntity.setId(i);
                                         db.mediaDao().insertAll(mediaEntity); // Change id from i
                                         mediaEntities.add(mediaEntity);
                                     }
@@ -262,7 +271,7 @@ public class ImageFeedActivity extends LoggedInActivity {
         adapter.setDoneLoading(true);
         adapter.clear(); // Remove all images (image urls) from the adapter
         for (int i = 0; i < mediaEntities.size(); i++) {
-            adapter.addItem(mediaEntities.get(i).getDownloadUrl());
+            adapter.addItem(mediaEntities.get(i));
         }
         adapter.notifyDataSetChanged(); // Make list view pick up changes
         refreshingFeed = false;
@@ -282,12 +291,12 @@ public class ImageFeedActivity extends LoggedInActivity {
         startCameraActivityCameraPermission();
     }
 
-    public void onAdd(View v) {
+    public void onAdd() {
         Intent intent = new Intent(this, SourceActivity.class);
         startActivity(intent);
     }
 
-    public void onHome(View v) {
+    public void onHome() {
         // Do nothing
     }
 
@@ -295,7 +304,7 @@ public class ImageFeedActivity extends LoggedInActivity {
         startBrowseActivity(mImageUri);
     }
 
-    public void onAccount(View v) {
+    public void onAccount() {
         Intent intent = new Intent(this, AccountActivity.class);
         startActivity(intent);
     }
@@ -457,12 +466,12 @@ public class ImageFeedActivity extends LoggedInActivity {
     private class ImageAdapter extends BaseAdapter {
 
         private Context context;
-        private ArrayList<String> imageUrlList;
+        private ArrayList<MediaEntity> imageUrlList;
         private boolean doneLoading = false;
 
         public ImageAdapter(Context context) {
             this.context = context;
-            this.imageUrlList = new ArrayList<String>();
+            this.imageUrlList = new ArrayList<MediaEntity>();
         }
 
         public boolean isDoneLoading() {
@@ -473,8 +482,12 @@ public class ImageFeedActivity extends LoggedInActivity {
             this.doneLoading = doneLoading;
         }
 
-        public void addItem(String url) {
-            imageUrlList.add(url);
+        public void addItem(MediaEntity mediaEntity) {
+            imageUrlList.add(mediaEntity);
+        }
+
+        public void addAll(List<MediaEntity> mediaEntities) {
+            imageUrlList.addAll(mediaEntities);
         }
 
         public void clear() {
@@ -518,15 +531,34 @@ public class ImageFeedActivity extends LoggedInActivity {
                 progressBar.setVisibility(View.VISIBLE);
 
                 holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
+                holder.titleTextView = (TextView) convertView.findViewById(R.id.title_text_view);
+                holder.dateTextView = (TextView) convertView.findViewById(R.id.date_text_view);
+                holder.commentTextView = (TextView) convertView.findViewById(R.id.comment_text_view);
                 if (position < imageUrlList.size()) {
                     holder.picturesView.setImageDrawable(getResources().getDrawable(R.drawable.bg_image_placeholder));
                     // This will wind up with pictures out of order if one async task finishes later than one that started later
                     // But it works well enough and its unlikely that the scenario will happen often
-                    new GetImageAsyncTask(ImageFeedActivity.this, holder.picturesView, progressBar, imageUrlList.get(position)).execute();
+                    new GetImageAsyncTask(ImageFeedActivity.this, holder.picturesView, progressBar, imageUrlList.get(position).getDownloadUrl()).execute();
+                    holder.titleTextView.setText(imageUrlList.get(position).getUsername());
+                    holder.dateTextView.setText(DateFormat.getDateInstance().format(imageUrlList.get(position).getTimestamp()));
+                    holder.commentTextView.setText(
+                            imageUrlList.get(position).getComment() != null ? imageUrlList.get(position).getComment() : "");
+                } else {
+                    // Not sure if I should set the image here to blank/empty
+                    holder.titleTextView.setText("");
+                    holder.dateTextView.setText("");
+                    holder.commentTextView.setText("");
                 }
             } else {
                 holder.picturesView = (ImageView) convertView.findViewById(R.id.imageview);
+                holder.titleTextView = (TextView) convertView.findViewById(R.id.title_text_view);
+                holder.dateTextView = (TextView) convertView.findViewById(R.id.date_text_view);
+                holder.commentTextView = (TextView) convertView.findViewById(R.id.comment_text_view);
+
                 holder.picturesView.setImageDrawable(getResources().getDrawable(R.drawable.img_feed_unavailable));
+                holder.titleTextView.setText("");
+                holder.dateTextView.setText("");
+                holder.commentTextView.setText("");
             }
 
             return convertView;
@@ -535,6 +567,9 @@ public class ImageFeedActivity extends LoggedInActivity {
         // View Holder pattern used for Smooth Scrolling. As View Holder pattern recycle the findViewById() object.
         class ViewHolder {
             private ImageView picturesView;
+            private TextView titleTextView;
+            private TextView dateTextView;
+            private TextView commentTextView;
         }
     }
 }

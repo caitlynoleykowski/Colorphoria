@@ -1,22 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/activity_vertical_margin" >
-    <com.oo0o0o.colorphoria.reusableuserinterface.ProportionalImageView
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/title_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:adjustViewBounds="true"
-        android:src="@drawable/img_test_pic_2"
-        android:id="@+id/imageview"/>
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/smallish_margin"
+        android:text="sampletext@sampletext.com"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+    <RelativeLayout
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.oo0o0o.colorphoria.reusableuserinterface.ProportionalImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/img_test_pic_10x10px"
+            android:id="@+id/imageview"/>
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/image_row_progress_bar"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:visibility="gone"/>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/date_text_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/image_row_progress_bar"
-        android:layout_centerInParent="true"
-        android:indeterminate="true"
-        android:visibility="gone"/>
-</RelativeLayout>
+        android:text="Sample Text"
+        android:textSize="10sp"
+        android:textAllCaps="true"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginTop="@dimen/smallish_margin"
+        android:layout_marginBottom="@dimen/smallest_margin"/>
+    <TextView
+        android:id="@+id/comment_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sample Text"
+        android:textSize="12sp"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+</LinearLayout>

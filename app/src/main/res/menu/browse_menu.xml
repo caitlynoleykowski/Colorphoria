@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/browse_menu_next"
-        android:title="Next"
+        android:title="@string/browse_menu_done"
         app:showAsAction="always"/>
 </menu>

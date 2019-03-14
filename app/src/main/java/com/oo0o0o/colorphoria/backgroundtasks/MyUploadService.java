@@ -40,6 +40,7 @@ public class MyUploadService extends MyBaseTaskService {
 
     /** Intent Extras **/
     public static final String EXTRA_FILE_URI = "extra_file_uri";
+    public static final String EXTRA_COMMENT = "comment";
     public static final String EXTRA_DOWNLOAD_URL = "extra_download_url";
 
     // [START declare_ref]
@@ -66,14 +67,15 @@ public class MyUploadService extends MyBaseTaskService {
         Log.d(TAG, "onStartCommand:" + intent + ":" + startId);
         if (ACTION_UPLOAD.equals(intent.getAction())) {
             Uri fileUri = intent.getParcelableExtra(EXTRA_FILE_URI);
-            uploadFromUri(fileUri);
+            String comment = intent.getStringExtra(EXTRA_COMMENT);
+            uploadFromUri(fileUri, comment);
         }
 
         return START_REDELIVER_INTENT;
     }
 
     // [START upload_from_uri]
-    private void uploadFromUri(final Uri fileUri) {
+    private void uploadFromUri(final Uri fileUri, final String comment) {
         Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
 
         // [START_EXCLUDE]
@@ -146,7 +148,7 @@ public class MyUploadService extends MyBaseTaskService {
                                         taskCompleted();
                                     }
                                 };
-                                RestHelper.recordUpload(getApplicationContext(), user, downloadUri.toString(), fileUri.getLastPathSegment(), Privacy.EVERYONE, "", callbacks);
+                                RestHelper.recordUpload(getApplicationContext(), user, downloadUri.toString(), fileUri.getLastPathSegment(), Privacy.EVERYONE, comment, callbacks);
                             }
                         });
 

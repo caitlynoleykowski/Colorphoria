@@ -11,8 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:onClick="onCamera">
+        android:layout_height="100dp" >
 
         <TextView
             android:layout_width="0dp"
@@ -20,20 +19,21 @@
             android:layout_weight="3"
             android:gravity="center_vertical"
             android:padding="@dimen/activity_horizontal_margin"
-            android:text="Use Camera" />
+            android:text="Use Camera"
+            android:onClick="onCamera"/>
 
         <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/ic_camera_alt_unselected_24dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:onClick="onCamera"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
-        android:onClick="onBrowse"
         >
         <TextView
             android:layout_width="0dp"
@@ -41,19 +41,22 @@
             android:layout_weight="3"
             android:gravity="center_vertical"
             android:padding="@dimen/activity_horizontal_margin"
-            android:text="Select from Gallery" />
+            android:text="Select from Gallery"
+            android:onClick="onBrowse"
+            />
         <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/ic_collections_unselected_24dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:onClick="onBrowse"
+            />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
-        android:onClick="onDraw"
         >
         <TextView
             android:layout_width="0dp"
@@ -61,12 +64,16 @@
             android:layout_weight="3"
             android:gravity="center_vertical"
             android:padding="@dimen/activity_horizontal_margin"
-            android:text="Draw an image" />
+            android:text="Draw an image"
+            android:onClick="onDraw"
+            />
         <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@drawable/ic_brush_unselected_24dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:onClick="onDraw"
+            />
     </LinearLayout>
 
 </LinearLayout>

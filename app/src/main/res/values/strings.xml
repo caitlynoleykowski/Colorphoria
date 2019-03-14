@@ -27,17 +27,6 @@
     <string name="birthday_error_not_eligible">Sorry, you\'re not eligible to use Colorphoria :/</string>
     <!-- Used for birthday activity end -->
 
-    <!-- Used for DrawingActivity begin -->
-    <string name="draw_activity_title">Draw</string>
-    <string name="draw_menu_new">New</string>
-    <string name="draw_menu_eraser">Eraser</string>
-    <string name="draw_menu_save">Save</string>
-    <string name="draw_menu_done">Next</string>
-    <string name="sml">Small</string>
-    <string name="med">Medium</string>
-    <string name="lrg">Large</string>
-    <!-- Used for DrawingActivity end -->
-
     <!-- Used for LoginActivity begin -->
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
@@ -124,13 +113,28 @@
     <!-- Used for BrowseActivity begin -->
     <string name="browse_activity_title">Gallery</string>
     <string name="browse_activity_everywhere">Everywhere</string>
+    <string name="browse_menu_done">Next</string>
     <string name="choose_image_destination">What would you like to do?</string>
     <string name="draw">Draw</string>
     <string name="apply_effects">Apply Effects</string>
     <!-- Used for BrowseActivity end -->
 
+    <!-- Used for DrawingActivity begin -->
+    <string name="draw_activity_title">Draw</string>
+    <string name="draw_menu_new">New</string>
+    <string name="draw_menu_eraser">Eraser</string>
+    <string name="draw_menu_save">Save</string>
+    <string name="draw_menu_done">Next</string>
+    <string name="sml">Small</string>
+    <string name="med">Medium</string>
+    <string name="lrg">Large</string>
+    <!-- Used for DrawingActivity end -->
+
     <!-- Used for non-existent camera activitiy begin -->
     <string name="camera_activity_title">Camera</string>
+
+    <!-- Used for SourceActivity begin -->
+    <string name="source_activity_title">Select</string>
 
     <!-- Used for ImageFeedActivity -->
     <string name="image_feed_activity_title">Home</string>
@@ -138,6 +142,7 @@
     <string name="download_failure">Unable to refresh feed</string>
 
     <!-- Used for UploadActivity and upload services -->
+    <string name="upload_activity_title">Share</string>
     <string name="upload_prompt">Upload image</string>
     <string name="upload">Share</string>
     <string name="share_external">Share with other apps</string>
@@ -154,6 +159,5 @@
 
     <string name="gcp_project_id">colorphoria-app</string>
     <string name="gcp_api_key">AIzaSyCP8m-QhcLveDg2e6KjXaoxEWhk8bFszWg</string>
-    <string name="upload_activity_title"></string>
 
 </resources>

@@ -15,6 +15,8 @@ import java.util.ArrayList;
  */
 public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
 
+    private static final int previewDimen = 200; // 200 pixels width 200 pixels height for preview
+
     WeakReference<Bitmap> sourceBitmapWeakReference;
 
     BitmapEffect effect;
@@ -41,11 +43,11 @@ public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
                 double scaleFactor;
                 Bitmap imgThumbnail;
                 if (sourceBitmap.getWidth() > sourceBitmap.getHeight()) {
-                    scaleFactor = (double) 100 / (double) sourceBitmap.getHeight();
-                    imgThumbnail = ThumbnailUtils.extractThumbnail(sourceBitmap, (int) (sourceBitmap.getWidth() * scaleFactor), 100);
+                    scaleFactor = (double) previewDimen / (double) sourceBitmap.getHeight();
+                    imgThumbnail = ThumbnailUtils.extractThumbnail(sourceBitmap, (int) (sourceBitmap.getWidth() * scaleFactor), previewDimen);
                 } else {
-                    scaleFactor = (double) 100 / (double) sourceBitmap.getWidth();
-                    imgThumbnail = ThumbnailUtils.extractThumbnail(sourceBitmap, 100, (int) (sourceBitmap.getHeight() * scaleFactor));
+                    scaleFactor = (double) previewDimen / (double) sourceBitmap.getWidth();
+                    imgThumbnail = ThumbnailUtils.extractThumbnail(sourceBitmap, previewDimen, (int) (sourceBitmap.getHeight() * scaleFactor));
                 }
                 effect.applyEffect(imgThumbnail, ctrl, randomSeed, colorPalette, 0);
                 return imgThumbnail;

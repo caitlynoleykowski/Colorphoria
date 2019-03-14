@@ -158,121 +158,156 @@ public class BrowseActivity extends LoggedInActivity {
     
     private void getFiles() {
 
-        createcolorphoriaImageStorage();
-
-        // Find colorphoria pictures
-        File picturesStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        final File albumStorageDir = new File(picturesStorageDir, "colorphoria");
-        allcolorphoriaImages = new ArrayList<File>();
-        FilenameFilter allcolorphoriaImagesFF = new FilenameFilter() {
+        new AsyncTask<Void, Void, ArrayList<File>>() {
             @Override
-            public boolean accept(File dir, String filename) {
-                // If filename is a directory or a picture accept it
-                if (!filename.contains(".") ||
-                        filename.toLowerCase().endsWith(".png") ||
-                        filename.toLowerCase().endsWith(".jpg") ||
-                        filename.toLowerCase(). endsWith(".jpeg")) {
-                    return true;
-                }
-                return false;
-            }
-        };
-        listFiles(albumStorageDir, allcolorphoriaImages, allcolorphoriaImagesFF);
-        // Sort images by date ascending
-        Collections.sort(allcolorphoriaImages, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                Long o1lastModified = o1.lastModified();
-                Long o2lastModified = o2.lastModified();
-                return o1lastModified.compareTo(o2lastModified);
-            }
-        });
+            protected ArrayList<File> doInBackground(Void... voids) {
 
-        // Find all pictures other than those in colorphoria directory
-        final File sdcardDir = Environment.getExternalStorageDirectory();
-        allOtherImages = new ArrayList<File>();
-        FilenameFilter allOtherImagesFF = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                // Don't accept the colorphoria storage directory here because that will be viewed elsewhere
-                if (dir.equals(albumStorageDir)) {
-                    return false;
-                }
-                // If filename is a directory or a picture accept it
-                if (!filename.contains(".") ||
-                        filename.toLowerCase().endsWith(".png") ||
-                        filename.toLowerCase().endsWith(".jpg") ||
-                        filename.toLowerCase(). endsWith(".jpeg")) {
-                    return true;
-                }
-                return false;
-            }
-        };
-        listFiles(sdcardDir, allOtherImages, allOtherImagesFF);
-        // Sort images by date ascending
-        Collections.sort(allOtherImages, new Comparator<File>() {
-            @Override
-            public int compare(File o1, File o2) {
-                Long o1lastModified = o1.lastModified();
-                Long o2lastModified = o2.lastModified();
-                return o1lastModified.compareTo(o2lastModified);
-            }
-        });
+                createcolorphoriaImageStorage();
 
-        GridView colorphoriaImagesGV = (GridView) findViewById(R.id.colorphoria_images_gridview);
-        ImageAdapter adapter = new ImageAdapter(getApplicationContext(), allcolorphoriaImages);
-        colorphoriaImagesGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                // Find colorphoria pictures
+                File picturesStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                final File albumStorageDir = new File(picturesStorageDir, "colorphoria");
+                ArrayList<File> allcolorphoriaImagesLocal = new ArrayList<File>();
+                FilenameFilter allcolorphoriaImagesFF = new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String filename) {
+                        // If filename is a directory or a picture accept it
+                        if (!filename.contains(".") ||
+                                filename.toLowerCase().endsWith(".png") ||
+                                filename.toLowerCase().endsWith(".jpg") ||
+                                filename.toLowerCase(). endsWith(".jpeg")) {
+                            return true;
+                        }
+                        return false;
+                    }
+                };
+                listFiles(albumStorageDir, allcolorphoriaImagesLocal, allcolorphoriaImagesFF);
+                // Sort images by date ascending
+                Collections.sort(allcolorphoriaImagesLocal, new Comparator<File>() {
+                    @Override
+                    public int compare(File o1, File o2) {
+                        Long o1lastModified = o1.lastModified();
+                        Long o2lastModified = o2.lastModified();
+                        return o1lastModified.compareTo(o2lastModified);
+                    }
+                });
 
-            public void onItemClick(AdapterView<?> adapterView, View v, int pos, long arg3) {
-                LinearLayout selectionOverlay = (LinearLayout) v.findViewById(R.id.thumbnail_item_selection_overlay);
-                if (selectionOverlay.getVisibility() == View.VISIBLE) {
-                    selectionOverlay.setVisibility(View.INVISIBLE);
-                    selectedIndex = -1;
-                    selectedView = null;
-                    selectedUri = null;
-                } else {
-                    selectionOverlay.setVisibility(View.VISIBLE);
-                    if (selectedIndex != -1) {
-                        LinearLayout selectedViewSelectionOverlay = (LinearLayout) selectedView.findViewById(R.id.thumbnail_item_selection_overlay);
-                        if (selectedViewSelectionOverlay != null) {
-                            selectedViewSelectionOverlay.setVisibility(View.INVISIBLE);
+                return allcolorphoriaImagesLocal;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<File> allcolorphoriaImagesLocal) {
+                super.onPostExecute(allcolorphoriaImagesLocal);
+
+                allcolorphoriaImages = allcolorphoriaImagesLocal;
+
+                GridView colorphoriaImagesGV = (GridView) findViewById(R.id.colorphoria_images_gridview);
+                ImageAdapter adapter = new ImageAdapter(getApplicationContext(), allcolorphoriaImages);
+                colorphoriaImagesGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    public void onItemClick(AdapterView<?> adapterView, View v, int pos, long arg3) {
+                        LinearLayout selectionOverlay = (LinearLayout) v.findViewById(R.id.thumbnail_item_selection_overlay);
+                        if (selectionOverlay.getVisibility() == View.VISIBLE) {
+                            selectionOverlay.setVisibility(View.INVISIBLE);
+                            selectedIndex = -1;
+                            selectedView = null;
+                            selectedUri = null;
+                        } else {
+                            selectionOverlay.setVisibility(View.VISIBLE);
+                            if (selectedIndex != -1) {
+                                LinearLayout selectedViewSelectionOverlay = (LinearLayout) selectedView.findViewById(R.id.thumbnail_item_selection_overlay);
+                                if (selectedViewSelectionOverlay != null) {
+                                    selectedViewSelectionOverlay.setVisibility(View.INVISIBLE);
+                                }
+                            }
+                            selectedIndex = pos;
+                            selectedView = v;
+                            selectedUri = Uri.fromFile(allcolorphoriaImages.get(getIdxFromPos(allcolorphoriaImages, selectedIndex)));
                         }
                     }
-                    selectedIndex = pos;
-                    selectedView = v;
-                    selectedUri = Uri.fromFile(allcolorphoriaImages.get(getIdxFromPos(allcolorphoriaImages, selectedIndex)));
-                }
+                });
+                colorphoriaImagesGV.setAdapter(adapter);
             }
-        });
-        colorphoriaImagesGV.setAdapter(adapter);
+        }.execute();
 
-        GridView allImagesGV = (GridView) findViewById(R.id.all_images_gridview);
-        ImageAdapter adapter2 = new ImageAdapter(getApplicationContext(), allOtherImages);
-        allImagesGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        new AsyncTask<Void, Void, ArrayList<File>>() {
+            @Override
+            protected ArrayList<File> doInBackground(Void... voids) {
 
-            public void onItemClick(AdapterView<?> adapterView, View v, int pos,
-                                    long arg3) {
-                LinearLayout selectionOverlay = (LinearLayout) v.findViewById(R.id.thumbnail_item_selection_overlay);
-                if (selectionOverlay.getVisibility() == View.VISIBLE) {
-                    selectionOverlay.setVisibility(View.INVISIBLE);
-                    selectedIndex = -1;
-                    selectedView = null;
-                    selectedUri = null;
-                } else {
-                    selectionOverlay.setVisibility(View.VISIBLE);
-                    if (selectedIndex != -1) {
-                        LinearLayout selectedViewSelectionOverlay = (LinearLayout) selectedView.findViewById(R.id.thumbnail_item_selection_overlay);
-                        if (selectedViewSelectionOverlay != null) {
-                            selectedViewSelectionOverlay.setVisibility(View.INVISIBLE);
+                // Find colorphoria pictures
+                File picturesStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                final File albumStorageDir = new File(picturesStorageDir, "colorphoria");
+
+                // Find all pictures other than those in colorphoria directory
+                final File sdcardDir = Environment.getExternalStorageDirectory();
+                ArrayList<File> allOtherImagesLocal = new ArrayList<File>();
+                FilenameFilter allOtherImagesFF = new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String filename) {
+                        // Don't accept the colorphoria storage directory here because that will be viewed elsewhere
+                        if (dir.equals(albumStorageDir)) {
+                            return false;
+                        }
+                        // If filename is a directory or a picture accept it
+                        if (!filename.contains(".") ||
+                                filename.toLowerCase().endsWith(".png") ||
+                                filename.toLowerCase().endsWith(".jpg") ||
+                                filename.toLowerCase(). endsWith(".jpeg")) {
+                            return true;
+                        }
+                        return false;
+                    }
+                };
+                listFiles(sdcardDir, allOtherImagesLocal, allOtherImagesFF);
+                // Sort images by date ascending
+                Collections.sort(allOtherImagesLocal, new Comparator<File>() {
+                    @Override
+                    public int compare(File o1, File o2) {
+                        Long o1lastModified = o1.lastModified();
+                        Long o2lastModified = o2.lastModified();
+                        return o1lastModified.compareTo(o2lastModified);
+                    }
+                });
+
+                return allOtherImagesLocal;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<File> allOtherImagesLocal) {
+                super.onPostExecute(allOtherImagesLocal);
+
+                allOtherImages = allOtherImagesLocal;
+
+                GridView allImagesGV = (GridView) findViewById(R.id.all_images_gridview);
+                ImageAdapter adapter2 = new ImageAdapter(getApplicationContext(), allOtherImages);
+                allImagesGV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    public void onItemClick(AdapterView<?> adapterView, View v, int pos, long arg3) {
+                        LinearLayout selectionOverlay = (LinearLayout) v.findViewById(R.id.thumbnail_item_selection_overlay);
+                        if (selectionOverlay.getVisibility() == View.VISIBLE) {
+                            selectionOverlay.setVisibility(View.INVISIBLE);
+                            selectedIndex = -1;
+                            selectedView = null;
+                            selectedUri = null;
+                        } else {
+                            selectionOverlay.setVisibility(View.VISIBLE);
+                            if (selectedIndex != -1) {
+                                LinearLayout selectedViewSelectionOverlay = (LinearLayout) selectedView.findViewById(R.id.thumbnail_item_selection_overlay);
+                                if (selectedViewSelectionOverlay != null) {
+                                    selectedViewSelectionOverlay.setVisibility(View.INVISIBLE);
+                                }
+                            }
+                            selectedIndex = pos;
+                            selectedView = v;
+                            selectedUri = Uri.fromFile(allOtherImages.get(getIdxFromPos(allOtherImages, selectedIndex)));
                         }
                     }
-                    selectedIndex = pos;
-                    selectedView = v;
-                    selectedUri = Uri.fromFile(allOtherImages.get(getIdxFromPos(allOtherImages, selectedIndex)));
-                }
+                });
+                allImagesGV.setAdapter(adapter2);
             }
-        });
-        allImagesGV.setAdapter(adapter2);
+        }.execute();
+
+
     }
 
     private void createcolorphoriaImageStorage() {

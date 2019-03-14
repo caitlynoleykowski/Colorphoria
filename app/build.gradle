@@ -1,10 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.oo0o0o.colorphoria"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 27
         versionCode 6
         versionName "1.1"
@@ -51,12 +52,19 @@ dependencies {
     implementation 'com.google.firebase:firebase-ads:17.1.2'
     implementation 'com.google.firebase:firebase-core:16.0.6'
     implementation "android.arch.persistence.room:runtime:1.1.1"
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation 'com.google.code.gson:gson:2.8.2'
 
     // test dependencies
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.robolectric:robolectric:2.4'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}

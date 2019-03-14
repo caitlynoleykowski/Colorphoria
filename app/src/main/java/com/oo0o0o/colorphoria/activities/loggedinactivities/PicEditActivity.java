@@ -107,13 +107,6 @@ public class PicEditActivity extends LoggedInActivity {
 
         setUIforImageDoneProcessing(false);
 
-        // Initialize ads (to setup ad banner)
-        adView = findViewById(R.id.adView);
-//        adView.setAdSize(AdSize.SMART_BANNER);
-//        adView.setAdUnitId(getResources().getString(R.string.admob_ad_unit_id_banner_pic_edit));
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-
         interstitialAd = new InterstitialAd(this);
         interstitialAd.setAdUnitId(getResources().getString(R.string.admob_ad_unit_id_interstitial_share));
         interstitialAd.setAdListener(new AdListener() {

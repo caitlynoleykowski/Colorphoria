@@ -83,7 +83,7 @@ public class RestHelper {
         params.add("key", getApiKey(appContext));
         params.add("timestamp", "" + System.currentTimeMillis());
 
-        postDataWrapper(appContext, user, "mobile", "date_images", params, callbacks);
+        postDataWrapper(appContext, user, "mobile", "date_image_metadata", params, callbacks);
     }
 
 //    public static void firebaseEndpointAuthTest(Context appContext, FirebaseUser user, HttpCallbacks callbacks) {

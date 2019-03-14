@@ -11,6 +11,9 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera2.full"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -19,10 +22,9 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7546412369288210~5401783923"/>
+            android:value="ca-app-pub-7546412369288210~5401783923" />
 
         <activity
             android:name=".activities.loggedoutactivites.LoginActivity"
@@ -45,10 +47,13 @@
         <!-- <activity android:name=".activities.loggedoutactivites.LoginActivity" /> -->
         <activity
             android:name=".activities.loggedinactivities.SourceActivity"
-            android:label="Select Source" />
+            android:label="Select" />
         <activity
             android:name=".activities.loggedinactivities.PicEditActivity"
             android:label="@string/pic_edit_activity_title" />
+        <activity
+            android:name=".activities.loggedinactivities.CameraActivity"
+            android:label="@string/camera_activity_title"/>
         <activity
             android:name=".activities.loggedinactivities.BrowseActivity"
             android:label="@string/browse_activity_title" />

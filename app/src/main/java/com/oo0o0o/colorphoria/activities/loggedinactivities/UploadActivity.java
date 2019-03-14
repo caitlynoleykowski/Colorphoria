@@ -34,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -157,6 +158,7 @@ public class UploadActivity extends LoggedInActivity {
     public void onSaveInstanceState(Bundle out) {
         out.putParcelable(KEY_FILE_URI, mFileUri);
         out.putParcelable(KEY_DOWNLOAD_URL, mDownloadUrl);
+        super.onSaveInstanceState(out);
     }
 
     @Override
@@ -174,14 +176,14 @@ public class UploadActivity extends LoggedInActivity {
                 finish();
                 return true;
             case R.id.upload_menu_share:
-                onInternalShare();
+                onInternalShare(((EditText)findViewById(R.id.upload_comment_edit_text)).getText().toString());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void uploadFromUri(Uri fileUri) {
+    private void uploadFromUri(Uri fileUri, String comment) {
         Log.d(TAG, "uploadFromUri:src:" + fileUri.toString());
 
         // Clear the last download, if any
@@ -192,6 +194,7 @@ public class UploadActivity extends LoggedInActivity {
         // even if this Activity is killed or put in the background
         startService(new Intent(this, MyUploadService.class)
                 .putExtra(MyUploadService.EXTRA_FILE_URI, fileUri)
+                .putExtra(MyUploadService.EXTRA_COMMENT, comment)
                 .setAction(MyUploadService.ACTION_UPLOAD));
 
         // Show loading spinner
@@ -288,9 +291,9 @@ public class UploadActivity extends LoggedInActivity {
         progressBar.setVisibility(View.GONE);
     }
 
-    public void onInternalShare() {
+    public void onInternalShare(String comment) {
         if (mFileUri != null) {
-            uploadFromUri(mFileUri);
+            uploadFromUri(mFileUri, comment != null? comment : "");
         } else {
             Log.w(TAG, "File URI is null");
         }
