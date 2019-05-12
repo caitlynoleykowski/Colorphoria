@@ -5,7 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 
 import com.oo0o0o.colorphoria.R;
-import com.oo0o0o.colorphoria.activities.loggedinactivities.ImageFeedActivity;
+import com.oo0o0o.colorphoria.activities.loggedinactivities.BottomNavActivity;
 import com.oo0o0o.colorphoria.activities.loggedoutactivites.LoginActivity;
 import com.oo0o0o.colorphoria.backgroundtasks.RestHelper;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,7 +55,7 @@ public class LoginUtils {
                     public void onPositiveButton(Dialog confirmDialog) {
                         // Close the dialog and go to login screen
                         confirmDialog.dismiss();
-                        activity.startActivity(new Intent(activity, ImageFeedActivity.class));
+                        activity.startActivity(new Intent(activity, BottomNavActivity.class));
                     }
                 },
                 false);

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.oo0o0o.colorphoria.R;
 import com.oo0o0o.colorphoria.activities.BaseColorphoriaActivity;
-import com.oo0o0o.colorphoria.activities.loggedinactivities.ImageFeedActivity;
+import com.oo0o0o.colorphoria.activities.loggedinactivities.BottomNavActivity;
 import com.oo0o0o.colorphoria.backgroundtasks.RestHelper;
 import com.oo0o0o.colorphoria.utils.Utils;
 import com.google.android.gms.auth.api.Auth;
@@ -61,7 +61,7 @@ public class LoginActivity extends BaseColorphoriaActivity implements
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, ImageFeedActivity.class));
+            startActivity(new Intent(LoginActivity.this, BottomNavActivity.class));
             finish();
         }
 
@@ -154,7 +154,7 @@ public class LoginActivity extends BaseColorphoriaActivity implements
                                         false);
                             }
                         } else {
-                            Intent intent = new Intent(LoginActivity.this, ImageFeedActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, BottomNavActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -270,7 +270,7 @@ public class LoginActivity extends BaseColorphoriaActivity implements
                                         if (responseJson.has("recorded")) {
                                             boolean recorded = responseJson.getBoolean("recorded");
                                             if (recorded) {
-                                                startActivity(new Intent(LoginActivity.this, ImageFeedActivity.class));
+                                                startActivity(new Intent(LoginActivity.this, BottomNavActivity.class));
                                             } else {
                                                 Intent birthdayActivityIntent = new Intent(LoginActivity.this, BirthdayActivity.class);
                                                 birthdayActivityIntent.putExtra(BirthdayActivity.STARTED_FROM_SIGNUP, false);

@@ -539,12 +539,6 @@ public class PicEditActivity extends LoggedInActivity {
         setUIforImageDoneProcessing(true);
     }
 
-    private void goToPicSourceActivity(Uri uri) {
-        Intent intent = new Intent(this, ImageFeedActivity.class);
-        intent.putExtra(ImageFeedActivity.IMAGE_URI_STATE_KEY, uri);
-        startActivity(intent);
-            }
-
     // End UI Helpers
 
     // Begin business logic

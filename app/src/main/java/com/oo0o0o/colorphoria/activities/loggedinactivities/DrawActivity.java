@@ -157,26 +157,6 @@ public class DrawActivity extends LoggedInActivity {
         }
     }
 
-    public void onDraw(View v) {
-        // Do nothing
-    }
-
-    public void onCamera(View v) {
-        startPicSourceStoragePermission(false, true);
-    }
-
-    public void onAdd(View v) {
-        // Do nothing
-    }
-
-    public void onHome(View v) {
-        startPicSourceStoragePermission(false, false);
-    }
-
-    public void onBrowse(View v) {
-        startPicSourceStoragePermission(true, false);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -373,60 +353,6 @@ public class DrawActivity extends LoggedInActivity {
         return imageFile;
     }
 
-    private void startPicSourceStoragePermission(final boolean startBrowse, final boolean startCamera) {
-        int callbackId;
-        if (!startBrowse && !startCamera) {
-            callbackId = REQUEST_PERMISSIONS_CALLBACK_START_PIC_SOURCE_WRITE_EXTERNAL_STORAGE;
-        } else if (startBrowse){
-            callbackId = REQUEST_PERMISSIONS_CALLBACK_START_BROWSE_WRITE_EXTERNAL_STORAGE;
-        } else {
-            callbackId = REQUEST_PERMISSIONS_CALLBACK_START_CAMERA_WRITE_EXTERNAL_STORAGE;
-        }
-        if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                getString(R.string.permission_write_external_storage_explanation),
-                callbackId,
-                new Utils.OnExplanationDeclinedHandler() {
-                    @Override
-                    public void onExplanationDeclined() {
-                        Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
-                        startPicSourceActivityWithoutSaving(startBrowse, startCamera);
-                    }
-                })) {
-            startPicSourceActivity(startBrowse, startCamera);
-        }
-    }
-
-    private void startPicSourceActivity(boolean startBrowse, boolean startCamera) {
-        Intent intent;
-        if (startBrowse) {
-            intent = new Intent(this, BrowseActivity.class);
-        } else if (startCamera) {
-            intent = new Intent(this, ImageFeedActivity.class);
-            intent.putExtra(ImageFeedActivity.START_CAMERA, true);
-        } else {
-            intent = new Intent(this, ImageFeedActivity.class);
-        }
-        if (drawView.isEdited()) {
-            File imageFile = saveDrawing();
-            // Load intent with uri
-            intent.putExtra(ImageFeedActivity.IMAGE_URI_STATE_KEY, Uri.fromFile(imageFile));
-        }
-        startActivity(intent);
-    }
-
-    private void startPicSourceActivityWithoutSaving(boolean startBrowse, boolean startCamera) {
-        Intent intent;
-        if (startBrowse) {
-            intent = new Intent(this, BrowseActivity.class);
-        } else if (startCamera) {
-            intent = new Intent(this, ImageFeedActivity.class);
-            intent.putExtra(ImageFeedActivity.START_CAMERA, true);
-        } else {
-            intent = new Intent(this, ImageFeedActivity.class);
-        }
-        startActivity(intent);
-    }
-
     private void startPicEditStoragePermission() {
         if (Utils.getPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 getString(R.string.permission_write_external_storage_explanation),
@@ -474,42 +400,6 @@ public class DrawActivity extends LoggedInActivity {
                     startPicEditActivity();
                 } else {
                     Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
-                }
-                return;
-            }
-            case REQUEST_PERMISSIONS_CALLBACK_START_PIC_SOURCE_WRITE_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted, so continue.
-                    startPicSourceActivity(false, false);
-                } else {
-                    Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
-                    startPicSourceActivityWithoutSaving(false, false);
-                }
-                return;
-            }
-            case REQUEST_PERMISSIONS_CALLBACK_START_BROWSE_WRITE_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted, so continue.
-                    startPicSourceActivity(true, false);
-                } else {
-                    Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
-                    startPicSourceActivityWithoutSaving(true, false);
-                }
-                return;
-            }
-            case REQUEST_PERMISSIONS_CALLBACK_START_CAMERA_WRITE_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted, so continue.
-                    startPicSourceActivity(false, true);
-                } else {
-                    Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
-                    startPicSourceActivityWithoutSaving(false, true);
                 }
                 return;
             }

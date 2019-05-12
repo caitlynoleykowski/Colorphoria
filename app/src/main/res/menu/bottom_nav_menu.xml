@@ -3,14 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/image_feed_nav"
         android:icon="@drawable/ic_home_unselected_24dp"
-        android:title="@string/image_feed_activity_title"
-        app:showAsAction="always"/>
+        android:title="@string/image_feed_activity_title"/>
     <item android:id="@+id/create_nav"
         android:icon="@drawable/ic_add_24dp"
-        android:title="Create"
-        app:showAsAction="always"/>
+        android:title="Create"/>
     <item android:id="@+id/account_nav"
         android:icon="@drawable/ic_person_unselected_24dp"
-        android:title="My Account"
-        app:showAsAction="always"/>
+        android:title="My Account"/>
 </menu>

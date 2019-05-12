@@ -43,7 +43,7 @@
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <activity android:name=".activities.loggedinactivities.ImageFeedActivity" />
+        <activity android:name=".activities.loggedinactivities.BottomNavActivity" />
         <!-- <activity android:name=".activities.loggedoutactivites.LoginActivity" /> -->
         <activity
             android:name=".activities.loggedinactivities.SourceActivity"
@@ -63,9 +63,6 @@
         <activity
             android:name=".activities.loggedinactivities.UploadActivity"
             android:label="@string/upload_activity_title" />
-        <activity
-            android:name=".activities.loggedinactivities.AccountActivity"
-            android:label="@string/account_activity_title" />
         <activity
             android:name=".activities.loggedoutactivites.BirthdayActivity"
             android:theme="@style/LoggedOutTheme" />

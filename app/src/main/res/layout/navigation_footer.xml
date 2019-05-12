@@ -1,89 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pic_source_buttons_linear_layout"
-    android:layout_gravity="center"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="@dimen/elevation"
-    android:background="@color/colorNavigationFooter"
-    android:orientation="vertical">
+<merge xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/navigation_footer_height"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingTop="@dimen/navigation_margin_top"
-            android:paddingBottom="@dimen/navigation_margin_bottom"
-            android:background="@drawable/button_selector_small"
-            android:orientation="vertical"
-            android:onClick="onHome">
-            <ImageView
-                android:id="@+id/homeButton"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_home_unselected_24dp" />
-            <TextView
-                android:id="@+id/homeLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textAlignment="center"
-                android:text="@string/image_feed_activity_title"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingTop="@dimen/navigation_margin_top"
-            android:paddingBottom="@dimen/navigation_margin_bottom"
-            android:background="@drawable/button_selector_small"
-            android:orientation="vertical"
-            android:onClick="onAdd">
-            <ImageView
-                android:id="@+id/addButton"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_add_24dp" />
-            <TextView
-                android:id="@+id/addLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textAlignment="center"
-                android:text="Create"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingTop="@dimen/navigation_margin_top"
-            android:paddingBottom="@dimen/navigation_margin_bottom"
-            android:background="@drawable/button_selector_small"
-            android:orientation="vertical"
-            android:onClick="onAccount">
-            <ImageView
-                android:id="@+id/accountButton"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_person_unselected_24dp" />
-            <TextView
-                android:id="@+id/accountLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textAlignment="center"
-                android:text="My Account"/>
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        style="@style/Widget.Design.BottomNavigationView"
+        app:itemIconTint="@drawable/bottom_navigation_colors"
+        app:itemTextColor="@drawable/bottom_navigation_colors"
+        app:menu="@menu/bottom_nav_menu" />
+</merge>

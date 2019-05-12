@@ -1,16 +1,13 @@
 package com.oo0o0o.colorphoria.activities.loggedinactivities;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,14 +17,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TabHost;
-import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.oo0o0o.colorphoria.backgroundtasks.GetBrowseThumbnailImageAsyncTask;
@@ -120,26 +114,6 @@ public class BrowseActivity extends LoggedInActivity {
             adView.destroy();
         }
         super.onDestroy();
-    }
-
-    public void onDraw(View v) {
-        startDrawActivity(mImageUri);
-    }
-
-    public void onCamera(View v) {
-        startCameraActivity(mImageUri);
-    }
-
-    public void onAdd(View v) {
-        // Do nothing
-    }
-
-    public void onHome(View v) {
-        startPicSourceActivity(mImageUri);
-    }
-
-    public void onBrowse(View v) {
-        // Do nothing
     }
 
     private void getFilesStoragePermission() {
@@ -423,15 +397,8 @@ public class BrowseActivity extends LoggedInActivity {
         startActivity(intent);
     }
 
-    private void startCameraActivity(Uri uri) {
-        Intent intent = new Intent(this, ImageFeedActivity.class);
-        intent.putExtra(DrawActivity.SOURCE_URI, uri);
-        intent.putExtra(ImageFeedActivity.START_CAMERA, true);
-        startActivity(intent);
-    }
-
     private void startPicSourceActivity(Uri uri) {
-        Intent intent = new Intent(this, ImageFeedActivity.class);
+        Intent intent = new Intent(this, BottomNavActivity.class);
         intent.putExtra(PicEditActivity.SOURCE_URI, uri);
         startActivity(intent);
     }

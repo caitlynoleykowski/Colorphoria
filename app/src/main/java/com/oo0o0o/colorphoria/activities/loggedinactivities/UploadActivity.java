@@ -219,7 +219,7 @@ public class UploadActivity extends LoggedInActivity {
     }
 
     private void startPicSourceActivity() {
-        Intent intent = new Intent(this, ImageFeedActivity.class);
+        Intent intent = new Intent(this, BottomNavActivity.class);
         startActivity(intent);
     }
 
