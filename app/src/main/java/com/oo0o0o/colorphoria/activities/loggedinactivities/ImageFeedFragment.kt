@@ -74,7 +74,6 @@ class ImageFeedFragment : Fragment() {
     private var mImageUri: Uri? = null
 
     private var adapter: ImageAdapter? = null
-    private var progressBar: ProgressBar? = null
 
     private var refreshingFeed = false
 

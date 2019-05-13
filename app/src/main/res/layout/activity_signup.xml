@@ -52,12 +52,11 @@
             android:hint="@string/password_hint"
             android:inputType="textPassword" />
 
-        <TextView
+        <Button
             android:id="@+id/sign_up_button"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/navigation_footer_height"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
-            android:background="@drawable/button_selector_large"
             android:text="@string/signup_button"
             android:gravity="center"
             android:textColor="@color/colorPrimary"
@@ -73,13 +72,11 @@
         <Button
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:background="@null"
             android:text="@string/back_button_link"
             android:textAllCaps="false"
-            android:textSize="15dp" />
+            />
     </LinearLayout>
 
     <include layout="@layout/progress">

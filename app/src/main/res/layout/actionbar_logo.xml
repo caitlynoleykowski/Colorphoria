@@ -8,10 +8,10 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="24dp"
+        android:layout_height="30dp"
         android:paddingTop="@dimen/smallest_margin"
         android:paddingBottom="@dimen/smallest_margin"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true"
-        android:src="@drawable/img_logo"/>
+        android:src="@drawable/img_logo_white"/>
 </LinearLayout>

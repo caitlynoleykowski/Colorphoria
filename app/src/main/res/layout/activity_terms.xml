@@ -46,16 +46,13 @@
             android:breakStrategy="simple"
             android:text="@string/terms_info" />
 
-        <TextView
+        <Button
             android:id="@+id/terms_continue_button"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/navigation_footer_height"
-            android:background="@drawable/button_selector_large"
+            android:layout_height="wrap_content"
             android:text="@string/terms_continue"
             android:gravity="center"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:textColor="@color/colorPrimary"
-            android:fontFamily="sans-serif-medium"
             android:textAllCaps="false"
             android:onClick="onAccept"/>
     </LinearLayout>
