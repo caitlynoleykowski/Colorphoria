@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:showDividers="middle|end"
     android:divider="@drawable/divider"
+    android:background="@color/colorBackground"
     tools:context="com.oo0o0o.colorphoria.activities.loggedinactivities.SourceActivity">
 
     <LinearLayout

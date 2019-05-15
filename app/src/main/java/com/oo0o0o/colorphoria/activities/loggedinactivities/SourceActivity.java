@@ -9,9 +9,12 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.oo0o0o.colorphoria.R;
@@ -34,6 +37,16 @@ public class SourceActivity extends LoggedInActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // inside your activity (if you did not enable transitions in your theme)
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
+        getWindow().setAllowEnterTransitionOverlap(true);
+
+        // set an enter/exit transition
+        getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
+        getWindow().setExitTransition(new Slide(Gravity.TOP));
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_source);
 

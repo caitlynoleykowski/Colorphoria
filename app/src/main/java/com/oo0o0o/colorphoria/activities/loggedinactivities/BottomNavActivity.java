@@ -1,6 +1,7 @@
 package com.oo0o0o.colorphoria.activities.loggedinactivities;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
@@ -13,10 +14,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.FileProvider;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -49,6 +54,15 @@ public class BottomNavActivity extends LoggedInActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        // inside your activity (if you did not enable transitions in your theme)
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
+        // set an exit and exit transition
+        getWindow().setExitTransition(new Fade());
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_feed);
 
@@ -93,7 +107,9 @@ public class BottomNavActivity extends LoggedInActivity {
 
     public void onAdd() {
         Intent intent = new Intent(this, SourceActivity.class);
-        startActivity(intent);
+
+        startActivity(intent,
+                ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
     }
 
     public void onHome() {

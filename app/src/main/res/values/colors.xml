@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorSecondaryAccent">#ff88ffff</color>
-    <color name="colorSecondary">#ff4DD0E1</color>
-    <color name="colorSecondaryDark">#ff009faf</color>
+    <color name="colorSecondary">#ff26c6da</color>
+    <color name="colorSecondaryDark">#ff0095a8</color>
 
     <color name="colorSecondaryAccentTranslucent">#8888ffff</color>
     <color name="colorSecondaryTranslucent">#884DD0E1</color>
