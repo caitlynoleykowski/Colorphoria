@@ -1,8 +1,9 @@
 package com.oo0o0o.colorphoria.reusableuserinterface;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
+
+import androidx.appcompat.widget.AppCompatImageButton;
 
 /**
  * Created by oo0o0o on 12/28/2017.

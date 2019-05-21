@@ -1,9 +1,9 @@
 package com.oo0o0o.colorphoria.reusableuserinterface;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * Created by oo0o0o on 9/29/2017.

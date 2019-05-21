@@ -1,27 +1,23 @@
 package com.oo0o0o.colorphoria.activities.loggedinactivities
 
-
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
-
 import com.oo0o0o.colorphoria.R
 import com.oo0o0o.colorphoria.activities.loggedoutactivites.LoginActivity
 import com.oo0o0o.colorphoria.activities.loggedoutactivites.SignupActivity
 import com.oo0o0o.colorphoria.utils.Utils
 import kotlinx.android.synthetic.main.account_fragment.*
-import kotlinx.android.synthetic.main.navigation_footer.*
 
 /**
  * A simple [Fragment] subclass.

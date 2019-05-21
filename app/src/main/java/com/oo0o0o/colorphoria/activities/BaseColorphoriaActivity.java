@@ -1,7 +1,8 @@
 package com.oo0o0o.colorphoria.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.oo0o0o.colorphoria.R;
 

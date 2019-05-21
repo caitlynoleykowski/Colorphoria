@@ -1,11 +1,6 @@
 package com.oo0o0o.colorphoria.backgroundtasks;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.oo0o0o.colorphoria.R;

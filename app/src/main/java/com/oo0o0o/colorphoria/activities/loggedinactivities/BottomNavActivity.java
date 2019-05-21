@@ -1,54 +1,16 @@
 package com.oo0o0o.colorphoria.activities.loggedinactivities;
 
-import android.Manifest;
 import android.app.ActivityOptions;
-import android.arch.persistence.room.Room;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.content.FileProvider;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
-import com.oo0o0o.colorphoria.backgroundtasks.GetImageAsyncTask;
-import com.oo0o0o.colorphoria.backgroundtasks.RestHelper;
-import com.oo0o0o.colorphoria.data.AppDatabase;
-import com.oo0o0o.colorphoria.data.MediaEntity;
-import com.oo0o0o.colorphoria.reusableuserinterface.ListRefreshView;
+import androidx.annotation.NonNull;
+import androidx.transition.Fade;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.oo0o0o.colorphoria.R;
-import com.oo0o0o.colorphoria.utils.Utils;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BottomNavActivity extends LoggedInActivity {
 
@@ -60,7 +22,7 @@ public class BottomNavActivity extends LoggedInActivity {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
         // set an exit and exit transition
-        getWindow().setExitTransition(new Fade());
+//        getWindow().setExitTransition(new Fade());
 
 
         super.onCreate(savedInstanceState);

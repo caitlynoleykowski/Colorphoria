@@ -3,22 +3,23 @@ package com.oo0o0o.colorphoria.activities.loggedinactivities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.oo0o0o.colorphoria.R;
-import com.oo0o0o.colorphoria.activities.BaseColorphoriaActivity;
-import com.oo0o0o.colorphoria.activities.loggedoutactivites.LoginActivity;
-import com.oo0o0o.colorphoria.utils.Utils;
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.oo0o0o.colorphoria.R;
+import com.oo0o0o.colorphoria.activities.BaseColorphoriaActivity;
+import com.oo0o0o.colorphoria.activities.loggedoutactivites.LoginActivity;
+import com.oo0o0o.colorphoria.utils.Utils;
 
 /**
  * Created by oo0o0o on 6/11/2017.
