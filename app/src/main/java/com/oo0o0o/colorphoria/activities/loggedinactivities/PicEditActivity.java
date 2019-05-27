@@ -385,7 +385,7 @@ public class PicEditActivity extends LoggedInActivity {
         LinearLayout ll2 = (LinearLayout) findViewById(R.id.icon_linear_layout);
         ll2.getChildCount();
         for (int i = 0; i < ll2.getChildCount(); i++) {
-            ((ImageButton) ll2.getChildAt(i)).setClickable(processingImageDone);
+            (ll2.getChildAt(i)).setClickable(processingImageDone);
         }
         findViewById(R.id.choose_palette).setClickable(processingImageDone);
         findViewById(R.id.rotate_right).setClickable(processingImageDone);

@@ -13,6 +13,8 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.google.android.gms.ads.AdView
@@ -60,24 +62,11 @@ class ImageFeedFragment : Fragment() {
                 }
     }
 
-    private val TAG = BottomNavActivity::class.java.name
-
-    private val REQUEST_IMAGE_CAPTURE = 1
-    private val REQUEST_IMAGE_GET = 0
-    val IMAGE_URI_STATE_KEY = "IMAGE_URI_STATE_KEY"
-
-    val START_CAMERA = "START_CAMERA"
-
-    val REQUEST_PERMISSIONS_CALLBACK_CAMERA = 0
-    val REQUEST_PERMISSIONS_CALLBACK_CAMERA_WRITE_EXTERNAL_STORAGE = 2
-
-    private var mImageUri: Uri? = null
+    private val TAG = ImageFeedFragment::class.java.name
 
     private var adapter: ImageAdapter? = null
 
     private var refreshingFeed = false
-
-    internal var adView: AdView? = null
 
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
@@ -108,7 +97,10 @@ class ImageFeedFragment : Fragment() {
 
         listView.adapter = adapter
 
-        listView.setOnRefreshHandler { getMyImages() }
+        swipeRefreshLayout.setOnRefreshListener { getMyImages() }
+        swipeRefreshLayout.setColorSchemeColors(
+                ResourcesCompat.getColor(resources, R.color.colorSecondary, activity?.theme)
+        )
 
         val appcontext = activity!!.applicationContext
         // Load the media urls from the database and display the images (if in db, should be cached)
@@ -129,7 +121,7 @@ class ImageFeedFragment : Fragment() {
                     loadFeed(mediaEntities)
                 }
                 // Call to get the images
-                getMyImages()
+                getMyImages(false)
             }
         }.execute()
 
@@ -140,32 +132,11 @@ class ImageFeedFragment : Fragment() {
 
     }
 
-    override fun onPause() {
-        if (adView != null) {
-            adView?.pause()
-        }
-        super.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (adView != null) {
-            adView?.resume()
-        }
-    }
-
-    override fun onDestroy() {
-        if (adView != null) {
-            adView?.destroy()
-        }
-        super.onDestroy()
-    }
-
-    private fun getMyImages() {
+    private fun getMyImages(showRefreshing: Boolean = true) {
         if (!refreshingFeed) {
-            progressBar?.visibility = View.VISIBLE
             adapter?.isDoneLoading = false
             refreshingFeed = true
+            swipeRefreshLayout.isRefreshing = showRefreshing
 
             val appContext = activity!!.applicationContext
             val user = FirebaseAuth.getInstance().currentUser
@@ -221,12 +192,12 @@ class ImageFeedFragment : Fragment() {
 
                         override fun onPostExecute(mediaEntities: List<MediaEntity>) {
                             super.onPostExecute(mediaEntities)
-                            progressBar?.setVisibility(View.INVISIBLE)
                             // TODO: Figure out why in the world networkResponse is null and come back to this
                             // TODO: so that we don't have to just loadFeed as if there's no images for today
                             Utils.showCustomToast(activity, "Unable to refresh feed")
                             loadFeed(mediaEntities)
                             refreshingFeed = false
+                            swipeRefreshLayout.isRefreshing = false
                         }
                     }.execute()
                 }
@@ -243,7 +214,7 @@ class ImageFeedFragment : Fragment() {
         }
         adapter?.notifyDataSetChanged() // Make list view pick up changes
         refreshingFeed = false
-        progressBar?.visibility = View.INVISIBLE
+        swipeRefreshLayout.isRefreshing = false
     }
 }
 

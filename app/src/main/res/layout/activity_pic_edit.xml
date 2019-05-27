@@ -34,7 +34,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:orientation="vertical"
         android:id="@+id/effect_ctrl_layout"
@@ -42,10 +41,9 @@
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
-            android:layout_height="124dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             >
 
@@ -55,64 +53,153 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                    android:id="@+id/random_bleed_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_effect"
-                    android:layout_marginRight="@dimen/small_margin"
-                    android:scaleType="centerCrop"
-                    android:clickable="false" />
+                <LinearLayout
 
-
-                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                    android:id="@+id/random_flood_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_effect"
-                    android:layout_marginRight="@dimen/small_margin"
-                    android:padding="@dimen/image_button_border"
-                    android:scaleType="centerCrop"
-                    android:clickable="false" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                    android:id="@+id/random_line_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_effect"
-                    android:layout_marginRight="@dimen/small_margin"
-                    android:padding="@dimen/image_button_border"
-                    android:scaleType="centerCrop"
-                    android:clickable="false" />
+                    <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
+                        android:id="@+id/random_bleed_button"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/button_effect"
+                        android:layout_marginRight="@dimen/small_margin"
+                        android:scaleType="centerCrop"
+                        android:clickable="false" />
 
-                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                    android:id="@+id/invert_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_effect"
-                    android:layout_marginRight="@dimen/small_margin"
-                    android:padding="@dimen/image_button_border"
-                    android:scaleType="centerCrop"
-                    android:clickable="false" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        android:gravity="center"
+                        android:text="@string/pic_edit_effect_tint_fill"
+                        />
+                </LinearLayout>
 
-                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                    android:id="@+id/outline_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_effect"
-                    android:padding="@dimen/image_button_border"
-                    android:scaleType="centerCrop"
-                    android:clickable="false" />
+                <LinearLayout
 
-                <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                    android:id="@+id/threshold_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_effect"
-                    android:layout_marginRight="@dimen/small_margin"
-                    android:padding="@dimen/image_button_border"
-                    android:scaleType="centerCrop"
-                    android:clickable="false" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
+                        android:id="@+id/random_flood_button"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/button_effect"
+                        android:layout_marginRight="@dimen/small_margin"
+                        android:padding="@dimen/image_button_border"
+                        android:scaleType="centerCrop"
+                        android:clickable="false" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        android:gravity="center"
+                        android:text="@string/pic_edit_effect_color_fill"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
+                        android:id="@+id/random_line_button"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/button_effect"
+                        android:layout_marginRight="@dimen/small_margin"
+                        android:padding="@dimen/image_button_border"
+                        android:scaleType="centerCrop"
+                        android:clickable="false" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        android:gravity="center"
+                        android:text="@string/pic_edit_effect_line_fill"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
+                        android:id="@+id/invert_button"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginRight="@dimen/small_margin"
+                        android:background="@drawable/button_effect"
+                        android:clickable="false"
+                        android:padding="@dimen/image_button_border"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        android:gravity="center"
+                        android:text="@string/pic_edit_effect_partial_invert"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
+                        android:id="@+id/outline_button"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/button_effect"
+                        android:padding="@dimen/image_button_border"
+                        android:scaleType="centerCrop"
+                        android:clickable="false" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        android:gravity="center"
+                        android:text="@string/pic_edit_effect_outline"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
+                        android:id="@+id/threshold_button"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/button_effect"
+                        android:layout_marginRight="@dimen/small_margin"
+                        android:padding="@dimen/image_button_border"
+                        android:scaleType="centerCrop"
+                        android:clickable="false" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        android:gravity="center"
+                        android:text="@string/pic_edit_effect_threshold"
+                        />
+                </LinearLayout>
 
         </LinearLayout>
         </HorizontalScrollView>
