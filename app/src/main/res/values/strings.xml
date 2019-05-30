@@ -108,6 +108,7 @@
     <string name="pic_edit_menu_save">Save</string>
     <string name="pic_edit_menu_share">Next</string>
     <string name="image_saved">Image saved</string>
+    <string name="pic_edit_effect_original">Original</string>
     <string name="pic_edit_effect_tint_fill">Tint Fill</string>
     <string name="pic_edit_effect_color_fill">Color Fill</string>
     <string name="pic_edit_effect_line_fill">Line Fill</string>

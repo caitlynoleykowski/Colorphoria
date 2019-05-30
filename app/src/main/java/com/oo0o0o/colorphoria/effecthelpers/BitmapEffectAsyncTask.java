@@ -6,11 +6,6 @@ import android.widget.ImageView;
 
 import com.oo0o0o.colorphoria.activities.loggedinactivities.PicEditActivity;
 import com.oo0o0o.colorphoria.effects.BitmapEffect;
-import com.oo0o0o.colorphoria.effects.InvertEffect;
-import com.oo0o0o.colorphoria.effects.RandomBleedFillEffect;
-import com.oo0o0o.colorphoria.effects.RandomFloodFillEffect;
-import com.oo0o0o.colorphoria.effects.RandomLineFillEffect;
-import com.oo0o0o.colorphoria.effects.ThresholdEffect;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

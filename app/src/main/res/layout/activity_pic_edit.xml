@@ -17,7 +17,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/theImage"
+            android:id="@+id/imageView"
             android:layout_centerInParent="true" />
 
         <ProgressBar
@@ -53,6 +53,30 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
+                <!--<LinearLayout-->
+
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical">-->
+
+                    <!--<com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton-->
+                        <!--android:id="@+id/original_button"-->
+                        <!--android:layout_width="100dp"-->
+                        <!--android:layout_height="100dp"-->
+                        <!--android:background="@drawable/button_effect"-->
+                        <!--android:layout_marginRight="@dimen/small_margin"-->
+                        <!--android:scaleType="centerCrop"-->
+                        <!--android:clickable="false" />-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="@string/pic_edit_effect_original"-->
+                        <!--/>-->
+                <!--</LinearLayout>-->
+
                 <LinearLayout
 
                     android:layout_width="wrap_content"
@@ -60,7 +84,7 @@
                     android:orientation="vertical">
 
                     <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                        android:id="@+id/random_bleed_button"
+                        android:id="@+id/randomBleedButton"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/button_effect"
@@ -84,7 +108,7 @@
                     android:orientation="vertical">
 
                     <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                        android:id="@+id/random_flood_button"
+                        android:id="@+id/randomFloodButton"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/button_effect"
@@ -109,7 +133,7 @@
                     android:orientation="vertical">
 
                     <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                        android:id="@+id/random_line_button"
+                        android:id="@+id/randomLineButton"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/button_effect"
@@ -134,7 +158,7 @@
                     android:orientation="vertical">
 
                     <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                        android:id="@+id/invert_button"
+                        android:id="@+id/invertButton"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_marginRight="@dimen/small_margin"
@@ -159,7 +183,7 @@
                     android:orientation="vertical">
 
                     <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                        android:id="@+id/outline_button"
+                        android:id="@+id/outlineButton"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/button_effect"
@@ -183,7 +207,7 @@
                     android:orientation="vertical">
 
                     <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
-                        android:id="@+id/threshold_button"
+                        android:id="@+id/thresholdButton"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/button_effect"

@@ -68,6 +68,7 @@
     <string name="pic_edit_menu_redo">やり直し</string>
     <string name="pic_edit_menu_save">セーブ</string>
     <string name="pic_edit_menu_share">次</string>
+    <string name="pic_edit_effect_original">元の</string>
     <string name="pic_edit_effect_tint_fill">色合い 塗りつぶし</string>
     <string name="pic_edit_effect_color_fill">色 塗りつぶし</string>
     <string name="pic_edit_effect_line_fill">ライン 塗りつぶし</string>
