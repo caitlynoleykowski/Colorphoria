@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class ResetPasswordActivity extends BaseColorphoriaActivity {
 
     private EditText emailEditText;
-    private TextView resetButtonTextView;
+    private Button resetButton;
     private Button backButtonLink;
 
     private FirebaseAuth auth;
@@ -37,10 +37,10 @@ public class ResetPasswordActivity extends BaseColorphoriaActivity {
         auth = FirebaseAuth.getInstance();
 
         emailEditText = (EditText) findViewById(R.id.email_edit_text);
-        resetButtonTextView = (TextView) findViewById(R.id.reset_password_button);
+        resetButton = (Button) findViewById(R.id.reset_password_button);
         backButtonLink = (Button) findViewById(R.id.back_button_link);
 
-        resetButtonTextView.setOnClickListener(new View.OnClickListener() {
+        resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

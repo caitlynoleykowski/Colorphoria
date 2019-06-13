@@ -74,10 +74,11 @@ android:layout_height="match_parent">
             android:layout_height="0dp"
             android:layout_weight="3" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/birthday_continue_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:text="@string/birthday_continue"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:textAllCaps="false"

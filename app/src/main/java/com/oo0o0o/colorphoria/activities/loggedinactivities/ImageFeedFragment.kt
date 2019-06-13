@@ -197,7 +197,7 @@ class ImageFeedFragment : Fragment() {
                             Utils.showCustomToast(activity, "Unable to refresh feed")
                             loadFeed(mediaEntities)
                             refreshingFeed = false
-                            swipeRefreshLayout.isRefreshing = false
+                            swipeRefreshLayout?.isRefreshing = false
                         }
                     }.execute()
                 }
@@ -214,7 +214,7 @@ class ImageFeedFragment : Fragment() {
         }
         adapter?.notifyDataSetChanged() // Make list view pick up changes
         refreshingFeed = false
-        swipeRefreshLayout.isRefreshing = false
+        swipeRefreshLayout?.isRefreshing = false
     }
 }
 
@@ -278,7 +278,7 @@ class ImageAdapter(private val context: Context) : BaseAdapter() {
             progressBar.visibility = View.VISIBLE
 
             holder.picturesView = convertView.findViewById(R.id.imageview) as ImageView
-            holder.titleTextView = convertView.findViewById(R.id.title_text_view) as TextView
+//            holder.titleTextView = convertView.findViewById(R.id.title_text_view) as TextView
             holder.dateTextView = convertView.findViewById(R.id.date_text_view) as TextView
             holder.commentTextView = convertView.findViewById(R.id.comment_text_view) as TextView
             if (position < imageUrlList.size) {
@@ -286,24 +286,24 @@ class ImageAdapter(private val context: Context) : BaseAdapter() {
                 // This will wind up with pictures out of order if one async task finishes later than one that started later
                 // But it works well enough and its unlikely that the scenario will happen often
                 GetImageAsyncTask(context, holder.picturesView, progressBar, imageUrlList[position].downloadUrl).execute()
-                holder.titleTextView?.setText(imageUrlList[position].username)
+//                holder.titleTextView?.setText(imageUrlList[position].username)
                 holder.dateTextView?.setText(DateFormat.getDateInstance().format(imageUrlList[position].timestamp))
                 holder.commentTextView?.setText(
                         if (imageUrlList[position].comment != null) imageUrlList[position].comment else "")
             } else {
                 // Not sure if I should set the image here to blank/empty
-                holder.titleTextView?.setText("")
+//                holder.titleTextView?.setText("")
                 holder.dateTextView?.setText("")
                 holder.commentTextView?.setText("")
             }
         } else {
             holder.picturesView = convertView.findViewById(R.id.imageview) as ImageView
-            holder.titleTextView = convertView.findViewById(R.id.title_text_view) as TextView
+//            holder.titleTextView = convertView.findViewById(R.id.title_text_view) as TextView
             holder.dateTextView = convertView.findViewById(R.id.date_text_view) as TextView
             holder.commentTextView = convertView.findViewById(R.id.comment_text_view) as TextView
 
             holder.picturesView?.setImageDrawable(context.getDrawable(R.drawable.img_feed_unavailable))
-            holder.titleTextView?.setText("")
+//            holder.titleTextView?.setText("")
             holder.dateTextView?.setText("")
             holder.commentTextView?.setText("")
         }

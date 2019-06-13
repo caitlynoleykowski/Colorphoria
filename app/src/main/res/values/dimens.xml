@@ -27,8 +27,8 @@
     <!-- paint brush sizes -->
     <dimen name="extra_small_brush">1dp</dimen>
     <integer name="extra_small_size">1</integer>
-    <dimen name="small_brush">5dp</dimen>
-    <integer name="small_size">5</integer>
+    <dimen name="small_brush">2dp</dimen>
+    <integer name="small_size">2</integer>
     <dimen name="medium_brush">20dp</dimen>
     <integer name="medium_size">20</integer>
     <dimen name="large_brush">40dp</dimen>

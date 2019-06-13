@@ -270,18 +270,20 @@ public class Utils {
 	}
 
 	public static void showCustomToast(Activity activity, String text) {
-		LayoutInflater inflater = activity.getLayoutInflater();
-		View layout = inflater.inflate(R.layout.toast,
-				(ViewGroup) activity.findViewById(R.id.toast_layout));
+		if (activity != null) {
+			LayoutInflater inflater = activity.getLayoutInflater();
+			View layout = inflater.inflate(R.layout.toast,
+					(ViewGroup) activity.findViewById(R.id.toast_layout));
 
-		TextView textView = (TextView) layout.findViewById(R.id.toast_text);
-		textView.setText(text);
+			TextView textView = (TextView) layout.findViewById(R.id.toast_text);
+			textView.setText(text);
 
-		Toast toast = new Toast(activity.getApplicationContext());
-		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-		toast.setDuration(Toast.LENGTH_LONG);
-		toast.setView(layout);
-		toast.show();
+			Toast toast = new Toast(activity.getApplicationContext());
+			toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+			toast.setDuration(Toast.LENGTH_LONG);
+			toast.setView(layout);
+			toast.show();
+		}
 	}
 
 	/**

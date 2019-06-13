@@ -52,10 +52,11 @@
             android:hint="@string/password_hint"
             android:inputType="textPassword" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sign_up_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             android:text="@string/signup_button"
             android:gravity="center"
@@ -69,10 +70,11 @@
             android:layout_weight="4"/>
 
         <!-- Top margin on this button needed to be same as login screen -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_marginTop="24dp"
             android:text="@string/back_button_link"
             android:textAllCaps="false"

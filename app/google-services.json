@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "890138283766-jess6tdk1cp8odjp9pm5frkflvscmsdq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oo0o0o.colorphoria",
+            "certificate_hash": "1991c10b1c88f386ffa343e227baa939091df9fc"
+          }
+        },
+        {
           "client_id": "890138283766-k5f28l1c6jl70m0k9jmj1f3gr474jq8g.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -25,17 +33,16 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890138283766-k5f28l1c6jl70m0k9jmj1f3gr474jq8g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-7546412369288210~5401783923"
     }
   ],
   "configuration_version": "1"

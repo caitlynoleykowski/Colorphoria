@@ -101,7 +101,7 @@ public class DrawActivity extends LoggedInActivity {
         mediumBrush = getResources().getInteger(R.integer.medium_size);
         largeBrush = getResources().getInteger(R.integer.large_size);
 
-        drawView.setPaintbrushSize(extraSmallBrush);
+        drawView.setPaintbrushSize(smallBrush);
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Bundle bundle = new Bundle();
@@ -135,22 +135,22 @@ public class DrawActivity extends LoggedInActivity {
     }
 
     private void loadImageIntoUIFromUri(Uri uri) {
-        try {
-            InputStream is = getContentResolver().openInputStream(sourceUri);
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(is, null, options);
-            // TODO: Maybe can move the getScaleFactor function somewhere else or create a generic one?
-            double scaleFactor = BitmapWrapper.getScaleFactor(options.outWidth, options.outHeight);
-            BitmapFactory.Options finalOptions = new BitmapFactory.Options();
-            finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
-            InputStream finalInputStream = getContentResolver().openInputStream(sourceUri);
-            Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
-            drawView.setCanvasBitmap(bm);
-        } catch (FileNotFoundException e) {
-            Log.e(TAG, "File with uri provided in Intent can not be found.");
-            // TODO: Handle this error
-        }
+//        try {
+//            InputStream is = getContentResolver().openInputStream(sourceUri);
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inJustDecodeBounds = true;
+//            BitmapFactory.decodeStream(is, null, options);
+//            // TODO: Maybe can move the getScaleFactor function somewhere else or create a generic one?
+//            double scaleFactor = BitmapWrapper.getScaleFactor(options.outWidth, options.outHeight);
+//            BitmapFactory.Options finalOptions = new BitmapFactory.Options();
+//            finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
+//            InputStream finalInputStream = getContentResolver().openInputStream(sourceUri);
+//            Bitmap bm = BitmapFactory.decodeStream(finalInputStream, null, finalOptions);
+//            drawView.setCanvasBitmap(bm);
+//        } catch (FileNotFoundException e) {
+//            Log.e(TAG, "File with uri provided in Intent can not be found.");
+//            // TODO: Handle this error
+//        }
     }
 
     @Override

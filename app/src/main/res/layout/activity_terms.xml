@@ -46,10 +46,11 @@
             android:breakStrategy="simple"
             android:text="@string/terms_info" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/terms_continue_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:text="@string/terms_continue"
             android:gravity="center"
             android:layout_margin="@dimen/activity_horizontal_margin"
