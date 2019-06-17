@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.oo0o0o.colorphoria.R;
 import com.oo0o0o.colorphoria.activities.BaseColorphoriaActivity;
 import com.oo0o0o.colorphoria.activities.loggedoutactivites.LoginActivity;
+import com.oo0o0o.colorphoria.activities.loggedoutactivites.StartingActivity;
 import com.oo0o0o.colorphoria.utils.Utils;
 
 /**
@@ -52,7 +53,7 @@ public class LoggedInActivity extends BaseColorphoriaActivity implements
                 if (user == null) {
                     // user auth state is changed - user is null
                     // launch login activity
-                    startActivity(new Intent(LoggedInActivity.this, LoginActivity.class));
+                    startActivity(new Intent(LoggedInActivity.this, StartingActivity.class));
                     finish();
                 }
             }

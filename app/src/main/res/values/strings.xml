@@ -166,7 +166,4 @@
     <string name="gcp_project_id">colorphoria-app</string>
     <string name="gcp_api_key">AIzaSyCP8m-QhcLveDg2e6KjXaoxEWhk8bFszWg</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>

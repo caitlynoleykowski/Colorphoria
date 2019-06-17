@@ -120,19 +120,14 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
                         bleedImgBtnWeakReference.get(), new RandomBleedFillEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
-            if (thresholdImgBtnWeakReference != null && thresholdImgBtnWeakReference.get() != null) {
+            if (floodImgBtnWeakReference != null && floodImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        thresholdImgBtnWeakReference.get(), new ThresholdEffect(),
+                        floodImgBtnWeakReference.get(), new RandomFloodFillEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (lineImgBtnWeakReference != null && lineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         lineImgBtnWeakReference.get(), new RandomLineFillEffect(),
-                        bitmap, ctrl, randomSeed, null).execute();
-            }
-            if (floodImgBtnWeakReference != null && floodImgBtnWeakReference.get() != null) {
-                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        floodImgBtnWeakReference.get(), new RandomFloodFillEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (invertImgBtnWeakReference != null && invertImgBtnWeakReference.get() != null) {
@@ -143,6 +138,11 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
             if (outlineImgBtnWeakReference != null && outlineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         outlineImgBtnWeakReference.get(), new OutlineEffect(),
+                        bitmap, ctrl, randomSeed, null).execute();
+            }
+            if (thresholdImgBtnWeakReference != null && thresholdImgBtnWeakReference.get() != null) {
+                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
+                        thresholdImgBtnWeakReference.get(), new ThresholdEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
         }

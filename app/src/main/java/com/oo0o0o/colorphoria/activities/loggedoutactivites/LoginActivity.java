@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.oo0o0o.colorphoria.R;
 import com.oo0o0o.colorphoria.activities.BaseColorphoriaActivity;
 import com.oo0o0o.colorphoria.activities.loggedinactivities.BottomNavActivity;
@@ -45,8 +46,9 @@ public class LoginActivity extends BaseColorphoriaActivity {
 
     // Email and password login vars
     private EditText emailEditText, passwordEditText;
+    private TextInputLayout emailTextInputLayout, passwordTextInputLayout;
     private Button loginButton;
-    private Button signupButtonLink, resetButtonLink;
+    private Button resetButtonLink;
 
     // Google login vars
 //    private static final int RC_GOOGLE_SIGN_IN = 9001;
@@ -54,7 +56,6 @@ public class LoginActivity extends BaseColorphoriaActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.LoggedOutTheme);
 
         super.onCreate(savedInstanceState);
 
@@ -80,9 +81,10 @@ public class LoginActivity extends BaseColorphoriaActivity {
     private void setupEmailAndPasswordLogin() {
 
         emailEditText = (EditText) findViewById(R.id.email_edit_text);
+        emailTextInputLayout = (TextInputLayout) findViewById(R.id.emailTextInputLayout);
         passwordEditText = (EditText) findViewById(R.id.password_edit_text);
+        passwordTextInputLayout = (TextInputLayout) findViewById(R.id.passwordTextInputLayout);
         loginButton = (Button) findViewById(R.id.login_button);
-        signupButtonLink = (Button) findViewById(R.id.signup_button_link);
         resetButtonLink = (Button) findViewById(R.id.reset_password_button_link);
 
         // Make sure font in password text edit is the default
@@ -93,13 +95,6 @@ public class LoginActivity extends BaseColorphoriaActivity {
             @Override
             public void onClick(View v) {
                 emailLogin();
-            }
-        });
-
-        signupButtonLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, BirthdayActivity.class));
             }
         });
 
@@ -116,12 +111,18 @@ public class LoginActivity extends BaseColorphoriaActivity {
         final String password = passwordEditText.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            emailEditText.setError(getString(R.string.empty_email_input));
-            return;
+            emailTextInputLayout.setError(getString(R.string.empty_email_input));
+        } else {
+            emailTextInputLayout.setError("");
         }
 
         if (TextUtils.isEmpty(password)) {
-            passwordEditText.setError(getString(R.string.empty_password_input));
+            passwordTextInputLayout.setError(getString(R.string.empty_password_input));
+        } else {
+            passwordTextInputLayout.setError("");
+        }
+
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             return;
         }
 
@@ -140,7 +141,7 @@ public class LoginActivity extends BaseColorphoriaActivity {
 
                             // there was an error
                             if (password.length() < 6) {
-                                passwordEditText.setError(getString(R.string.password_too_short));
+                                passwordTextInputLayout.setError(getString(R.string.password_too_short));
                             } else {
                                 Utils.showAlertDialog(
                                         LoginActivity.this,

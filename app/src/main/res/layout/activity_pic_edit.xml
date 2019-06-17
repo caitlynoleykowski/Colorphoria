@@ -57,14 +57,15 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:clipToPadding="false">
 
                     <com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton
                         android:id="@+id/random_bleed_button"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/button_effect"
-                        android:layout_marginRight="@dimen/small_margin"
+                        android:layout_marginRight="@dimen/smallish_margin"
                         android:scaleType="centerCrop"
                         android:clickable="false" />
 
@@ -88,8 +89,7 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/button_effect"
-                        android:layout_marginRight="@dimen/small_margin"
-                        android:padding="@dimen/image_button_border"
+                        android:layout_marginRight="@dimen/smallish_margin"
                         android:scaleType="centerCrop"
                         android:clickable="false" />
 
@@ -113,8 +113,7 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/button_effect"
-                        android:layout_marginRight="@dimen/small_margin"
-                        android:padding="@dimen/image_button_border"
+                        android:layout_marginRight="@dimen/smallish_margin"
                         android:scaleType="centerCrop"
                         android:clickable="false" />
 
@@ -137,10 +136,9 @@
                         android:id="@+id/invert_button"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_marginRight="@dimen/small_margin"
+                        android:layout_marginRight="@dimen/smallish_margin"
                         android:background="@drawable/button_effect"
                         android:clickable="false"
-                        android:padding="@dimen/image_button_border"
                         android:scaleType="centerCrop" />
 
                     <TextView
@@ -163,7 +161,7 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/button_effect"
-                        android:padding="@dimen/image_button_border"
+                        android:layout_marginRight="@dimen/smallish_margin"
                         android:scaleType="centerCrop"
                         android:clickable="false" />
 
@@ -187,8 +185,7 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:background="@drawable/button_effect"
-                        android:layout_marginRight="@dimen/small_margin"
-                        android:padding="@dimen/image_button_border"
+                        android:layout_marginRight="@dimen/smallish_margin"
                         android:scaleType="centerCrop"
                         android:clickable="false" />
 

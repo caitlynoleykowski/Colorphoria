@@ -20,7 +20,7 @@
 
     <dimen name="toast_radius">@dimen/dialog_radius</dimen>
 
-    <dimen name="dialog_radius">30dp</dimen>
+    <dimen name="dialog_radius">24dp</dimen>
     <dimen name="dialog_width_short">240dp</dimen>
     <dimen name="dialog_width_long">300dp</dimen>
 

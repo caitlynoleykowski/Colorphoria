@@ -5,11 +5,9 @@
         <item name="colorPrimary">@color/colorSecondary</item>
         <item name="colorPrimaryDark">@color/colorSecondaryDark</item> <!-- status bar, ... -->
         <item name="colorAccent">@color/colorSecondary</item> <!-- tab underline, progress spinner, ... -->
-
     </style>
 
-    <style name="AppTheme" parent="BaseTheme">
-    </style>
+    <style name="AppTheme" parent="BaseTheme"></style>
 
     <style name="LoggedOutTheme" parent="AppTheme">
         <item name="windowActionBar">false</item>
@@ -17,6 +15,7 @@
     </style>
 
     <style name="LoggedOutTheme.Launcher">
+        <item name="android:statusBarColor">@color/colorSecondary</item> <!-- status bar, ... -->
         <item name="android:windowBackground">@drawable/bg_launcher</item>
     </style>
 

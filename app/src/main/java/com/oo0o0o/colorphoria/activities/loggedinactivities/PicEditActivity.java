@@ -511,16 +511,12 @@ public class PicEditActivity extends LoggedInActivity {
                 new RandomBleedFillEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
-                (ImageButton) findViewById(R.id.threshold_button),
-                new ThresholdEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
+                (ImageButton) findViewById(R.id.random_flood_button),
+                new RandomFloodFillEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_line_button),
                 new RandomLineFillEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
-                randomSeed, colorPalette).execute();
-        new BitmapEffectPreviewAsyncTask(this,
-                (ImageButton) findViewById(R.id.random_flood_button),
-                new RandomFloodFillEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.invert_button),
@@ -529,6 +525,10 @@ public class PicEditActivity extends LoggedInActivity {
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.outline_button),
                 new OutlineEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed, colorPalette).execute();
+        new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.threshold_button),
+                new ThresholdEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
     }
 

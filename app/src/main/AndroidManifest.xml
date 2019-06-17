@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.oo0o0o.colorphoria">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- below is redundant but useful for readabiliity/if we dont need write anymore -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- below is redundant but useful for readabiliity/if we dont need write anymore -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,12 +21,13 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-7546412369288210~5401783923" />
 
         <activity
-            android:name=".activities.loggedoutactivites.LoginActivity"
+            android:name=".activities.loggedoutactivites.StartingActivity"
             android:theme="@style/LoggedOutTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,16 +35,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- <activity android:name=".activities.loggedinactivitImageFeedActivityvity"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
-        <activity android:name=".activities.loggedinactivities.BottomNavActivity" />
-        <!-- <activity android:name=".activities.loggedoutactivites.LoginActivity" /> -->
+        <activity
+            android:name=".activities.loggedoutactivites.LoginActivity"
+            android:theme="@style/LoggedOutTheme"/>
+        <activity
+            android:name=".activities.loggedinactivities.BottomNavActivity" />
         <activity
             android:name=".activities.loggedinactivities.SourceActivity"
             android:label="Select" />
@@ -53,7 +48,7 @@
             android:label="@string/pic_edit_activity_title" />
         <activity
             android:name=".activities.loggedinactivities.CameraActivity"
-            android:label="@string/camera_activity_title"/>
+            android:label="@string/camera_activity_title" />
         <activity
             android:name=".activities.loggedinactivities.BrowseActivity"
             android:label="@string/browse_activity_title" />
@@ -89,7 +84,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />
         </provider>
-
     </application>
 
 </manifest>
