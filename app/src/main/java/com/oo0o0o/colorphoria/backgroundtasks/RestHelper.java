@@ -179,6 +179,7 @@ public class RestHelper {
         String url = getEndpointUrl(context, api, endpointName);
 
         AsyncHttpClient apiClient = new AsyncHttpClient();
+        apiClient.setTimeout(60 * 1000); // 60 s
         apiClient.addHeader("Authorization", "Bearer " + authToken);
         apiClient.post(url, params, new AsyncHttpResponseHandler() {
             @Override
