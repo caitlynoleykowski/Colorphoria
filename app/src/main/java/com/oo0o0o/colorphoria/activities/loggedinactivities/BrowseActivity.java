@@ -50,8 +50,6 @@ public class BrowseActivity extends LoggedInActivity {
 
     private Uri mImageUri;
 
-    AdView adView;
-
     int selectedIndex = -1;
     View selectedView = null;
     Uri selectedUri = null;
@@ -70,13 +68,6 @@ public class BrowseActivity extends LoggedInActivity {
 
         Utils.setupcolorphoriaRecentAppsBar(this);
 
-        // Initialize ads (to setup ad banner)
-        AdView adView = findViewById(R.id.adView);
-//        adView.setAdSize(AdSize.SMART_BANNER);
-//        adView.setAdUnitId(getResources().getString(R.string.admob_ad_unit_id_banner_gallery));
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-
         if (savedInstanceState != null) {
             mImageUri = (Uri) savedInstanceState.getParcelable(IMAGE_URI_STATE_KEY);
         }
@@ -90,30 +81,10 @@ public class BrowseActivity extends LoggedInActivity {
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
-    /** Called when leaving the activity */
-    @Override
-    public void onPause() {
-        if (adView != null) {
-            adView.pause();
-        }
-        super.onPause();
-    }
-    /** Called when returning to the activity */
     @Override
     public void onResume() {
         super.onResume();
         getFilesStoragePermission();
-        if (adView != null) {
-            adView.resume();
-        }
-    }
-    /** Called before the activity is destroyed */
-    @Override
-    public void onDestroy() {
-        if (adView != null) {
-            adView.destroy();
-        }
-        super.onDestroy();
     }
 
     private void getFilesStoragePermission() {
