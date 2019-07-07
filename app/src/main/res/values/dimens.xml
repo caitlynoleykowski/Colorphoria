@@ -1,7 +1,7 @@
 <resources>
     <!-- margins/padding -->
     <dimen name="activity_horizontal_margin">12dp</dimen>
-    <dimen name="activity_vertical_margin">20dp</dimen>
+    <dimen name="activity_vertical_margin">12dp</dimen>
     <dimen name="smallest_margin">2dp</dimen>
     <dimen name="small_margin">4dp</dimen>
     <dimen name="smallish_margin">8dp</dimen>

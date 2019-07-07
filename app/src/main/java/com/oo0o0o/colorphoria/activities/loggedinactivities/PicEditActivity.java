@@ -44,7 +44,6 @@ import com.oo0o0o.colorphoria.effects.ResetEffect;
 import com.oo0o0o.colorphoria.effects.RotateEffect;
 import com.oo0o0o.colorphoria.effects.ThresholdEffect;
 import com.oo0o0o.colorphoria.reusableuserinterface.PaletteChooserDialog;
-import com.oo0o0o.colorphoria.reusableuserinterface.SquareImageButton;
 import com.oo0o0o.colorphoria.utils.Utils;
 
 import java.util.ArrayDeque;
@@ -213,7 +212,7 @@ public class PicEditActivity extends LoggedInActivity {
             }
         });
 
-        ((SquareImageButton) findViewById(R.id.original_button)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.original_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (processingImageDone) {
@@ -221,7 +220,7 @@ public class PicEditActivity extends LoggedInActivity {
                 }
             }
         });
-        ((SquareImageButton) findViewById(R.id.random_bleed_button)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.random_bleed_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (processingImageDone) {
@@ -229,7 +228,7 @@ public class PicEditActivity extends LoggedInActivity {
                 }
             }
         });
-        ((SquareImageButton) findViewById(R.id.threshold_button)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.threshold_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (processingImageDone) {
@@ -237,7 +236,7 @@ public class PicEditActivity extends LoggedInActivity {
                 }
             }
         });
-        ((SquareImageButton) findViewById(R.id.random_line_button)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.random_line_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (processingImageDone) {
@@ -245,7 +244,7 @@ public class PicEditActivity extends LoggedInActivity {
                 }
             }
         });
-        ((SquareImageButton) findViewById(R.id.random_flood_button)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.random_flood_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (processingImageDone) {
@@ -253,7 +252,7 @@ public class PicEditActivity extends LoggedInActivity {
                 }
             }
         });
-        ((SquareImageButton) findViewById(R.id.invert_button)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.invert_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (processingImageDone) {
@@ -261,7 +260,7 @@ public class PicEditActivity extends LoggedInActivity {
                 }
             }
         });
-        ((SquareImageButton) findViewById(R.id.outline_button)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.outline_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (processingImageDone) {
