@@ -222,6 +222,15 @@ public class DrawActivity extends LoggedInActivity {
     public void onEraseButton(){
         final Dialog eraseDialog = new Dialog(this);
         eraseDialog.setContentView(R.layout.paintbrush_options);
+        ImageButton extraSmallBtn = (ImageButton) eraseDialog.findViewById(R.id.extra_small_brush);
+        extraSmallBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawView.setEraseMode(true);
+                drawView.setPaintbrushSize(extraSmallBrush);
+                eraseDialog.dismiss();
+            }
+        });
         ImageButton smallBtn = (ImageButton)eraseDialog.findViewById(R.id.small_brush);
         smallBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -255,7 +264,7 @@ public class DrawActivity extends LoggedInActivity {
     // onClick for new image button
     public void onNewButton(){
         Utils.showConfirmDialog(this,
-                getString(R.string.are_you_sure),
+                getString(R.string.are_you_sure_clear),
                 getString(R.string.yes),
                 getString(R.string.no),
                 new Utils.ConfirmDialogHandler() {
@@ -295,16 +304,18 @@ public class DrawActivity extends LoggedInActivity {
                         Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
                     }
                 })) {
-            saveDrawing();
+            saveDrawing(true);
         }
     }
 
-    private File saveDrawing() {
+    private File saveDrawing(final boolean showConfirmation) {
         //save drawing
         drawView.setDrawingCacheEnabled(true);
         File imageFile = Utils.savecolorphoriaBitmap(drawView.getDrawingCache(), this, new Utils.SavecolorphoriaBitmapHandler() {
             public void onSuccess(Uri uri) {
-                Utils.showCustomToast(DrawActivity.this, getString(R.string.image_saved));
+                if (showConfirmation) {
+                    Utils.showCustomToast(DrawActivity.this, getString(R.string.image_saved));
+                }
                 sourceUri = uri;
             }
             public void onFailure() {
@@ -331,7 +342,7 @@ public class DrawActivity extends LoggedInActivity {
 
     private void startPicEditActivity() {
         if (drawView.isEdited()) {
-            File imageFile = saveDrawing();
+            File imageFile = saveDrawing(false);
 
             Intent intent = new Intent(this, PicEditActivity.class);
             intent.putExtra(PicEditActivity.SOURCE_URI, Uri.fromFile(imageFile)); // Load with uri
@@ -348,7 +359,7 @@ public class DrawActivity extends LoggedInActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted, so continue.
-                    saveDrawing();
+                    saveDrawing(true);
                 } else {
                     Utils.showCustomToast(DrawActivity.this, getString(R.string.unable_to_save_image));
                 }

@@ -15,6 +15,7 @@ import com.oo0o0o.colorphoria.effects.OutlineEffect;
 import com.oo0o0o.colorphoria.effects.RandomBleedFillEffect;
 import com.oo0o0o.colorphoria.effects.RandomFloodFillEffect;
 import com.oo0o0o.colorphoria.effects.RandomLineFillEffect;
+import com.oo0o0o.colorphoria.effects.ResetEffect;
 import com.oo0o0o.colorphoria.effects.ThresholdEffect;
 
 import java.io.InputStream;
@@ -29,6 +30,7 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
     private final WeakReference<ImageView> imageViewReference;
     private final WeakReference<Uri> uriWeakReference;
     private final WeakReference<BitmapWrapper> bmwWeakReference;
+    private final WeakReference<ImageButton> originalImgBtnWeakReference;
     private final WeakReference<ImageButton> bleedImgBtnWeakReference;
     private final WeakReference<ImageButton> thresholdImgBtnWeakReference;
     private final WeakReference<ImageButton> lineImgBtnWeakReference;
@@ -39,9 +41,14 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
     private final int randomSeed;
 
     public PicEditBitmapLoaderAsyncTask(PicEditActivity activity, Context context, ImageView imageView, Uri uri, BitmapWrapper bmw,
-                                        ImageButton bleedImageBtn, ImageButton thresholdImageBtn,
-                                        ImageButton lineImageBtn, ImageButton floodImageBtn,
-                                        ImageButton invertImageBtn, ImageButton outlineImageBtn, double ctrl,
+                                        ImageButton originalImageBtn,
+                                        ImageButton bleedImageBtn,
+                                        ImageButton thresholdImageBtn,
+                                        ImageButton lineImageBtn,
+                                        ImageButton floodImageBtn,
+                                        ImageButton invertImageBtn,
+                                        ImageButton outlineImageBtn,
+                                        double ctrl,
                                         int randomSeed) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
         activityWeakReference = new WeakReference<PicEditActivity>(activity);
@@ -49,6 +56,7 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
         imageViewReference = new WeakReference<ImageView>(imageView);
         uriWeakReference = new WeakReference<Uri>(uri);
         bmwWeakReference = new WeakReference<BitmapWrapper>(bmw);
+        originalImgBtnWeakReference = new WeakReference<ImageButton>(originalImageBtn);
         bleedImgBtnWeakReference = new WeakReference<ImageButton>(bleedImageBtn);
         thresholdImgBtnWeakReference = new WeakReference<ImageButton>(thresholdImageBtn);
         lineImgBtnWeakReference = new WeakReference<ImageButton>(lineImageBtn);
@@ -115,6 +123,11 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
 
         // Don't need a colorPalette here because there will never be one yet
         if (activityWeakReference != null && activityWeakReference.get() != null && bitmap != null) {
+            if (originalImgBtnWeakReference != null && originalImgBtnWeakReference.get() != null) {
+                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
+                        originalImgBtnWeakReference.get(), new ResetEffect(),
+                        bitmap, ctrl, randomSeed, null).execute();
+            }
             if (bleedImgBtnWeakReference != null && bleedImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         bleedImgBtnWeakReference.get(), new RandomBleedFillEffect(),

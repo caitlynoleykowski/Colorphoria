@@ -9,6 +9,7 @@
     <string name="no" translatable="false">@android:string/no</string>
     <string name="cancel" translatable="false">@android:string/cancel</string>
     <string name="are_you_sure">Are you sure?</string>
+    <string name="are_you_sure_clear">Are you sure you want to clear?</string>
     <!-- General use end -->
 
     <!-- Used for terms activity begin -->
@@ -108,6 +109,7 @@
     <string name="pic_edit_menu_save">Save</string>
     <string name="pic_edit_menu_share">Next</string>
     <string name="image_saved">Image saved</string>
+    <string name="pic_edit_effect_original">Original</string>
     <string name="pic_edit_effect_tint_fill">Tint Fill</string>
     <string name="pic_edit_effect_color_fill">Color Fill</string>
     <string name="pic_edit_effect_line_fill">Line Fill</string>
@@ -150,7 +152,7 @@
     <!-- Used for UploadActivity and upload services -->
     <string name="upload_activity_title">Share</string>
     <string name="upload_prompt">Upload image</string>
-    <string name="upload">Share</string>
+    <string name="upload">Post</string>
     <string name="share_external">Share with other apps</string>
     <string name="progress_uploading">Uploading...</string>
     <string name="upload_success">Upload finished</string>

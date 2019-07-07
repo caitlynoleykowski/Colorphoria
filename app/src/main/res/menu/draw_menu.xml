@@ -9,15 +9,15 @@
         android:icon="@drawable/ic_eraser_24dp"
         android:title="@string/draw_menu_eraser"
         app:showAsAction="always"/>
-    <item android:id="@+id/draw_menu_done"
-        android:title="@string/draw_menu_done"
+    <item android:id="@+id/draw_menu_new"
+        android:icon="@drawable/ic_new_canvas_24dp"
+        android:title="@string/draw_menu_new"
         app:showAsAction="always"/>
     <item android:id="@+id/draw_menu_save"
         android:icon="@drawable/ic_get_app_24dp"
         android:title="@string/draw_menu_save"
-        app:showAsAction="never"/>
-    <item android:id="@+id/draw_menu_new"
-        android:icon="@drawable/ic_new_canvas_24dp"
-        android:title="@string/draw_menu_new"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
+    <item android:id="@+id/draw_menu_done"
+        android:title="@string/draw_menu_done"
+        app:showAsAction="always"/>
 </menu>

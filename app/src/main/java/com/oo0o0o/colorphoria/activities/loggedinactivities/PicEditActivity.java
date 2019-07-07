@@ -163,6 +163,7 @@ public class PicEditActivity extends LoggedInActivity {
             ImageView iv = (ImageView) findViewById(R.id.theImage);
             bmW = new BitmapWrapper();
             PicEditBitmapLoaderAsyncTask bmwAsync = new PicEditBitmapLoaderAsyncTask(this, getApplicationContext(), iv, sourceUri, bmW,
+                    (ImageButton) findViewById(R.id.original_button),
                     (ImageButton) findViewById(R.id.random_bleed_button),
                     (ImageButton) findViewById(R.id.threshold_button),
                     (ImageButton) findViewById(R.id.random_line_button),
@@ -176,6 +177,7 @@ public class PicEditActivity extends LoggedInActivity {
             ImageView iv = (ImageView) findViewById(R.id.theImage);
             bmW = new BitmapWrapper();
             PicEditBitmapLoaderAsyncTask bmwAsync = new PicEditBitmapLoaderAsyncTask(this, getApplicationContext(), iv, sourceUri, bmW,
+                    (ImageButton) findViewById(R.id.original_button),
                     (ImageButton) findViewById(R.id.random_bleed_button),
                     (ImageButton) findViewById(R.id.threshold_button),
                     (ImageButton) findViewById(R.id.random_line_button),
@@ -211,6 +213,14 @@ public class PicEditActivity extends LoggedInActivity {
             }
         });
 
+        ((SquareImageButton) findViewById(R.id.original_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (processingImageDone) {
+                    onOriginal(view);
+                }
+            }
+        });
         ((SquareImageButton) findViewById(R.id.random_bleed_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -348,9 +358,6 @@ public class PicEditActivity extends LoggedInActivity {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
                 finish();
-                                return true;
-            case R.id.pic_edit_menu_reset:
-                onReset();
                 return true;
             case R.id.pic_edit_menu_undo:
                 onUndo();
@@ -446,6 +453,15 @@ public class PicEditActivity extends LoggedInActivity {
         colorPaletteDialog.show();
     }
 
+    public void onOriginal(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, RandomBleedFillEffect.class.getName());
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        }
+        applyEffect(new ResetEffect());
+    }
+
     public void onRandomBleedFill(View v) {
         if (firebaseAnalytics != null) {
             Bundle bundle = new Bundle();
@@ -506,6 +522,10 @@ public class PicEditActivity extends LoggedInActivity {
 
     private void refreshEffectThumbnails(int randomSeed) {
         // Populate the effect preview buttons
+        new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.original_button),
+                new ResetEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.random_bleed_button),
                 new RandomBleedFillEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
@@ -640,7 +660,6 @@ public class PicEditActivity extends LoggedInActivity {
     private void saveImageAndStartShareActivity() {
         Utils.savecolorphoriaBitmap(bmW.getModifiedBitmap(), this, new Utils.SavecolorphoriaBitmapHandler() {
             public void onSuccess(Uri uri) {
-                Utils.showCustomToast(PicEditActivity.this, getString(R.string.image_saved));
                 startShareActivity(uri);
             }
             public void onFailure() {

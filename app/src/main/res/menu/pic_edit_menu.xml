@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/pic_edit_menu_share"
-        android:title="@string/pic_edit_menu_share"
-        app:showAsAction="always" >
-    </item>
-    <item android:id="@+id/pic_edit_menu_save"
-        android:title="@string/pic_edit_menu_save"
-        android:icon="@drawable/ic_get_app_24dp"
-        app:showAsAction="never" >
-    </item>
     <item android:id="@+id/pic_edit_menu_undo"
         android:title="@string/pic_edit_menu_undo"
         android:icon="@drawable/ic_undo_24dp"
-        app:showAsAction="never" >
+        app:showAsAction="always" >
     </item>
     <item android:id="@+id/pic_edit_menu_redo"
         android:title="@string/pic_edit_menu_redo"
         android:icon="@drawable/ic_redo_24dp"
-        app:showAsAction="never" >
+        app:showAsAction="always"
+        android:visible="false">
     </item>
-    <item android:id="@+id/pic_edit_menu_reset"
-        android:title="@string/pic_edit_menu_reset"
-        android:icon="@drawable/ic_layers_clear_white_24dp"
-        app:showAsAction="never" >
+    <item android:id="@+id/pic_edit_menu_save"
+        android:title="@string/pic_edit_menu_save"
+        android:icon="@drawable/ic_get_app_24dp"
+        app:showAsAction="always" >
+    </item>
+    <item android:id="@+id/pic_edit_menu_share"
+        android:title="@string/pic_edit_menu_share"
+        app:showAsAction="always" >
     </item>
 </menu>
