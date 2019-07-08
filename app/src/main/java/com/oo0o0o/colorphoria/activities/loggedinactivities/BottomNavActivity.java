@@ -70,7 +70,7 @@ public class BottomNavActivity extends LoggedInActivity {
     public void onAdd() {
         Intent intent = new Intent(this, SourceActivity.class);
         startActivity(intent);
-//        overridePendingTransition(R.anim.slide_up_in, R.anim.slide_up_out);
+        overridePendingTransition(R.anim.slide_up_in, R.anim.slide_up_out);
     }
 
     public void onHome() {
