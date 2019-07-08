@@ -31,11 +31,14 @@
     <!-- Used for LoginActivity begin -->
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
     <string name="login_button">Login</string>
     <string name="forgot_password_button_link">Forgot Password</string>
 
     <string name="empty_email_input">Empty email address</string>
+    <string name="invalid_email_input">Invalid email address</string>
     <string name="empty_password_input">Empty password</string>
+    <string name="password_input_mismatch">Passwords do not match</string>
     <string name="password_too_short">Password too short, enter minimum 6 characters!</string>
     <string name="login_try_again">Try Again</string>
     <string name="login_failed">The email or password you entered is incorrect. Please try again or sign up.</string>

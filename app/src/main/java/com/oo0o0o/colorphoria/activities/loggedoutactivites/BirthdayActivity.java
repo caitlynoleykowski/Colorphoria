@@ -137,7 +137,7 @@ public class BirthdayActivity extends BaseColorphoriaActivity {
                         @Override
                         public void onPositiveButton(Dialog confirmDialog) {
                             confirmDialog.dismiss();
-                            startActivity(new Intent(BirthdayActivity.this, LoginActivity.class));
+                            finish();
                         }
                     },
                     false);

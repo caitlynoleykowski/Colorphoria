@@ -103,4 +103,7 @@
     <string name="gcp_api_key">AIzaSyC2F1FVP1yAqkRJomg8hoL1GR614low1AE</string>
     <string name="signup_message">あなたのメールアドレスを入力してアカウントにサインアップしてください</string>
     <string name="source_activity_title">選択する</string>
+    <string name="confirm_password_hint">パスワードを認証する</string>
+    <string name="password_input_mismatch">パスワードが一致しません</string>
+    <string name="invalid_email_input">無効な電子メールアドレス</string>
 </resources>

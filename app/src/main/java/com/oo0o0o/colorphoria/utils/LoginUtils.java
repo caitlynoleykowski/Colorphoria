@@ -55,7 +55,10 @@ public class LoginUtils {
                     public void onPositiveButton(Dialog confirmDialog) {
                         // Close the dialog and go to login screen
                         confirmDialog.dismiss();
-                        activity.startActivity(new Intent(activity, BottomNavActivity.class));
+                        Intent intent = new Intent(activity, BottomNavActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        activity.startActivity(intent);
+                        activity.finish();
                     }
                 },
                 false);
@@ -72,7 +75,10 @@ public class LoginUtils {
                     public void onPositiveButton(Dialog confirmDialog) {
                         // Close the dialog and go to login screen
                         confirmDialog.dismiss();
-                        activity.startActivity(new Intent(activity, LoginActivity.class));
+                        Intent intent = new Intent(activity, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        activity.startActivity(intent);
+                        activity.finish();
                     }
                 },
                 false);

@@ -41,7 +41,7 @@ class StartingActivity : AppCompatActivity() {
         }
 
         signupButton.setOnClickListener {
-            startActivity(Intent(this@StartingActivity, SignupActivity::class.java))
+            startActivity(Intent(this@StartingActivity, BirthdayActivity::class.java))
         }
     }
 

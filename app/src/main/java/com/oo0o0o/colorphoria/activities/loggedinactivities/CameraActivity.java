@@ -304,7 +304,7 @@ public class CameraActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 // close the app
-                Toast.makeText(CameraActivity.this, "Sorry!!!, you can't use this app without granting permission", Toast.LENGTH_LONG).show();
+                Toast.makeText(CameraActivity.this, "Sorry, you can't use this app without granting permission", Toast.LENGTH_LONG).show();
                 finish();
             }
         }
