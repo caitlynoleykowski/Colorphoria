@@ -9,8 +9,6 @@
     android:orientation="vertical">
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         tools:context="com.oo0o0o.colorphoria.activities.loggedoutactivites.ResetPasswordActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,6 +34,7 @@
             android:id="@+id/emailTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             >
             <com.google.android.material.textfield.TextInputEditText
@@ -53,6 +52,7 @@
             android:id="@+id/passwordTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             app:passwordToggleEnabled="true"
             >
@@ -69,6 +69,7 @@
             android:id="@+id/confirmPasswordTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
             app:passwordToggleEnabled="true"
             >

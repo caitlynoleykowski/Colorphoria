@@ -21,6 +21,7 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.loggedinactivities.AccountActivity"></activity>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -37,9 +38,8 @@
         </activity>
         <activity
             android:name=".activities.loggedoutactivites.LoginActivity"
-            android:theme="@style/LoggedOutTheme"/>
-        <activity
-            android:name=".activities.loggedinactivities.BottomNavActivity" />
+            android:theme="@style/LoggedOutTheme" />
+        <activity android:name=".activities.loggedinactivities.BottomNavActivity" />
         <activity
             android:name=".activities.loggedinactivities.SourceActivity"
             android:label="Select" />

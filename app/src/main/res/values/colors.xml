@@ -21,6 +21,7 @@
     <color name="transparent">@android:color/transparent</color>
 
     <!-- Additional colors -->
+    <color name="colorLabelText">#8a000000</color>
     <color name="colorEditText">#8a000000</color>
     <color name="colorSmallButtonSelectedBackground">#ffeeeeee</color> <!-- hardcoded where used -->
 </resources>

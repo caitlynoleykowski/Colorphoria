@@ -1,23 +1,42 @@
 package com.oo0o0o.colorphoria.activities.loggedinactivities
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.ImageView
+import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.room.Room
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
+import com.google.gson.Gson
 import com.oo0o0o.colorphoria.R
 import com.oo0o0o.colorphoria.activities.loggedoutactivites.LoginActivity
 import com.oo0o0o.colorphoria.activities.loggedoutactivites.SignupActivity
+import com.oo0o0o.colorphoria.backgroundtasks.GetImageAsyncTask
+import com.oo0o0o.colorphoria.backgroundtasks.RestHelper
+import com.oo0o0o.colorphoria.data.AppDatabase
+import com.oo0o0o.colorphoria.data.MyMediaEntity
+import com.oo0o0o.colorphoria.reusableuserinterface.SquareImageView
 import com.oo0o0o.colorphoria.utils.Utils
 import kotlinx.android.synthetic.main.account_fragment.*
+import org.json.JSONException
+import org.json.JSONObject
+import java.util.ArrayList
 
 /**
  * A simple [Fragment] subclass.
@@ -42,6 +61,12 @@ class AccountFragment : Fragment() {
     // Google login vars (used for logout in this activity)
     private val googleApiClient: GoogleApiClient? = null
 
+
+    private var adapter: MyImageAdapter? = null
+    private var refreshingFeed = false
+
+    private var firebaseAnalytics: FirebaseAnalytics? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -64,6 +89,7 @@ class AccountFragment : Fragment() {
 
         // Get current user
         val user = FirebaseAuth.getInstance().currentUser
+        usernameTextView.text = user?.email
 
         authListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
             val user = firebaseAuth.currentUser
@@ -77,11 +103,12 @@ class AccountFragment : Fragment() {
 
         progressBar.visibility = View.GONE
 
+        settingsButton.setOnClickListener {
+            // Toggle settings layout visibility
+            settingsLayout.visibility = if (settingsLayout.visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        }
+
         changeEmailButton.setOnClickListener(View.OnClickListener {
-            if (newEmailEditText.getVisibility() == View.GONE) {
-                hideInputs()
-                newEmailEditText.setVisibility(View.VISIBLE)
-            } else {
                 progressBar.setVisibility(View.VISIBLE)
                 if (user != null && newEmailEditText.getText().toString().trim({ it <= ' ' }) != "") {
                     user.updateEmail(newEmailEditText.getText().toString().trim({ it <= ' ' }))
@@ -122,14 +149,9 @@ class AccountFragment : Fragment() {
                     newEmailEditText.error = getString(R.string.empty_email_input)
                     progressBar.visibility = View.GONE
                 }
-            }
         })
 
         changePasswordButton.setOnClickListener(View.OnClickListener {
-            if (newPasswordEditText.visibility == View.GONE) {
-                hideInputs()
-                newPasswordEditText.visibility = View.VISIBLE
-            } else {
                 progressBar.visibility = View.VISIBLE
                 if (user != null && newPasswordEditText.getText().toString().trim({ it <= ' ' }) != "") {
                     if (newPasswordEditText.text.toString().trim({ it <= ' ' }).length < 6) {
@@ -167,11 +189,9 @@ class AccountFragment : Fragment() {
                     newPasswordEditText.setError(getString(R.string.empty_password_input))
                     progressBar.setVisibility(View.GONE)
                 }
-            }
         })
 
         resetPasswordButton.setOnClickListener(View.OnClickListener {
-            hideInputs()
             progressBar.visibility = View.VISIBLE
             auth?.currentUser?.email?.trim({ it <= ' ' })?.let {
                 auth?.sendPasswordResetEmail(it)?.addOnCompleteListener(OnCompleteListener<Void> { task ->
@@ -205,7 +225,6 @@ class AccountFragment : Fragment() {
         })
 
         deleteAccountButton.setOnClickListener(View.OnClickListener {
-            hideInputs()
             Utils.showConfirmDialog(
                     activity,
                     getString(R.string.delete_account_confirmation),
@@ -226,17 +245,55 @@ class AccountFragment : Fragment() {
         })
 
         signOutButton.setOnClickListener(View.OnClickListener {
-            hideInputs()
             (activity as LoggedInActivity?)?.signOut()
         })
 
-    }
 
 
-    private fun hideInputs() {
-        // Hide the inputs until the user selects the option that requires them
-        newEmailEditText.visibility = View.GONE
-        newPasswordEditText.visibility = View.GONE
+
+
+
+        // Handle images
+        // Create the adapter to convert the array to views
+        adapter = MyImageAdapter(activity!!.applicationContext)
+        // Attach the adapter to a ListView
+        val listView = imageListView
+
+        listView.adapter = adapter
+
+        swipeRefreshLayout.setOnRefreshListener { getMyImages() }
+        swipeRefreshLayout.setColorSchemeColors(
+                ResourcesCompat.getColor(resources, R.color.colorSecondary, activity?.theme)
+        )
+
+        val appcontext = activity!!.applicationContext
+        // Load the media urls from the database and display the images (if in db, should be cached)
+        // Then, attempt to fetch the urls from the server
+        object : AsyncTask<String, String, List<MyMediaEntity>>() {
+            override fun doInBackground(vararg strings: String): List<MyMediaEntity> {
+                val db = Room.databaseBuilder(appcontext,
+                        AppDatabase::class.java, "colorphoria-database")
+                        .fallbackToDestructiveMigration()
+                        .build()
+
+                return db.myMediaDao().all
+            }
+
+            override fun onPostExecute(mediaEntities: List<MyMediaEntity>) {
+                super.onPostExecute(mediaEntities)
+                if (mediaEntities.size > 0) {
+                    loadFeed(mediaEntities)
+                }
+                // Call to get the images
+                getMyImages(false)
+            }
+        }.execute()
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance((activity as AppCompatActivity))
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, BottomNavActivity::class.java.name)
+        firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+
     }
 
     fun deleteUser(user: FirebaseUser?) {
@@ -291,4 +348,180 @@ class AccountFragment : Fragment() {
                     }
                 }
     }
+
+    private fun getMyImages(showRefreshing: Boolean = true) {
+        if (!refreshingFeed) {
+            adapter?.isDoneLoading = false
+            refreshingFeed = true
+            swipeRefreshLayout.isRefreshing = showRefreshing
+
+            val appContext = activity!!.applicationContext
+            val user = FirebaseAuth.getInstance().currentUser
+            val callbacks = object : RestHelper.HttpCallbacks {
+                override fun onSuccess(response: String) {
+                    // AsyncTask needed for db access to save media urls from response
+                    object : AsyncTask<String, String, List<MyMediaEntity>>() {
+                        override fun doInBackground(vararg strings: String): List<MyMediaEntity> {
+                            val db = Room.databaseBuilder(appContext,
+                                    AppDatabase::class.java, "colorphoria-database").build()
+                            db.myMediaDao().deleteAll()
+
+                            val mediaEntities = ArrayList<MyMediaEntity>()
+
+                            try {
+                                val responseJson = JSONObject(response)
+                                if (responseJson.has("mediaEntities")) {
+                                    // TODO: Handle this better in case somehow it has "urls" but the array is empty
+
+                                    val mediaEntitiesJson = responseJson.getJSONArray("mediaEntities")
+                                    val gson = Gson()
+                                    for (i in 0 until mediaEntitiesJson.length()) {
+                                        val mediaEntity = gson.fromJson(mediaEntitiesJson.get(i).toString(), MyMediaEntity::class.java)
+                                        mediaEntity.id = i.toLong()
+                                        db.myMediaDao().insertAll(mediaEntity) // Change id from i
+                                        mediaEntities.add(mediaEntity)
+                                    }
+                                }
+                            } catch (e: JSONException) {
+                                // TODO: Handle this
+                                Log.i(this.javaClass.name, "Error parsing json.", e)
+                            }
+
+                            return mediaEntities
+                        }
+
+                        override fun onPostExecute(mediaEntities: List<MyMediaEntity>) {
+                            super.onPostExecute(mediaEntities)
+                            loadFeed(mediaEntities)
+
+                        }
+                    }.execute(response)
+                }
+
+                override fun onFailure(error: String) {
+                    // AsyncTask needed for db access to fetch media urls
+                    object : AsyncTask<String, String, List<MyMediaEntity>>() {
+                        override fun doInBackground(vararg strings: String): List<MyMediaEntity> {
+                            val db = Room.databaseBuilder(appContext,
+                                    AppDatabase::class.java, "colorphoria-database").build()
+                            return db.myMediaDao().all
+                        }
+
+                        override fun onPostExecute(mediaEntities: List<MyMediaEntity>) {
+                            super.onPostExecute(mediaEntities)
+                            // TODO: Figure out why in the world networkResponse is null and come back to this
+                            // TODO: so that we don't have to just loadFeed as if there's no images for today
+                            Utils.showCustomToast(activity, "Unable to refresh feed")
+                            loadFeed(mediaEntities)
+                            refreshingFeed = false
+                            swipeRefreshLayout?.isRefreshing = false
+                        }
+                    }.execute()
+                }
+            }
+            RestHelper.myImages(appContext, user, callbacks)
+        }
+    }
+
+    private fun loadFeed(mediaEntities: List<MyMediaEntity>) {
+        adapter?.isDoneLoading = true
+        adapter?.clear() // Remove all images (image urls) from the adapter
+        for (i in mediaEntities.indices) {
+            adapter?.addItem(mediaEntities[i])
+        }
+        adapter?.notifyDataSetChanged() // Make list view pick up changes
+        if (adapter?.count == 0) {
+            noPostsInfoText.visibility = View.VISIBLE
+        } else {
+            noPostsInfoText.visibility = View.GONE
+        }
+        refreshingFeed = false
+        swipeRefreshLayout?.isRefreshing = false
+    }
 }
+
+// Image Adapter
+// Adapter for Grid View
+class MyImageAdapter(private val context: Context) : BaseAdapter() {
+    private val imageUrlList: ArrayList<MyMediaEntity>
+    var isDoneLoading = false
+
+    init {
+        this.imageUrlList = ArrayList()
+    }
+
+    fun addItem(mediaEntity: MyMediaEntity) {
+        imageUrlList.add(mediaEntity)
+    }
+
+    fun addAll(mediaEntities: List<MyMediaEntity>) {
+        imageUrlList.addAll(mediaEntities)
+    }
+
+    fun clear() {
+        imageUrlList.clear()
+    }
+
+    override fun getCount(): Int {
+        return imageUrlList.size
+    }
+
+    override fun getItem(position: Int): Any {
+        return position
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var convertView = convertView
+        var holder = MyViewHolder()
+
+        if (convertView == null) {
+            holder.picturesView = SquareImageView(context)
+            //Converting the Row Layout to be used in Grid View
+            convertView = LayoutInflater.from(context).inflate(R.layout.account_image_item, parent, false)
+
+            convertView!!.tag = holder
+
+        } else {
+            holder = convertView.tag as MyViewHolder
+        }
+
+        if (imageUrlList.size != 0) {
+
+            holder.picturesView = convertView.findViewById(R.id.imageview) as ImageView
+            if (position < imageUrlList.size) {
+                val url = imageUrlList[position].downloadUrl
+                // Only try to fetch the image and set it on the image view if it's a new image
+                if (!(holder.urlSource ?: "").equals(url)) {
+                    val progressBar = convertView.findViewById(R.id.image_row_progress_bar) as ProgressBar
+//                  progressBar.visibility = View.VISIBLE
+
+                    holder.urlSource = url
+                    holder.picturesView?.setImageDrawable(context.getDrawable(R.drawable.bg_image_placeholder))
+                    // This will wind up with pictures out of order if one async task finishes later than one that started later
+                    // But it works well enough and its unlikely that the scenario will happen often
+                    GetImageAsyncTask(context, holder.picturesView, progressBar, url).execute()
+                }
+            } else {
+                // Not sure if I should set the image here to blank/empty
+                holder.urlSource = null
+            }
+        } else {
+            holder.picturesView = convertView.findViewById(R.id.imageview) as ImageView
+
+            holder.picturesView?.setImageDrawable(context.getDrawable(R.drawable.img_feed_unavailable))
+            holder.urlSource = null
+        }
+
+        return convertView
+    }
+}
+
+// View Holder pattern used for Smooth Scrolling. As View Holder pattern recycle the findViewById() object.
+data class MyViewHolder (
+        var urlSource: String? = null,
+        var picturesView: ImageView? = null
+)

@@ -71,7 +71,7 @@ public class RestHelper {
         postDataWrapper(appContext, user, "mobile", "record_upload", params, callbacks);
     }
 
-    public static void myImages(Context appContext, FirebaseUser user, HttpCallbacks callbacks) {
+    public static void recentImages(Context appContext, FirebaseUser user, HttpCallbacks callbacks) {
 
 //        Map<String, String>  params = new HashMap<String, String>();
 //        params.put("key", getApiKey());
@@ -85,6 +85,15 @@ public class RestHelper {
         params.add("timestamp", "" + System.currentTimeMillis());
 
         postDataWrapper(appContext, user, "mobile", "date_image_metadata", params, callbacks);
+    }
+
+    public static void myImages(Context appContext, FirebaseUser user, HttpCallbacks callbacks) {
+
+        RequestParams  params = new RequestParams();
+        params.add("key", getApiKey(appContext));
+        params.add("timestamp", "" + System.currentTimeMillis());
+
+        postDataWrapper(appContext, user, "mobile", "my_image_metadata", params, callbacks);
     }
 
 //    public static void firebaseEndpointAuthTest(Context appContext, FirebaseUser user, HttpCallbacks callbacks) {

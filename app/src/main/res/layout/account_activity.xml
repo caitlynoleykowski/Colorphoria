@@ -1,19 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settingsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/outerLayout"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    tools:context=".activities.loggedinactivities.AccountActivity">
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_email"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/newEmailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <include layout="@layout/navigation_footer" />
+        <EditText
+            android:id="@+id/newEmailEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:hint="@string/new_email_hint"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:padding="@dimen/activity_horizontal_margin" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/changeEmailButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pic_edit_menu_save"
+            android:textAllCaps="false" />
+    </LinearLayout>
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/change_password"-->
+        <!--android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />-->
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal">-->
+
+        <!--<EditText-->
+            <!--android:id="@+id/newPasswordEditText"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="@dimen/activity_horizontal_margin"-->
+            <!--android:layout_weight="1"-->
+            <!--android:focusableInTouchMode="true"-->
+            <!--android:hint="@string/new_password_hint"-->
+            <!--android:inputType="textPassword"-->
+            <!--android:maxLines="1"-->
+            <!--android:padding="@dimen/activity_horizontal_margin" />-->
+
+        <!--<com.google.android.material.button.MaterialButton-->
+            <!--android:id="@+id/changePasswordButton"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/pic_edit_menu_save"-->
+            <!--android:textAllCaps="false" />-->
+    <!--</LinearLayout>-->
+
+    <!--<com.google.android.material.button.MaterialButton-->
+        <!--android:id="@+id/resetPasswordButton"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/reset_password"-->
+        <!--android:textAllCaps="false" />-->
+
+    <!--<com.google.android.material.button.MaterialButton-->
+        <!--android:id="@+id/deleteAccountButton"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/delete_account"-->
+        <!--android:textAllCaps="false" />-->
+
+    <!--<com.google.android.material.button.MaterialButton-->
+        <!--android:id="@+id/signOutButton"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/sign_out"-->
+        <!--android:textAllCaps="false" />-->
+
 
 </LinearLayout>
