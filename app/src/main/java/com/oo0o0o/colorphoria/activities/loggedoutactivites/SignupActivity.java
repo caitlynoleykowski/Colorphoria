@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,8 +21,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.Date;
 
@@ -94,7 +93,7 @@ public class SignupActivity extends BaseColorphoriaActivity {
                     return;
                 }
 
-                if (!EmailValidator.getInstance().isValid(email)) {
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     emailTextInputLayout.setError(getString(R.string.invalid_email_input));
                     return;
                 }

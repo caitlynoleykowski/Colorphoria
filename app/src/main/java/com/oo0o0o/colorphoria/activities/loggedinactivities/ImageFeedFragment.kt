@@ -258,30 +258,30 @@ class ImageAdapter(private val context: Context) : BaseAdapter() {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+        var convertViewVar = convertView
         var holder = ViewHolder()
 
-        if (convertView == null) {
+        if (convertViewVar == null) {
             holder.picturesView = ProportionalImageView(context)
             //Converting the Row Layout to be used in Grid View
-            convertView = LayoutInflater.from(context).inflate(R.layout.image_row, parent, false)
+            convertViewVar = LayoutInflater.from(context).inflate(R.layout.image_row, parent, false)
 
-            convertView!!.tag = holder
+            convertViewVar!!.tag = holder
 
         } else {
-            holder = convertView.tag as ViewHolder
+            holder = convertViewVar.tag as ViewHolder
         }
 
         if (imageUrlList.size != 0) {
-            holder.picturesView = convertView.findViewById(R.id.imageview) as ProportionalImageView
+            holder.picturesView = convertViewVar.findViewById(R.id.imageview) as ProportionalImageView
 //            holder.titleTextView = convertView.findViewById(R.id.title_text_view) as TextView
-            holder.dateTextView = convertView.findViewById(R.id.date_text_view) as TextView
-            holder.commentTextView = convertView.findViewById(R.id.comment_text_view) as TextView
+            holder.dateTextView = convertViewVar.findViewById(R.id.date_text_view) as TextView
+            holder.commentTextView = convertViewVar.findViewById(R.id.comment_text_view) as TextView
             if (position < imageUrlList.size) {
                 val url = imageUrlList[position].downloadUrl
                 // Only try to fetch the image and set it on the image view if it's a new image
                 if (!(holder.urlSource ?: "").equals(url)) {
-                    val progressBar = convertView.findViewById(R.id.image_row_progress_bar) as ProgressBar
+                    val progressBar = convertViewVar.findViewById(R.id.image_row_progress_bar) as ProgressBar
                     progressBar.visibility = View.VISIBLE
 
                     holder.urlSource = url
@@ -302,10 +302,10 @@ class ImageAdapter(private val context: Context) : BaseAdapter() {
                 holder.urlSource = null
             }
         } else {
-            holder.picturesView = convertView.findViewById(R.id.imageview) as ProportionalImageView
+            holder.picturesView = convertViewVar.findViewById(R.id.imageview) as ProportionalImageView
 //            holder.titleTextView = convertView.findViewById(R.id.title_text_view) as TextView
-            holder.dateTextView = convertView.findViewById(R.id.date_text_view) as TextView
-            holder.commentTextView = convertView.findViewById(R.id.comment_text_view) as TextView
+            holder.dateTextView = convertViewVar.findViewById(R.id.date_text_view) as TextView
+            holder.commentTextView = convertViewVar.findViewById(R.id.comment_text_view) as TextView
 
             holder.picturesView?.setImageDrawable(context.getDrawable(R.drawable.img_feed_unavailable))
 //            holder.titleTextView?.setText("")
@@ -314,7 +314,7 @@ class ImageAdapter(private val context: Context) : BaseAdapter() {
             holder.urlSource = null
         }
 
-        return convertView
+        return convertViewVar
     }
 }
 

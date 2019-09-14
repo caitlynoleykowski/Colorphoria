@@ -92,8 +92,8 @@ class AccountFragment : Fragment() {
         usernameTextView.text = user?.email
 
         authListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
-            val user = firebaseAuth.currentUser
-            if (user == null) {
+            val updatedUser = firebaseAuth.currentUser
+            if (updatedUser == null) {
                 // user auth state is changed - user is null
                 // launch login activity
                 startActivity(Intent(activity, LoginActivity::class.java))
@@ -475,28 +475,28 @@ class MyImageAdapter(private val context: Context) : BaseAdapter() {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        var convertView = convertView
+        var convertViewVar = convertView
         var holder = MyViewHolder()
 
-        if (convertView == null) {
+        if (convertViewVar == null) {
             holder.picturesView = SquareImageView(context)
             //Converting the Row Layout to be used in Grid View
-            convertView = LayoutInflater.from(context).inflate(R.layout.account_image_item, parent, false)
+            convertViewVar = LayoutInflater.from(context).inflate(R.layout.account_image_item, parent, false)
 
-            convertView!!.tag = holder
+            convertViewVar!!.tag = holder
 
         } else {
-            holder = convertView.tag as MyViewHolder
+            holder = convertViewVar.tag as MyViewHolder
         }
 
         if (imageUrlList.size != 0) {
 
-            holder.picturesView = convertView.findViewById(R.id.imageview) as ImageView
+            holder.picturesView = convertViewVar.findViewById(R.id.imageview) as ImageView
             if (position < imageUrlList.size) {
                 val url = imageUrlList[position].downloadUrl
                 // Only try to fetch the image and set it on the image view if it's a new image
                 if (!(holder.urlSource ?: "").equals(url)) {
-                    val progressBar = convertView.findViewById(R.id.image_row_progress_bar) as ProgressBar
+                    val progressBar = convertViewVar.findViewById(R.id.image_row_progress_bar) as ProgressBar
 //                  progressBar.visibility = View.VISIBLE
 
                     holder.urlSource = url
@@ -510,13 +510,13 @@ class MyImageAdapter(private val context: Context) : BaseAdapter() {
                 holder.urlSource = null
             }
         } else {
-            holder.picturesView = convertView.findViewById(R.id.imageview) as ImageView
+            holder.picturesView = convertViewVar.findViewById(R.id.imageview) as ImageView
 
             holder.picturesView?.setImageDrawable(context.getDrawable(R.drawable.img_feed_unavailable))
             holder.urlSource = null
         }
 
-        return convertView
+        return convertViewVar
     }
 }
 

@@ -7,7 +7,7 @@ import androidx.room.TypeConverters;
 /**
  * Created by caitoo0o on 7/23/2018.
  */
-@Database(entities = {MediaEntity.class, MyMediaEntity.class}, version = 3)
+@Database(entities = {MediaEntity.class, MyMediaEntity.class}, version = 3, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract MediaDao mediaDao();
