@@ -47,7 +47,7 @@ public class OutlineEffectTest {
     public void testOutlineEffect() throws Exception {
         Bitmap bitmap = Bitmap.createBitmap(pixelArray, 7, 8, Bitmap.Config.ARGB_8888);
         shadowOf(bitmap).setMutable(true);
-        new OutlineEffect().applyEffect(bitmap, .5, 8, null, 0); // randomseed / colorPalette not used for threshold
+        new OutlineEffect(true).applyEffect(bitmap, .5, 8, null, 0); // randomseed / colorPalette not used for threshold
 
         // Check that the black pixels are black
         for (int i = 0; i < expectedPixelArray.length; i++) {

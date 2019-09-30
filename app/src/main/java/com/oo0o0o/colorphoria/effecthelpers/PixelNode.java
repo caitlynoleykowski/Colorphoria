@@ -42,6 +42,22 @@ public class PixelNode {
         PixelNode node = new PixelNode(x() - 1, y());
         return node.isWithinBounds(bm) ? node : null;
     }
+    public PixelNode getNorthWest(Bitmap bm) {
+        PixelNode node = new PixelNode(x() - 1, y() - 1);
+        return node.isWithinBounds(bm) ? node : null;
+    }
+    public PixelNode getSouthWest(Bitmap bm) {
+        PixelNode node = new PixelNode(x() - 1, y() + 1);
+        return node.isWithinBounds(bm) ? node : null;
+    }
+    public PixelNode getNorthEast(Bitmap bm) {
+        PixelNode node = new PixelNode(x() + 1, y() - 1);
+        return node.isWithinBounds(bm) ? node : null;
+    }
+    public PixelNode getSouthEast(Bitmap bm) {
+        PixelNode node = new PixelNode(x() + 1, y() + 1);
+        return node.isWithinBounds(bm) ? node : null;
+    }
     private boolean isWithinBounds(Bitmap bm) {
         if (x() < bm.getWidth() && x() >= 0 && y() < bm.getHeight() && y() >= 0) {
             return true;

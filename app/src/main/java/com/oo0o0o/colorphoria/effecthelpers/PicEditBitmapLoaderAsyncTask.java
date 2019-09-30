@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.oo0o0o.colorphoria.activities.loggedinactivities.PicEditActivity;
+import com.oo0o0o.colorphoria.effects.FadeFillKotlin;
 import com.oo0o0o.colorphoria.effects.InvertEffect;
 import com.oo0o0o.colorphoria.effects.OutlineEffect;
 import com.oo0o0o.colorphoria.effects.RandomBleedFillEffect;
@@ -36,7 +37,10 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
     private final WeakReference<ImageButton> lineImgBtnWeakReference;
     private final WeakReference<ImageButton> floodImgBtnWeakReference;
     private final WeakReference<ImageButton> invertImgBtnWeakReference;
+    private final WeakReference<ImageButton> lightOutlineImgBtnWeakReference;
     private final WeakReference<ImageButton> outlineImgBtnWeakReference;
+    private final WeakReference<ImageButton> fadeFillImgBtnWeakReference;
+    private final WeakReference<ImageButton> fadeTintImgBtnWeakReference;
     private final double ctrl;
     private final int randomSeed;
 
@@ -47,7 +51,10 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
                                         ImageButton lineImageBtn,
                                         ImageButton floodImageBtn,
                                         ImageButton invertImageBtn,
+                                        ImageButton lightOutlineImgBtn,
                                         ImageButton outlineImageBtn,
+                                        ImageButton fadeFillImageBtn,
+                                        ImageButton fadeTintImageBtn,
                                         double ctrl,
                                         int randomSeed) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
@@ -62,7 +69,10 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
         lineImgBtnWeakReference = new WeakReference<ImageButton>(lineImageBtn);
         floodImgBtnWeakReference = new WeakReference<ImageButton>(floodImageBtn);
         invertImgBtnWeakReference = new WeakReference<ImageButton>(invertImageBtn);
+        lightOutlineImgBtnWeakReference = new WeakReference<ImageButton>(lightOutlineImgBtn);
         outlineImgBtnWeakReference = new WeakReference<ImageButton>(outlineImageBtn);
+        fadeFillImgBtnWeakReference = new WeakReference<ImageButton>(fadeFillImageBtn);
+        fadeTintImgBtnWeakReference = new WeakReference<ImageButton>(fadeTintImageBtn);
         this.ctrl = ctrl;
         this.randomSeed = randomSeed;
     }
@@ -148,14 +158,29 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
                         invertImgBtnWeakReference.get(), new InvertEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
+            if (lightOutlineImgBtnWeakReference != null && lightOutlineImgBtnWeakReference.get() != null) {
+                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
+                        lightOutlineImgBtnWeakReference.get(), new OutlineEffect(false),
+                        bitmap, ctrl, randomSeed, null).execute();
+            }
             if (outlineImgBtnWeakReference != null && outlineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        outlineImgBtnWeakReference.get(), new OutlineEffect(),
+                        outlineImgBtnWeakReference.get(), new OutlineEffect(true),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (thresholdImgBtnWeakReference != null && thresholdImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
                         thresholdImgBtnWeakReference.get(), new ThresholdEffect(),
+                        bitmap, ctrl, randomSeed, null).execute();
+            }
+            if (fadeFillImgBtnWeakReference != null && fadeFillImgBtnWeakReference.get() != null) {
+                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
+                        fadeFillImgBtnWeakReference.get(), new FadeFillKotlin(),
+                        bitmap, ctrl, randomSeed, null).execute();
+            }
+            if (fadeTintImgBtnWeakReference != null && fadeTintImgBtnWeakReference.get() != null) {
+                new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
+                        fadeTintImgBtnWeakReference.get(), new FadeFillKotlin(true),
                         bitmap, ctrl, randomSeed, null).execute();
             }
         }

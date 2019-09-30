@@ -35,6 +35,7 @@ import com.oo0o0o.colorphoria.effecthelpers.PicEditBitmapLoaderAsyncTask;
 import com.oo0o0o.colorphoria.effecthelpers.BitmapWrapper;
 import com.oo0o0o.colorphoria.R;
 import com.oo0o0o.colorphoria.effects.BitmapEffect;
+import com.oo0o0o.colorphoria.effects.FadeFillKotlin;
 import com.oo0o0o.colorphoria.effects.InvertEffect;
 import com.oo0o0o.colorphoria.effects.OutlineEffect;
 import com.oo0o0o.colorphoria.effects.RandomBleedFillEffect;
@@ -168,7 +169,10 @@ public class PicEditActivity extends LoggedInActivity {
                     (ImageButton) findViewById(R.id.random_line_button),
                     (ImageButton) findViewById(R.id.random_flood_button),
                     (ImageButton) findViewById(R.id.invert_button),
+                    (ImageButton) findViewById(R.id.light_outline_button),
                     (ImageButton) findViewById(R.id.outline_button),
+                    (ImageButton) findViewById(R.id.fade_fill_button),
+                    (ImageButton) findViewById(R.id.fade_tint_button),
                     getEffectCtrl(), randomSeed);
             bmwAsync.execute();
         } else if (getIntent().hasExtra(SOURCE_URI)) {
@@ -182,7 +186,10 @@ public class PicEditActivity extends LoggedInActivity {
                     (ImageButton) findViewById(R.id.random_line_button),
                     (ImageButton) findViewById(R.id.random_flood_button),
                     (ImageButton) findViewById(R.id.invert_button),
+                    (ImageButton) findViewById(R.id.light_outline_button),
                     (ImageButton) findViewById(R.id.outline_button),
+                    (ImageButton) findViewById(R.id.fade_fill_button),
+                    (ImageButton) findViewById(R.id.fade_tint_button),
                     getEffectCtrl(), randomSeed);
             bmwAsync.execute();
         } else {
@@ -260,11 +267,35 @@ public class PicEditActivity extends LoggedInActivity {
                 }
             }
         });
+        ((ImageButton) findViewById(R.id.light_outline_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (processingImageDone) {
+                    onLightOutlineEffect(view);
+                }
+            }
+        });
         ((ImageButton) findViewById(R.id.outline_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (processingImageDone) {
                     onOutlineEffect(view);
+                }
+            }
+        });
+        ((ImageButton) findViewById(R.id.fade_fill_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (processingImageDone) {
+                    onFadeFillEffect(view);
+                }
+            }
+        });
+        ((ImageButton) findViewById(R.id.fade_tint_button)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (processingImageDone) {
+                    onFadeTintEffect(view);
                 }
             }
         });
@@ -506,13 +537,40 @@ public class PicEditActivity extends LoggedInActivity {
         applyEffect(new InvertEffect());
     }
 
+    public void onLightOutlineEffect(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "light" + OutlineEffect.class.getName());
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        }
+        applyEffect(new OutlineEffect(false));
+    }
+
     public void onOutlineEffect(View v) {
         if (firebaseAnalytics != null) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, OutlineEffect.class.getName());
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
         }
-        applyEffect(new OutlineEffect());
+        applyEffect(new OutlineEffect(true));
+    }
+
+    public void onFadeFillEffect(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, FadeFillKotlin.class.getName());
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        }
+        applyEffect(new FadeFillKotlin());
+    }
+
+    public void onFadeTintEffect(View v) {
+        if (firebaseAnalytics != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "tint" + FadeFillKotlin.class.getName());
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
+        }
+        applyEffect(new FadeFillKotlin(true));
     }
 
     // End UI Handlers
@@ -542,12 +600,24 @@ public class PicEditActivity extends LoggedInActivity {
                 new InvertEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.light_outline_button),
+                new OutlineEffect(false), bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed, colorPalette).execute();
+        new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.outline_button),
-                new OutlineEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
+                new OutlineEffect(true), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.threshold_button),
                 new ThresholdEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed, colorPalette).execute();
+        new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.fade_fill_button),
+                new FadeFillKotlin(), bmW.getSourceBitmap(), getEffectCtrl(),
+                randomSeed, colorPalette).execute();
+        new BitmapEffectPreviewAsyncTask(this,
+                (ImageButton) findViewById(R.id.fade_tint_button),
+                new FadeFillKotlin(true), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
     }
 

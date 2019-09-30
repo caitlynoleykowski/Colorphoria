@@ -74,8 +74,11 @@
     <string name="pic_edit_effect_color_fill">色 塗りつぶし</string>
     <string name="pic_edit_effect_line_fill">ライン 塗りつぶし</string>
     <string name="pic_edit_effect_partial_invert">部分的 反転する</string>
-    <string name="pic_edit_effect_outline">アウトライン</string>
+    <string name="pic_edit_effect_light_outline">光の輪郭</string>
+    <string name="pic_edit_effect_outline">暗い輪郭</string>
     <string name="pic_edit_effect_threshold">しきい値</string>
+    <string name="pic_edit_effect_fade_fill">フェードフィル</string>
+    <string name="pic_edit_effect_fade_tint">フェードの色合い</string>
     <string name="browse_activity_title">ギャラリー</string>
     <string name="browse_menu_done">次</string>
     <string name="choose_image_destination">あなたは何をしたいですか？</string>

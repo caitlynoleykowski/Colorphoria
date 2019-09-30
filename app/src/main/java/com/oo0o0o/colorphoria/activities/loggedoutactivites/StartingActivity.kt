@@ -30,7 +30,7 @@ class StartingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_starting)
 
         viewFlipper.isAutoStart = true
-        viewFlipper.setFlipInterval(2000)
+        viewFlipper.setFlipInterval(1200)
         viewFlipper.setInAnimation(this, R.anim.view_transition_in_left);
         viewFlipper.setOutAnimation(this, R.anim.view_transition_out_left);
 

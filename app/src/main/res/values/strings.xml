@@ -117,8 +117,11 @@
     <string name="pic_edit_effect_color_fill">Color Fill</string>
     <string name="pic_edit_effect_line_fill">Line Fill</string>
     <string name="pic_edit_effect_partial_invert">Partial Invert</string>
-    <string name="pic_edit_effect_outline">Outline</string>
+    <string name="pic_edit_effect_light_outline">Light Outline</string>
+    <string name="pic_edit_effect_outline">Dark Outline</string>
     <string name="pic_edit_effect_threshold">Threshold</string>
+    <string name="pic_edit_effect_fade_fill">Fade Fill</string>
+    <string name="pic_edit_effect_fade_tint">Fade Tint</string>
     <!-- Used for PicEditActivity end -->
 
     <!-- Used for BrowseActivity begin -->
