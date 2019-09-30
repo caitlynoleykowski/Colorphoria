@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.oo0o0o.colorphoria.activities.loggedinactivities.PicEditActivity;
-import com.oo0o0o.colorphoria.effects.FadeFillKotlin;
+import com.oo0o0o.colorphoria.effects.FadeFillEffect;
 import com.oo0o0o.colorphoria.effects.InvertEffect;
 import com.oo0o0o.colorphoria.effects.OutlineEffect;
 import com.oo0o0o.colorphoria.effects.RandomBleedFillEffect;
@@ -175,12 +175,12 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
             }
             if (fadeFillImgBtnWeakReference != null && fadeFillImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        fadeFillImgBtnWeakReference.get(), new FadeFillKotlin(),
+                        fadeFillImgBtnWeakReference.get(), new FadeFillEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (fadeTintImgBtnWeakReference != null && fadeTintImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        fadeTintImgBtnWeakReference.get(), new FadeFillKotlin(true),
+                        fadeTintImgBtnWeakReference.get(), new FadeFillEffect(true),
                         bitmap, ctrl, randomSeed, null).execute();
             }
         }

@@ -5,7 +5,7 @@ import com.oo0o0o.colorphoria.effecthelpers.ColorHelper
 import com.oo0o0o.colorphoria.effecthelpers.PixelNode
 import java.util.*
 
-class FadeFillKotlin : BitmapEffect {
+class FadeFillEffect : BitmapEffect {
 
     internal var tintFill: Boolean = false
 
@@ -23,7 +23,7 @@ class FadeFillKotlin : BitmapEffect {
         this.tintFill = tintFill
     }
 
-    override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>, rotationAngle: Int): Bitmap {
+    override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>?, rotationAngle: Int): Bitmap {
         val original = bm.copy(bm.config, true)
         val processed = Array(bm.width) { BooleanArray(bm.height) }
         val r = Random(randomSeed.toLong())
@@ -112,13 +112,13 @@ class FadeFillKotlin : BitmapEffect {
                     val blueInFadedRepColor = ColorHelper.getBlue(fadedReplacementColor)
 
                     when (fadeTo) {
-                        FadeFillKotlin.RGB.RED -> if (redInFadedRepColor < 255) {
+                        FadeFillEffect.RGB.RED -> if (redInFadedRepColor < 255) {
                             fadedReplacementColor = (redInFadedRepColor + 1 shl 16) + (greenInFadedRepColor shl 8) + blueInFadedRepColor
                         }
-                        FadeFillKotlin.RGB.GREEN -> if (greenInFadedRepColor < 255) {
+                        FadeFillEffect.RGB.GREEN -> if (greenInFadedRepColor < 255) {
                             fadedReplacementColor = (redInFadedRepColor shl 16) + (greenInFadedRepColor + 1 shl 8) + blueInFadedRepColor
                         }
-                        FadeFillKotlin.RGB.BLUE -> if (blueInFadedRepColor < 255) {
+                        FadeFillEffect.RGB.BLUE -> if (blueInFadedRepColor < 255) {
                             fadedReplacementColor = (redInFadedRepColor shl 16) + (greenInFadedRepColor shl 8) + blueInFadedRepColor + 1
                         }
                     }

@@ -25,7 +25,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -35,7 +34,7 @@ import com.oo0o0o.colorphoria.effecthelpers.PicEditBitmapLoaderAsyncTask;
 import com.oo0o0o.colorphoria.effecthelpers.BitmapWrapper;
 import com.oo0o0o.colorphoria.R;
 import com.oo0o0o.colorphoria.effects.BitmapEffect;
-import com.oo0o0o.colorphoria.effects.FadeFillKotlin;
+import com.oo0o0o.colorphoria.effects.FadeFillEffect;
 import com.oo0o0o.colorphoria.effects.InvertEffect;
 import com.oo0o0o.colorphoria.effects.OutlineEffect;
 import com.oo0o0o.colorphoria.effects.RandomBleedFillEffect;
@@ -558,19 +557,19 @@ public class PicEditActivity extends LoggedInActivity {
     public void onFadeFillEffect(View v) {
         if (firebaseAnalytics != null) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, FadeFillKotlin.class.getName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, FadeFillEffect.class.getName());
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
         }
-        applyEffect(new FadeFillKotlin());
+        applyEffect(new FadeFillEffect());
     }
 
     public void onFadeTintEffect(View v) {
         if (firebaseAnalytics != null) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "tint" + FadeFillKotlin.class.getName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "tint" + FadeFillEffect.class.getName());
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
         }
-        applyEffect(new FadeFillKotlin(true));
+        applyEffect(new FadeFillEffect(true));
     }
 
     // End UI Handlers
@@ -613,11 +612,11 @@ public class PicEditActivity extends LoggedInActivity {
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.fade_fill_button),
-                new FadeFillKotlin(), bmW.getSourceBitmap(), getEffectCtrl(),
+                new FadeFillEffect(), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
         new BitmapEffectPreviewAsyncTask(this,
                 (ImageButton) findViewById(R.id.fade_tint_button),
-                new FadeFillKotlin(true), bmW.getSourceBitmap(), getEffectCtrl(),
+                new FadeFillEffect(true), bmW.getSourceBitmap(), getEffectCtrl(),
                 randomSeed, colorPalette).execute();
     }
 
