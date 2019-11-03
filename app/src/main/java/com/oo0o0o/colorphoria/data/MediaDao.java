@@ -6,12 +6,18 @@ import androidx.room.Query;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+
 /**
  * Created by caitoo0o on 7/23/2018.
  */
 
 @Dao
 public interface MediaDao {
+    @Query("SELECT * FROM mediaentity")
+    Flowable<List<MediaEntity>> getAllRx();
+
     @Query("SELECT * FROM mediaentity")
     List<MediaEntity> getAll();
 
@@ -30,4 +36,7 @@ public interface MediaDao {
 
     @Query("DELETE FROM mediaentity")
     void deleteAll();
+
+    @Query("DELETE FROM mediaentity")
+    Completable deleteAllRx();
 }

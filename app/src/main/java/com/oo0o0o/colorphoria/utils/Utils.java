@@ -53,7 +53,7 @@ public class Utils {
 	}
 
 	public static boolean getPermission(final Activity activity, final String permissionKind,
-									 	final String permissionExplanation, final int callbackInt,
+										final String permissionExplanation, final int callbackInt,
 										final OnExplanationDeclinedHandler onExplanationDeclinedHandler) {
 		// Here, thisActivity is the current activity
 		if (ContextCompat.checkSelfPermission(activity, permissionKind) != PackageManager.PERMISSION_GRANTED) {
@@ -62,27 +62,28 @@ public class Utils {
 			if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
 					permissionKind)) {
 
-                // Show an explanation to the user
-                //If the user would like to proceed from the explanation,
-                // try again to request the permission.
-                Utils.showConfirmDialog(activity,
-                        permissionExplanation,
-                        activity.getString(R.string.yes),
-                        activity.getString(R.string.no),
-                        new Utils.ConfirmDialogHandler() {
-                            public void onNegativeButton(Dialog confirmDialog) {
-                                onExplanationDeclinedHandler.onExplanationDeclined();
-                                confirmDialog.dismiss();
-                            }
-                            public void onPositiveButton(Dialog confirmDialog) {
-                                // Request the permission
-                                ActivityCompat.requestPermissions(activity,
-                                        new String[]{permissionKind},
-                                        callbackInt);
-                                confirmDialog.dismiss();
-                            }
-                        },
-                        false);
+				// Show an explanation to the user
+				//If the user would like to proceed from the explanation,
+				// try again to request the permission.
+				Utils.showConfirmDialog(activity,
+						permissionExplanation,
+						activity.getString(R.string.yes),
+						activity.getString(R.string.no),
+						new Utils.ConfirmDialogHandler() {
+							public void onNegativeButton(Dialog confirmDialog) {
+								onExplanationDeclinedHandler.onExplanationDeclined();
+								confirmDialog.dismiss();
+							}
+
+							public void onPositiveButton(Dialog confirmDialog) {
+								// Request the permission
+								ActivityCompat.requestPermissions(activity,
+										new String[]{permissionKind},
+										callbackInt);
+								confirmDialog.dismiss();
+							}
+						},
+						false);
 			} else {
 
 				// No explanation needed, we can request the permission.
@@ -116,8 +117,15 @@ public class Utils {
 
 		public void onFailure();
 	}
-
 	public static File savecolorphoriaBitmap(Bitmap bm, Activity activity, SavecolorphoriaBitmapHandler handler) {
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyyhhmmss");
+		String formattedDate = sdf.format(date);
+		String filename = "colorphoria" + formattedDate + ".png";
+		return savecolorphoriaBitmap(bm, activity, filename, handler);
+	}
+
+	public static File savecolorphoriaBitmap(Bitmap bm, Activity activity, String filename, SavecolorphoriaBitmapHandler handler) {
 		if (Utils.isExternalStorageWritable()) {
 			//File albumStorageDir = getAlbumStorageDir("colorphoriaSaves");
 			File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
@@ -127,14 +135,13 @@ public class Utils {
 				albumStorageDir.mkdir();
 			}
 			catch (Exception e) {
-				Utils.showCustomToast(activity, "Failed to create directory");
+				if (activity != null) {
+					Utils.showCustomToast(activity, "Failed to create directory");
+				}
 				Log.e("picsource", "Failed to create colorphoria directory.");
 				e.printStackTrace();
 			}
-			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyyhhmmss");
-			String formattedDate = sdf.format(date);
-			File picFile = new File(albumStorageDir, "colorphoria" + formattedDate + ".png");
+			File picFile = new File(albumStorageDir, filename);
 			Log.e("picsource", "picfile: " + picFile.getAbsolutePath());
 			FileOutputStream out = null;
 			try {
@@ -142,12 +149,16 @@ public class Utils {
 				bm.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
 				// PNG is a lossless format, the compression factor (100) is ignored
 				Log.i("picsource", "file written to: " + picFile.getAbsolutePath());
-				handler.onSuccess(Uri.fromFile(picFile)); // TODO: Error handling on this parse
+				if (handler != null) {
+					handler.onSuccess(Uri.fromFile(picFile)); // TODO: Error handling on this parse
+				}
 			} catch (Exception e) {
 				Log.e("picsource", "failed save.");
 				e.printStackTrace();
 				picFile = null;
-				handler.onFailure();
+				if (handler != null) {
+					handler.onFailure();
+				}
 			} finally {
 				try {
 					if (out != null) {
@@ -161,7 +172,9 @@ public class Utils {
 			return picFile;
 		}
 		else {
-			Utils.showCustomToast(activity, "Save failed. External storage not writeable.");
+			if (activity != null) {
+				Utils.showCustomToast(activity, "Save failed. External storage not writeable.");
+			}
 			Log.e("picsource", "failed save. external storage not writeable");
 			return null;
 		}

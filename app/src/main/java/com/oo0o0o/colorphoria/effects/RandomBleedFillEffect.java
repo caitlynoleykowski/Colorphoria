@@ -1,12 +1,17 @@
 package com.oo0o0o.colorphoria.effects;
 
 import android.graphics.Bitmap;
+import android.os.Environment;
 
+import com.oo0o0o.colorphoria.effecthelpers.BitmapWrapper;
 import com.oo0o0o.colorphoria.effecthelpers.ColorHelper;
-import com.oo0o0o.colorphoria.effecthelpers.EffectTypes;
 import com.oo0o0o.colorphoria.effecthelpers.PixelNode;
+import com.oo0o0o.colorphoria.utils.Utils;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -18,9 +23,18 @@ import java.util.Random;
 public class RandomBleedFillEffect implements BitmapEffect {
 
     public Bitmap applyEffect(Bitmap bm, double ctrl, int randomSeed, ArrayList<Integer> colorPalette, int rotationAngle) {
+
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyyhhmmss");
+        String formattedDate = sdf.format(date);
+        String baseFilename = "colorphoriaImgGen" + formattedDate;
+
+        ArrayList<File> generatedImgFiles = new ArrayList<>();
+
         Bitmap original = bm.copy(bm.getConfig(), true);
         boolean [][] processed = new boolean[bm.getWidth()][bm.getHeight()];
         Random r = new Random(randomSeed);
+        int count = 0;
         for (int i = 0; i < bm.getWidth(); i++) {
             for (int j = 0; j < bm.getHeight(); j++) {
                 PixelNode currNode = new PixelNode(i, j);
@@ -29,8 +43,32 @@ public class RandomBleedFillEffect implements BitmapEffect {
                     int nextColor = ColorHelper.getNextColor(r, colorPalette);
                     bleedFill(original, bm, currNode, targetColor, nextColor, ctrl, processed);
                 }
+                // TODO Video gen
+//                if ((count % (BitmapWrapper.MAX_PIXELS/10)) == 0) { // Divisor is the number of image files we'll generate
+//                    String filename = baseFilename + "-" + i + "-" + j + ".png";
+//                    File file = Utils.savecolorphoriaBitmap(bm, null, filename, null);
+//                    generatedImgFiles.add(file);
+//                }
+                count++;
             }
         }
+
+        // TODO Video gen
+        // After img gen try creating an mp4 from the imgs
+//        File pictureStorageDir = Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_PICTURES);
+//        File file = new File(pictureStorageDir, baseFilename + ".mp4");
+//        try
+//        {
+//            EncodeDecode encodeDecoder = new EncodeDecode(generatedImgFiles, file);
+//            encodeDecoder.encodeDecodeVideoFromBufferToSurface(bm.getWidth(), bm.getHeight(),
+//                    2000000);
+//        } catch (Throwable e)
+//        {
+//            e.printStackTrace();
+//        }
+
+
         return bm;
     }
 

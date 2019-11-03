@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.room.Room
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -22,10 +23,15 @@ import com.google.gson.Gson
 import com.oo0o0o.colorphoria.R
 import com.oo0o0o.colorphoria.backgroundtasks.GetImageAsyncTask
 import com.oo0o0o.colorphoria.backgroundtasks.RestHelper
+import com.oo0o0o.colorphoria.backgroundtasks.RestHelperKotlinRx
 import com.oo0o0o.colorphoria.data.AppDatabase
 import com.oo0o0o.colorphoria.data.MediaEntity
 import com.oo0o0o.colorphoria.reusableuserinterface.ProportionalImageView
 import com.oo0o0o.colorphoria.utils.Utils
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_image_feed.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -67,6 +73,10 @@ class ImageFeedFragment : Fragment() {
 
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
+    private lateinit var viewModel: ImageFeedViewModel
+
+    private var disposables = CompositeDisposable()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -86,6 +96,8 @@ class ImageFeedFragment : Fragment() {
 
         MobileAds.initialize(activity, resources.getString(R.string.admob_app_id))
 
+        viewModel = ViewModelProviders.of(this).get(ImageFeedViewModel::class.java)
+
         // Handle image feed
         // Create the adapter to convert the array to views
         adapter = ImageAdapter(activity!!.applicationContext)
@@ -99,34 +111,28 @@ class ImageFeedFragment : Fragment() {
                 ResourcesCompat.getColor(resources, R.color.colorSecondary, activity?.theme)
         )
 
-        val appcontext = activity!!.applicationContext
-        // Load the media urls from the database and display the images (if in db, should be cached)
-        // Then, attempt to fetch the urls from the server
-        object : AsyncTask<String, String, List<MediaEntity>>() {
-            override fun doInBackground(vararg strings: String): List<MediaEntity> {
-                val db = Room.databaseBuilder(appcontext,
-                        AppDatabase::class.java, "colorphoria-database")
-                        .fallbackToDestructiveMigration()
-                        .build()
-
-                return db.mediaDao().all
-            }
-
-            override fun onPostExecute(mediaEntities: List<MediaEntity>) {
-                super.onPostExecute(mediaEntities)
-                if (mediaEntities.size > 0) {
-                    loadFeed(mediaEntities)
-                }
-                // Call to get the images
-                getMyImages(false)
-            }
-        }.execute()
-
         firebaseAnalytics = FirebaseAnalytics.getInstance((activity as AppCompatActivity))
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, BottomNavActivity::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle)
+    }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.getData(activity?.application?.applicationContext) {
+            if (it.isNotEmpty()) {
+                loadFeed(it)
+            }
+            getMyImages(false)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        viewModel.unsubscribe()
+        disposables.clear()
     }
 
     private fun getMyImages(showRefreshing: Boolean = true) {
@@ -138,69 +144,63 @@ class ImageFeedFragment : Fragment() {
 
                 val appContext = activity!!.applicationContext
                 val user = FirebaseAuth.getInstance().currentUser
-                val callbacks = object : RestHelper.HttpCallbacks {
-                    override fun onSuccess(response: String) {
-                        // AsyncTask needed for db access to save media urls from response
-                        object : AsyncTask<String, String, List<MediaEntity>>() {
-                            override fun doInBackground(vararg strings: String): List<MediaEntity> {
-                                val db = Room.databaseBuilder(appContext,
-                                        AppDatabase::class.java, "colorphoria-database").build()
-                                db.mediaDao().deleteAll()
 
-                                val mediaEntities = ArrayList<MediaEntity>()
+                user ?: return
 
-                                try {
-                                    val responseJson = JSONObject(response)
-                                    if (responseJson.has("mediaEntities")) {
-                                        // TODO: Handle this better in case somehow it has "urls" but the array is empty
+                RestHelperKotlinRx.recentImages(appContext, user)
+                        .subscribeOn(Schedulers.io())
+                        .map { response ->
+                            val db = Room.databaseBuilder(appContext,
+                                    AppDatabase::class.java, "colorphoria-database").build()
+                            db.mediaDao().deleteAll()
 
-                                        val mediaEntitiesJson = responseJson.getJSONArray("mediaEntities")
-                                        val gson = Gson()
-                                        for (i in 0 until mediaEntitiesJson.length()) {
-                                            val mediaEntity = gson.fromJson(mediaEntitiesJson.get(i).toString(), MediaEntity::class.java)
-                                            mediaEntity.id = i.toLong()
-                                            db.mediaDao().insertAll(mediaEntity) // Change id from i
-                                            mediaEntities.add(mediaEntity)
-                                        }
+                            val mediaEntities = ArrayList<MediaEntity>()
+
+                            try {
+                                val responseJson = JSONObject(response)
+                                if (responseJson.has("mediaEntities")) {
+                                    // TODO: Handle this better in case somehow it has "urls" but the array is empty
+
+                                    val mediaEntitiesJson = responseJson.getJSONArray("mediaEntities")
+                                    val gson = Gson()
+                                    for (i in 0 until mediaEntitiesJson.length()) {
+                                        val mediaEntity = gson.fromJson(mediaEntitiesJson.get(i).toString(), MediaEntity::class.java)
+                                        mediaEntity.id = i.toLong()
+                                        db.mediaDao().insertAll(mediaEntity) // Change id from i
+                                        mediaEntities.add(mediaEntity)
                                     }
-                                } catch (e: JSONException) {
-                                    // TODO: Handle this
-                                    Log.i(this.javaClass.name, "Error parsing json.", e)
+                                }
+                            } catch (e: JSONException) {
+                                // TODO: Handle this
+                                Log.i(this.javaClass.name, "Error parsing json.", e)
+                            }
+
+                            return@map mediaEntities
+                        }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe ({
+                            loadFeed(it)
+                        }, {
+                            // TODO
+                            object : AsyncTask<String, String, List<MediaEntity>>() {
+                                override fun doInBackground(vararg strings: String): List<MediaEntity> {
+                                    val db = Room.databaseBuilder(appContext,
+                                            AppDatabase::class.java, "colorphoria-database").build()
+                                    return db.mediaDao().all
                                 }
 
-                                return mediaEntities
-                            }
-
-                            override fun onPostExecute(mediaEntities: List<MediaEntity>) {
-                                super.onPostExecute(mediaEntities)
-                                loadFeed(mediaEntities)
-
-                            }
-                        }.execute(response)
-                    }
-
-                    override fun onFailure(error: String) {
-                        // AsyncTask needed for db access to fetch media urls
-                        object : AsyncTask<String, String, List<MediaEntity>>() {
-                            override fun doInBackground(vararg strings: String): List<MediaEntity> {
-                                val db = Room.databaseBuilder(appContext,
-                                        AppDatabase::class.java, "colorphoria-database").build()
-                                return db.mediaDao().all
-                            }
-
-                            override fun onPostExecute(mediaEntities: List<MediaEntity>) {
-                                super.onPostExecute(mediaEntities)
-                                // TODO: Figure out why in the world networkResponse is null and come back to this
-                                // TODO: so that we don't have to just loadFeed as if there's no images for today
-                                Utils.showCustomToast(activity, "Unable to refresh feed")
-                                loadFeed(mediaEntities)
-                                refreshingFeed = false
-                                swipeRefreshLayout?.isRefreshing = false
-                            }
-                        }.execute()
-                    }
-                }
-                RestHelper.recentImages(appContext, user, callbacks)
+                                override fun onPostExecute(mediaEntities: List<MediaEntity>) {
+                                    super.onPostExecute(mediaEntities)
+                                    // TODO: Figure out why in the world networkResponse is null and come back to this
+                                    // TODO: so that we don't have to just loadFeed as if there's no images for today
+                                    Utils.showCustomToast(activity, "Unable to refresh feed")
+                                    loadFeed(mediaEntities)
+                                    refreshingFeed = false
+                                    swipeRefreshLayout?.isRefreshing = false
+                                }
+                            }.execute()
+                        }).addTo(disposables)
             }
         }
     }

@@ -18,7 +18,7 @@ public class BitmapWrapper {
 
     private static final String TAG = "BitmapWrapper";
 
-    protected static final int MAX_PIXELS = 1000000; // Protected for unit test
+    public static final int MAX_PIXELS = 1000000; // Protected for unit test
     private static final int ROTATION_ANGLE = 90;
 
     Bitmap source;
