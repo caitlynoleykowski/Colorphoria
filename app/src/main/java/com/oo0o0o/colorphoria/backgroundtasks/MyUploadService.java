@@ -11,9 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.tasks.Task;
-import com.oo0o0o.colorphoria.R;
-import com.oo0o0o.colorphoria.data.Privacy;
-import com.oo0o0o.colorphoria.activities.loggedinactivities.UploadActivity;
+import com.oo0o0o.colorphoria.model.Privacy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;

@@ -2,8 +2,6 @@ package com.oo0o0o.colorphoria;
 
 import android.graphics.Bitmap;
 
-import com.oo0o0o.colorphoria.effects.ThresholdEffect;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;

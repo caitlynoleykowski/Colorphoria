@@ -21,7 +21,6 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.loggedinactivities.AccountActivity"></activity>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -39,24 +38,24 @@
         <activity
             android:name=".activities.loggedoutactivites.LoginActivity"
             android:theme="@style/LoggedOutTheme" />
-        <activity android:name=".activities.loggedinactivities.BottomNavActivity" />
+        <activity android:name=".activities.loggedinactivities.main.BottomNavActivity" />
         <activity
-            android:name=".activities.loggedinactivities.SourceActivity"
+            android:name=".activities.loggedinactivities.sourceselect.SourceActivity"
             android:label="Select" />
         <activity
-            android:name=".activities.loggedinactivities.PicEditActivity"
+            android:name=".activities.loggedinactivities.edit.PicEditActivityKotlin"
             android:label="@string/pic_edit_activity_title" />
         <activity
-            android:name=".activities.loggedinactivities.CameraActivity"
+            android:name=".activities.loggedinactivities.cameraunused.CameraActivity"
             android:label="@string/camera_activity_title" />
         <activity
-            android:name=".activities.loggedinactivities.BrowseActivity"
+            android:name=".activities.loggedinactivities.gallery.GalleryActivity"
             android:label="@string/browse_activity_title" />
         <activity
-            android:name=".activities.loggedinactivities.DrawActivity"
+            android:name=".activities.loggedinactivities.draw.DrawActivity"
             android:label="@string/draw_activity_title" />
         <activity
-            android:name=".activities.loggedinactivities.UploadActivity"
+            android:name=".activities.loggedinactivities.upload.UploadActivity"
             android:label="@string/upload_activity_title" />
         <activity
             android:name=".activities.loggedoutactivites.BirthdayActivity"

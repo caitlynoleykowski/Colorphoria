@@ -1,15 +1,11 @@
 package com.oo0o0o.colorphoria.activities.loggedoutactivites
 
-import androidx.core.app.ActivityOptionsCompat
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.view.View
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth
 import com.oo0o0o.colorphoria.R
-import com.oo0o0o.colorphoria.activities.loggedinactivities.BottomNavActivity
+import com.oo0o0o.colorphoria.activities.loggedinactivities.main.BottomNavActivity
 
 import kotlinx.android.synthetic.main.activity_starting.*
 

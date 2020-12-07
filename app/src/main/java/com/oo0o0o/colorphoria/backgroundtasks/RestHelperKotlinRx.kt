@@ -4,31 +4,13 @@ package com.oo0o0o.colorphoria.backgroundtasks
 import android.content.Context
 import android.util.Log
 
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.VolleyError
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.oo0o0o.colorphoria.R
-import com.oo0o0o.colorphoria.data.Privacy
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GetTokenResult
 import com.loopj.android.http.*
-
-import java.io.UnsupportedEncodingException
-import java.util.Date
-import java.util.HashMap
-import java.util.concurrent.ExecutionException
 
 import cz.msebera.android.httpclient.Header
 import io.reactivex.*
 import io.reactivex.schedulers.Schedulers
-import java.nio.charset.Charset
 
 /**
  * Created by oo0o0o on 10/27/2019.

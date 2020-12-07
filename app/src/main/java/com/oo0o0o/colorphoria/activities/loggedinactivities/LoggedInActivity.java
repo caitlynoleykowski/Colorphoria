@@ -81,7 +81,7 @@ public class LoggedInActivity extends BaseColorphoriaActivity implements
     }
 
     //sign out method
-    protected void signOut() {
+    public void signOut() {
         auth.getCurrentUser();
 
         googleSignOut();
@@ -89,7 +89,7 @@ public class LoggedInActivity extends BaseColorphoriaActivity implements
         auth.signOut();
     }
 
-    protected void googleSignOut() {
+    public void googleSignOut() {
         // Google revoke access - could also just sign out but this is more complete
         Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(
                 new ResultCallback<Status>() {

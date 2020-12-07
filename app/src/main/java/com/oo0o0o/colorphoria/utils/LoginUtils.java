@@ -5,7 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 
 import com.oo0o0o.colorphoria.R;
-import com.oo0o0o.colorphoria.activities.loggedinactivities.BottomNavActivity;
+import com.oo0o0o.colorphoria.activities.loggedinactivities.main.BottomNavActivity;
 import com.oo0o0o.colorphoria.activities.loggedoutactivites.LoginActivity;
 import com.oo0o0o.colorphoria.backgroundtasks.RestHelper;
 import com.google.firebase.auth.FirebaseAuth;

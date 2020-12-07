@@ -9,15 +9,8 @@ import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.oo0o0o.colorphoria.activities.loggedinactivities.PicEditActivity;
-import com.oo0o0o.colorphoria.effects.FadeFillEffect;
-import com.oo0o0o.colorphoria.effects.InvertEffect;
-import com.oo0o0o.colorphoria.effects.OutlineEffect;
-import com.oo0o0o.colorphoria.effects.RandomBleedFillEffect;
-import com.oo0o0o.colorphoria.effects.RandomFloodFillEffect;
-import com.oo0o0o.colorphoria.effects.RandomLineFillEffect;
-import com.oo0o0o.colorphoria.effects.ResetEffect;
-import com.oo0o0o.colorphoria.effects.ThresholdEffect;
+import com.oo0o0o.colorphoria.activities.loggedinactivities.edit.PicEditActivityKotlin;
+import com.oo0o0o.colorphoria.effects.*;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -26,7 +19,7 @@ import java.lang.ref.WeakReference;
  * Created by Cait on 9/22/2016.
  */
 public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
-    private final WeakReference<PicEditActivity> activityWeakReference;
+    private final WeakReference<PicEditActivityKotlin> activityWeakReference;
     private final WeakReference<Context> contextWeakReference;
     private final WeakReference<ImageView> imageViewReference;
     private final WeakReference<Uri> uriWeakReference;
@@ -44,7 +37,7 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
     private final double ctrl;
     private final int randomSeed;
 
-    public PicEditBitmapLoaderAsyncTask(PicEditActivity activity, Context context, ImageView imageView, Uri uri, BitmapWrapper bmw,
+    public PicEditBitmapLoaderAsyncTask(PicEditActivityKotlin activity, Context context, ImageView imageView, Uri uri, BitmapWrapper bmw,
                                         ImageButton originalImageBtn,
                                         ImageButton bleedImageBtn,
                                         ImageButton thresholdImageBtn,
@@ -58,7 +51,7 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
                                         double ctrl,
                                         int randomSeed) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
-        activityWeakReference = new WeakReference<PicEditActivity>(activity);
+        activityWeakReference = new WeakReference<PicEditActivityKotlin>(activity);
         contextWeakReference = new WeakReference<Context>(context);
         imageViewReference = new WeakReference<ImageView>(imageView);
         uriWeakReference = new WeakReference<Uri>(uri);

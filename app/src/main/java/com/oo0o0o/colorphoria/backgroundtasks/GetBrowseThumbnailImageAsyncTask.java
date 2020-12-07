@@ -3,8 +3,6 @@ package com.oo0o0o.colorphoria.backgroundtasks;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -12,18 +10,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.oo0o0o.colorphoria.R;
-import com.oo0o0o.colorphoria.activities.loggedinactivities.BrowseActivity;
+import com.oo0o0o.colorphoria.activities.loggedinactivities.gallery.GalleryActivity;
 import com.oo0o0o.colorphoria.reusableuserinterface.PositionImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -65,7 +58,7 @@ public class GetBrowseThumbnailImageAsyncTask extends AsyncTask<Integer, Void, B
             ImageView imageView = imageViewWeakReference == null? null : imageViewWeakReference.get();
             if (files != null && context != null && imageView != null) {
 
-                int filesIndex = BrowseActivity.getIdxFromPos(files, position);
+                int filesIndex = GalleryActivity.getIdxFromPos(files, position);
                 if (filesIndex < files.size()) {
                     Uri uri = Uri.fromFile(files.get(filesIndex));
                     InputStream is;
@@ -74,7 +67,7 @@ public class GetBrowseThumbnailImageAsyncTask extends AsyncTask<Integer, Void, B
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inJustDecodeBounds = true;
                         BitmapFactory.decodeStream(is, null, options);
-                        double scaleFactor = BrowseActivity.getThumbnailScaleFactor(options.outWidth, options.outHeight);
+                        double scaleFactor = GalleryActivity.getThumbnailScaleFactor(options.outWidth, options.outHeight);
                         BitmapFactory.Options finalOptions = new BitmapFactory.Options();
                         finalOptions.inSampleSize = (int) Math.ceil(1 / scaleFactor);
                         InputStream finalInputStream = context.getContentResolver().openInputStream(uri);

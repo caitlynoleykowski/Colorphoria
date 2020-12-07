@@ -2,14 +2,9 @@ package com.oo0o0o.colorphoria;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 
 import com.oo0o0o.colorphoria.effecthelpers.BitmapWrapper;
 import com.oo0o0o.colorphoria.effecthelpers.ColorHelper;
-import com.oo0o0o.colorphoria.effects.RandomBleedFillEffect;
-import com.oo0o0o.colorphoria.effects.RandomFloodFillEffect;
-import com.oo0o0o.colorphoria.effects.RandomLineFillEffect;
-import com.oo0o0o.colorphoria.effects.ThresholdEffect;
 
 import org.junit.Ignore;
 import org.junit.Test;

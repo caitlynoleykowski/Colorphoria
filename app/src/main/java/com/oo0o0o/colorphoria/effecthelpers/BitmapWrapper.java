@@ -9,7 +9,6 @@ import com.oo0o0o.colorphoria.effects.ResetEffect;
 import com.oo0o0o.colorphoria.effects.RotateEffect;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by Cait on 8/11/2016.

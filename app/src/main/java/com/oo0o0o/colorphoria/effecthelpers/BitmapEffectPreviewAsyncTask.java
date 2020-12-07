@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.widget.ImageView;
 
-import com.oo0o0o.colorphoria.activities.loggedinactivities.PicEditActivity;
+import com.oo0o0o.colorphoria.activities.loggedinactivities.edit.PicEditActivityKotlin;
 import com.oo0o0o.colorphoria.effects.BitmapEffect;
 
 import java.lang.ref.WeakReference;
@@ -21,7 +21,7 @@ public class BitmapEffectPreviewAsyncTask extends BitmapEffectAsyncTask {
 
     BitmapEffect effect;
 
-    public BitmapEffectPreviewAsyncTask(PicEditActivity activity, ImageView imageView,
+    public BitmapEffectPreviewAsyncTask(PicEditActivityKotlin activity, ImageView imageView,
                                         BitmapEffect effect, Bitmap sourceBitmap,
                                         double ctrl, int randomSeed, ArrayList<Integer> colorPalette) {
         super(activity, imageView, effect, null, ctrl, randomSeed, colorPalette);
