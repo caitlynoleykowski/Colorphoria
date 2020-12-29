@@ -14,6 +14,12 @@ import java.util.Random
 
 class RandomLineFillEffect : BitmapEffect {
 
+    companion object {
+        val effectType = EffectTypes.RANDOM_LINE_FILL
+    }
+
+    override val effectType: EffectTypes = RandomLineFillEffect.effectType
+
     override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>?, rotationAngle: Int): Bitmap {
         ThresholdEffect().applyEffect(bm, ctrl, randomSeed, colorPalette, rotationAngle)
         applyRandomLineFill(bm, ctrl, randomSeed, colorPalette)

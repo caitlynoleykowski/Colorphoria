@@ -133,7 +133,7 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
             }
             if (bleedImgBtnWeakReference != null && bleedImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        bleedImgBtnWeakReference.get(), new RandomBleedFillEffect(),
+                        bleedImgBtnWeakReference.get(), new RandomTintFillEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (floodImgBtnWeakReference != null && floodImgBtnWeakReference.get() != null) {
@@ -153,12 +153,12 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
             }
             if (lightOutlineImgBtnWeakReference != null && lightOutlineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        lightOutlineImgBtnWeakReference.get(), new OutlineEffect(false),
+                        lightOutlineImgBtnWeakReference.get(), new OutlineEffectDark(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (outlineImgBtnWeakReference != null && outlineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        outlineImgBtnWeakReference.get(), new OutlineEffect(true),
+                        outlineImgBtnWeakReference.get(), new OutlineEffectLight(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (thresholdImgBtnWeakReference != null && thresholdImgBtnWeakReference.get() != null) {
@@ -168,12 +168,12 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
             }
             if (fadeFillImgBtnWeakReference != null && fadeFillImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        fadeFillImgBtnWeakReference.get(), new FadeFillEffect(),
+                        fadeFillImgBtnWeakReference.get(), new FadeFloodFillEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (fadeTintImgBtnWeakReference != null && fadeTintImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        fadeTintImgBtnWeakReference.get(), new FadeFillEffect(true),
+                        fadeTintImgBtnWeakReference.get(), new FadeTintFillEffect(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
         }

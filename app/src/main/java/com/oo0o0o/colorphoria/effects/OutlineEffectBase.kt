@@ -3,6 +3,7 @@ package com.oo0o0o.colorphoria.effects
 import android.graphics.Bitmap
 
 import com.oo0o0o.colorphoria.effecthelpers.ColorHelper
+import com.oo0o0o.colorphoria.effecthelpers.EffectTypes
 import com.oo0o0o.colorphoria.effecthelpers.PixelNode
 
 import java.util.ArrayList
@@ -13,7 +14,7 @@ import java.util.Random
  * Created by oo0o0o on 4/12/2018.
  */
 
-class OutlineEffect(internal var dark: Boolean) : BitmapEffect {
+abstract class OutlineEffectBase(internal var dark: Boolean) : BitmapEffect {
 
     override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>?, rotationAngle: Int): Bitmap {
         // goal : amplify ctrl ( which is a number less than 1) and keep it less than 1

@@ -13,6 +13,12 @@ import java.util.ArrayList
 
 class ResetEffect : BitmapEffect {
 
+    companion object {
+        val effectType = EffectTypes.RESET
+    }
+
+    override val effectType: EffectTypes = ResetEffect.effectType
+
     override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>?, rotationAngle: Int): Bitmap {
         return bm // Yeah this is weird but it's because the rotation angle is in the BitmapWrapper
     }

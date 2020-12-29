@@ -14,7 +14,7 @@ import static org.robolectric.Robolectric.shadowOf;
  * Created by oo0o0o on 4/17/2018.
  */
 @RunWith(RobolectricTestRunner.class)
-public class OutlineEffectTest {
+public class OutlineEffectBaseTest {
 
     final static int [] pixelArray =
             {

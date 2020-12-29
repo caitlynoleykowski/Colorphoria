@@ -12,18 +12,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.InterstitialAd
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.oo0o0o.colorphoria.R
 import com.oo0o0o.colorphoria.activities.loggedinactivities.LoggedInActivity
 import com.oo0o0o.colorphoria.activities.loggedinactivities.upload.UploadActivity
-import com.oo0o0o.colorphoria.effecthelpers.BitmapEffectAsyncTask
-import com.oo0o0o.colorphoria.effecthelpers.BitmapEffectPreviewAsyncTask
-import com.oo0o0o.colorphoria.effecthelpers.BitmapWrapper
-import com.oo0o0o.colorphoria.effecthelpers.PicEditBitmapLoaderAsyncTask
+import com.oo0o0o.colorphoria.effecthelpers.*
 import com.oo0o0o.colorphoria.effects.*
 import com.oo0o0o.colorphoria.reusableuserinterface.PaletteChooserDialog
 import com.oo0o0o.colorphoria.utils.Utils
@@ -34,6 +27,7 @@ import org.opencv.android.LoaderCallbackInterface
 import org.opencv.android.OpenCVLoader
 import org.opencv.core.Mat
 import java.util.*
+import com.oo0o0o.colorphoria.effecthelpers.EffectTypes.*
 
 class PicEditActivityKotlin : LoggedInActivity() {
     private var bmW: BitmapWrapper? = null
@@ -43,6 +37,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
     private var sourceUri: Uri? = null
     private var randomSeed = 0
     private val colorPalette = ArrayList<Int>()
+
     //var adView: AdView? = null
 //    var interstitialAd: InterstitialAd? = null
     private var firebaseAnalytics: FirebaseAnalytics? = null
@@ -111,7 +106,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
         if (savedInstanceState != null) {
             sourceUri = savedInstanceState.getParcelable(SOURCE_URI_STATE_KEY)
 
-            // Have to do this in place of the to do above. Same steps as new intent below
+            // Load initial thumbnails
             bmW = BitmapWrapper()
             val bmwAsync = PicEditBitmapLoaderAsyncTask(this,
                     applicationContext,
@@ -128,13 +123,17 @@ class PicEditActivityKotlin : LoggedInActivity() {
                     outline_button,
                     fade_fill_button,
                     fade_tint_button,
-                    effectCtrl, randomSeed)
+                    effectCtrl,
+                    randomSeed)
             bmwAsync.execute()
         } else if (intent.hasExtra(SOURCE_URI)) {
             sourceUri = intent.getParcelableExtra<Parcelable>(SOURCE_URI) as Uri
-            val iv = findViewById<View>(R.id.theImage) as ImageView
             bmW = BitmapWrapper()
-            val bmwAsync = PicEditBitmapLoaderAsyncTask(this, applicationContext, iv, sourceUri, bmW,
+            val bmwAsync = PicEditBitmapLoaderAsyncTask(this,
+                    applicationContext,
+                    theImage,
+                    sourceUri,
+                    bmW,
                     original_button,
                     random_bleed_button,
                     threshold_button,
@@ -145,7 +144,8 @@ class PicEditActivityKotlin : LoggedInActivity() {
                     outline_button,
                     fade_fill_button,
                     fade_tint_button,
-                    effectCtrl, randomSeed)
+                    effectCtrl,
+                    randomSeed)
             bmwAsync.execute()
         } else {
             // TODO: Error/bug, shouldn't get here
@@ -353,16 +353,16 @@ class PicEditActivityKotlin : LoggedInActivity() {
 
     private fun onOriginal(v: View?) {
         val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, RandomBleedFillEffect::class.java.name)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, RandomTintFillEffect::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
         applyEffect(ResetEffect())
     }
 
     private fun onRandomBleedFill(v: View?) {
         val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, RandomBleedFillEffect::class.java.name)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, RandomTintFillEffect::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-        applyEffect(RandomBleedFillEffect())
+        applyEffect(RandomTintFillEffect())
     }
 
     private fun onThreshold(v: View?) {
@@ -395,30 +395,30 @@ class PicEditActivityKotlin : LoggedInActivity() {
 
     private fun onLightOutlineEffect(v: View?) {
         val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "light" + OutlineEffect::class.java.name)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "light" + OutlineEffectBase::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-        applyEffect(OutlineEffect(false))
+        applyEffect(OutlineEffectDark())
     }
 
     private fun onOutlineEffect(v: View?) {
         val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, OutlineEffect::class.java.name)
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, OutlineEffectBase::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-        applyEffect(OutlineEffect(true))
+        applyEffect(OutlineEffectLight())
     }
 
     private fun onFadeFillEffect(v: View?) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, FadeFillEffect::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-        applyEffect(FadeFillEffect())
+        applyEffect(FadeFloodFillEffect())
     }
 
     private fun onFadeTintEffect(v: View?) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "tint" + FadeFillEffect::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-        applyEffect(FadeFillEffect(true))
+        applyEffect(FadeTintFillEffect())
     }
 
     private fun refreshEffectThumbnails(randomSeed: Int) {
@@ -429,7 +429,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
                 randomSeed, colorPalette).execute()
         BitmapEffectPreviewAsyncTask(this,
                 random_bleed_button,
-                RandomBleedFillEffect(), bmW?.sourceBitmap, effectCtrl,
+                RandomTintFillEffect(), bmW?.sourceBitmap, effectCtrl,
                 randomSeed, colorPalette).execute()
         BitmapEffectPreviewAsyncTask(this,
                 random_flood_button,
@@ -445,11 +445,11 @@ class PicEditActivityKotlin : LoggedInActivity() {
                 randomSeed, colorPalette).execute()
         BitmapEffectPreviewAsyncTask(this,
                 light_outline_button,
-                OutlineEffect(false), bmW?.sourceBitmap, effectCtrl,
+                OutlineEffectLight(), bmW?.sourceBitmap, effectCtrl,
                 randomSeed, colorPalette).execute()
         BitmapEffectPreviewAsyncTask(this,
                 outline_button,
-                OutlineEffect(true), bmW?.sourceBitmap, effectCtrl,
+                OutlineEffectDark(), bmW?.sourceBitmap, effectCtrl,
                 randomSeed, colorPalette).execute()
         BitmapEffectPreviewAsyncTask(this,
                 threshold_button,
@@ -457,12 +457,83 @@ class PicEditActivityKotlin : LoggedInActivity() {
                 randomSeed, colorPalette).execute()
         BitmapEffectPreviewAsyncTask(this,
                 fade_fill_button,
-                FadeFillEffect(), bmW?.sourceBitmap, effectCtrl,
+                FadeFloodFillEffect(), bmW?.sourceBitmap, effectCtrl,
                 randomSeed, colorPalette).execute()
         BitmapEffectPreviewAsyncTask(this,
                 fade_tint_button,
-                FadeFillEffect(true), bmW?.sourceBitmap, effectCtrl,
+                FadeTintFillEffect(), bmW?.sourceBitmap, effectCtrl,
                 randomSeed, colorPalette).execute()
+    }
+
+    private fun refreshEffectThumbnail(randomSeed: Int, effect: EffectTypes) {
+        // Repopulate the effect preview button for the effect specified
+        when (effect) {
+            ResetEffect.effectType -> {
+                BitmapEffectPreviewAsyncTask(this,
+                        original_button,
+                        ResetEffect(), bmW?.sourceBitmap, effectCtrl,
+                        randomSeed, colorPalette).execute()
+            }
+            RandomTintFillEffect.effectType -> {
+                BitmapEffectPreviewAsyncTask(this,
+                        random_bleed_button,
+                        RandomTintFillEffect(), bmW?.sourceBitmap, effectCtrl,
+                        randomSeed, colorPalette)
+                        .execute()
+            }
+            RandomFloodFillEffect.effectType -> {
+                BitmapEffectPreviewAsyncTask(this,
+                        random_flood_button,
+                        RandomFloodFillEffect(), bmW?.sourceBitmap, effectCtrl,
+                        randomSeed, colorPalette).execute()
+            }
+            RandomLineFillEffect.effectType -> {
+                BitmapEffectPreviewAsyncTask(this,
+                        random_line_button,
+                        RandomLineFillEffect(), bmW?.sourceBitmap, effectCtrl,
+                        randomSeed, colorPalette)
+                        .execute()
+            }
+            InvertEffect.effectType -> {
+                BitmapEffectPreviewAsyncTask(this,
+                        findViewById<View>(R.id.invert_button) as ImageButton,
+                        InvertEffect(), bmW?.sourceBitmap, effectCtrl,
+                        randomSeed, colorPalette).execute()
+            }
+            OutlineEffectLight.effectType -> {
+                BitmapEffectPreviewAsyncTask(this,
+                        light_outline_button,
+                        OutlineEffectLight(), bmW?.sourceBitmap, effectCtrl,
+                        randomSeed, colorPalette)
+                        .execute()
+            }
+            OutlineEffectDark.effectType -> {
+                BitmapEffectPreviewAsyncTask(this,
+                        outline_button,
+                        OutlineEffectDark(), bmW?.sourceBitmap, effectCtrl,
+                        randomSeed, colorPalette).execute()
+            }
+            ThresholdEffect.effectType -> {
+                BitmapEffectPreviewAsyncTask(this,
+                        threshold_button,
+                        ThresholdEffect(), bmW?.sourceBitmap, effectCtrl,
+                        randomSeed, colorPalette)
+                        .execute()
+            }
+            FadeFloodFillEffect.effectType -> {
+                BitmapEffectPreviewAsyncTask(this,
+                        fade_fill_button,
+                        FadeFloodFillEffect(), bmW?.sourceBitmap, effectCtrl,
+                        randomSeed, colorPalette).execute()
+            }
+            FadeTintFillEffect.effectType -> {
+                BitmapEffectPreviewAsyncTask(this,
+                        fade_tint_button,
+                        FadeTintFillEffect(), bmW?.sourceBitmap, effectCtrl,
+                        randomSeed, colorPalette)
+                        .execute()
+            }
+        }
     }
 
     // public to be used by BitmapEffectAsyncTask
@@ -506,7 +577,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
         BitmapEffectAsyncTask(this, theImage, effect, bmW, ctrl, randomSeed, colorPalette).execute()
         val randSeedGen = Random()
         randomSeed = randSeedGen.nextInt()
-        refreshEffectThumbnails(randomSeed)
+        refreshEffectThumbnail(randomSeed, effect.effectType)
     }
 
     private val effectCtrl: Double

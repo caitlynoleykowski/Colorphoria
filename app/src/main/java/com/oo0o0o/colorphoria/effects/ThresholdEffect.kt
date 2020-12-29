@@ -13,6 +13,12 @@ import java.util.ArrayList
 
 class ThresholdEffect : BitmapEffect {
 
+    companion object {
+        val effectType = EffectTypes.THRESHOLD
+    }
+
+    override val effectType: EffectTypes = ThresholdEffect.effectType
+
     override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>?, rotationAngle: Int): Bitmap {
         for (y in 0 until bm.height) {
             for (x in 0 until bm.width) {

@@ -5,6 +5,7 @@ import android.os.Environment
 
 import com.oo0o0o.colorphoria.effecthelpers.BitmapWrapper
 import com.oo0o0o.colorphoria.effecthelpers.ColorHelper
+import com.oo0o0o.colorphoria.effecthelpers.EffectTypes
 import com.oo0o0o.colorphoria.effecthelpers.PixelNode
 import com.oo0o0o.colorphoria.utils.Utils
 
@@ -20,7 +21,13 @@ import java.util.Random
  * Created by oo0o0o on 4/12/2018.
  */
 
-class RandomBleedFillEffect : BitmapEffect {
+class RandomTintFillEffect : BitmapEffect {
+
+    companion object {
+        val effectType = EffectTypes.RANDOM_TINT_FILL
+    }
+
+    override val effectType: EffectTypes = RandomTintFillEffect.effectType
 
     override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>?, rotationAngle: Int): Bitmap {
 

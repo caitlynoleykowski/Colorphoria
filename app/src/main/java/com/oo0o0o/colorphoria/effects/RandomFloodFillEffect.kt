@@ -17,6 +17,12 @@ import java.util.Random
 
 class RandomFloodFillEffect : BitmapEffect {
 
+    companion object {
+        val effectType = EffectTypes.RANDOM_FLOOD_FILL
+    }
+
+    override val effectType: EffectTypes = RandomFloodFillEffect.effectType
+
     override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>?, rotationAngle: Int): Bitmap {
         ThresholdEffect().applyEffect(bm, ctrl, randomSeed, colorPalette, rotationAngle)
         applyRandomFill(bm, ctrl, randomSeed, colorPalette)

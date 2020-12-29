@@ -2,28 +2,19 @@ package com.oo0o0o.colorphoria.effects
 
 import android.graphics.Bitmap
 import com.oo0o0o.colorphoria.effecthelpers.ColorHelper
+import com.oo0o0o.colorphoria.effecthelpers.EffectTypes
 import com.oo0o0o.colorphoria.effecthelpers.PixelNode
-import java.util.*
+import java.util.Random
+import java.util.LinkedList
 
-class FadeFillEffect : BitmapEffect {
-
-    internal var tintFill: Boolean = false
-
+abstract class FadeFillEffect(internal val tintFill: Boolean = false) : BitmapEffect {
     private enum class RGB {
         RED,
         GREEN,
         BLUE
     }
 
-    constructor() {
-        this.tintFill = false
-    }
-
-    constructor(tintFill: Boolean) {
-        this.tintFill = tintFill
-    }
-
-    override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>?, rotationAngle: Int): Bitmap {
+    override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>?, rotationAngle: Int): Bitmap? {
         val original = bm.copy(bm.config, true)
         val processed = Array(bm.width) { BooleanArray(bm.height) }
         val r = Random(randomSeed.toLong())

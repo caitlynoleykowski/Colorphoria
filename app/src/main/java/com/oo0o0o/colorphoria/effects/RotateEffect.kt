@@ -14,6 +14,12 @@ import java.util.ArrayList
 
 class RotateEffect : BitmapEffect {
 
+    companion object {
+        val effectType = EffectTypes.ROTATE
+    }
+
+    override val effectType: EffectTypes = RotateEffect.effectType
+
     override fun applyEffect(bm: Bitmap, ctrl: Double, randomSeed: Int, colorPalette: ArrayList<Int>?, rotationAngle: Int): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(rotationAngle.toFloat())
