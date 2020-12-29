@@ -2,6 +2,8 @@ package com.oo0o0o.colorphoria;
 
 import android.graphics.Bitmap;
 
+import com.oo0o0o.colorphoria.effects.OutlineEffectDark;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -44,7 +46,7 @@ public class OutlineEffectBaseTest {
     public void testOutlineEffect() throws Exception {
         Bitmap bitmap = Bitmap.createBitmap(pixelArray, 7, 8, Bitmap.Config.ARGB_8888);
         shadowOf(bitmap).setMutable(true);
-        new OutlineEffect(true).applyEffect(bitmap, .5, 8, null, 0); // randomseed / colorPalette not used for threshold
+        new OutlineEffectDark().applyEffect(bitmap, .5, 8, null, 0); // randomseed / colorPalette not used for threshold
 
         // Check that the black pixels are black
         for (int i = 0; i < expectedPixelArray.length; i++) {

@@ -10,6 +10,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.robolectric.Robolectric.shadowOf;
 
+import com.oo0o0o.colorphoria.effects.ThresholdEffect;
+
 /**
  * Created by oo0o0o on 4/17/2018.
  */

@@ -5,6 +5,10 @@ import android.graphics.BitmapFactory;
 
 import com.oo0o0o.colorphoria.effecthelpers.BitmapWrapper;
 import com.oo0o0o.colorphoria.effecthelpers.ColorHelper;
+import com.oo0o0o.colorphoria.effects.RandomFloodFillEffect;
+import com.oo0o0o.colorphoria.effects.RandomLineFillEffect;
+import com.oo0o0o.colorphoria.effects.RandomTintFillEffect;
+import com.oo0o0o.colorphoria.effects.ThresholdEffect;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -104,7 +108,7 @@ public class BitmapWrapperTest {
     public void testRandomBleedFillBasic() throws Exception {
         Bitmap testPic1 = BitmapFactory.decodeResource(Robolectric.application.getResources(), R.drawable.img_test_pic_1);
         BitmapWrapper bmw = new BitmapWrapper(testPic1);
-        bmw.applyEffect(new RandomBleedFillEffect(), .5, 8, null);
+        bmw.applyEffect(new RandomTintFillEffect(), .5, 8, null);
         assertNotNull(bmw.getSourceBitmap());
         assertNotNull(bmw.getModifiedBitmap());
         assertTrue(bmw.getSourceBitmap() != bmw.getModifiedBitmap());
@@ -246,7 +250,7 @@ public class BitmapWrapperTest {
         Bitmap bitmap = Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888);
         BitmapWrapperExposed bmw = new BitmapWrapperExposed(bitmap);
         bmw.setModifiedBitmap(Bitmap.createBitmap(pixelArray, 8, 8, Bitmap.Config.ARGB_8888));
-        bmw.applyEffect(new RandomBleedFillEffect(), ctrl, 1, null);
+        bmw.applyEffect(new RandomTintFillEffect(), ctrl, 1, null);
 
         assertNotNull(bmw.getSourceBitmap());
         assertNotNull(bmw.getModifiedBitmap());
