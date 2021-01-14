@@ -105,7 +105,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
 
             // Load initial thumbnails
             bmW = BitmapWrapper()
-            val bmwAsync = PicEditBitmapLoaderAsyncTask(this,
+            val bmwAsync = BitmapEffectPreviewAllAsyncTask(this,
                     applicationContext,
                     theImage,
                     sourceUri,
@@ -126,7 +126,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
         } else if (intent.hasExtra(SOURCE_URI)) {
             sourceUri = intent.getParcelableExtra<Parcelable>(SOURCE_URI) as Uri
             bmW = BitmapWrapper()
-            val bmwAsync = PicEditBitmapLoaderAsyncTask(this,
+            val bmwAsync = BitmapEffectPreviewAllAsyncTask(this,
                     applicationContext,
                     theImage,
                     sourceUri,
@@ -394,14 +394,14 @@ class PicEditActivityKotlin : LoggedInActivity() {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "light" + OutlineEffectBase::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-        applyEffect(OutlineEffectDark())
+        applyEffect(OutlineEffectLight())
     }
 
     private fun onOutlineEffect(v: View?) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, OutlineEffectBase::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-        applyEffect(OutlineEffectLight())
+        applyEffect(OutlineEffectDark())
     }
 
     private fun onFadeFillEffect(v: View?) {

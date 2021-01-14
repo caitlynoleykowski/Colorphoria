@@ -26,6 +26,8 @@ import com.oo0o0o.colorphoria.utils.Utils;
 
 import java.io.File;
 
+import static android.os.Environment.DIRECTORY_PICTURES;
+
 public class SourceActivity extends LoggedInActivity {
 
     private static final String TAG = SourceActivity.class.getName();
@@ -76,7 +78,7 @@ public class SourceActivity extends LoggedInActivity {
 
     private File createTemporaryFile(String part, String ext) throws Exception
     {
-        File tempDir= Environment.getExternalStorageDirectory();
+        File tempDir= Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES);
         tempDir=new File(tempDir.getAbsolutePath()+"/.temp/");
         if(!tempDir.exists())
         {
