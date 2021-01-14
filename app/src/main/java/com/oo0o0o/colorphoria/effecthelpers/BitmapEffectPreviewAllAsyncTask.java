@@ -18,7 +18,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by Cait on 9/22/2016.
  */
-public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
+public class BitmapEffectPreviewAllAsyncTask extends AsyncTask<Integer, Void, Bitmap> {
     private final WeakReference<PicEditActivityKotlin> activityWeakReference;
     private final WeakReference<Context> contextWeakReference;
     private final WeakReference<ImageView> imageViewReference;
@@ -37,19 +37,19 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
     private final double ctrl;
     private final int randomSeed;
 
-    public PicEditBitmapLoaderAsyncTask(PicEditActivityKotlin activity, Context context, ImageView imageView, Uri uri, BitmapWrapper bmw,
-                                        ImageButton originalImageBtn,
-                                        ImageButton bleedImageBtn,
-                                        ImageButton thresholdImageBtn,
-                                        ImageButton lineImageBtn,
-                                        ImageButton floodImageBtn,
-                                        ImageButton invertImageBtn,
-                                        ImageButton lightOutlineImgBtn,
-                                        ImageButton outlineImageBtn,
-                                        ImageButton fadeFillImageBtn,
-                                        ImageButton fadeTintImageBtn,
-                                        double ctrl,
-                                        int randomSeed) {
+    public BitmapEffectPreviewAllAsyncTask(PicEditActivityKotlin activity, Context context, ImageView imageView, Uri uri, BitmapWrapper bmw,
+                                           ImageButton originalImageBtn,
+                                           ImageButton bleedImageBtn,
+                                           ImageButton thresholdImageBtn,
+                                           ImageButton lineImageBtn,
+                                           ImageButton floodImageBtn,
+                                           ImageButton invertImageBtn,
+                                           ImageButton lightOutlineImgBtn,
+                                           ImageButton outlineImageBtn,
+                                           ImageButton fadeFillImageBtn,
+                                           ImageButton fadeTintImageBtn,
+                                           double ctrl,
+                                           int randomSeed) {
         // Use a WeakReference to ensure the ImageView can be garbage collected
         activityWeakReference = new WeakReference<PicEditActivityKotlin>(activity);
         contextWeakReference = new WeakReference<Context>(context);
@@ -153,12 +153,12 @@ public class PicEditBitmapLoaderAsyncTask extends AsyncTask<Integer, Void, Bitma
             }
             if (lightOutlineImgBtnWeakReference != null && lightOutlineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        lightOutlineImgBtnWeakReference.get(), new OutlineEffectDark(),
+                        lightOutlineImgBtnWeakReference.get(), new OutlineEffectLight(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (outlineImgBtnWeakReference != null && outlineImgBtnWeakReference.get() != null) {
                 new BitmapEffectPreviewAsyncTask(activityWeakReference.get(),
-                        outlineImgBtnWeakReference.get(), new OutlineEffectLight(),
+                        outlineImgBtnWeakReference.get(), new OutlineEffectDark(),
                         bitmap, ctrl, randomSeed, null).execute();
             }
             if (thresholdImgBtnWeakReference != null && thresholdImgBtnWeakReference.get() != null) {

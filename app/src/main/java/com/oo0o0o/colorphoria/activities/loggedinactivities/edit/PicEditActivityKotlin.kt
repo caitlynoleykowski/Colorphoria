@@ -35,7 +35,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
     private var redoQueue = ArrayDeque<BitmapWrapper>()
     private var processingImageDone = false
     private var sourceUri: Uri? = null
-    private var randomSeed = 0
+    private var randomSeedManager = SeedManager()
     private val colorPalette = ArrayList<Int>()
 
     //var adView: AdView? = null
@@ -73,10 +73,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
         undoQueue = ArrayDeque()
         redoQueue = ArrayDeque()
 
-        // So that the effects aren't the same every time the activity is restarted,
-        // the random seed itself needs to be random
-        val randSeedGen = Random()
-        randomSeed = randSeedGen.nextInt()
+        randomSeedManager.nextSeed()
         setUIforImageDoneProcessing(false)
 //        interstitialAd = InterstitialAd(this)
 //        interstitialAd?.adUnitId = resources.getString(R.string.admob_ad_unit_id_interstitial_share)
@@ -108,7 +105,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
 
             // Load initial thumbnails
             bmW = BitmapWrapper()
-            val bmwAsync = PicEditBitmapLoaderAsyncTask(this,
+            val bmwAsync = BitmapEffectPreviewAllAsyncTask(this,
                     applicationContext,
                     theImage,
                     sourceUri,
@@ -124,12 +121,12 @@ class PicEditActivityKotlin : LoggedInActivity() {
                     fade_fill_button,
                     fade_tint_button,
                     effectCtrl,
-                    randomSeed)
+                    randomSeedManager.randomSeeds[RANDOM_LINE_FILL] ?: 0) //TODO
             bmwAsync.execute()
         } else if (intent.hasExtra(SOURCE_URI)) {
             sourceUri = intent.getParcelableExtra<Parcelable>(SOURCE_URI) as Uri
             bmW = BitmapWrapper()
-            val bmwAsync = PicEditBitmapLoaderAsyncTask(this,
+            val bmwAsync = BitmapEffectPreviewAllAsyncTask(this,
                     applicationContext,
                     theImage,
                     sourceUri,
@@ -145,7 +142,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
                     fade_fill_button,
                     fade_tint_button,
                     effectCtrl,
-                    randomSeed)
+                    randomSeedManager.randomSeeds[RANDOM_LINE_FILL] ?: 0) // TODO
             bmwAsync.execute()
         } else {
             // TODO: Error/bug, shouldn't get here
@@ -156,7 +153,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
 
         effect_ctrl_seekbar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                refreshEffectThumbnails(randomSeed)
+                refreshEffectThumbnails(randomSeedManager.randomSeeds[RANDOM_LINE_FILL] ?: 0) // TODO
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {
             }
@@ -345,7 +342,7 @@ class PicEditActivityKotlin : LoggedInActivity() {
         // inside of the PaletteChooserDialog class
         colorPaletteDialog.setOnDismissListener {
             if (colorPaletteDialog.isColorPaletteChanged) {
-                refreshEffectThumbnails(randomSeed)
+                refreshEffectThumbnails(randomSeedManager.randomSeeds[RANDOM_LINE_FILL] ?: 0) // TODO
             }
         }
         colorPaletteDialog.show()
@@ -397,14 +394,14 @@ class PicEditActivityKotlin : LoggedInActivity() {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "light" + OutlineEffectBase::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-        applyEffect(OutlineEffectDark())
+        applyEffect(OutlineEffectLight())
     }
 
     private fun onOutlineEffect(v: View?) {
         val bundle = Bundle()
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, OutlineEffectBase::class.java.name)
         firebaseAnalytics?.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
-        applyEffect(OutlineEffectLight())
+        applyEffect(OutlineEffectDark())
     }
 
     private fun onFadeFillEffect(v: View?) {
@@ -574,10 +571,20 @@ class PicEditActivityKotlin : LoggedInActivity() {
         updateUndoRedoQueues()
         setUIforImageDoneProcessing(false)
         val ctrl = effectCtrl
-        BitmapEffectAsyncTask(this, theImage, effect, bmW, ctrl, randomSeed, colorPalette).execute()
-        val randSeedGen = Random()
-        randomSeed = randSeedGen.nextInt()
-        refreshEffectThumbnail(randomSeed, effect.effectType)
+        BitmapEffectAsyncTask(
+                this,
+                theImage,
+                effect,
+                bmW,
+                ctrl,
+                randomSeedManager.randomSeeds[effect.effectType] ?: 0,
+                colorPalette
+        ).execute()
+        randomSeedManager.nextSeed(effect.effectType)
+        refreshEffectThumbnail(
+                randomSeedManager.randomSeeds[effect.effectType] ?: 0,
+                effect.effectType
+        )
     }
 
     private val effectCtrl: Double
